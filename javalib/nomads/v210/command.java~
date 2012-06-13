@@ -1,0 +1,12 @@
+package nomads.v200;
+
+// Panel apps < 10;
+// Client apps mod 10, ie., 10,20,30,40,50
+//
+// usage:
+//        writeByte(app_id.WEB_CHAT)
+
+public class command {
+    public static int RES1 = 0;
+    public static int SEND_MESSAGE = 1;
+}

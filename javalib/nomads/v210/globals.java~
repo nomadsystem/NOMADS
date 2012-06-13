@@ -1,0 +1,35 @@
+package nomads.v200;
+
+// Panel apps < 10;
+// Client apps mod 10, ie., 10,20,30,40,50
+//
+// usage:
+//        writeByte(app_id.WEB_CHAT)
+
+public class globals {
+    public static int clientDebugLevel = 1;  // Use this for printout info
+    public static int serverDebugLevel = 1;  // Use this for printout info
+    public static String    serverName = "nomads.music.virginia.edu";
+    public static int serverPort = 52807;
+
+    public static void printit(String str) {
+	if (clientDebugLevel > 0) {
+	    System.out.println(str);
+	}
+    }
+
+    public static void cPrint(String str) {
+	if (clientDebugLevel > 0) {
+	    System.out.println(str);
+	}
+    }
+
+    public static void sPrint(String str) {
+	if (serverDebugLevel > 0) {
+	    System.out.println(str);
+	}
+    }
+
+    
+
+}
