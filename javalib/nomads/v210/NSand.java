@@ -144,6 +144,73 @@ public class NSand
     }
 
     //Returns Grain appID, cmd, dT, dL, bA
+    public NGrain getGrain (byte appID) {
+	NGlobals.lPrint("getGrain");
+	byte cmd, dT;
+	int dL;
+	NGrain grain = null;
+	try {  
+	    // get command
+	    cmd = streamIn.readByte();
+	    // get data Type
+	    dT = streamIn.readByte();
+	    // get data Length
+	    dL = streamIn.readInt();
+			
+	    //Detect array type in Grain
+	    //Byte array
+	    if (dT == NDataType.BYTE) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+	    }
+			
+	    //Int Array
+	    else if (dT == NDataType.INT) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+	    }
+			
+	    //Float Array
+	    else if (dT == NDataType.FLOAT) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+	    }
+			
+	    //Double Array
+	    else if (dT == NDataType.DOUBLE) {
+		double[] dA = new double[dL];
+
+		for (int i=0; i< dL; i++) {
+		    dA[i] = streamIn.readDouble();
+		    NGlobals.lPrint("DOUBLE:  " + dA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, dA);
+	    }
+	}
+	catch(IOException ioe) {  
+	    System.out.println("SAND write error");
+	}
+	return grain;
+    }
+
+
+
+    //Returns Grain appID, cmd, dT, dL, bA
     public NGrain getGrain () {
 	NGlobals.lPrint("getGrain");
 	byte appID, cmd, dT;
@@ -230,7 +297,7 @@ public class NSand
 	}
     }
 
-    private void openSocketStreams()
+    public void openSocketStreams()
     {  
 	try {
 	    streamOut = new DataOutputStream(socket.getOutputStream());
