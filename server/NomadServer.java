@@ -80,7 +80,7 @@ public class NomadServer implements Runnable {
 	}
     }
 
-    public synchronized void handle(int THREAD_ID)  {  
+    public synchronized void handle(int THREAD_ID, byte incAppID)  {  
 	String tUser, IP, tempString;
 	int loginStatus = 0;
 	int cNum = -1;
@@ -90,7 +90,7 @@ public class NomadServer implements Runnable {
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];
 
-	byte incAppID, incAppCmd, incAppDataType;
+	byte incAppCmd, incAppDataType;
 	int incAppDataLen;
 
 	NGrain inGrain;
@@ -101,7 +101,6 @@ public class NomadServer implements Runnable {
 	// =====================================================================================================
 	// BEGIN Main data routing code
 	// =====================================================================================================
-
 
 	// Do the following for EACH client
 
@@ -117,12 +116,12 @@ public class NomadServer implements Runnable {
 
 	// Read in the COMMAND
 	inSand.setSock(currentClient.getSock());
+	inSand.openSocketStreams();
 	
-	NGrain myGrain = inSand.getGrain();
+	NGrain myGrain = inSand.getGrain(incAppID); // by sending 
 
 	// TOFIX:  change to getXXX acccessor functions
 
-	incAppID = myGrain.appID;
 	incAppCmd = myGrain.command;
 	incAppDataType = myGrain.dataType;
 	incAppDataLen = myGrain.dataLen;
@@ -161,6 +160,9 @@ public class NomadServer implements Runnable {
 	    myGrain.print();
 
 	    // Write the data out
+	    outSand.setSock(currentClient.getSock());
+	    outSand.openSocketStreams();
+
 	    outSand.sendGrain(myGrain);
 
 	}   
