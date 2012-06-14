@@ -7,7 +7,15 @@ include ../makefile.conf
 CLASSES = \
         DiscussPrompt.java
 
-default: classes
+default: myliblink classes
+
+topliblink:
+	rm -f ./nomads
+	/bin/ln -s /var/www/NOMADS/javalib/nomads .
+
+myliblink:
+	rm -f ./nomads
+	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
 
 classes: $(CLASSES:.java=.class)
 
