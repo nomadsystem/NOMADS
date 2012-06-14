@@ -1,0 +1,2 @@
+JFLAGS = -source 1.5 -target 1.5
+JC = javac
