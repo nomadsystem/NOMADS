@@ -1,0 +1,284 @@
+import java.net.*;
+import java.io.*;
+import java.applet.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.text.DefaultCaret;
+import javax.swing.*;
+import java.util.Random;
+import nomads.*;
+import java.util.*;
+import java.lang.*;
+
+public class CloudDiscuss extends JApplet implements ActionListener, KeyListener {   
+    private Socket socket              = null;
+    private DataInputStream  console   = null;
+    private DataOutputStream streamOut = null;
+    private CloudDiscussThread client    = null;
+    private String    serverName = "nomad.music.virginia.edu";
+    private int       serverPort = 52807;
+    private String SANDnumber = "", SANDstring = "";
+    private String dispMsg = "", temp = "", tID = "";
+    
+//    JTextArea chatWindow;
+    JScrollPane spane;
+    JButton speak, connect, disconnect;
+    JTextField input;
+    JPanel panel, panPanel, wholeThing, lTab, rTab;
+    JLabel title, topic, spa1, spa2, spa3, spa5;
+    String topicString = "";
+    Font titleFont, topicFont;
+	String tempString = "";
+        
+  //background color for the whole applet
+    Color BG = new Color(158,55,33);      
+    
+    //background color for chatwindow
+//    Color cWindy = new Color(242,197,126);
+    
+    //background color for input text field
+    Color inputColor = new Color(249,241,131);
+    
+    //color for chat window
+    Color chatColor = new Color(0,0,0);
+    
+    Font chatFont = new Font("sansserif", Font.BOLD, 18);
+
+    boolean c = false; //flag to see if it is connected to server
+    int wait;
+
+    public void init()
+    { //daniel's swingin' code
+      //topmost container. It will hold wholeThing, which is the applet
+      Container content = getContentPane();
+		content.setBackground(BG);
+	  setLayout( new BorderLayout() );
+
+      //applet it will be added to the topmost container  
+      //this is done for the purposes of color
+	  wholeThing = new JPanel( new BorderLayout() );
+	  wholeThing.setBackground(BG);
+
+           //initialize components
+      speak = new JButton("Add to the Cloud");
+//	  connect = new JButton("Connect");
+//	  disconnect = new JButton("Disconnect");
+//	  chatWindow = new JTextArea(10,30);
+	  //makes chat window autoscroll
+//	  DefaultCaret caret = (DefaultCaret)chatWindow.getCaret();
+//	  caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+	  
+//	  chatWindow.setEnabled(false);
+//	  chatWindow.setBackground(cWindy);
+//	  chatWindow.setFont(chatFont);
+//	  chatWindow.setDisabledTextColor(chatColor);
+//	  spane = new JScrollPane(chatWindow);
+	  input = new JTextField("", 30);
+	  input.setBackground(inputColor);
+	  panel = new JPanel( new FlowLayout() ); //holds buttons and textfield 
+//      panPanel = new JPanel( new GridLayout(1,1,0,1)); //holds panel for spacing and color purposes...may not be necessary
+//	  panPanel.setBackground(BG);
+	  panel.setBackground(BG);		  
+	  
+	  titleFont = new Font("TimesRoman", Font.BOLD, 20);
+	  title = new JLabel("Send your text to the NOMADS cloud", JLabel.CENTER);
+	  title.setFont(titleFont);
+	  topicFont = new Font("TimesRoman", Font.PLAIN, 16);
+	  topic = new JLabel("", JLabel.CENTER);
+	  topic.setFont(topicFont);
+
+	
+	  //key listener stuff
+//	  input.setFocusable(true);
+	  input.addKeyListener(this); 
+	
+	  //add action listeners to the buttons
+	  speak.addActionListener(this);
+//	  connect.addActionListener(this);
+//	  disconnect.addActionListener(this);
+	
+            //buffer the sides of the applet  
+//	  lTab = new JPanel( new FlowLayout() );
+//	  rTab = new JPanel( new FlowLayout() );
+//	  lTab.setBackground(BG);
+//	  rTab.setBackground(BG);
+          
+//      spa1 = new JLabel("            ");
+//	  spa2 = new JLabel("            ");
+	  //spa3 = new JLabel("            ");
+//	  spa5 = new JLabel("                 ");
+//	  lTab.add(spa1);
+//	  rTab.add(spa2);
+
+	     //add components to the applet
+//	   panel.add(connect);
+//	   panel.add(disconnect);
+//	   panel.add(spa5);
+	   panel.add(input);
+	   panel.add(speak);   
+	   //panPanel.add(spa3);
+//	   panPanel.add(panel);
+
+       wholeThing.add(panel, BorderLayout.SOUTH);
+	   wholeThing.add(title, BorderLayout.NORTH);
+	   wholeThing.add(topic, FlowLayout.CENTER);
+//	   wholeThing.add(spane, BorderLayout.CENTER);
+//	   wholeThing.add(lTab, BorderLayout.WEST);
+//	   wholeThing.add(rTab, BorderLayout.EAST);	   
+
+	   add(wholeThing);
+	   connect("nomad.music.virginia.edu", 52807);	//****STK Connects on init
+
+    }
+    
+    public void connect(String serverName, int serverPort)
+    {  
+		System.out.println("Establishing connection. Please wait ...");
+		try {  
+		    socket = new Socket("nomad.music.virginia.edu", 52807);	
+
+		    System.out.println("Connected");
+		    open();
+		}
+		catch(UnknownHostException uhe) {  
+	    	System.out.println("How unknown");
+	    }
+		catch(IOException ioe) {  
+		    System.out.println("Unexpected exception: ");
+		} 
+    }
+
+    public void handle(byte bite, String msg)
+    {	
+		// msg string format -- threadId: sandnumbermessage
+		// threadId is variable length, always immediately followed by a :
+		// sandnumber is always two digits
+		// message is variable length
+		// there is a space between : and sandnumber
+		// there is no space between sandnumber and message
+		
+			
+//			input.setText("");
+			input.requestFocus();
+//--------------------------------------- STK this is where we get the cloud discussion topic
+		if (bite == app_id.CLOUD_PROMPT)
+      	 {	 
+      	 	topic.setText(msg);
+      	 	tempString = new String(msg);
+      	 	topic.setForeground(Color.BLACK);
+	    	topicFont = new Font("TimesRoman", Font.PLAIN, 20);
+      	 }
+      	 else if (bite == app_id.INSTRUCTOR_PANEL) {
+      		if (msg.equals("DISABLE_CLOUD_BUTTON")) {
+				speak.setEnabled(false);
+				topic.setText("Cloud Disabled");
+			}
+			else if (msg.equals("ENABLE_CLOUD_BUTTON")) {
+				speak.setEnabled(true);
+				topic.setText(tempString);
+			}
+			else {
+			}
+		} 
+	}
+
+    public void open()
+    {  
+	  try {
+         System.out.println("open()");
+         streamOut = new DataOutputStream(socket.getOutputStream());
+  	     client = new CloudDiscussThread(this, socket); 
+         System.out.println(app_id.CLOUD_CHAT  + ":");
+         System.out.println("Connected to NOMADS");
+
+		 streamOut.writeByte(app_id.CLOUD_CHAT );
+         streamOut.writeUTF("");
+      }
+	  catch(IOException ioe) {
+	  } 	  
+    }
+    
+    public void close()
+    {         
+       
+       try {
+       		streamOut.writeByte(app_id.CLOUD_CHAT);
+			streamOut.writeUTF(".bye");
+			streamOut.flush();
+	     if (streamOut != null)  
+           streamOut.close();
+         if (socket != null)  
+	       socket.close(); 
+                        
+	     }
+	   catch(IOException ioe) {
+	   }
+	
+	  client.close();  
+	  client.stop(); 
+	  
+      
+    }
+    
+    public void start() {
+    }
+    
+   ////////////////////////////////////////////////////////////////////////////
+   //key listener code
+   ///////////////////////////////////////////////////////////////////////////
+    public void keyPressed (KeyEvent e)
+    {
+    	if (e.getKeyCode() == 10) // enter key
+    	{
+    		
+		  try
+		  {
+			streamOut.writeByte(app_id.CLOUD_CHAT);
+			streamOut.writeUTF(input.getText());
+			streamOut.flush();
+			input.setText("");
+
+		  }
+		  catch(IOException ioe)
+		  {
+			 System.out.println("IOException");
+		  }
+		}
+    	
+    }
+    
+    //makes compiler happy
+    public void keyReleased(KeyEvent e){
+    }
+  	
+  	public void keyTyped(KeyEvent e){
+  	}
+  
+   ////////////////////////////////////////////////////////////////////////////
+   //action listener code
+   ///////////////////////////////////////////////////////////////////////////  
+   public void actionPerformed(java.awt.event.ActionEvent ae)
+   {
+   	  Object source = ae.getSource();
+
+       //listener code for speak button
+       if (source == speak)
+       {
+       	
+			try
+			{
+			  streamOut.writeByte(app_id.CLOUD_CHAT );
+			  streamOut.writeUTF(input.getText());
+			  streamOut.flush();
+			  input.setText("");
+	
+			}
+			catch(IOException ioe)
+			{
+			   System.out.println("IOException");
+			}
+       	 
+       } 
+   }
+   
+}
