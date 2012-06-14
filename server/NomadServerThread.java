@@ -12,6 +12,13 @@ public class NomadServerThread extends Thread
     private DataInputStream  streamIn  =  null;
     private DataOutputStream streamOut = null;
 
+
+    class MyException extends Exception {
+	public MyException(String msg){
+	    super(msg);
+	}
+    }
+
     public NomadServerThread(NomadServer _server, Socket _socket) {  
     	super();
 		server = _server;
@@ -19,16 +26,20 @@ public class NomadServerThread extends Thread
 		THREAD_ID     = socket.getPort();
     }
     
+    public Socket getSock() {
+	return socket;
+    }
+
     public void sendUTF(String msg) {   
     	try {  
-	    	streamOut.writeUTF(msg);
-		streamOut.flush();
-	    }
-		catch(IOException ioe) {  
-			System.out.println(THREAD_ID + " ERROR sending: " + ioe.getMessage());
-			server.remove(THREAD_ID);
-			stop();
-	    }
+	    streamOut.writeUTF(msg);
+	    streamOut.flush();
+	}
+	catch(IOException ioe) {  
+	    System.out.println(THREAD_ID + " ERROR sending: " + ioe.getMessage());
+	    server.remove(THREAD_ID);
+	    stop();
+	}
     }
     
     public int getThreadID() {  
@@ -142,15 +153,8 @@ public class NomadServerThread extends Thread
     public void run() {  
     	System.out.println("Server Thread " + THREAD_ID + " running.");
 		while (true) {  
-			try {  
-			    server.handle(THREAD_ID, streamIn.readByte());
-	       	        }
-			catch(IOException ioe) {  
-				System.out.println(THREAD_ID + " ERROR reading: " + ioe.getMessage());
-				server.remove(THREAD_ID);
-				stop();
-		    }
-	    }
+		    server.handle(THREAD_ID);
+		}
     }
     
     public void open() throws IOException {  
