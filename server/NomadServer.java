@@ -2,10 +2,11 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.lang.Object.*;
-import nomads.v200.*;
+import nomads.v210.*;
 
 public class NomadServer implements Runnable {  
     private NomadServerThread clients[] = new NomadServerThread[3000];
+    private NomadServerThread currentClient;
     private short clientThreadNum[] = new short[100000];
     private String IPsLoggedIn[] = new String[1000];
     private String users[] = new String[1000];
@@ -25,6 +26,9 @@ public class NomadServer implements Runnable {
     int iDay;
     FileOutputStream out; // declare a file output object
     PrintStream p; // declare a print stream object
+
+    NSand outSand;
+    NSand inSand;
     
     public NomadServer(int port) {  	    
 	for (int i=0;i<100000;i++) {
@@ -45,6 +49,10 @@ public class NomadServer implements Runnable {
 	    ioe.printStackTrace();
 	    System.exit(1); 
 	}
+
+	outSand = new NSand();
+	inSand = new NSand();
+
     }
 
     public void run()  {  
@@ -72,7 +80,7 @@ public class NomadServer implements Runnable {
 	}
     }
 
-    public synchronized void handle(int THREAD_ID, byte incAppID)  {  
+    public synchronized void handle(int THREAD_ID)  {  
 	String tUser, IP, tempString;
 	int loginStatus = 0;
 	int cNum = -1;
@@ -82,12 +90,13 @@ public class NomadServer implements Runnable {
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];
 
-	byte incAppCmd, incAppDataType;
+	byte incAppID, incAppCmd, incAppDataType;
 	int incAppDataLen;
+
+	NGrain inGrain;
 
     	globals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
     	
-    	globals.sPrint("handle (" + THREAD_ID + "," + incAppID + ")");
 		
 	// =====================================================================================================
 	// BEGIN Main data routing code
@@ -104,32 +113,35 @@ public class NomadServer implements Runnable {
 
 	// Get client number of inc client
 	tCNum = clientThreadNum[THREAD_ID];
-	globals.sPrint("appID: " + incAppID);
-	
+	currentClient = clients[tCNum];
+
 	// Read in the COMMAND
-	incAppCmd = clients[tCNum].getNetByte();
+	inSand.setSock(currentClient.getSock());
+	
+	NGrain myGrain = inSand.getGrain();
+
+	// TOFIX:  change to getXXX acccessor functions
+
+	incAppID = myGrain.appID;
+	incAppCmd = myGrain.command;
+	incAppDataType = myGrain.dataType;
+	incAppDataLen = myGrain.dataLen;
+
+	globals.sPrint("appID: " + incAppID);
 	globals.sPrint("command: " + incAppCmd);
-	
-	// Read in the NUMBER of Blocks in the MESSAGE
-	incAppDataType = clients[tCNum].getNetByte();
 	globals.sPrint("dataType: " + incAppDataType);
-	
-	// Read in the NUMBER of Blocks in the MESSAGE
-	incAppDataLen = clients[tCNum].getNetInt();
 	globals.sPrint("dataLen: " + incAppDataLen);
 
 	// Read each specific BLOCK
 	if (incAppDataType == dataType.INT) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		incIntData[j] = clients[tCNum].getNetInt();
-		globals.sPrint("INT: " + incIntData[j]);
+		globals.sPrint("INT: " + myGrain.iArray[j]);
 	    }
 	}
 		
 	if (incAppDataType == dataType.BYTE) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		incByteData[j] = clients[tCNum].getNetByte();
-		globals.sPrint("BYTE: " + (char) incByteData[j]);
+		globals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
 	    }
 	}
     
@@ -142,37 +154,23 @@ public class NomadServer implements Runnable {
 	globals.sPrint("sending data ...");
 
 	for (int c = 0; c < clientCount; c++) {
+	    
+	    // Get the client off the master list
+	    currentClient = clients[c];
 
-	    globals.sPrint("client [" + c + "]");
+	    myGrain.print();
+
 	    // Write the data out
-	    globals.sPrint("appID: " + incAppID);
-	    clients[c].sendNetByte(incAppID);
+	    outSand.sendGrain(myGrain);
 
-	    globals.sPrint("appCmd: " + incAppCmd);
-	    clients[c].sendNetByte(incAppCmd);
-
-	    globals.sPrint("dType: " + incAppDataType);
-	    clients[c].sendNetByte(incAppDataType);
-
-	    globals.sPrint("dLen: " + incAppDataLen);
-	    clients[c].sendNetInt(incAppDataLen);
-	    
-	    if (incAppDataType == dataType.INT) {
-		for (int j=0; j < incAppDataLen; j++ ) {
-		    globals.sPrint("INT: " + incIntData[j]);
-		    clients[c].sendNetInt(incIntData[j]);
-		}
-	    }
-	    if (incAppDataType == dataType.BYTE) {
-		for (int j=0; j < incAppDataLen; j++ ) {
-		    globals.sPrint("BYTE: " + (char) incByteData[j]);
-		    clients[c].sendNetByte(incByteData[j]);
-		}
-	    }
-	}
-	    
+	}   
 	// END --------------------------------------------------------------------
-	globals.sPrint("handle(DONE) " + THREAD_ID + ":" + incAppID);
+	globals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+
+	// Free up memory
+	if (myGrain != null) {
+	    myGrain = null;
+	}
     }
 
     
