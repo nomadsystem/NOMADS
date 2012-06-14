@@ -153,10 +153,17 @@ public class NomadServerThread extends Thread
     public void run() {  
     	System.out.println("Server Thread " + THREAD_ID + " running.");
 		while (true) {  
-		    server.handle(THREAD_ID);
-		}
+			try {  
+			    server.handle(THREAD_ID, streamIn.readByte());
+	       	        }
+			catch(IOException ioe) {  
+				System.out.println(THREAD_ID + " ERROR reading: " + ioe.getMessage());
+				server.remove(THREAD_ID);
+				stop();
+		    }
+	    }
     }
-    
+
     public void open() throws IOException {  
     	streamIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 	streamOut = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));

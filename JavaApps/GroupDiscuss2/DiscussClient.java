@@ -140,7 +140,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		add(wholeThing, BorderLayout.CENTER);
 
 
-		discussSand = new NSand(); //Connects on init
+		discussSand = new NSand(); //Connects on init - NO IT DOESN'T
 		discussSand.connect();
 
 		nThread = new NomadsAppThread(this);
