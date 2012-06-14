@@ -603,6 +603,12 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 			NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
 			repaint();
 		}
+		
+		else {
+			grain = null;
+		}
+		if (grain != null)
+			grain = null;
 		// END OC_CLOUD ------------------------------------------------------------------------------------
 
 

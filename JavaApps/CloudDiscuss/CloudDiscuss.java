@@ -125,8 +125,7 @@ public class CloudDiscuss extends JApplet implements ActionListener, KeyListener
 
 		cloudSand = new NSand(); //Connects on init
 		cloudSand.connect();
-		//	   connect(serverName, serverPort);	
-
+		
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 
@@ -163,6 +162,11 @@ public class CloudDiscuss extends JApplet implements ActionListener, KeyListener
 				topic.setText(tempString);
 			}
 		} 
+		else {
+			grain = null;
+		}
+		if (grain != null)
+			grain = null;
 		input.requestFocus();
 	}
 

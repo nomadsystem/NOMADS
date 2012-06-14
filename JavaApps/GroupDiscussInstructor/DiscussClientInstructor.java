@@ -183,10 +183,15 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 				topic.setText(msg);
 			}			
 		}
-		else {
+		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
 			chatWindow.append(msg + "\n");
 			input.requestFocus();
 		}
+		else {
+			grain = null;
+		}
+		if (grain != null)
+			grain = null;
 		
 	}
 

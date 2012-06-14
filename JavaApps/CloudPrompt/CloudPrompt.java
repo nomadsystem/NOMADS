@@ -37,7 +37,6 @@ public class CloudPrompt extends JApplet implements ActionListener
 	private NomadsAppThread nThread;
 	
 	String temp = "";
-	Byte SANDnumber = 00;
 
 	JLabel title;
 	JButton ask;

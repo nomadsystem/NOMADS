@@ -1,4 +1,4 @@
-include ../makefile.conf
+include makefile.conf
 
 .SUFFIXES: .java .class
 .java.class:

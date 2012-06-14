@@ -142,7 +142,6 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		discussSand = new NSand(); //Connects on init
 		discussSand.connect();
-		//	   connect(serverName, serverPort);	
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
@@ -180,10 +179,15 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 				topic.setText(msg);
 			}			
 		}
-		else {
+		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
 			chatWindow.append(msg + "\n");
 			input.requestFocus();
 		}
+		else {
+			grain = null;
+		}
+		if (grain != null)
+			grain = null;
 		
 	}
 
