@@ -1,11 +1,11 @@
-include makefile.conf
+include ../makefile.conf
 
 .SUFFIXES: .java .class
 .java.class:
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-        DiscussClient.java
+        CloudDisplay.java
 
 default: classes
 

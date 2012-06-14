@@ -1,6 +1,6 @@
 /*
-  NOMADS Group Discuss v.210
-  Revised/cleaned, 6/12/2012, Steven Kemper
+  NOMADS Group Discuss (Instructor) v.210
+  Revised/cleaned, 6/14/2012, Steven Kemper
   Integrating NOMADSApp class
  */
 
@@ -15,14 +15,12 @@ import java.util.*;
 import java.lang.*;
 import nomads.v210.*;
 
-public class DiscussClient extends JApplet implements ActionListener, KeyListener {   
-
-
+public class DiscussClientInstructor extends JApplet implements ActionListener, KeyListener {   
 
 	private class NomadsAppThread extends Thread {
-		DiscussClient client; //Replace with current class name
+		DiscussClientInstructor client; //Replace with current class name
 
-		public NomadsAppThread(DiscussClient _client) {
+		public NomadsAppThread(DiscussClientInstructor _client) {
 			client = _client;
 		}
 		public void run()    {			
@@ -33,18 +31,17 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		}
 	}
 
-
 	NSand discussSand;
 	private NomadsAppThread nThread;
 
 	JTextArea chatWindow;
 	JScrollPane spane;
-	JButton speak;
+	JButton speak, connect, disconnect;
 	JTextField input;
 	JPanel panel, panPanel, wholeThing, lTab, rTab, titleTopicPanel;
 	JLabel title, topic, spa1, spa2, spa3, spa5;
 	Font titleFont, topicFont;
-	String tempString = "";   
+
 	//background color for the whole applet
 	Color BG = new Color(158,55,33);      
 
@@ -57,13 +54,13 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 	//color for chat window
 	Color chatColor = new Color(0,0,0);
 
-	Font chatFont = new Font("sansserif", Font.BOLD, 18);
+	Font chatFont = new Font("sansserif", Font.PLAIN, 18);
 
 	boolean c = false; //flag to see if it is connected to server
 	int wait;
 
 	public void init()
-	{ 
+	{ //daniel's swingin' code
 		//topmost container. It will hold wholeThing, which is the applet
 		setLayout( new BorderLayout() );
 
@@ -74,8 +71,9 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		//initialize components
 		speak = new JButton("Speak");
+		//	  connect = new JButton("Connect");
+		//	  disconnect = new JButton("Disconnect");
 		chatWindow = new JTextArea(10,30);
-
 		//makes chat window autoscroll
 		DefaultCaret caret = (DefaultCaret)chatWindow.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -84,12 +82,11 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		chatWindow.setBackground(cWindy);
 		chatWindow.setFont(chatFont);
 		chatWindow.setDisabledTextColor(chatColor);
-
 		spane = new JScrollPane(chatWindow);
 		input = new JTextField("", 30);
 		input.setBackground(inputColor);
 		panel = new JPanel( new FlowLayout() ); //holds buttons and textfield 
-		panPanel = new JPanel( new GridLayout(1,1,0,5)); //holds panel for spacing and color purposes
+		panPanel = new JPanel( new GridLayout(1,1,0,5)); //holds panel for spacing and color purposes...may not be necessary
 		panPanel.setBackground(BG);
 		panel.setBackground(BG);		  
 
@@ -107,10 +104,13 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 
 		//key listener stuff
+		//	  input.setFocusable(true);
 		input.addKeyListener(this); 
 
 		//add action listeners to the buttons
 		speak.addActionListener(this);
+		//	  connect.addActionListener(this);
+		//	  disconnect.addActionListener(this);
 
 		//buffer the sides of the applet  
 		lTab = new JPanel( new FlowLayout() );
@@ -120,14 +120,18 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		spa1 = new JLabel("            ");
 		spa2 = new JLabel("            ");
+		//spa3 = new JLabel("            ");
 		spa5 = new JLabel("                 ");
 		lTab.add(spa1);
 		rTab.add(spa2);
 
 		//add components to the applet
+		//	   panel.add(connect);
+		//	   panel.add(disconnect);
 		panel.add(spa5);
 		panel.add(input);
 		panel.add(speak);   
+		//panPanel.add(spa3);
 		panPanel.add(panel);
 
 
@@ -139,12 +143,12 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		add(wholeThing, BorderLayout.CENTER);
 
-
 		discussSand = new NSand(); //Connects on init
 		discussSand.connect();
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+
 	}
 
 	public void handle()
@@ -163,7 +167,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		if (grain.appID == NAppID.DISCUSS_PROMPT) {
 			topic.setText(msg);
-			tempString = new String(msg);
+			String tempString = new String(msg);
 			topic.setForeground(Color.BLACK);
 			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 		}
@@ -192,15 +196,14 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 	}
 
 
+
 	////////////////////////////////////////////////////////////////////////////
 	//key listener code
 	///////////////////////////////////////////////////////////////////////////
-
-
 	public void keyPressed (KeyEvent e)
 	{
-		if (e.getKeyCode() == 10) {// enter key
-
+		if (e.getKeyCode() == 10) // enter key
+		{
 			NGlobals.cPrint("ENTER");
 
 			String tString = input.getText();
@@ -208,7 +211,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 
 			// The data 
@@ -221,7 +224,6 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 			NGlobals.cPrint("sending: (" + tString + ")");
 			input.setText("");
-
 		}
 	}
 
@@ -239,17 +241,17 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 	{
 		Object source = ae.getSource();
 
-
 		//listener code for speak button
 		if (source == speak)
 		{
-			NGlobals.cPrint("pressed speak button");
+			NGlobals.cPrint("ENTER");
+
 			String tString = input.getText();
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 
 			// The data 
@@ -262,7 +264,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 			NGlobals.cPrint("sending: (" + tString + ")");
 			input.setText("");
-
+			//       	 }
 		} 
 	}
 
