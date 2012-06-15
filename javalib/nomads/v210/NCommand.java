@@ -6,5 +6,4 @@ public class NCommand {
     public static int QUESTION_TYPE_YES_NO = 2;
     public static int QUESTION_TYPE_ONE_TO_TEN = 3;
     public static int QUESTION_TYPE_A_TO_E = 4;
-    public static int TEST = 5;
-}
+    }
