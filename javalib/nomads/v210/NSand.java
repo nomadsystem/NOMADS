@@ -14,8 +14,7 @@ public class NSand
     //(Fields)
     private Socket socket              = null;
     private DataInputStream  streamIn   = null;
-    private DataOutputStream streamOut = null;    private String    serverName = "nomads.music.virginia.edu";
-    private int       serverPort = 52820;
+    private DataOutputStream streamOut = null;
 
     // Maybe yes to these
     URL imgWebBase, webBase;
@@ -289,7 +288,7 @@ public class NSand
     {  
 	System.out.println("Establishing connection. Please wait ...");
 	try {  
-	    socket = new Socket(serverName, serverPort);
+	    socket = new Socket(NGlobals.serverName, NGlobals.serverPort);
 	    System.out.println("Connected");
 	}
 	catch(IOException ioe) {  
