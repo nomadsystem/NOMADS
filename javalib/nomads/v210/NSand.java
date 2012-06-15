@@ -34,18 +34,18 @@ public class NSand
 			// send command
 			streamOut.writeByte(myGrain.command);
 			// send data Type
-			streamOut.writeByte(myGrain.dType);
+			streamOut.writeByte(myGrain.dataType);
 			// send data Length
 			streamOut.writeInt(myGrain.dataLen);
 
 			// send data
-			if (myGrain.dType == NDataType.BYTE) {
+			if (myGrain.dataType == NDataType.BYTE) {
 				for (int i=0; i<myGrain.dataLen; i++) {
 					streamOut.writeByte(myGrain.bArray[i]);
 				}
 			}
 
-			if (myGrain.dType == NDataType.INT) {
+			if (myGrain.dataType == NDataType.INT) {
 				for (int i=0; i<myGrain.dataLen; i++) {
 					streamOut.writeInt(myGrain.iArray[i]);
 				}

@@ -1,5 +1,5 @@
 /*
-  NOMADS Poll Promot v.210
+  NOMADS Poll Prompt v.210
   Revised/cleaned, 6/15/2012, Steven Kemper
   Integrating NOMADSApp class
  */
@@ -175,7 +175,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		String response = new String(grain.bArray);
 
 		if (grain.appID == NAppID.STUDENT_POLL) {
-			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)
+			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)	// Replace with QUESTION_TYPE_YES_NO)
 			{
 				if (response.equalsIgnoreCase("yes")) //eventually may want to convert these to commands
 				{
@@ -225,7 +225,7 @@ public class PollPrompt extends JApplet implements ActionListener
 			}
 			
 			//parse 1 to 10 results
-			else if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)
+			else if (incCmd == NCommand.SEND_MESSAGE)	// Replace with QUESTION_TYPE_ONE_TO_TEN)
 			{
 				resp = Integer.parseInt(response); //May need to deal with gettng results as an int or string ****STK 6/15/12
 				runningTotal += resp;
@@ -258,14 +258,14 @@ public class PollPrompt extends JApplet implements ActionListener
 
 		if (source == ask)
 		{
-			int tCommand;
+			int tCommand = NCommand.SEND_MESSAGE;
 
 			int tQuestionType = qType.getSelectedIndex();
 			
 			if (tQuestionType == 0) //refers to JComboBox index number
-				tCommand = NCommand.QUESTION_TYPE_YES_NO;
+				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_YES_NO;
 			else if (tQuestionType == 1)
-				tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
 			else 
 				NGlobals.cPrint("Invalid question type specified");
 
@@ -345,13 +345,13 @@ public class PollPrompt extends JApplet implements ActionListener
 		}
 		if (source == question)
 		{
-			int tCommand;
+			int tCommand = NCommand.SEND_MESSAGE;
 
 			int tQuestionType = qType.getSelectedIndex();
 			if (tQuestionType == 0) //refers to JComboBox index number
-				tCommand = NCommand.QUESTION_TYPE_YES_NO;
+				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_YES_NO;
 			else if (tQuestionType == 1)
-				tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
 			else {
 				NGlobals.cPrint("Invalid question type specified");
 			}
