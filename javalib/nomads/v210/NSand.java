@@ -288,7 +288,7 @@ public class NSand
     {  
 	System.out.println("Establishing connection. Please wait ...");
 	try {  
-	    socket = new Socket(NGlobals.serverName, NGlobals.serverPort);
+		socket = new Socket(NGlobals.serverName, NGlobals.serverPort);
 	    System.out.println("Connected");
 	}
 	catch(IOException ioe) {  
