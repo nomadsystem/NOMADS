@@ -4,7 +4,7 @@ public class NGrain {
 
 	public byte appID;
 	public byte command;
-	public byte dataType;
+	public byte dataType; //For some reason, it wouldn't compile with "dataType" ***STK 6/15/12
 	public int dataLen;
 
 	public byte[] bArray;
