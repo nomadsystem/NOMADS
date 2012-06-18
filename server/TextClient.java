@@ -1,6 +1,6 @@
 import java.net.*;
 import java.io.*;
-import nomads.v200.*;
+import nomads.v210.*;
 
 public class TextClient implements Runnable
 {  private Socket socket              = null;
@@ -13,7 +13,7 @@ public class TextClient implements Runnable
     public TextClient(int serverPort)
     {  System.out.println("Establishing connection. Please wait ...");
 	try
-	    {  socket = new Socket(globals.serverName, serverPort);
+	    {  socket = new Socket(NGlobals.serverName, NGlobals.serverPort);
 		System.out.println("Connected: " + socket);
 		start();
 	    }
@@ -31,30 +31,30 @@ public class TextClient implements Runnable
 		    String tString = console.readLine();
 		    // This will be your app id
 
-		    streamOut.writeByte(appID.DEBUG);
+		    streamOut.writeByte(NAppID.DEBUG);
 		    
 		    // Command
-		    streamOut.writeInt(command.SEND_MESSAGE);
+		    streamOut.writeInt(NCommand.SEND_MESSAGE);
 		    
 		    // Number of blocks, 1 in this case
 		    streamOut.writeInt(1);
 		    
 		    // Data type of first block
-		    streamOut.writeInt(dataType.BYTE);
+		    streamOut.writeInt(NDataType.BYTE);
 
 		    // Number (how many) of this data type
 		    int tLen = tString.length();
 		    streamOut.writeInt(tLen);
 		    
 		    // The data 
-		    globals.cPrint("sending:  (" + tLen + ") of this data type");
+		    NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
 
 		    for (int i=0; i<tLen; i++) {
- 			globals.cPrint("sending:  " + tString.charAt(i));
+ 			NGlobals.cPrint("sending:  " + tString.charAt(i));
  			streamOut.writeByte(tString.charAt(i));
  		    }
 
-		    globals.cPrint("sending: (" + tString + ")");
+		    NGlobals.cPrint("sending: (" + tString + ")");
 
 		    // Flush it
 		    streamOut.flush();
@@ -83,31 +83,31 @@ public class TextClient implements Runnable
 	    incDType = (int) streamIn.readByte();
 	    incDLen = (int) streamIn.readInt();
 
-	    globals.cPrint("received:  [" + incAppID + "]" + "[" + incCmd + "]" + "[" + incNBlocks + "]" + "[" + incDType + "]" + "[" + incDLen + "]");
+	    NGlobals.cPrint("received:  [" + incAppID + "]" + "[" + incCmd + "]" + "[" + incNBlocks + "]" + "[" + incDType + "]" + "[" + incDLen + "]");
 
 	    // Read each specific BLOCK
 	    for (j = 0; j < incDLen; j++) {
 		
 		// For reference, not used by this app (since it's text based)
-		if (incDType == dataType.INT) {
+		if (incDType == NDataType.INT) {
 		    incIntData[j] = (int) streamIn.readInt();
-		    globals.sPrint("received INT [" + j + "] " + incIntData[j]);
+		    NGlobals.sPrint("received INT [" + j + "] " + incIntData[j]);
 		}
 		
-		if (incDType == dataType.BYTE) {
+		if (incDType == NDataType.BYTE) {
 		    byte tByte = streamIn.readByte();
 		    incByteData[j] = tByte;
 
-		    globals.sPrint("received tByte: " + tByte);
-		    globals.sPrint("received incByteData [" + j + "]" + (char) incByteData[j]);
+		    NGlobals.sPrint("received tByte: " + tByte);
+		    NGlobals.sPrint("received incByteData [" + j + "]" + (char) incByteData[j]);
 
 		}
 	    }
 
-	    if (incDType == dataType.BYTE) {
+	    if (incDType == NDataType.BYTE) {
 	     	String dataString = new String(incByteData);
-	     	// globals.cPrint("received data: " + incByteData);
-	     	globals.cPrint("received string " + dataString);
+	     	// NGlobals.cPrint("received data: " + incByteData);
+	     	NGlobals.cPrint("received string " + dataString);
 	     }
 	    
 	}

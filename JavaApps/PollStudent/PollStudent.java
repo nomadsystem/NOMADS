@@ -9,7 +9,6 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import nomads.technosonics.*;
 import java.util.*;
 import java.lang.*;
 import nomads.v210.*;
@@ -46,11 +45,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 	Color BG2 = new Color(145, 106, 65);
 
 	//the question to pose. taken from teacher's app.
-	String toBePosed = "yy";
-
 	String temp = "";
-
-	String currentQuestionType = "";
 
 	//just for gui making purposes, delete later
 	String q = "";
@@ -146,53 +141,39 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 
 
-	
+
 
 	//read poll information from teacherpoll app
 	public void handle()    {
-		int i;
+		int currentQuestionType = 0;
+		String previousQuestion = "";
+		int i,j;
+		int appID, incCmd, incDType, incDLen;
+		int incIntData[] = new int[1000];
+		byte incByteData[] = new byte[1000];  
+		NGrain grain;
+
+		grain = pollSand.getGrain();
+		grain.print(); //prints grain data to console
+
+		appID = grain.appID;
+		incCmd = grain.command;
+		currentQuestionType = incCmd;
+		String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
+
 		NGlobals.cPrint("****************");
-		NGlobals.cPrint("socketpoll handle method");
-		SANDnumber = sandByte;
-		if (globals.clientDebugLevel > 0) 
-		{NGlobals.cPrint("...");} 
-		NGlobals.cPrint("sandByte: " + sandByte);
+		NGlobals.cPrint("Student Poll handle method");
 
-		temp = "";
-		toBePosed = "xx";
-		String questionType = "";
-		//String qTypeANDtoBePosed = "";
-		if (globals.clientDebugLevel > 0) 
-		{NGlobals.cPrint("...");} 
-		NGlobals.cPrint("s " + s);
-
-		if (previousQuestion.equals(s)) {
+		if (previousQuestion.equals(toBePosed)) {
 			return;
 		}
 
-		previousQuestion = new String(s);
+		previousQuestion = toBePosed;
 
-		//parse the SANDnumber and qTypeANDtoBePosed
-		/*for (int i = 0; i < s.length(); i++)
-	  {
-	  temp = s.substring(i,i+1);
-	  if (temp.equalsIgnoreCase(":"))
-	  {
-	  //SANDnumber = s.substring(i+2, i+4);
-	  qTypeANDtoBePosed = s.substring(i+4);
-	  break;
-	  }
-	  }
+		if (appID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
 
-	  NGlobals.cPrint("SANDnumber " + SANDnumber);
-	  NGlobals.cPrint("qTypeANDtoBePosed " + qTypeANDtoBePosed);
-		 */
-		//temp = "";
-
-		if (SANDnumber == app_id.INSTRUCTOR_PANEL) {
-
-			if (s.equalsIgnoreCase("VOTE")) {
-				if (currentQuestionType.equalsIgnoreCase("Yes-No")) {
+			if (incCmd == NCommand.VOTE) {
+				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO) {
 					yes.setEnabled(true);
 					no.setEnabled(true);
 
@@ -202,7 +183,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 				}
-				if (currentQuestionType.equalsIgnoreCase("Scale of 1 to 10")) {
+				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
 					one.setEnabled(true);
 					two.setEnabled(true);
 					three.setEnabled(true);
@@ -236,32 +217,15 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 
 		//if this string was sent from the teacher poll
-		if (SANDnumber == app_id.TEACHER_POLL)
+		if (appID == NAppID.TEACHER_POLL)
 		{	 
-			// parse the questionType and the question toBePosed from String s
-			for (int j = 0; j < s.length(); j++)
-			{
-				temp = s.substring(j,j+1);
-				if (temp.equalsIgnoreCase(";"))
-				{
-					questionType = s.substring(0,j);
-					toBePosed = s.substring(j+1);
-					break;
-				}
-			}
-			if (globals.clientDebugLevel > 0) 
-			{NGlobals.cPrint("...");} 
-			NGlobals.cPrint("questionType " + questionType);
-			if (globals.clientDebugLevel > 0) 
-			{NGlobals.cPrint("...");} 
-			NGlobals.cPrint("toBePosed " + toBePosed);
 
 
 			//set the question type ===========================================--------------
 
-			if (questionType.equalsIgnoreCase("A through E"))  // +++++++++++++++++++++++++++
+			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++
 			{
-				if (currentQuestionType.equalsIgnoreCase(""))
+				if (currentQuestionType == 0)
 				{
 					// gui is blank
 					// add the options
@@ -276,10 +240,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "A through E";
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
 				}
 
-				if (currentQuestionType.equalsIgnoreCase(questionType))
+				if (currentQuestionType == incCmd) //Question type is already set...
 				{
 					// gui is already set to display yes no question type
 
@@ -291,7 +255,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 				}
 
-				if (currentQuestionType.equalsIgnoreCase("Scale of 1 to 10"))
+				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
 				{
 					// out with the old
 					oneToTen.remove(one);
@@ -317,9 +281,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "A through E";
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
-				if (currentQuestionType.equalsIgnoreCase("Yes-No"))
+
+				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
 				{
 					// out with the old
 					oneToTen.remove(yes);
@@ -336,15 +301,15 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "A through E";
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
 			}
 
 
-			if (questionType.equalsIgnoreCase("Yes-No"))  // +++++++++++++++++++++++++++
+			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  // +++++++++++++++++++++++++++
 			{
-				if (currentQuestionType.equalsIgnoreCase(""))
+				if (currentQuestionType == 0)
 				{
 					// gui is blank
 					// add the options
@@ -362,10 +327,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Yes-No";
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
-				if (currentQuestionType.equalsIgnoreCase(questionType))
+				if (currentQuestionType == incCmd)
 				{
 					// gui is already set to display yes no question type
 
@@ -377,7 +342,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 				}
 
-				if (currentQuestionType.equalsIgnoreCase("Scale of 1 to 10"))
+				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
 				{
 					// out with the old
 					oneToTen.remove(one);
@@ -405,10 +370,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Yes-No";
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
-				if (currentQuestionType.equalsIgnoreCase("A through E")) {
+				if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
 
 					// out with the old
 					for(i=0;i<5;i++) {
@@ -429,14 +394,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Yes-No";
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
 			}
 
-			if (questionType.equalsIgnoreCase("Scale of 1 to 10"))  // +++++++++++++++++++++++++++
+			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  // +++++++++++++++++++++++++++
 			{
-				if (currentQuestionType.equalsIgnoreCase(""))
+				if (currentQuestionType == 0)
 				{
 					// gui is blank
 					// add the options
@@ -478,10 +443,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Scale of 1 to 10";
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
 
-				if (currentQuestionType.equalsIgnoreCase(questionType))
+				if (currentQuestionType == incCmd)
 				{
 					// gui is already set to display scale of one to ten question
 
@@ -509,7 +474,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					ten.setSelected(false);	
 				}
 
-				if (currentQuestionType.equalsIgnoreCase("Yes-No"))
+				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
 				{
 					// out with the old
 					oneToTen.remove(yes);
@@ -554,9 +519,9 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Scale of 1 to 10";
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
-				if (currentQuestionType.equalsIgnoreCase("A through E")) {
+				if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
 
 					// out with the old
 					for(i=0;i<5;i++) {
@@ -602,18 +567,18 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = "Scale of 1 to 10";
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
 			}	 
 			//set the question to be posed
 			question.setText("<html><h2 style='color:black;font-size:125%'>" + toBePosed + "</h2></html>");
-			globals.cPrint("Setting toBePosed to: " + toBePosed);
+			NGlobals.cPrint("Setting toBePosed to: " + toBePosed);
 		}
 		else
 		{
-			NGlobals.cPrint("Socketpoll says extraneous information");
+			NGlobals.cPrint("PollStudent says extraneous information");
 		}
-		NGlobals.cPrint("Leaving socketpoll handle method");      	 
+		NGlobals.cPrint("Leaving PollStudent handle method");      	 
 	}
 
 
@@ -624,6 +589,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 	public void actionPerformed(java.awt.event.ActionEvent ae)
 	{
 		int i;
+		int tCommand = 0;
 		Object source = ae.getSource();
 
 		int turnOff = 1;
@@ -647,35 +613,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			no.setEnabled(false);
 
 			//show results with color
-
-			int tCommand = NCommand.SEND_MESSAGE; //CHANGE ME
-
-			int tQuestionType = qType.getSelectedIndex();
 			
-			if (tQuestionType == 0) //refers to JComboBox index number
-				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_YES_NO;
-			else if (tQuestionType == 1)
-				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
-			else 
-				NGlobals.cPrint("Invalid question type specified");
-
-			String tString = question.getText();
+			String tString = "yes";
+			tCommand = NCommand.QUESTION_TYPE_YES_NO;
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			pollSand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-			
-			try
-			{	
-				NGlobals.cPrint("WRITING YES");
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("yes");
-				streamOut.flush();
-				NGlobals.cPrint("IT WAS WRITTEN");
-			}
-			catch (IOException ioe)
-			{
-			}
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending Yes");
 		}
 
 		if (source == no)
@@ -687,17 +632,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			no.setEnabled(false);
 			//show results with color
 
-			try
-			{	
-				NGlobals.cPrint("WRITING NO");
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("no");
-				streamOut.flush();
-				NGlobals.cPrint("IT WAS WRITTEN");
-			}
-			catch (IOException ioe)
-			{
-			}
+			String tString = "no";
+			tCommand = NCommand.QUESTION_TYPE_YES_NO;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending No");
 		}
 
 		if (source == one)
@@ -730,15 +671,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				ten.setEnabled(false);
 			}
 
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("1");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			//Eventually change to ints instead of string ***STK 6/18/12
+			String tString = "1";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 1");
 		}
 
 		if (source == two)
@@ -769,15 +709,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("2");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			
+			String tString = "2";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 2");
 
 		}
 
@@ -808,15 +747,15 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("3");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			
+			String tString = "3";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 3");
+
 
 		}
 
@@ -847,15 +786,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("4");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "4";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 4");
+
 
 		}
 
@@ -886,15 +824,14 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("5");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "5";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 5");
+
 
 		}
 
@@ -925,15 +862,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("6");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "6";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 6");
 
 		}
 
@@ -964,15 +899,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("7");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "7";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 7");
 
 		}
 
@@ -1003,15 +936,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("8");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "8";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 8");
 
 		}
 
@@ -1044,15 +975,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 			//show understanding with color
 
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("9");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "9";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 9");
 
 		}
 
@@ -1083,15 +1012,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			try
-			{
-				streamOut.writeByte(app_id.STUDENT_POLL);
-				streamOut.writeUTF("10");
-				streamOut.flush();
-			}
-			catch (IOException ioe)
-			{   
-			}
+			String tString = "10";
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+			pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			NGlobals.cPrint("Sending 10");
 
 		}		  		
 	}	
