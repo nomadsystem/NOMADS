@@ -39,13 +39,13 @@ public class NomadServer implements Runnable {
 	    users[i] = null;
 	}
     	try {  
-	    globals.sPrint("  Binding to port " + port + ", please wait  ...");
+	    NGlobals.sPrint("  Binding to port " + port + ", please wait  ...");
 	    server = new ServerSocket(port);  
-	    globals.sPrint("  Server started: " + server);
+	    NGlobals.sPrint("  Server started: " + server);
 	    start(); 
 	}
 	catch(IOException ioe)  {  	   
-	    globals.sPrint("  Can not bind to port " + port + ": " + ioe.getMessage());
+	    NGlobals.sPrint("  Can not bind to port " + port + ": " + ioe.getMessage());
 	    ioe.printStackTrace();
 	    System.exit(1); 
 	}
@@ -58,11 +58,11 @@ public class NomadServer implements Runnable {
     public void run()  {  
     	while (thread != null) {  
 	    try {  
-		globals.sPrint("  Waiting for a client ..."); 
+		NGlobals.sPrint("  Waiting for a client ..."); 
 		addThread(server.accept()); 
 	    }
 	    catch(IOException ioe)  {  
-		globals.sPrint("  Server accept error: " + ioe); stop(); }
+		NGlobals.sPrint("  Server accept error: " + ioe); stop(); }
 	}
     }
     
@@ -95,7 +95,7 @@ public class NomadServer implements Runnable {
 
 	NGrain inGrain;
 
-    	globals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
+    	NGlobals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
     	
 		
 	// =====================================================================================================
@@ -107,7 +107,7 @@ public class NomadServer implements Runnable {
 	// 1 ---- READ ---------------------------------------
 	// ---------------------------------------------------
 
-	globals.sPrint("reading data ...");
+	NGlobals.sPrint("reading data ...");
 
 
 	// Get client number of inc client
@@ -126,21 +126,21 @@ public class NomadServer implements Runnable {
 	incAppDataType = myGrain.dataType;
 	incAppDataLen = myGrain.dataLen;
 
-	globals.sPrint("appID: " + incAppID);
-	globals.sPrint("command: " + incAppCmd);
-	globals.sPrint("dataType: " + incAppDataType);
-	globals.sPrint("dataLen: " + incAppDataLen);
+	NGlobals.sPrint("appID: " + incAppID);
+	NGlobals.sPrint("command: " + incAppCmd);
+	NGlobals.sPrint("dataType: " + incAppDataType);
+	NGlobals.sPrint("dataLen: " + incAppDataLen);
 
 	// Read each specific BLOCK
-	if (incAppDataType == dataType.INT) {
+	if (incAppDataType == NDataType.INT) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		globals.sPrint("INT: " + myGrain.iArray[j]);
+		NGlobals.sPrint("INT: " + myGrain.iArray[j]);
 	    }
 	}
 		
-	if (incAppDataType == dataType.BYTE) {
+	if (incAppDataType == NDataType.BYTE) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		globals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
+		NGlobals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
 	    }
 	}
     
@@ -150,7 +150,7 @@ public class NomadServer implements Runnable {
 
 	// For each client SEND ALL DATA
 
-	globals.sPrint("sending data ...");
+	NGlobals.sPrint("sending data ...");
 
 	for (int c = 0; c < clientCount; c++) {
 	    
@@ -167,7 +167,7 @@ public class NomadServer implements Runnable {
 
 	}   
 	// END --------------------------------------------------------------------
-	globals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+	NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
 
 	// Free up memory
 	if (myGrain != null) {
@@ -188,7 +188,7 @@ public class NomadServer implements Runnable {
 	    NomadServerThread toTerminate = clients[pos];
 
 	    if (pos < clientCount-1) {
-		globals.sPrint("Removing client thread " + THREAD_ID + " at " + pos);
+		NGlobals.sPrint("Removing client thread " + THREAD_ID + " at " + pos);
 		for (int i = pos+1; i < clientCount; i++) {
 		    clients[i-1] = clients[i];
 		    tID = clients[i-1].getThreadID();
@@ -201,24 +201,24 @@ public class NomadServer implements Runnable {
 		toTerminate.stop(); 
 	    }
 	    catch(IOException ioe) {  
-		globals.sPrint("  Error closing thread: " + ioe); 
+		NGlobals.sPrint("  Error closing thread: " + ioe); 
 	    }
         }
     }
     
     private  synchronized void addThread(Socket socket) {  
 	int tID;
-    	globals.sPrint("addThread(" + socket + ")");
+    	NGlobals.sPrint("addThread(" + socket + ")");
 
 	String IP = new String((socket.getInetAddress()).getHostAddress());
 
-    	globals.sPrint("     clientCount = " + clientCount);
-    	globals.sPrint("     clients.length = " + clients.length);
+    	NGlobals.sPrint("     clientCount = " + clientCount);
+    	NGlobals.sPrint("     clients.length = " + clients.length);
 
 
     	if (clientCount < clients.length) {  
-	    globals.sPrint("  Client accepted: " + socket);
-	    globals.sPrint("  IP = " + IP);
+	    NGlobals.sPrint("  Client accepted: " + socket);
+	    NGlobals.sPrint("  IP = " + IP);
 
 	    clients[clientCount] = new NomadServerThread(this, socket);
 	    try {  
@@ -228,21 +228,21 @@ public class NomadServer implements Runnable {
 		clientThreadNum[tID] = (short)clientCount;
 		clients[clientCount].start();  
 
-		globals.sPrint("  Client added to lookup array at slot # " + clientCount);
+		NGlobals.sPrint("  Client added to lookup array at slot # " + clientCount);
 		clientCount++; 
 	    }
 	    catch(IOException ioe) {  
-		globals.sPrint("    Error opening thread: " + ioe); 
+		NGlobals.sPrint("    Error opening thread: " + ioe); 
 	    } 
         }
 	else
-	    globals.sPrint("  Client refused: maximum " + clients.length + " reached.");
+	    NGlobals.sPrint("  Client refused: maximum " + clients.length + " reached.");
     }
     
     public static void main(String args[]) {  
     	NomadServer server = null;
 	if (args.length != 1)
-	    globals.sPrint("Usage: java NomadServer port");
+	    NGlobals.sPrint("Usage: java NomadServer port");
 	else
 	    server = new NomadServer(Integer.parseInt(args[0]));
     }
