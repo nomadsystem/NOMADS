@@ -225,7 +225,7 @@ public class PollPrompt extends JApplet implements ActionListener
 			}
 			
 			//parse 1 to 10 results
-			else if (incCmd == NCommand.SEND_MESSAGE)	// Replace with QUESTION_TYPE_ONE_TO_TEN)
+			else if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)	// Replace with QUESTION_TYPE_ONE_TO_TEN)
 			{
 				resp = Integer.parseInt(response); //May need to deal with gettng results as an int or string ****STK 6/15/12
 				runningTotal += resp;
@@ -345,13 +345,13 @@ public class PollPrompt extends JApplet implements ActionListener
 		}
 		if (source == question)
 		{
-			int tCommand = NCommand.SEND_MESSAGE;
+			int tCommand = 0;
 
 			int tQuestionType = qType.getSelectedIndex();
 			if (tQuestionType == 0) //refers to JComboBox index number
-				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_YES_NO;
+				tCommand = NCommand.QUESTION_TYPE_YES_NO;	// Replace with QUESTION_TYPE_YES_NO;
 			else if (tQuestionType == 1)
-				tCommand = NCommand.SEND_MESSAGE;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
+				tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
 			else {
 				NGlobals.cPrint("Invalid question type specified");
 			}
