@@ -163,12 +163,15 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 		NGlobals.cPrint("****************");
 		NGlobals.cPrint("Student Poll handle method");
+		NGlobals.cPrint("Student Poll Command = " + incCmd);
+		NGlobals.cPrint("Student Poll toBePosed = " + toBePosed);
 
 		if (previousQuestion.equals(toBePosed)) {
 			return;
 		}
 
 		previousQuestion = toBePosed;
+		NGlobals.cPrint("Student Poll previousQuestion = " + previousQuestion);
 
 		if (appID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
 
@@ -224,6 +227,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			//set the question type ===========================================--------------
 
 			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++
+				NGlobals.cPrint("Student Poll: Got A-E Question");
 			{
 				if (currentQuestionType == 0)
 				{
@@ -234,6 +238,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 						ateBox[i].setEnabled(true);
 						ateBox[i].setSelected(false);
 					}
+					NGlobals.cPrint("Student Poll AEQ: Adding A-E Buttons");
 
 
 					//refresh the gui
@@ -243,19 +248,20 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
 				}
 
-				if (currentQuestionType == incCmd) //Question type is already set...
+				else if (currentQuestionType == incCmd) //Question type is already set...
 				{
 					// gui is already set to display yes no question type
 
 					for(i=0;i<5;i++) {
-						oneToTen.add(ateBox[i]);
+					//	oneToTen.add(ateBox[i]);
 						ateBox[i].setEnabled(true);
 						ateBox[i].setSelected(false);
 					}
+					NGlobals.cPrint("Student Poll AEQ: Already has question Adding A-E Buttons");
 
 				}
 
-				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
 				{
 					// out with the old
 					oneToTen.remove(one);
@@ -276,15 +282,16 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 						ateBox[i].setEnabled(true);
 						ateBox[i].setSelected(false);
 					}
+					NGlobals.cPrint("Student Poll AEQ: Removing 1-10, Adding A-E Buttons");
 
 					//refresh the gui
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
 				}
 
-				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
 				{
 					// out with the old
 					oneToTen.remove(yes);
@@ -296,18 +303,21 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 						ateBox[i].setEnabled(true);
 						ateBox[i].setSelected(false);
 					}
-
+					NGlobals.cPrint("Student Poll AEQ: Removing Yes/No, Adding A-E Buttons");
+					
 					//refresh the gui
 					oneToTen.revalidate();
 					oneToTen.repaint();
 
-					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
+					currentQuestionType =  NCommand.QUESTION_TYPE_A_TO_E;
 				}
 
 			}
 
 
 			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  // +++++++++++++++++++++++++++
+				NGlobals.cPrint("Student Poll: Got Yes/No question");
+				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
 			{
 				if (currentQuestionType == 0)
 				{
@@ -315,7 +325,9 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					// add the options
 					oneToTen.add(yes);
 					oneToTen.add(no);
-
+					
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
+					
 					yes.setEnabled(true);
 					no.setEnabled(true);
 
@@ -330,7 +342,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
-				if (currentQuestionType == incCmd)
+				else if (currentQuestionType == incCmd)
 				{
 					// gui is already set to display yes no question type
 
@@ -339,10 +351,11 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					no.setEnabled(true);
 					yes.setSelected(false);
 					no.setSelected(false);
+					NGlobals.cPrint("Student Poll YNQ: keeping buttons that are already there");
 
 				}
 
-				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
 				{
 					// out with the old
 					oneToTen.remove(one);
@@ -355,10 +368,12 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.remove(eight);
 					oneToTen.remove(nine);
 					oneToTen.remove(ten);
-
+					NGlobals.cPrint("Student Poll YNQ: Removing 1-10 Buttons");
+					
 					// in with the new
 					oneToTen.add(yes);
 					oneToTen.add(no);
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
 
 					// refresh the options
 					yes.setEnabled(true);
@@ -373,16 +388,18 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 				}
 
-				if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
 
 					// out with the old
 					for(i=0;i<5;i++) {
 						oneToTen.remove(ateBox[i]);
 					}
+					NGlobals.cPrint("Student Poll YNQ: Removing A-E Buttons");
 
 					// in with the new
 					oneToTen.add(yes);
 					oneToTen.add(no);
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
 
 					// refresh the options
 					yes.setEnabled(true);
@@ -400,6 +417,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			}
 
 			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  // +++++++++++++++++++++++++++
+				NGlobals.cPrint("Student Poll: Got 1-10 question");
 			{
 				if (currentQuestionType == 0)
 				{
@@ -415,7 +433,8 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.add(eight);
 					oneToTen.add(nine);
 					oneToTen.add(ten);
-
+					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
+					
 					// refresh the options
 					one.setEnabled(true);
 					two.setEnabled(true);
@@ -446,7 +465,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
 
-				if (currentQuestionType == incCmd)
+				else if (currentQuestionType == incCmd)
 				{
 					// gui is already set to display scale of one to ten question
 
@@ -472,14 +491,15 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					eight.setSelected(false);
 					nine.setSelected(false);
 					ten.setSelected(false);	
+					NGlobals.cPrint("Student Poll OTQ: 1-10 Buttons already there");
 				}
 
-				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
 				{
 					// out with the old
 					oneToTen.remove(yes);
 					oneToTen.remove(no);
-
+					NGlobals.cPrint("Student Poll OTQ: Removing Y/N Buttons");
 					// in with the new
 					oneToTen.add(one);
 					oneToTen.add(two);
@@ -521,12 +541,13 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
-				if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
 
 					// out with the old
 					for(i=0;i<5;i++) {
 						oneToTen.remove(ateBox[i]);
 					}
+					NGlobals.cPrint("Student Poll OTQ: Removing A-E Buttons");
 
 					// in with the new
 					oneToTen.add(one);
@@ -539,6 +560,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.add(eight);
 					oneToTen.add(nine);
 					oneToTen.add(ten);
+					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
 
 					// refresh the options
 					one.setEnabled(true);
