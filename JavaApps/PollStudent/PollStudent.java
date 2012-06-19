@@ -615,7 +615,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 		int tCommand = 0;
 		Object source = ae.getSource();
 
-		int turnOff = 1;
+		int turnOff = 0; //Allows re-voting (turnOff = 0) 
 
 		for (i=0;i<5;i++) {
 			if (source == ateBox[i]) {
