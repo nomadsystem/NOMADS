@@ -1,9 +1,8 @@
 /*
-Password field exists in version 0.2 STK 12/11/09
-Version 0.4 is going to try and implement server stuff STK 12/11/09
-Version 0.4 moves arrayList to server
-Version 0.5 changes so you connect to server when you press submit/hit enter
-*/
+  NOMADS JoinApp v.210
+  Revised, 6/19/2012, Paul Turowski
+  - Integrate NOMADSApp class
+ */
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,16 +10,29 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import netscape.javascript.*;
-import nomads.technosonics.*;
+import nomads.v210.*;
 
-public class JoinApp extends JApplet implements ActionListener
-{
- 	private Socket socket              = null;
-    private DataInputStream  console   = null;
-    private DataOutputStream streamOut = null;
-    private JoinAppThread client    = null;
-    private String    serverName = globals.serverName;
-    private int       serverPort = globals.serverPort;
+public class JoinApp extends JApplet implements ActionListener {
+	private class NomadsAppThread extends Thread {
+		JoinApp client; //Replace with current class name
+
+		public NomadsAppThread(JoinApp _client) {
+			client = _client;
+		}
+// Handle is not used yet
+		/*
+		public void run() {			
+			NGlobals.lPrint("NomadsAppThread -> run()");
+			while (true)  {
+				client.handle();
+			}
+		}
+		*/
+	}
+
+
+	NSand joinSand;
+	private NomadsAppThread nThread;
  	
 	String userID, tUserID, tLogin;
 	JButton submit;
@@ -30,8 +42,10 @@ public class JoinApp extends JApplet implements ActionListener
 
 	int i;
 	
-	public void init( )
-	{
+	boolean c = false; //flag to see if it is connected to server
+	int wait;
+	
+	public void init( ) {
 		Color bgColor = new Color(233, 158, 37);
 		Container content = getContentPane();
 		content.setBackground(bgColor);
@@ -47,124 +61,130 @@ public class JoinApp extends JApplet implements ActionListener
 		add( login);
 		add(empty);
 		add( submit);
-		getParameters(); //Not sure what this does
-	
+		
+		// Connect
+		joinSand = new NSand();
+		joinSand.connect();
+
+		nThread = new NomadsAppThread(this);
+		nThread.start();
 	}
-  
-	
-  
-  public void connect(String serverName, int serverPort)
-    {  
-		System.out.println("Establishing connection. Please wait ...");
-		try {  
-		    socket = new Socket(serverName, serverPort);
-		    System.out.println("Connected");
-		    open();
-		}
-		catch(UnknownHostException uhe) {  
-	    	System.out.println("How unknown");
-	    }
-		catch(IOException ioe) {  
-		    System.out.println("Unexpected exception: ");
-		} 
-    }
-  
+
+// handle method from GroupDiscuss
+ /*
   public void handle(byte bite, String text) {
-	if (text.equals(".bye")) {
-		System.out.println("Bye!");
-	    client.close();
-	    close();
-	    client.stop();
-	}
-  else {
+	  int incCmd, incNBlocks, incDType, incDLen;
+		int i,j;
+		int incIntData[] = new int[1000];
+		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
+		NGrain grain;
 
+		NGlobals.cPrint("DiscussClient -> handle()");
+
+		grain = joinSand.getGrain();
+		grain.print(); //prints grain data to console
+		String msg = new String(grain.bArray);
+
+		if (grain.appID == NAppID.DISCUSS_PROMPT) {
+			topic.setText(msg);
+			tempString = new String(msg);
+			topic.setForeground(Color.BLACK);
+			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
+		}
+		// Disable discuss when the student panel button is off
+		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
+			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
+				speak.setEnabled(false);
+				topic.setText("Discuss Disabled");
+				chatWindow.setText("");
+			}
+			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
+				speak.setEnabled(true);
+				topic.setText(msg);
+			}			
+		}
+		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
+			chatWindow.append(msg + "\n");
+			login.requestFocus();
+		}
+		else {
+			grain = null;
+		}
+		if (grain != null)
+			grain = null;
+		
 	}
-}
-    public void open()
-    {  
-		try {
-		    streamOut = new DataOutputStream(socket.getOutputStream());
-		    client = new JoinAppThread(this, socket);
+*/
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//key listener code
+	///////////////////////////////////////////////////////////////////////////
+
+
+	public void keyPressed (KeyEvent e) {
+		if (e.getKeyCode() == 10) {// enter key
+
+			NGlobals.cPrint("ENTER");
+
+			String tString = login.getText();
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+
+			joinSand.sendGrain((byte)NAppID.LOGIN, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+
+
+			// The data 
+			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+
+			//                for (int i=0; i<tLen; i++) {
+			//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+			//                streamOut.writeByte(tString.charAt(i));
+			//                }
+
+			NGlobals.cPrint("sending: (" + tString + ")");
+			login.setText("");
 
 		}
-		catch(IOException ioe) { 
-		    System.out.println("Error opening output stream: ");
+	}
+
+	//makes compiler happy
+	public void keyReleased(KeyEvent e){
+	}
+
+	public void keyTyped(KeyEvent e){
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//action listener code
+	///////////////////////////////////////////////////////////////////////////  
+	public void actionPerformed(java.awt.event.ActionEvent ae) {
+		Object source = ae.getSource();
+
+		//listener code for speak button
+		if (source == submit) {
+			NGlobals.cPrint("pressed speak button");
+			String tString = login.getText();
+			int tLen = tString.length();
+			//    char[] tStringAsChars = tString.toCharArray();
+			byte[] tStringAsBytes = tString.getBytes();
+
+			joinSand.sendGrain((byte)NAppID.LOGIN, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+
+
+			// The data 
+			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+
+			//                for (int i=0; i<tLen; i++) {
+			//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+			//                streamOut.writeByte(tString.charAt(i));
+			//                }
+
+			NGlobals.cPrint("sending: (" + tString + ")");
+			login.setText("");
+
 		} 
-    }
-    public void close()
-    {  
-    	try {
-    		streamOut.writeByte(app_id.LOGIN);
-			streamOut.writeUTF(".bye");    
-			streamOut.flush();
-	    	if (streamOut != null)  streamOut.close();
-	    	if (socket    != null)  socket.close(); 
-		}
-		catch(IOException ioe) { 
-			System.out.println("Error closing...");
-	}
-
-
-    }
-
-    public void getParameters() {
-    }
-
-    public void start() {
-
-    }
-	public void actionPerformed( ActionEvent ae ) {
-		Object obj = ae.getSource( );
-		if( obj == submit ) {
-
-			try{
-			    connect(globals.serverName,globals.serverPort);
-				streamOut.writeByte(app_id.LOGIN);
-				streamOut.writeUTF(login.getText());
-				login.setText("");
-				submit.removeActionListener(this);
-				login.removeActionListener(this);
-				streamOut.writeByte(app_id.LOGIN);
-				streamOut.writeUTF(".bye");
-				streamOut.flush();
-				JSObject win = (JSObject) JSObject.getWindow(this);
-			    if (globals.clientDebugLevel > 0) {
-			    	System.out.println("..."); 
-			    	System.out.println("self.close()");
-			    	}	
-				win.call("close", new Object[0]);
-            	win.eval("self.close();");
-            	win.eval("close();");
-			}
-			catch(IOException ioe) {
-			}
-		}
-			
-		if( obj == login ) {
-
-			try {
-				connect(serverName, serverPort);
-				streamOut.writeByte(app_id.LOGIN);
-				streamOut.writeUTF(login.getText());
-				login.setText("");
-				login.removeActionListener(this);
-				submit.removeActionListener(this);
-				streamOut.writeByte(app_id.LOGIN);
-				streamOut.writeUTF(".bye");
-				streamOut.flush();
-				JSObject win = (JSObject) JSObject.getWindow(this);
-			    if (globals.clientDebugLevel > 0) {
-					System.out.println("...");
-			    	System.out.println("self.close()");
-			    }	
-				win.call("close", new Object[0]);
-            	win.eval("self.close();");
-            	win.eval("close();");
-			}
-			catch(IOException ioe) {
-			}
-		}
 	}
 
 }
-
