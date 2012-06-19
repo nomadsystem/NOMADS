@@ -44,8 +44,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 	Color BG = new Color(191, 140, 44);
 	Color BG2 = new Color(145, 106, 65);
 
-	//the question to pose. taken from teacher's app.
-	String temp = "";
+	int currentQuestionType = 0;
 
 	//just for gui making purposes, delete later
 	String q = "";
@@ -145,7 +144,6 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 	//read poll information from teacherpoll app
 	public void handle()    {
-		int currentQuestionType = 0;
 		String previousQuestion = "";
 		int i,j;
 		int appID, incCmd, incDType, incDLen;
@@ -158,7 +156,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 		appID = grain.appID;
 		incCmd = grain.command;
-		currentQuestionType = incCmd;
+		//		currentQuestionType = incCmd;
 		String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
 
 		NGlobals.cPrint("****************");
@@ -226,9 +224,9 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 			//set the question type ===========================================--------------
 
-			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++
-				NGlobals.cPrint("Student Poll: Got A-E Question");
+			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++	
 			{
+				NGlobals.cPrint("Student Poll: Got A-E Question");
 				if (currentQuestionType == 0)
 				{
 					// gui is blank
@@ -253,12 +251,12 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					// gui is already set to display yes no question type
 
 					for(i=0;i<5;i++) {
-					//	oneToTen.add(ateBox[i]);
+						//	oneToTen.add(ateBox[i]);
 						ateBox[i].setEnabled(true);
 						ateBox[i].setSelected(false);
 					}
 					NGlobals.cPrint("Student Poll AEQ: Already has question Adding A-E Buttons");
-
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
 				}
 
 				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
@@ -304,7 +302,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 						ateBox[i].setSelected(false);
 					}
 					NGlobals.cPrint("Student Poll AEQ: Removing Yes/No, Adding A-E Buttons");
-					
+
 					//refresh the gui
 					oneToTen.revalidate();
 					oneToTen.repaint();
@@ -315,19 +313,19 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			}
 
 
-			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  // +++++++++++++++++++++++++++
+			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  {// +++++++++++++++++++++++++++
 				NGlobals.cPrint("Student Poll: Got Yes/No question");
 				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
-			{
+
 				if (currentQuestionType == 0)
 				{
 					// gui is blank
 					// add the options
 					oneToTen.add(yes);
 					oneToTen.add(no);
-					
+
 					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
-					
+
 					yes.setEnabled(true);
 					no.setEnabled(true);
 
@@ -352,6 +350,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					yes.setSelected(false);
 					no.setSelected(false);
 					NGlobals.cPrint("Student Poll YNQ: keeping buttons that are already there");
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
 
 				}
 
@@ -369,7 +368,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.remove(nine);
 					oneToTen.remove(ten);
 					NGlobals.cPrint("Student Poll YNQ: Removing 1-10 Buttons");
-					
+
 					// in with the new
 					oneToTen.add(yes);
 					oneToTen.add(no);
@@ -416,9 +415,10 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 			}
 
-			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  // +++++++++++++++++++++++++++
+			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  {// +++++++++++++++++++++++++++
 				NGlobals.cPrint("Student Poll: Got 1-10 question");
-			{
+				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
+
 				if (currentQuestionType == 0)
 				{
 					// gui is blank
@@ -434,7 +434,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					oneToTen.add(nine);
 					oneToTen.add(ten);
 					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
-					
+
 					// refresh the options
 					one.setEnabled(true);
 					two.setEnabled(true);
@@ -492,6 +492,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 					nine.setSelected(false);
 					ten.setSelected(false);	
 					NGlobals.cPrint("Student Poll OTQ: 1-10 Buttons already there");
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
 
 				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
@@ -635,7 +636,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 			no.setEnabled(false);
 
 			//show results with color
-			
+
 			String tString = "yes";
 			tCommand = NCommand.QUESTION_TYPE_YES_NO;
 			int tLen = tString.length();
@@ -731,7 +732,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			
+
 			String tString = "2";
 			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 			int tLen = tString.length();
@@ -769,7 +770,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 				nine.setEnabled(false);
 				ten.setEnabled(false);
 			}
-			
+
 			String tString = "3";
 			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 			int tLen = tString.length();
