@@ -14,19 +14,36 @@ public class NSand
 	//(Fields)
 	private Socket socket              = null;
 	private DataInputStream  streamIn   = null;
-	private DataOutputStream streamOut = null;    private String    serverName = NGlobals.serverName;
-	private int       serverPort = NGlobals.serverPortSK;
+	private DataOutputStream streamOut = null;    
+        private String    serverName = NGlobals.serverName;
+	private int       serverPort = NGlobals.serverPortDT;
 
 	// Maybe yes to these
 	URL imgWebBase, webBase;
 
+    public NSand () {
+    }
+
+    public NSand (Socket serverSock) {
+	socket = serverSock;
+    }
+
+
+
+    public DataInputStream getInStream() {
+	return streamIn;
+    }
+
+    public DataOutputStream getOutStream() {
+	return streamOut;
+    }
 
 	public void setSock (Socket serverSock) {
 		socket = serverSock;
 	}
 
 	// SendGrain with Byte Array
-	public void sendGrain (NGrain myGrain) {
+	public synchronized void sendGrain (NGrain myGrain) {
 		NGlobals.lPrint("sendGrain: (NGrain) ");
 		try {  
 			// send app id
@@ -58,7 +75,7 @@ public class NSand
 
 
 	// SendGrain with Byte Array
-	public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
+	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
 		NGlobals.lPrint("sendGrain: ");
 		try {  
 			// send app id
@@ -80,7 +97,7 @@ public class NSand
 	}
 
 	// SendGrain with Int Array
-	public void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
 		try {  
 			// send app id
 			streamOut.writeByte(aID);
@@ -101,7 +118,7 @@ public class NSand
 	}
 
 	// SendGrain with Float Array
-	public void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
+	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
 		try {  
 			// send app id
 			streamOut.writeByte(aID);
@@ -122,7 +139,7 @@ public class NSand
 	}
 
 	// SendGrain with Double Array
-	public void sendGrain (byte aID, byte cmd, byte dType, int dLen, double[] dArray) {
+	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, double[] dArray) {
 
 		try {  
 			// send app id
@@ -144,7 +161,7 @@ public class NSand
 	}
 
 	//Returns Grain appID, cmd, dT, dL, bA
-	public NGrain getGrain (byte appID) {
+	public synchronized NGrain getGrain (byte appID) {
 		NGlobals.lPrint("getGrain");
 		byte cmd, dT;
 		int dL;
@@ -205,13 +222,15 @@ public class NSand
 		catch(IOException ioe) {  
 			System.out.println("SAND write error");
 		}
+		System.out.println("NSand:getGrain: returning grain");
+		grain.print();
 		return grain;
 	}
 
 
 
 	//Returns Grain appID, cmd, dT, dL, bA
-	public NGrain getGrain () {
+	public synchronized NGrain getGrain () {
 		NGlobals.lPrint("getGrain");
 		byte appID, cmd, dT;
 		int dL;
@@ -285,7 +304,7 @@ public class NSand
 	}
 
 
-	private void connectSocket()
+	public void connectSocket()
 	{  
 		System.out.println("Establishing connection. Please wait ...");
 		try {  
