@@ -27,8 +27,8 @@ public class NomadServer implements Runnable {
     FileOutputStream out; // declare a file output object
     PrintStream p; // declare a print stream object
 
-    NSand outSand;
-    NSand inSand;
+    // xxx
+    NGrain myGrain;
     
     public NomadServer(int port) {  	    
 	for (int i=0;i<100000;i++) {
@@ -49,10 +49,6 @@ public class NomadServer implements Runnable {
 	    ioe.printStackTrace();
 	    System.exit(1); 
 	}
-
-	outSand = new NSand();
-	inSand = new NSand();
-
     }
 
     public void run()  {  
@@ -80,7 +76,7 @@ public class NomadServer implements Runnable {
 	}
     }
 
-    public synchronized void handle(int THREAD_ID, byte incAppID)  {  
+    public synchronized void handle(int THREAD_ID, NGrain myGrain)  {  
 	String tUser, IP, tempString;
 	int loginStatus = 0;
 	int cNum = -1;
@@ -91,7 +87,7 @@ public class NomadServer implements Runnable {
 	byte incByteData[] = new byte[1000];
 
 	byte incAppCmd, incAppDataType;
-	int incAppDataLen;
+	int incAppDataLen, incAppID;
 
 	NGrain inGrain;
 
@@ -115,13 +111,14 @@ public class NomadServer implements Runnable {
 	currentClient = clients[tCNum];
 
 	// Read in the COMMAND
-	inSand.setSock(currentClient.getSock());
-	inSand.openSocketStreams();
+	// dtx:  copied to NomadServerThread
+	// inSand.setSock(currentClient.getSock());
+	// inSand.openSocketStreams();
 	
-	NGrain myGrain = inSand.getGrain(incAppID); // by sending 
 
 	// TOFIX:  change to getXXX acccessor functions
 
+	incAppID = myGrain.appID;
 	incAppCmd = myGrain.command;
 	incAppDataType = myGrain.dataType;
 	incAppDataLen = myGrain.dataLen;
@@ -157,13 +154,11 @@ public class NomadServer implements Runnable {
 	    // Get the client off the master list
 	    currentClient = clients[c];
 
+	    
 	    myGrain.print();
 
 	    // Write the data out
-	    outSand.setSock(currentClient.getSock());
-	    outSand.openSocketStreams();
-
-	    outSand.sendGrain(myGrain);
+	    currentClient.threadSand.sendGrain(myGrain);
 
 	}   
 	// END --------------------------------------------------------------------
@@ -215,6 +210,8 @@ public class NomadServer implements Runnable {
     	NGlobals.sPrint("     clientCount = " + clientCount);
     	NGlobals.sPrint("     clients.length = " + clients.length);
 
+
+	
 
     	if (clientCount < clients.length) {  
 	    NGlobals.sPrint("  Client accepted: " + socket);
