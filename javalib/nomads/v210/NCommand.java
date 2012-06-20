@@ -11,4 +11,6 @@ public class NCommand {
     public static int SYNTH_DISABLE = 7;//uGroove
     public static int SYNTH_START = 8;//uGroove
     public static int SYNTH_STOP = 9;//uGroove
-    }
+    public static int SEND_SPRITEYX = 10;  // SoundSwarm
+    
+}

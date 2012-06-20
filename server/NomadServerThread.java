@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import nomads.v210.*;
 
 public class NomadServerThread extends Thread
 {  private NomadServer       server    = null;
@@ -11,7 +12,8 @@ public class NomadServerThread extends Thread
     private int loginStatus = 0;
     private DataInputStream  streamIn  =  null;
     private DataOutputStream streamOut = null;
-
+    private NGrain threadGrain;
+    public NSand threadSand;
 
     class MyException extends Exception {
 	public MyException(String msg){
@@ -85,76 +87,14 @@ public class NomadServerThread extends Thread
     	return USER;
     }
 
-    public void sendNetUTF(String msg) {   
-    	try {  
-	    	streamOut.writeUTF(msg);
-		streamOut.flush();
-	    }
-		catch(IOException ioe) {  
-			System.out.println(THREAD_ID + " ERROR sending UTF: " + ioe.getMessage());
-			server.remove(THREAD_ID);
-			stop();
-	    }
-    }
-
-    public void sendNetInt(int data) {
-
-	try {
-	    streamOut.writeInt(data);
-	    streamOut.flush();
-	}
-	catch(IOException ioe) {  
-	    System.out.println(THREAD_ID + " ERROR writing INT: " + ioe.getMessage());
-	    server.remove(THREAD_ID);
-	    stop();
-	}
-    }
-
-    public void sendNetByte(byte data) {
-
-	try {
-	    streamOut.writeByte(data);
-	    streamOut.flush();
-	}
-	catch(IOException ioe) {  
-	    System.out.println(THREAD_ID + " ERROR writing BYTE: " + ioe.getMessage());
-	    server.remove(THREAD_ID);
-	    stop();
-	}
-    }
-
    
-    public int getNetInt() {
-	int tInt = 0;
-	try {
-	    tInt = streamIn.readInt();
-	}
-	catch(IOException ioe) {  
-	    System.out.println(THREAD_ID + " ERROR reading INT: " + ioe.getMessage());
-	    server.remove(THREAD_ID);
-	    stop();
-	}
-	return tInt;
-    }
-
-    public byte getNetByte() {
-	byte tByte = 0;
-	try {
-	    tByte = streamIn.readByte();
-	}
-	catch(IOException ioe) {  
-	    System.out.println(THREAD_ID + " ERROR reading INT: " + ioe.getMessage());
-	    server.remove(THREAD_ID);
-	    stop();
-	}
-	return tByte;
-    }
-
-    public void run() {  
+    public synchronized void run() {  
     	System.out.println("Server Thread " + THREAD_ID + " running.");
-		while (true) {  
+		while (true) {
 			try {  
-			    server.handle(THREAD_ID, streamIn.readByte());
+			    threadGrain = threadSand.getGrain(streamIn.readByte());
+			    threadGrain.print();
+			    server.handle(THREAD_ID, threadGrain);
 	       	        }
 			catch(IOException ioe) {  
 				System.out.println(THREAD_ID + " ERROR reading: " + ioe.getMessage());
@@ -165,8 +105,13 @@ public class NomadServerThread extends Thread
     }
 
     public void open() throws IOException {  
-    	streamIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-	streamOut = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+	NGlobals.sPrint("NomadServerThread:open()");
+
+	threadSand = new NSand(socket);
+	threadSand.openSocketStreams();
+
+	streamIn = threadSand.getInStream();
+	streamOut = threadSand.getOutStream();
     }
 
     public void close() throws IOException {  
