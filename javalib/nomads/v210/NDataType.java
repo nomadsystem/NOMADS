@@ -7,4 +7,5 @@ public class NDataType {
     public static byte INT = 2;
     public static byte FLOAT = 3;
     public static byte DOUBLE = 4;
+    public static byte NO_DATA = 5;
 }
