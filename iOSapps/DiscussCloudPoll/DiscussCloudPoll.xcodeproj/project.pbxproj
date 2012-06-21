@@ -1,0 +1,322 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F9306DA7156440A90057F8FE /* PollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9306DA6156440A90057F8FE /* PollViewController.m */; };
+		F9306DA9156441150057F8FE /* PollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9306DA8156441150057F8FE /* PollViewController.xib */; };
+		F93EA0151566CB18001F6F52 /* iPhone_AppIcon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = F9ABCCF815654137007CFC99 /* iPhone_AppIcon_57x57.png */; };
+		F96590CA1562A2DF004A6C23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96590C91562A2DF004A6C23 /* UIKit.framework */; };
+		F96590CC1562A2DF004A6C23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96590CB1562A2DF004A6C23 /* Foundation.framework */; };
+		F96590CE1562A2DF004A6C23 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96590CD1562A2DF004A6C23 /* CoreGraphics.framework */; };
+		F96590D41562A2DF004A6C23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F96590D21562A2DF004A6C23 /* InfoPlist.strings */; };
+		F96590D61562A2DF004A6C23 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590D51562A2DF004A6C23 /* main.m */; };
+		F96590DA1562A2DF004A6C23 /* DiscussCloudAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590D91562A2DF004A6C23 /* DiscussCloudAppDelegate.m */; };
+		F96590E21562A30E004A6C23 /* DiscussViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590E11562A30E004A6C23 /* DiscussViewController.m */; };
+		F96590E51562A401004A6C23 /* CloudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590E41562A401004A6C23 /* CloudViewController.m */; };
+		F96590E71562A448004A6C23 /* DiscussViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E61562A448004A6C23 /* DiscussViewController.xib */; };
+		F96590E91562A45E004A6C23 /* CloudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E81562A45E004A6C23 /* CloudViewController.xib */; };
+		F9A46BB015644F65001CD1A1 /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = F9A46BAF15644F65001CD1A1 /* SandDunes1_960x640.png */; };
+		F9ABCCFB15654149007CFC99 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9ABCCFA15654149007CFC99 /* Default.png */; };
+		F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B1B709156ABEDA001CBF5B /* LoginViewController.m */; };
+		F9B1B70D156AC0B0001CBF5B /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9B1B70C156AC0B0001CBF5B /* LoginViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F9306DA5156440A90057F8FE /* PollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PollViewController.h; path = ../PollViewController.h; sourceTree = "<group>"; };
+		F9306DA6156440A90057F8FE /* PollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PollViewController.m; path = ../PollViewController.m; sourceTree = "<group>"; };
+		F9306DA8156441150057F8FE /* PollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PollViewController.xib; path = ../PollViewController.xib; sourceTree = "<group>"; };
+		F96590C51562A2DF004A6C23 /* DiscussCloudPoll.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiscussCloudPoll.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F96590C91562A2DF004A6C23 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F96590CB1562A2DF004A6C23 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F96590CD1562A2DF004A6C23 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F96590D11562A2DF004A6C23 /* DiscussCloudPoll-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DiscussCloudPoll-Info.plist"; sourceTree = "<group>"; };
+		F96590D31562A2DF004A6C23 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F96590D51562A2DF004A6C23 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F96590D71562A2DF004A6C23 /* DiscussCloudPoll-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DiscussCloudPoll-Prefix.pch"; sourceTree = "<group>"; };
+		F96590D81562A2DF004A6C23 /* DiscussCloudAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiscussCloudAppDelegate.h; sourceTree = "<group>"; };
+		F96590D91562A2DF004A6C23 /* DiscussCloudAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiscussCloudAppDelegate.m; sourceTree = "<group>"; };
+		F96590E01562A30E004A6C23 /* DiscussViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiscussViewController.h; path = ../DiscussViewController.h; sourceTree = "<group>"; };
+		F96590E11562A30E004A6C23 /* DiscussViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiscussViewController.m; path = ../DiscussViewController.m; sourceTree = "<group>"; };
+		F96590E31562A401004A6C23 /* CloudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudViewController.h; sourceTree = "<group>"; };
+		F96590E41562A401004A6C23 /* CloudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudViewController.m; sourceTree = "<group>"; };
+		F96590E61562A448004A6C23 /* DiscussViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscussViewController.xib; sourceTree = "<group>"; };
+		F96590E81562A45E004A6C23 /* CloudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloudViewController.xib; sourceTree = "<group>"; };
+		F9A46BAF15644F65001CD1A1 /* SandDunes1_960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SandDunes1_960x640.png; sourceTree = "<group>"; };
+		F9ABCCF815654137007CFC99 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
+		F9ABCCFA15654149007CFC99 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F9B1B708156ABEDA001CBF5B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		F9B1B709156ABEDA001CBF5B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		F9B1B70C156AC0B0001CBF5B /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F96590C21562A2DF004A6C23 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F96590CA1562A2DF004A6C23 /* UIKit.framework in Frameworks */,
+				F96590CC1562A2DF004A6C23 /* Foundation.framework in Frameworks */,
+				F96590CE1562A2DF004A6C23 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F96590BA1562A2DF004A6C23 = {
+			isa = PBXGroup;
+			children = (
+				F9ABCCFA15654149007CFC99 /* Default.png */,
+				F9ABCCF815654137007CFC99 /* iPhone_AppIcon_57x57.png */,
+				F9A46BAF15644F65001CD1A1 /* SandDunes1_960x640.png */,
+				F96590CF1562A2DF004A6C23 /* DiscussCloudPoll */,
+				F96590C81562A2DF004A6C23 /* Frameworks */,
+				F96590C61562A2DF004A6C23 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F96590C61562A2DF004A6C23 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F96590C51562A2DF004A6C23 /* DiscussCloudPoll.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F96590C81562A2DF004A6C23 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F96590C91562A2DF004A6C23 /* UIKit.framework */,
+				F96590CB1562A2DF004A6C23 /* Foundation.framework */,
+				F96590CD1562A2DF004A6C23 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F96590CF1562A2DF004A6C23 /* DiscussCloudPoll */ = {
+			isa = PBXGroup;
+			children = (
+				F9306DA5156440A90057F8FE /* PollViewController.h */,
+				F9306DA6156440A90057F8FE /* PollViewController.m */,
+				F9306DA8156441150057F8FE /* PollViewController.xib */,
+				F96590E01562A30E004A6C23 /* DiscussViewController.h */,
+				F96590E11562A30E004A6C23 /* DiscussViewController.m */,
+				F96590E61562A448004A6C23 /* DiscussViewController.xib */,
+				F9B1B708156ABEDA001CBF5B /* LoginViewController.h */,
+				F9B1B709156ABEDA001CBF5B /* LoginViewController.m */,
+				F9B1B70C156AC0B0001CBF5B /* LoginViewController.xib */,
+				F96590D81562A2DF004A6C23 /* DiscussCloudAppDelegate.h */,
+				F96590D91562A2DF004A6C23 /* DiscussCloudAppDelegate.m */,
+				F96590E31562A401004A6C23 /* CloudViewController.h */,
+				F96590E41562A401004A6C23 /* CloudViewController.m */,
+				F96590E81562A45E004A6C23 /* CloudViewController.xib */,
+				F96590D01562A2DF004A6C23 /* Supporting Files */,
+			);
+			name = DiscussCloudPoll;
+			path = DiscussCloud;
+			sourceTree = "<group>";
+		};
+		F96590D01562A2DF004A6C23 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F96590D11562A2DF004A6C23 /* DiscussCloudPoll-Info.plist */,
+				F96590D21562A2DF004A6C23 /* InfoPlist.strings */,
+				F96590D51562A2DF004A6C23 /* main.m */,
+				F96590D71562A2DF004A6C23 /* DiscussCloudPoll-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F96590C41562A2DF004A6C23 /* DiscussCloudPoll */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F96590DD1562A2DF004A6C23 /* Build configuration list for PBXNativeTarget "DiscussCloudPoll" */;
+			buildPhases = (
+				F96590C11562A2DF004A6C23 /* Sources */,
+				F96590C21562A2DF004A6C23 /* Frameworks */,
+				F96590C31562A2DF004A6C23 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DiscussCloudPoll;
+			productName = DiscussCloud;
+			productReference = F96590C51562A2DF004A6C23 /* DiscussCloudPoll.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F96590BC1562A2DF004A6C23 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = DiscussCloud;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = F96590BF1562A2DF004A6C23 /* Build configuration list for PBXProject "DiscussCloudPoll" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F96590BA1562A2DF004A6C23;
+			productRefGroup = F96590C61562A2DF004A6C23 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F96590C41562A2DF004A6C23 /* DiscussCloudPoll */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F96590C31562A2DF004A6C23 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F96590D41562A2DF004A6C23 /* InfoPlist.strings in Resources */,
+				F96590E71562A448004A6C23 /* DiscussViewController.xib in Resources */,
+				F96590E91562A45E004A6C23 /* CloudViewController.xib in Resources */,
+				F9306DA9156441150057F8FE /* PollViewController.xib in Resources */,
+				F9A46BB015644F65001CD1A1 /* SandDunes1_960x640.png in Resources */,
+				F9ABCCFB15654149007CFC99 /* Default.png in Resources */,
+				F93EA0151566CB18001F6F52 /* iPhone_AppIcon_57x57.png in Resources */,
+				F9B1B70D156AC0B0001CBF5B /* LoginViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F96590C11562A2DF004A6C23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F96590D61562A2DF004A6C23 /* main.m in Sources */,
+				F96590DA1562A2DF004A6C23 /* DiscussCloudAppDelegate.m in Sources */,
+				F96590E21562A30E004A6C23 /* DiscussViewController.m in Sources */,
+				F96590E51562A401004A6C23 /* CloudViewController.m in Sources */,
+				F9306DA7156440A90057F8FE /* PollViewController.m in Sources */,
+				F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F96590D21562A2DF004A6C23 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F96590D31562A2DF004A6C23 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F96590DB1562A2DF004A6C23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F96590DC1562A2DF004A6C23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F96590DE1562A2DF004A6C23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DiscussCloud/DiscussCloudPoll-Prefix.pch";
+				INFOPLIST_FILE = "DiscussCloud/DiscussCloudPoll-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = DiscussCloudPoll;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F96590DF1562A2DF004A6C23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DiscussCloud/DiscussCloudPoll-Prefix.pch";
+				INFOPLIST_FILE = "DiscussCloud/DiscussCloudPoll-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = DiscussCloudPoll;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F96590BF1562A2DF004A6C23 /* Build configuration list for PBXProject "DiscussCloudPoll" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F96590DB1562A2DF004A6C23 /* Debug */,
+				F96590DC1562A2DF004A6C23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F96590DD1562A2DF004A6C23 /* Build configuration list for PBXNativeTarget "DiscussCloudPoll" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F96590DE1562A2DF004A6C23 /* Debug */,
+				F96590DF1562A2DF004A6C23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F96590BC1562A2DF004A6C23 /* Project object */;
+}
