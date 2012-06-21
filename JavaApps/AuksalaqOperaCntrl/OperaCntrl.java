@@ -260,7 +260,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
-		NGlobals.cPrint("OperaClient -> handle()");
+		NGlobals.cPrint("OperaCntrl -> handle()");
 
 		grain = operaSand.getGrain();
 		grain.print(); //prints grain data to console
@@ -364,18 +364,13 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 				byte[] tStringAsBytes = tString.getBytes();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.CLEAR_CLOUD, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 			}
-
-
-			// if (source == pointerClear) {
-			//     NGlobals.cPrint("Action:  pointerClear");
-			//     try {
-			// 	streamOut.writeByte(app_id.CONDUCTOR_PANEL);
-			// 	streamOut.writeUTF("POCR");
-			//     }
-			//     catch(IOException ioe) {
-			// 	NGlobals.cPrint("Error writing to output stream: ");
-			//     }
-			// }
+//			if (source == pointerClear) {
+//				NGlobals.cPrint("Action:  pointerClear");
+//				String tString = " "; 
+//				int tLen = tString.length();
+//				byte[] tStringAsBytes = tString.getBytes();
+//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.CLEAR_POINTER, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+//			}
 		}		
 	};
 
