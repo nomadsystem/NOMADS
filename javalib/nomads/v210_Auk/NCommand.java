@@ -22,4 +22,5 @@ public class NCommand {
 	public static int SET_MAIN_VOLUME = 21;
 	public static int CLEAR_DISCUSS = 22;
 	public static int CLEAR_CLOUD = 23;
+	public static int CLEAR_POINTER = 23;
 }

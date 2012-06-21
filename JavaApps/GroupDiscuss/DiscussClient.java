@@ -147,7 +147,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		nThread.start();
 	}
 
-	public void handle()
+	public synchronized void handle()
 	{	
 		int incCmd, incNBlocks, incDType, incDLen;
 		int i,j;
@@ -210,7 +210,6 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 			discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
-
 			// The data 
 			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
 
@@ -246,9 +245,9 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 			NGlobals.cPrint("pressed speak button");
 			String tString = input.getText();
 			int tLen = tString.length();
-			//    char[] tStringAsChars = tString.toCharArray();
+//			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-
+//
 			discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 
