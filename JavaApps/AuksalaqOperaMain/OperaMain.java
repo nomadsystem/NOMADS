@@ -537,7 +537,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
-		NGlobals.cPrint("OperaClient -> handle()");
+		NGlobals.cPrint("OperaMain -> handle()");
 
 		grain = operaSand.getGrain();
 		grain.print(); //prints grain data to console
@@ -546,66 +546,113 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		incCmd = grain.command;
 
 		String text = new String(grain.bArray);
-
+		
+		NGlobals.cPrint("...");
+		NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd + " text= " + text);
+		NGlobals.cPrint("...");
 
 		quad=0;
 		lastQuad=0;
 
-		NGlobals.cPrint("...");
-		NGlobals.cPrint("handle(" + text + "," + incAppID + ") [OperaMain]\n");
-		NGlobals.cPrint("...");
+		// CONDUCTOR PANEL ================================================================================
 
-		// if (text.equals(".bye")) {
-		//     System.out.println("Bye!");
-		//     close(); 
-		// }
+		if (incAppID == NAppID.CONDUCTOR_PANEL) {
 
-		if (incCmd == NCommand.SET_MAIN_VOLUME) {	
-			input = text; 
-			double tVolumeVal = (double)Integer.parseInt(input);
-			mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
-			for (i=0;i<numOscs;i++) {
-				int tNum = oscNum[i];
-				float tAmp = (float)2/numOscs; //default amp = 2.0
-				NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-				myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-				float tVolume = tAmp * mainVolumeFromSlider;
-				NGlobals.cPrint("Amplitude = " + tVolume);
+
+			if (incCmd == NCommand.SET_DISCUSS_ALPHA) {
+				tAlpha = text;
+				chatA = Integer.parseInt(tAlpha);
+				setChatColors(chatA);
+				NGlobals.cPrint("Setting ChA to " + chatA);
+				repaint();
 			}
-			//TO DO: Make this a log function. . .
+
+			else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
+				tAlpha = text;
+				cloudA = Integer.parseInt(tAlpha);
+				setCloudColors(cloudA);
+				NGlobals.cPrint("Setting ClA to " + cloudA);
+				repaint();
+			}
+			else if (incCmd == NCommand.SET_POINTER_ALPHA) {
+				tAlpha = text;
+				pointerA = Integer.parseInt(tAlpha);
+				setPointerColors(pointerA);
+				NGlobals.cPrint("Setting PtA to " + pointerA);
+				repaint();
+			}
+			else if (incCmd == NCommand.CLEAR_CLOUD) {  // Cloud reset
+				histoGram.clear();
+
+				// int tSize = histoGram.size();
+				// for (i=0;i<tSize;i++) {
+				//     histoGram.remove(i);
+				// }
+				NGlobals.cPrint("Resetting cloud...\n");
+				repaint();
+			}
+			else if (incCmd == NCommand.CLEAR_DISCUSS) {  // Cloud reset
+				for (i=0;i<numChatLines;i++) {
+					chatLines[i] = "";
+				}
+				tH = (int)(height*1.1);
+				chatSpace = tH/numChatLines;
+				chatYLoc = height-chatSpace;
+				chatXLoc = 20;
+				NGlobals.cPrint("Resetting discuss...\n");
+				repaint();
+			}
+			else if (incCmd == NCommand.SET_MAIN_VOLUME) {	
+				input = text; 
+				double tVolumeVal = (double)Integer.parseInt(input);
+				mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
+				for (i=0;i<numOscs;i++) {
+					int tNum = oscNum[i];
+					float tAmp = (float)2/numOscs; //default amp = 2.0
+					NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+					myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+					float tVolume = tAmp * mainVolumeFromSlider;
+					NGlobals.cPrint("Amplitude = " + tVolume);
+				}
+				//TO DO: Make this a log function. . .
+			}
+
+
+
+
 		}
 
 		// ========= Pointer ============================================
 
 		else if (incAppID == NAppID.OC_POINTER) {
 
-			NGlobals.cPrint("OC_POINTER\n");
+			NGlobals.cPrint("OMP: OC_POINTER\n");
 			if (text.length() > 1) {
 
 				fc = text.indexOf(":");
 				thread = text.substring(0,fc);
-				NGlobals.cPrint("thread = " + thread);
+				NGlobals.cPrint("OMP: thread = " + thread);
 				THREAD_ID = (int)Integer.parseInt(thread);
 
 				makeSynth(THREAD_ID);
 
-				NGlobals.cPrint("THREAD_ID = " + THREAD_ID);
+				NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
 
 				input = text.substring(6,text.length());
 				temp = input.substring(0,2);
 
 				if (temp.equals("C:")) {
-					NGlobals.cPrint("C: = (x,y)");
+					NGlobals.cPrint("OMP: C: = (x,y)");
 					fc = input.indexOf(":");
 					sc = input.indexOf(":", fc+1);
-					NGlobals.cPrint("fc = " + fc);
-					NGlobals.cPrint("sc = " + sc);
+					NGlobals.cPrint("OMP: fc = " + fc);
+					NGlobals.cPrint("OMP: sc = " + sc);
 					temp = input.substring(2,sc);
 					x = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("temp " + temp);
+					NGlobals.cPrint("OMP: temp " + temp);
 					temp = input.substring(sc+1,input.length());
 					y = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("temp " + temp);
+					NGlobals.cPrint("OMP: temp " + temp);
 
 					freq = (float)x;
 					amp = (float)(y/1000);
@@ -616,12 +663,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 					x = (int)(fx*width);
 					y = (int)(fy*height);
 
-					NGlobals.cPrint("x = " + x);
+					NGlobals.cPrint("OMP: x = " + x);
 					//		amp = 1;
-					NGlobals.cPrint("y = " + y);
-					NGlobals.cPrint("fx = " + fx);
+					NGlobals.cPrint("OMP: y = " + y);
+					NGlobals.cPrint("OMP: fx = " + fx);
 					//		amp = 1;
-					NGlobals.cPrint("fy = " + fy);
+					NGlobals.cPrint("OMP: fy = " + fy);
 
 					//if (x > 900)
 					//	x = 900;
@@ -987,61 +1034,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		//			}	 
 		//		}   
 
-		// ALPHA CHANNEL ================================================================================
 
-		else if (incAppID == NAppID.CONDUCTOR_PANEL) {
-
-
-			if (incCmd == NCommand.SET_DISCUSS_ALPHA) {
-				tAlpha = text;
-				chatA = Integer.parseInt(tAlpha);
-				setChatColors(chatA);
-				NGlobals.cPrint("Setting ChA to " + chatA);
-				repaint();
-			}
-
-			else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
-				tAlpha = text;
-				cloudA = Integer.parseInt(tAlpha);
-				setCloudColors(cloudA);
-				NGlobals.cPrint("Setting ClA to " + cloudA);
-				repaint();
-			}
-			else if (incCmd == NCommand.SET_POINTER_ALPHA) {
-				tAlpha = text;
-				pointerA = Integer.parseInt(tAlpha);
-				setPointerColors(pointerA);
-				NGlobals.cPrint("Setting PtA to " + pointerA);
-				repaint();
-			}
-			else if (incCmd == NCommand.CLEAR_CLOUD) {  // Cloud reset
-				histoGram.clear();
-
-				// int tSize = histoGram.size();
-				// for (i=0;i<tSize;i++) {
-				//     histoGram.remove(i);
-				// }
-
-
-				NGlobals.cPrint("Resetting cloud...\n");
-				repaint();
-			}
-			else if (incCmd == NCommand.CLEAR_DISCUSS) {  // Cloud reset
-				for (i=0;i<numChatLines;i++) {
-					chatLines[i] = "";
-				}
-				tH = (int)(height*1.1);
-				chatSpace = tH/numChatLines;
-				chatYLoc = height-chatSpace;
-				chatXLoc = 20;
-				NGlobals.cPrint("Resetting discuss...\n");
-				repaint();
-			}
-
-
-
-
-		}
 		NGlobals.cPrint ("-------------------------------------------------[OM]\n");
 	}
 

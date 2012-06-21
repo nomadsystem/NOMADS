@@ -142,12 +142,12 @@ public class OC_Pointer extends JPanel implements Runnable
 		// Create InputStream to download WAV data.
 		try {
 			sampleURL = new URL(prefix + fileString + ".aif"); 	
-			NGlobals.cPrint("URL = " + sampleURL);
-			NGlobals.cPrint(prefix + fileString + ".aif");
+		//	NGlobals.cPrint("URL = " + sampleURL);
+		//	NGlobals.cPrint(prefix + fileString + ".aif");
 			//	NGlobals.cPrint(prefix + "1.aiff");
 			inputStream = sampleURL.openConnection().getInputStream();
 			fooSample = new SynthSampleAIFF(inputStream);
-			NGlobals.cPrint("Sample Frames = " + fooSample.getNumFrames());
+		//	NGlobals.cPrint("Sample Frames = " + fooSample.getNumFrames());
 		}	catch (MalformedURLException mue) {
 			mue.printStackTrace();
 		} catch (IOException ioe) {
@@ -298,7 +298,7 @@ public class OC_Pointer extends JPanel implements Runnable
 				myY = (double)(posY - origY);
 			else
 				myY = (double)(origY - posY);
-			NGlobals.cPrint( "myY =" + myY);
+		//	NGlobals.cPrint( "myY =" + myY);
 			// 			
 			// 		myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
 			// 		
@@ -309,31 +309,31 @@ public class OC_Pointer extends JPanel implements Runnable
 
 			if (myY < ySection) {
 				fileBankNumber = 2; //(starting with bank 7--medium sounds)
-				NGlobals.cPrint( "zone 1");
+		//		NGlobals.cPrint( "zone 1");
 			}
 			else if ((myY >= ySection*1) && myY < (ySection*2)) {
 				fileBankNumber = 1;
-				NGlobals.cPrint( "zone 2");
+			//	NGlobals.cPrint( "zone 2");
 			}
 			else if (myY >= (ySection*2) && myY < (ySection*3)) {
 				fileBankNumber = 0;
-				NGlobals.cPrint( "zone 3");
+			//	NGlobals.cPrint( "zone 3");
 			}
 			else if (myY >= (ySection*3) && myY < (ySection*4)) {
 				fileBankNumber = 6;
-				NGlobals.cPrint( "zone 4");
+			//	NGlobals.cPrint( "zone 4");
 			}
 			else if (myY >= (ySection*4) && myY < (ySection*5)) {
 				fileBankNumber = 3;
-				NGlobals.cPrint( "zone 5");
+			//	NGlobals.cPrint( "zone 5");
 			}
 			else if (myY >= (ySection*5) && myY < (ySection*6)) {
 				fileBankNumber = 4;
-				NGlobals.cPrint( "zone 6");
+		//		NGlobals.cPrint( "zone 6");
 			}
 			else if (myY >= (ySection*6) ) {
 				fileBankNumber = 5;	
-				NGlobals.cPrint( "zone 7");
+			//	NGlobals.cPrint( "zone 7");
 			}
 
 			threadWaitSubtractor = (int)(posXTimeScaler * posX);
@@ -344,18 +344,18 @@ public class OC_Pointer extends JPanel implements Runnable
 
 			try {
 				sampleURL = new URL(prefix + fileString + ".aif"); 	
-				NGlobals.cPrint("URL = " + sampleURL);
-				NGlobals.cPrint(prefix + fileString + ".aif");
+			//	NGlobals.cPrint("URL = " + sampleURL);
+			//	NGlobals.cPrint(prefix + fileString + ".aif");
 				//	NGlobals.cPrint(prefix + "1.aiff");
 				inputStream = sampleURL.openConnection().getInputStream();
 				fooSample = new SynthSampleAIFF(inputStream);
-				NGlobals.cPrint("Sample Frames = " + fooSample.getNumFrames());
+			//	NGlobals.cPrint("Sample Frames = " + fooSample.getNumFrames());
 			}	catch (MalformedURLException mue) {
 				mue.printStackTrace();
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
-			NGlobals.cPrint( "fileString = " + fileString + "fileBankNumber = " + fileBankNumber + "FileOffset =" + fileOffset);
+			//NGlobals.cPrint( "fileString = " + fileString + "fileBankNumber = " + fileBankNumber + "FileOffset =" + fileOffset);
 			//		mySample.play();
 			//		Synth.sleepForTicks( 1000 );
 
@@ -363,7 +363,7 @@ public class OC_Pointer extends JPanel implements Runnable
 
 			threadWait = randThreadWait.nextInt(10); //determines how long the thread pauses between samples
 			runnerSleepTime = ((4000 + (threadWait * 50)) - threadWaitSubtractor);
-			NGlobals.cPrint("runner SleepTime = " + runnerSleepTime);
+		//	NGlobals.cPrint("runner SleepTime = " + runnerSleepTime);
 			Synth.sleepForTicks( runnerSleepTime );
 
 			try {

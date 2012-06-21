@@ -171,7 +171,7 @@ public class OperaClient extends JApplet implements Runnable
 		add(panel2, BorderLayout.CENTER);
 		//		add(myOC_Pointer, BorderLayout.EAST);
 		//		add(myDiscussDisplayOnly, BorderLayout.WEST);
-
+		
 
 		operaSand = new NSand(); 
 		operaSand.connect();
@@ -415,7 +415,7 @@ public class OperaClient extends JApplet implements Runnable
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
 					operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-					myOC_Discuss.input.setText("");
+					myOC_Cloud.input.setText("");
 					NGlobals.cPrint("OC_Cloud: tInput: " + myOC_Cloud.tInput);
 				}
 
@@ -446,7 +446,7 @@ public class OperaClient extends JApplet implements Runnable
 						//    char[] tStringAsChars = tString.toCharArray();
 						byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
 						operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-						myOC_Discuss.input.setText("");
+						myOC_Cloud.input.setText("");
 						NGlobals.cPrint("OC_Cloud: tInput: " + myOC_Cloud.tInput);
 					}
 
@@ -551,7 +551,6 @@ public class OperaClient extends JApplet implements Runnable
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = towrite.getBytes();
 					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-					myOC_Discuss.input.setText("");
 					NGlobals.cPrint("OC_Pointer: towrite: " + towrite);
 					
 				}

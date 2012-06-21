@@ -43,7 +43,7 @@ public class NSand
 	}
 
 	// SendGrain with Byte Array
-	public synchronized void sendGrain (NGrain myGrain) {
+	public void sendGrain (NGrain myGrain) {
 		NGlobals.lPrint("sendGrain: (NGrain) ");
 		try {  
 			// send app id
@@ -75,7 +75,7 @@ public class NSand
 
 
 	// SendGrain with Byte Array
-	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
+	public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
 		NGlobals.lPrint("sendGrain: ");
 		try {  
 			// send app id
@@ -97,7 +97,7 @@ public class NSand
 	}
 
 	// SendGrain with Int Array
-	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+	public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
 		try {  
 			// send app id
 			streamOut.writeByte(aID);
@@ -118,7 +118,7 @@ public class NSand
 	}
 
 	// SendGrain with Float Array
-	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
+	public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
 		try {  
 			// send app id
 			streamOut.writeByte(aID);
@@ -139,7 +139,7 @@ public class NSand
 	}
 
 	// SendGrain with Double Array
-	public synchronized void sendGrain (byte aID, byte cmd, byte dType, int dLen, double[] dArray) {
+	public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, double[] dArray) {
 
 		try {  
 			// send app id
@@ -161,7 +161,7 @@ public class NSand
 	}
 
 	//Returns Grain appID, cmd, dT, dL, bA
-	public synchronized NGrain getGrain (byte appID) {
+	public  NGrain getGrain (byte appID) {
 		NGlobals.lPrint("getGrain");
 		byte cmd, dT;
 		int dL;
@@ -230,7 +230,7 @@ public class NSand
 
 
 	//Returns Grain appID, cmd, dT, dL, bA
-	public synchronized NGrain getGrain () {
+	public  NGrain getGrain () {
 		NGlobals.lPrint("getGrain");
 		byte appID, cmd, dT;
 		int dL;
