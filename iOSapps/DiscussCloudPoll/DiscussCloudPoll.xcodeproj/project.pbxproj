@@ -20,6 +20,9 @@
 		F96590E51562A401004A6C23 /* CloudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590E41562A401004A6C23 /* CloudViewController.m */; };
 		F96590E71562A448004A6C23 /* DiscussViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E61562A448004A6C23 /* DiscussViewController.xib */; };
 		F96590E91562A45E004A6C23 /* CloudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E81562A45E004A6C23 /* CloudViewController.xib */; };
+		F99FFAB21594C26E00D0EAB3 /* ClassLib in Resources */ = {isa = PBXBuildFile; fileRef = F99FFAB11594C26E00D0EAB3 /* ClassLib */; };
+		F99FFAB71594F57F00D0EAB3 /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = F99FFAB41594F57E00D0EAB3 /* NGrain.m */; };
+		F99FFAB81594F57F00D0EAB3 /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = F99FFAB61594F57E00D0EAB3 /* NSand.m */; };
 		F9A46BB015644F65001CD1A1 /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = F9A46BAF15644F65001CD1A1 /* SandDunes1_960x640.png */; };
 		F9ABCCFB15654149007CFC99 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9ABCCFA15654149007CFC99 /* Default.png */; };
 		F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B1B709156ABEDA001CBF5B /* LoginViewController.m */; };
@@ -46,6 +49,11 @@
 		F96590E41562A401004A6C23 /* CloudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudViewController.m; sourceTree = "<group>"; };
 		F96590E61562A448004A6C23 /* DiscussViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscussViewController.xib; sourceTree = "<group>"; };
 		F96590E81562A45E004A6C23 /* CloudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloudViewController.xib; sourceTree = "<group>"; };
+		F99FFAB11594C26E00D0EAB3 /* ClassLib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClassLib; path = ../../ClassLib; sourceTree = "<group>"; };
+		F99FFAB31594F57E00D0EAB3 /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGrain.h; path = ../../ClassLib/NGrain.h; sourceTree = "<group>"; };
+		F99FFAB41594F57E00D0EAB3 /* NGrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGrain.m; path = ../../ClassLib/NGrain.m; sourceTree = "<group>"; };
+		F99FFAB51594F57E00D0EAB3 /* NSand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSand.h; path = ../../ClassLib/NSand.h; sourceTree = "<group>"; };
+		F99FFAB61594F57E00D0EAB3 /* NSand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSand.m; path = ../../ClassLib/NSand.m; sourceTree = "<group>"; };
 		F9A46BAF15644F65001CD1A1 /* SandDunes1_960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SandDunes1_960x640.png; sourceTree = "<group>"; };
 		F9ABCCF815654137007CFC99 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
 		F9ABCCFA15654149007CFC99 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -101,11 +109,16 @@
 		F96590CF1562A2DF004A6C23 /* DiscussCloudPoll */ = {
 			isa = PBXGroup;
 			children = (
+				F99FFAB11594C26E00D0EAB3 /* ClassLib */,
 				F9306DA5156440A90057F8FE /* PollViewController.h */,
 				F9306DA6156440A90057F8FE /* PollViewController.m */,
 				F9306DA8156441150057F8FE /* PollViewController.xib */,
 				F96590E01562A30E004A6C23 /* DiscussViewController.h */,
 				F96590E11562A30E004A6C23 /* DiscussViewController.m */,
+				F99FFAB31594F57E00D0EAB3 /* NGrain.h */,
+				F99FFAB41594F57E00D0EAB3 /* NGrain.m */,
+				F99FFAB51594F57E00D0EAB3 /* NSand.h */,
+				F99FFAB61594F57E00D0EAB3 /* NSand.m */,
 				F96590E61562A448004A6C23 /* DiscussViewController.xib */,
 				F9B1B708156ABEDA001CBF5B /* LoginViewController.h */,
 				F9B1B709156ABEDA001CBF5B /* LoginViewController.m */,
@@ -191,6 +204,7 @@
 				F9ABCCFB15654149007CFC99 /* Default.png in Resources */,
 				F93EA0151566CB18001F6F52 /* iPhone_AppIcon_57x57.png in Resources */,
 				F9B1B70D156AC0B0001CBF5B /* LoginViewController.xib in Resources */,
+				F99FFAB21594C26E00D0EAB3 /* ClassLib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +221,8 @@
 				F96590E51562A401004A6C23 /* CloudViewController.m in Sources */,
 				F9306DA7156440A90057F8FE /* PollViewController.m in Sources */,
 				F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */,
+				F99FFAB71594F57F00D0EAB3 /* NGrain.m in Sources */,
+				F99FFAB81594F57F00D0EAB3 /* NSand.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
