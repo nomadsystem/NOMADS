@@ -18,11 +18,18 @@
     NSArray *bArray;
     NSArray *iArray;
     NSArray *fArray;
-	NSArray *dArray;
+    NSArray *dArray;
 }
 
-- (id) initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndByteArray:(NSArray *)bA; 
-- (id) initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndIntArray:(NSArray *)iA;
+- (id) initWithAppID:(Byte)a 
+	  AndCommand:(Byte)c 
+	 AndDataType:(Byte)dT 
+	  AndDataLen:(int)dL 
+	AndByteArray:(NSArray *)bA; 
+
+- (id) initWithAppID:(Byte)a 
+	  AndCommand:(Byte)c 
+	 AndDataType:(Byte)dT AndDataLen:(int)dL AndIntArray:(NSArray *)iA;
 - (id) initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndFloatArray:(NSArray *)fA;
 - (id) initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndDoubleArray:(NSArray *)dA;
 
