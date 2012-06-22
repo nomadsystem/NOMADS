@@ -8,35 +8,36 @@
 
 #import "NGrain.h"
 
+
+
 @implementation NGrain
-- (id)init //initialization function
+//@synthesize appID;
+//@synthesize command;
+//@synthesize dataType;
+//@synthesize dataLen;
+//@synthesize dataArray;
+//+ (id)init //initialization function
+//{
+//    //Perhaps unnecessary. . .****STK 6/22/12
+//    self = [super init]; //Here to get initialization from parent class first
+//    if (self) { //if we get that initialization, override it
+//    }
+//    return self;
+//}
+
+- (id)initWithGrainElts_AppID:(Byte)a 
+            Command:(Byte)c 
+           DataType:(Byte)dT 
+            DataLen:(int)dL 
+          DataArray:(NSData *)dA
 {
-    //Perhaps unnecessary. . .****STK 6/22/12
-    self = [super init]; //Here to get initialization from parent class first
-    if (self) { //if we get that initialization, override it
-    }
-    return self;
+    return [self initWithGrainElts_AppID:appID 
+                                 Command:command 
+                                DataType:dataType 
+                                 DataLen:dataLen 
+                               DataArray:dataArray];
 }
 
-- (id)initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndByteArray:(NSArray *)bA
-{
-    return [self initWithAppID:appID AndCommand:command AndDataType:dataType AndDataLen:dataLen AndByteArray:bArray];
-}
-
-- (id)initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndIntArray:(NSArray *)iA
-{
-    return [self initWithAppID:appID AndCommand:command AndDataType:dataType AndDataLen:dataLen AndIntArray:iArray];
-}
-
-- (id)initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndFloatArray:(NSArray *)fA
-{
-    return [self initWithAppID:appID AndCommand:command AndDataType:dataType AndDataLen:dataLen AndFloatArray:fArray];
-}
-
-- (id)initWithAppID:(Byte)a AndCommand:(Byte)c AndDataType:(Byte)dT AndDataLen:(int)dL AndDoubleArray:(NSArray *)dA
-{
-    return [self initWithAppID:appID AndCommand:command AndDataType:dataType AndDataLen:dataLen AndDoubleArray:dArray];
-}
 
 - (void)print
 {
@@ -45,7 +46,7 @@
     NSLog(@"command = %@",command);
     NSLog(@"dataType = %@",dataType);
     NSLog(@"dataLen = %@",dataLen);
-    NSLog(@"Array = %@", bArray); //This is temporary until we get other global variables classes made
+    NSLog(@"dataArray = %@", dataArray); //This is temporary until we get other global variables classes made
 }
 
 @end
