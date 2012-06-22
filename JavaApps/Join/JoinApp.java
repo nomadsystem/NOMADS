@@ -18,6 +18,9 @@ public class JoinApp extends JApplet implements ActionListener {
 
 		public NomadsAppThread(JoinApp _client) {
 			client = _client;
+			// Connect
+			joinSand = new NSand();
+			joinSand.connect();
 		}
 // Handle is not used yet
 		/*
@@ -61,10 +64,6 @@ public class JoinApp extends JApplet implements ActionListener {
 		add( login);
 		add(empty);
 		add( submit);
-		
-		// Connect
-		joinSand = new NSand();
-		joinSand.connect();
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
