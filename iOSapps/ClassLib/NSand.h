@@ -10,14 +10,29 @@
 
 @interface NSand : NSObject <NSStreamDelegate>
 {
-  NSInputStream	*streamIn;
-  NSOutputStream	*streamOut;   
-  NSString    *serverName; //= @"nomads.music.virginia.edu";
-  int       serverPort; //52911; //DT's server port
+    NSInputStream	*streamIn;
+	NSOutputStream	*streamOut;   
+    NSString    *serverName; //= @"nomads.music.virginia.edu";
+    int       serverPort; //52911; //DT's server port
 }
 
-- (void) sendWithGrain: (NGrain) myGrain;
+@property (nonatomic, retain) NSInputStream *streamIn;
+@property (nonatomic, retain) NSOutputStream *streamOut;
 
+//- (void) sendWithGrain:(NGrain *) myGrain;
 
+- (void) sendWithGrainElts_AppID:(Byte)a 
+                 Command:(Byte)c 
+                DataType:(Byte)dT 
+                 DataLen:(int)dL 
+               DataArray:(NSArray *)dA;
+
+//- (NGrain) getGrain;
+
+//- (NGrain) getGrainElts_AppID: (Byte)appID;
+
+- (void) connect;
+
+- (void) close;
 
 @end
