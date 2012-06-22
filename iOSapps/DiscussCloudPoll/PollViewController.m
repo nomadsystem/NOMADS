@@ -54,7 +54,7 @@ int oneToTenVoteVal;
 	
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52807, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
 	
 	inputStream = (__bridge NSInputStream *)readStream;
 	outputStream = (__bridge NSOutputStream *)writeStream;

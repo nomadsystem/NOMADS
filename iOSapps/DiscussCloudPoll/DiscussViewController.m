@@ -6,6 +6,8 @@
 //
 
 #import "DiscussViewController.h"
+#import "NSand.h"
+#import "NGrain.h"
 
 //@interface DiscussViewController ()
 
@@ -37,7 +39,10 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    [self initNetworkCommunication];
+  //  [self initNetworkCommunication];
+    NSand *mySand = [NSand alloc];
+    [mySand connect];
+    NSLog(@"mySand connect");
     
     inputDiscussField.text = @"";
     discussPromptLabel.text = @"Discuss Prompt";
@@ -55,7 +60,7 @@
 	
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52807, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
 	
 	inputStream = (__bridge NSInputStream *)readStream;
 	outputStream = (__bridge NSOutputStream *)writeStream;
