@@ -5,11 +5,9 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-        UnityGrooveStudent.java\
-        colorBox.java
-        
+        InstructorControlPanel.java
 
-default: classes myliblink comlink
+default: classes myliblink
 
 topliblink:
 	rm -f ./nomads
@@ -18,14 +16,9 @@ topliblink:
 myliblink:
 	rm -f ./nomads
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
-	
-comlink:
-	rm -f ./com
-	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
 
 classes: $(CLASSES:.java=.class)
 
 clean:
 		$(RM) *.class
 		rm -f ./nomads
-		rm -f ./com
