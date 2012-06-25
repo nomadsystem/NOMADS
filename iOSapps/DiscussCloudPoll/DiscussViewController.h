@@ -6,12 +6,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSand.h"
+
 
 @interface DiscussViewController : UIViewController <NSStreamDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     
 	NSInputStream	*inputStream;
 	NSOutputStream	*outputStream;
+
+    NSand *mySand;
     
 	UILabel         __weak *discussPromptLabel;
     UITableView		__weak *tableView;
