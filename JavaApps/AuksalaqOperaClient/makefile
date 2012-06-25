@@ -1,5 +1,4 @@
-JFLAGS = -source 1.5 -target 1.5
-JC = javac
+include ../makefile.conf
 
 .SUFFIXES: .java .class
 .java.class:
@@ -36,3 +35,5 @@ classes: $(CLASSES:.java=.class)
 
 clean:
 		$(RM) *.class *.jar
+		rm -f ./nomads
+		rm -f ./com
