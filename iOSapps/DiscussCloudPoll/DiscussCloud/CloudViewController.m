@@ -35,7 +35,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     inputCloudField.text = @"";
-    [self initNetworkCommunication];
+  //  [self initNetworkCommunication];
     messages = [[NSMutableArray alloc] init];
     [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
 

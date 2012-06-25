@@ -4,6 +4,8 @@
 //
 //  Created by Steven Kemper on 5/21/12.
 //
+#import "NSand.h"
+#import "NGrain.h"
 #import "DiscussCloudAppDelegate.h"
 #import "LoginViewController.h"
 
@@ -28,54 +30,53 @@
     
 	// Do any additional setup after loading the view.
     
-    
-    
     [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
 
 }
 
-- (void) initNetworkCommunication {
-	
-	CFReadStreamRef readStream;
-	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
-	
-	inputStream = (__bridge NSInputStream *)readStream;
-	outputStream = (__bridge NSOutputStream *)writeStream;
-	[inputStream setDelegate:self];
-	[outputStream setDelegate:self];
-	[inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[inputStream open];
-	[outputStream open];
-    
-}
+//- (void) initNetworkCommunication {
+//	
+//	CFReadStreamRef readStream;
+//	CFWriteStreamRef writeStream;
+//	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
+//	
+//	inputStream = (__bridge NSInputStream *)readStream;
+//	outputStream = (__bridge NSOutputStream *)writeStream;
+//	[inputStream setDelegate:self];
+//	[outputStream setDelegate:self];
+//	[inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//	[outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//	[inputStream open];
+//	[outputStream open];
+//    
+//}
 
-- (NSData*) convertToJavaUTF8Int : (NSInteger*) appID 
-{ 
-    //     NSUInteger len = [appID lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-    //     Byte buffer[2]; 
-    //     buffer[0] = (0xff & (len >> 8)); 
-    //     buffer[1] = (0xff & len); 
-    NSMutableData *outData = [NSMutableData dataWithCapacity:1]; 
-    [outData appendBytes:appID length:1];
-    return outData;
-}
+//- (NSData*) convertToJavaUTF8Int : (NSInteger*) appID 
+//{ 
+//    //     NSUInteger len = [appID lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
+//    //     Byte buffer[2]; 
+//    //     buffer[0] = (0xff & (len >> 8)); 
+//    //     buffer[1] = (0xff & len); 
+//    NSMutableData *outData = [NSMutableData dataWithCapacity:1]; 
+//    [outData appendBytes:appID length:1];
+//    return outData;
+//}
 
-- (NSData*) convertToJavaUTF8 : (NSString*) str { 
-    NSUInteger len = [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-    Byte buffer[2]; 
-    buffer[0] = (0xff & (len >> 8)); 
-    buffer[1] = (0xff & len); 
-    NSMutableData *outData = [NSMutableData dataWithCapacity:2]; 
-    [outData appendBytes:buffer length:2]; 
-    [outData appendData:[str dataUsingEncoding:NSUTF8StringEncoding]]; 
-    return outData;
-}
+//- (NSData*) convertToJavaUTF8 : (NSString*) str { 
+//    NSUInteger len = [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
+//    Byte buffer[2]; 
+//    buffer[0] = (0xff & (len >> 8)); 
+//    buffer[1] = (0xff & len); 
+//    NSMutableData *outData = [NSMutableData dataWithCapacity:2]; 
+//    [outData appendBytes:buffer length:2]; 
+//    [outData appendData:[str dataUsingEncoding:NSUTF8StringEncoding]]; 
+//    return outData;
+//}
 
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
-    [self sendToNOMADSappID:40 sendToNOMADSoutMessage:loginTextField.text];
+    NSLog(@"mySand connect");
+ //   [self sendToNOMADSappID:40 sendToNOMADSoutMessage:loginTextField.text];
     loginTextField.text = @"";
     [loginTextField setHidden:NO];
     DiscussCloudAppDelegate *appDelegate = (DiscussCloudAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -177,38 +178,38 @@
 }
 
 
-- (void) sendToNOMADSappID:(int)appID sendToNOMADSoutMessage:(NSString *)outMessage
-{
-    
-    
-    NSLog(@"outMessage = %@", outMessage);
-    
-    NSData *aData = [self convertToJavaUTF8Int:&appID]; //Store AppID as NSData
-    NSData *data = [self convertToJavaUTF8:outMessage]; //Store text as NSData
-    
-    int aDataLength = [aData length]; //Get length of AppID
-    int dataLength = [data length]; //Get text length
-    [self initNetworkCommunication];
-    //Write AppID as String to outputStream
-    int aNum = [outputStream write:(const uint8_t *)[aData bytes] maxLength:aDataLength];
-    //Write text to outputStream
-    int num = [outputStream write:(const uint8_t *)[data bytes] maxLength:dataLength];
-    
-    //Check and make sure data was sent out properly
-	if (-1 == aNum) {
-        NSLog(@"Error writing appID to stream %@: %@", outputStream, [outputStream streamError]);
-    }
-    else {
-        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
-    }
-    
-	if (-1 == num) {
-        NSLog(@"Error writing data to stream %@: %@", outputStream, [outputStream streamError]);
-    }
-    else {
-        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
-    }
-}
+//- (void) sendToNOMADSappID:(int)appID sendToNOMADSoutMessage:(NSString *)outMessage
+//{
+//    
+//    
+//    NSLog(@"outMessage = %@", outMessage);
+//    
+//    NSData *aData = [self convertToJavaUTF8Int:&appID]; //Store AppID as NSData
+//    NSData *data = [self convertToJavaUTF8:outMessage]; //Store text as NSData
+//    
+//    int aDataLength = [aData length]; //Get length of AppID
+//    int dataLength = [data length]; //Get text length
+//    [self initNetworkCommunication];
+//    //Write AppID as String to outputStream
+//    int aNum = [outputStream write:(const uint8_t *)[aData bytes] maxLength:aDataLength];
+//    //Write text to outputStream
+//    int num = [outputStream write:(const uint8_t *)[data bytes] maxLength:dataLength];
+//    
+//    //Check and make sure data was sent out properly
+//	if (-1 == aNum) {
+//        NSLog(@"Error writing appID to stream %@: %@", outputStream, [outputStream streamError]);
+//    }
+//    else {
+//        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
+//    }
+//    
+//	if (-1 == num) {
+//        NSLog(@"Error writing data to stream %@: %@", outputStream, [outputStream streamError]);
+//    }
+//    else {
+//        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
+//    }
+//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
 {   

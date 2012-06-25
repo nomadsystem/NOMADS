@@ -12,7 +12,6 @@
 {
     NSInputStream	*streamIn;
 	NSOutputStream	*streamOut;   
-    NSString    *serverName; //= @"nomads.music.virginia.edu";
     int       serverPort; //52911; //DT's server port
 }
 
