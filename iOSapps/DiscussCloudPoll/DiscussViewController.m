@@ -40,7 +40,7 @@
     
 	// Do any additional setup after loading the view.
   //  [self initNetworkCommunication];
-    NSand *mySand = [NSand alloc];
+    mySand = [NSand alloc];
     [mySand connect];
     NSLog(@"mySand connect");
     

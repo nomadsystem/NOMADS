@@ -8,11 +8,11 @@
 
 @interface NDataType : NSObject
 {
-    public static byte FOO;
-    public static byte BYTE;
-    public static byte INT;
-    public static byte FLOAT;
-    public static byte DOUBLE;
-    public static byte NO_DATA;
+    @public Byte FOO;
+    @public Byte BYTE;
+    @public Byte INT;
+    @public Byte FLOAT;
+    @public Byte DOUBLE;
+    @public Byte NO_DATA;
 }
 @end
