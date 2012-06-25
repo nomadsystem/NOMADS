@@ -40,8 +40,8 @@
     
 	// Do any additional setup after loading the view.
   //  [self initNetworkCommunication];
-    mySand = [NSand alloc];
-    [mySand connect];
+//    mySand = [NSand alloc];
+//    [mySand connect];
     NSLog(@"mySand connect");
     
     inputDiscussField.text = @"";

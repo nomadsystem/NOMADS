@@ -8,6 +8,7 @@
 
 #import "NSand.h"
 #import "NGrain.h"
+#import "NGlobals.h"
 
 @implementation NSand
 
@@ -17,8 +18,9 @@
 {
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
-        serverName = @"nomads.music.virginia.edu";
-        serverPort = 52911; //DT's server port
+        NGlobals *myGlobals;
+       // serverPort = myGlobals->serverPortSK; 
+        serverPort = 52912;
     }
     
     return self;
@@ -33,7 +35,7 @@
 {
     CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)serverName, serverPort, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52912, &readStream, &writeStream);
 	
 	streamIn = (__bridge NSInputStream *)readStream;
 	streamOut = (__bridge NSOutputStream *)writeStream;

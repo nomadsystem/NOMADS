@@ -39,7 +39,7 @@ int oneToTenVoteVal;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [self initNetworkCommunication];
+  //  [self initNetworkCommunication];
     messages = [[NSMutableArray alloc] init];
     [[self blankView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
     [[self aeView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
