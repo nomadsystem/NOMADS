@@ -176,7 +176,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 			}
 			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
 				speak.setEnabled(true);
-				topic.setText(msg);
+				topic.setText(tempString);
 			}			
 		}
 		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
