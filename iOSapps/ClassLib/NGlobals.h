@@ -8,15 +8,15 @@
 
 @interface NGlobals : NSObject
 {
-  static int clientDebugLevel;
-  static int serverDebugLevel;
-  static int libraryDebugLevel;
-  static NSString    serverName;
-  static int serverPort;
-  static int serverPortDT;
-  static int serverPortSK;
-  static int serverPortPT;
-  static int serverPortMB;
+  @public int clientDebugLevel;
+  @public int serverDebugLevel;
+  @public int libraryDebugLevel;
+  @public NSString    serverName;
+  @public int serverPort;
+  @public int serverPortDT;
+  @public int serverPortSK;
+  @public int serverPortPT;
+  @public int serverPortMB;
 }
 
 @end
