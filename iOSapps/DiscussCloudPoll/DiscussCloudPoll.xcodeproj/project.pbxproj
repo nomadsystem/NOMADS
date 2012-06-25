@@ -27,6 +27,10 @@
 		F9ABCCFB15654149007CFC99 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F9ABCCFA15654149007CFC99 /* Default.png */; };
 		F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B1B709156ABEDA001CBF5B /* LoginViewController.m */; };
 		F9B1B70D156AC0B0001CBF5B /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9B1B70C156AC0B0001CBF5B /* LoginViewController.xib */; };
+		F9EC7F4B1598BC260050BD44 /* NAppID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EC7F441598BC260050BD44 /* NAppID.m */; };
+		F9EC7F4C1598BC260050BD44 /* NCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EC7F461598BC260050BD44 /* NCommand.m */; };
+		F9EC7F4D1598BC260050BD44 /* NDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EC7F481598BC260050BD44 /* NDataType.m */; };
+		F9EC7F4E1598BC260050BD44 /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EC7F4A1598BC260050BD44 /* NGlobals.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +64,14 @@
 		F9B1B708156ABEDA001CBF5B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		F9B1B709156ABEDA001CBF5B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		F9B1B70C156AC0B0001CBF5B /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		F9EC7F431598BC260050BD44 /* NAppID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppID.h; path = ../../ClassLib/NAppID.h; sourceTree = "<group>"; };
+		F9EC7F441598BC260050BD44 /* NAppID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NAppID.m; path = ../../ClassLib/NAppID.m; sourceTree = "<group>"; };
+		F9EC7F451598BC260050BD44 /* NCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommand.h; path = ../../ClassLib/NCommand.h; sourceTree = "<group>"; };
+		F9EC7F461598BC260050BD44 /* NCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NCommand.m; path = ../../ClassLib/NCommand.m; sourceTree = "<group>"; };
+		F9EC7F471598BC260050BD44 /* NDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDataType.h; path = ../../ClassLib/NDataType.h; sourceTree = "<group>"; };
+		F9EC7F481598BC260050BD44 /* NDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDataType.m; path = ../../ClassLib/NDataType.m; sourceTree = "<group>"; };
+		F9EC7F491598BC260050BD44 /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGlobals.h; path = ../../ClassLib/NGlobals.h; sourceTree = "<group>"; };
+		F9EC7F4A1598BC260050BD44 /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGlobals.m; path = ../../ClassLib/NGlobals.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,16 +121,24 @@
 		F96590CF1562A2DF004A6C23 /* DiscussCloudPoll */ = {
 			isa = PBXGroup;
 			children = (
+				F9EC7F431598BC260050BD44 /* NAppID.h */,
+				F9EC7F441598BC260050BD44 /* NAppID.m */,
+				F9EC7F451598BC260050BD44 /* NCommand.h */,
+				F9EC7F461598BC260050BD44 /* NCommand.m */,
+				F9EC7F471598BC260050BD44 /* NDataType.h */,
+				F9EC7F481598BC260050BD44 /* NDataType.m */,
+				F9EC7F491598BC260050BD44 /* NGlobals.h */,
+				F9EC7F4A1598BC260050BD44 /* NGlobals.m */,
+				F99FFAB31594F57E00D0EAB3 /* NGrain.h */,
+				F99FFAB41594F57E00D0EAB3 /* NGrain.m */,
+				F99FFAB51594F57E00D0EAB3 /* NSand.h */,
+				F99FFAB61594F57E00D0EAB3 /* NSand.m */,
 				F99FFAB11594C26E00D0EAB3 /* ClassLib */,
 				F9306DA5156440A90057F8FE /* PollViewController.h */,
 				F9306DA6156440A90057F8FE /* PollViewController.m */,
 				F9306DA8156441150057F8FE /* PollViewController.xib */,
 				F96590E01562A30E004A6C23 /* DiscussViewController.h */,
 				F96590E11562A30E004A6C23 /* DiscussViewController.m */,
-				F99FFAB31594F57E00D0EAB3 /* NGrain.h */,
-				F99FFAB41594F57E00D0EAB3 /* NGrain.m */,
-				F99FFAB51594F57E00D0EAB3 /* NSand.h */,
-				F99FFAB61594F57E00D0EAB3 /* NSand.m */,
 				F96590E61562A448004A6C23 /* DiscussViewController.xib */,
 				F9B1B708156ABEDA001CBF5B /* LoginViewController.h */,
 				F9B1B709156ABEDA001CBF5B /* LoginViewController.m */,
@@ -223,6 +243,10 @@
 				F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */,
 				F99FFAB71594F57F00D0EAB3 /* NGrain.m in Sources */,
 				F99FFAB81594F57F00D0EAB3 /* NSand.m in Sources */,
+				F9EC7F4B1598BC260050BD44 /* NAppID.m in Sources */,
+				F9EC7F4C1598BC260050BD44 /* NCommand.m in Sources */,
+				F9EC7F4D1598BC260050BD44 /* NDataType.m in Sources */,
+				F9EC7F4E1598BC260050BD44 /* NGlobals.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

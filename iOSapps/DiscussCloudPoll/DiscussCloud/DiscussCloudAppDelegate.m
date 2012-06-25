@@ -20,6 +20,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    NSand *mySand = [NSand alloc];
+    [mySand connect];
     
     LoginViewController *lvc = [[LoginViewController alloc] init];
 //    DiscussViewController *dvc = [[DiscussViewController alloc] init];
