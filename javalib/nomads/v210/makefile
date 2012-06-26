@@ -5,12 +5,12 @@ include makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	command.java\
-	globals.java\
-	appID.java\
-	dataType.java\
-	NomadsApp.java\
-	NomadsAppThread.java
+	NCommand.java\
+	NGlobals.java\
+	NAppID.java\
+	NDataType.java\
+	NSand.java\
+	NGrain.java
 
 default: classes
 
