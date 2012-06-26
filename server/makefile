@@ -26,3 +26,4 @@ classes: $(CLASSES:.java=.class)
 
 clean:
 		$(RM) *.class
+		rm -f ./nomads
