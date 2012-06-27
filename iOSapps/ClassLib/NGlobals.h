@@ -11,7 +11,7 @@
   @public int clientDebugLevel;
   @public int serverDebugLevel;
   @public int libraryDebugLevel;
-  @public NSString    serverName;
+  @public NSString    *serverName;
   @public int serverPort;
   @public int serverPortDT;
   @public int serverPortSK;

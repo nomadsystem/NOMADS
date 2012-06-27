@@ -8,16 +8,16 @@
 
 @interface NCommand : NSObject
 {
-    @public int RES1;
-    @public int SEND_MESSAGE;
-    @public int QUESTION_TYPE_YES_NO;
-    @public int QUESTION_TYPE_ONE_TO_TEN;
-    @public int QUESTION_TYPE_A_TO_E;
-    @public int VOTE;
-    @public int SYNTH_ENABLE;
-    @public int SYNTH_DISABLE;
-    @public int SYNTH_START;
-    @public int SYNTH_STOP;
-    @public int SEND_SPRITEYX;
+    @public Byte RES1;
+    @public Byte SEND_MESSAGE;
+    @public Byte QUESTION_TYPE_YES_NO;
+    @public Byte QUESTION_TYPE_ONE_TO_TEN;
+    @public Byte QUESTION_TYPE_A_TO_E;
+    @public Byte VOTE;
+    @public Byte SYNTH_ENABLE;
+    @public Byte SYNTH_DISABLE;
+    @public Byte SYNTH_START;
+    @public Byte SYNTH_STOP;
+    @public Byte SEND_SPRITEYX;
 }
 @end
