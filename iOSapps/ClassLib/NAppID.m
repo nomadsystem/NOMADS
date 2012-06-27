@@ -19,7 +19,7 @@
      CENSOR = 5;
      MONITOR = 6;
 
-     DEBUG = 10;
+     //DEBUG = 10;
 
      WEB_CHAT = 20;
      C_WEB_CHAT = 21;

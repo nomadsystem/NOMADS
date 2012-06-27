@@ -12,6 +12,7 @@
 {
     NSInputStream	*streamIn;
 	NSOutputStream	*streamOut;   
+    NSString    *serverName; //= @"nomads.music.virginia.edu";
     int       serverPort; //52911; //DT's server port
 }
 
@@ -24,7 +25,7 @@
                  Command:(Byte)c 
                 DataType:(Byte)dT 
                  DataLen:(int)dL 
-               DataArray:(NSArray *)dA;
+               DataArray:(NSData *)dA;
 
 //- (NGrain) getGrain;
 

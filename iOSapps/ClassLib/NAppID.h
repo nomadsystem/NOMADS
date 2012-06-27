@@ -8,64 +8,64 @@
 
 @interface NAppID : NSObject
 {
-    @public int SERVER;
-    @public int INSTRUCTOR_PANEL;
-    @public int C_INSTRUCTOR_PANEL;
-    @public int STUDENT_PANEL;
-    @public int C_STUDENT_PANEL;
-    @public int CENSOR;
-    @public int MONITOR;
+    @public Byte SERVER;
+    @public Byte INSTRUCTOR_PANEL;
+    @public Byte C_INSTRUCTOR_PANEL;
+    @public Byte STUDENT_PANEL;
+    @public Byte C_STUDENT_PANEL;
+    @public Byte CENSOR;
+    @public Byte MONITOR;
 
-    @public int DEBUG;
+    @public Byte APPDEBUG;
 
-    @public int WEB_CHAT;
-    @public int C_WEB_CHAT;
-    @public int DISCUSS_PROMPT;
-    @public int C_DISCUSS_PROMPT;
-    @public int INSTRUCTOR_DISCUSS;
-    @public int C_INSTRUCTOR_DISCUSS;
+    @public Byte WEB_CHAT;
+    @public Byte C_WEB_CHAT;
+    @public Byte DISCUSS_PROMPT;
+    @public Byte C_DISCUSS_PROMPT;
+    @public Byte INSTRUCTOR_DISCUSS;
+    @public Byte C_INSTRUCTOR_DISCUSS;
 
-    @public int TEXT_CHAT;
-    @public int C_TEXT_CHAT;
+    @public Byte TEXT_CHAT;
+    @public Byte C_TEXT_CHAT;
 
-    @public int LOGIN;
-    @public int C_LOGIN;
+    @public Byte LOGIN;
+    @public Byte C_LOGIN;
 
-    @public int CLOUD_DISPLAY;
-    @public int C_CLOUD_DISPLAY;
-    @public int CLOUD_CHAT;
-    @public int C_CLOUD_CHAT;
-    @public int CLOUD_PROMPT;
-    @public int C_CLOUD_PROMPT;
+    @public Byte CLOUD_DISPLAY;
+    @public Byte C_CLOUD_DISPLAY;
+    @public Byte CLOUD_CHAT;
+    @public Byte C_CLOUD_CHAT;
+    @public Byte CLOUD_PROMPT;
+    @public Byte C_CLOUD_PROMPT;
 
-    @public int TEACHER_POLL;
-    @public int C_TEACHER_POLL;
-    @public int STUDENT_POLL;
-    @public int C_STUDENT_POLL;
-    @public int DISPLAY_POLL;
-    @public int C_DISPLAY_POLL;
+    @public Byte TEACHER_POLL;
+    @public Byte C_TEACHER_POLL;
+    @public Byte STUDENT_POLL;
+    @public Byte C_STUDENT_POLL;
+    @public Byte DISPLAY_POLL;
+    @public Byte C_DISPLAY_POLL;
 
-    @public int SNAKE_GAME;
-    @public int C_SNAKE_GAME;
+    @public Byte SNAKE_GAME;
+    @public Byte C_SNAKE_GAME;
 
-    @public int INSTRUCTOR_SEQUENCER;
-    @public int C_INSTRUCTOR_SEQUENCER;
-    @public int STUDENT_SEQUENCER;
-    @public int C_STUDENT_SEQUENCER;
+    @public Byte INSTRUCTOR_SEQUENCER;
+    @public Byte C_INSTRUCTOR_SEQUENCER;
+    @public Byte STUDENT_SEQUENCER;
+    @public Byte C_STUDENT_SEQUENCER;
 
-    @public int STUDENT_SAND_POINTER;
-    @public int C_STUDENT_SAND_POINTER;
-    @public int INSTRUCTOR_SAND_POINTER;
-    @public int C_INSTRUCTOR_SAND_POINTER;
+    @public Byte STUDENT_SAND_POINTER;
+    @public Byte C_STUDENT_SAND_POINTER;
+    @public Byte INSTRUCTOR_SAND_POINTER;
+    @public Byte C_INSTRUCTOR_SAND_POINTER;
 
-    @public int SOUND_SWARM;
-    @public int C_SOUND_SWARM;
-    @public int SPHERE_MOVER;
+    @public Byte SOUND_SWARM;
+    @public Byte C_SOUND_SWARM;
+    @public Byte SPHERE_MOVER;
 
-    @public int STUD_EMRG_SYNTH;
-    @public int C_STUD_EMRG_SYNTH;
-    @public int INSTRUCT_EMRG_SYNTH_PROMPT;
-    @public int C_INSTRUCT_EMRG_SYNTH_PROMPT;
+    @public Byte STUD_EMRG_SYNTH;
+    @public Byte C_STUD_EMRG_SYNTH;
+    @public Byte INSTRUCT_EMRG_SYNTH_PROMPT;
+    @public Byte C_INSTRUCT_EMRG_SYNTH_PROMPT;
 }
 
 @end
