@@ -9,21 +9,18 @@
 #import "NSand.h"
 
 
-@interface DiscussViewController : UIViewController <NSStreamDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface DiscussViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
-    
-	NSInputStream	*inputStream;
-	NSOutputStream	*outputStream;
 
-    NSand  *discussSand;
+
+    NSand   *discussSand;
     
 	UILabel         __weak *discussPromptLabel;
     UITableView		__weak *tableView;
 	NSMutableArray	*messages;
 }
 
-//@property (weak, nonatomic) NSand *discussSand;
-
+@property (strong, retain) NSand *discussSand;
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -35,7 +32,6 @@
 
 
 - (IBAction)sendDiscuss:(id)sender;
-- (void) initNetworkCommunication;
 - (void) messageReceived:(NSString *)message;
 
 @end

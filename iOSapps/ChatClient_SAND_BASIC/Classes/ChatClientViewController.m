@@ -127,50 +127,50 @@
     // How to send the SAND header info (appID, command, dataType and dataLength)
     // NSData *sDatum;
     
-    Byte appID = 40; 
-    NSData *sDatum = [[NSData alloc] initWithBytes:&appID length:1];
-     
-    sDatum = [self convertToJavaUTF8Byte:&appID]; // appID
-    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
-
-    Byte cmd = 1;
-    sDatum = [self convertToJavaUTF8Byte:&cmd]; // command
-    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
-
-    Byte dataType = 2;
-    sDatum = [self convertToJavaUTF8Byte:&dataType]; // dataType
-    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
-
-    int dataLen = 3;
-    int dataLenBE = CFSwapInt32HostToBig(dataLen);   // dataLength
-    [outputStream write:(uint8_t *)&dataLenBE maxLength:4];
-
-    // If the data is an array of ints, send like this
-    NSUInteger nInt[3];
-    nInt[0] = CFSwapInt32HostToBig(5);
-    nInt[1] = CFSwapInt32HostToBig(7);
-    nInt[2] = CFSwapInt32HostToBig(9);
-    NSData *intData = [NSData dataWithBytes:&nInt length:sizeof(nInt)];
-    [outputStream write:(const uint8_t *)[intData bytes] maxLength: [intData length]];
+//    Byte appID = 40; 
+//    NSData *sDatum = [[NSData alloc] initWithBytes:&appID length:1];
+//     
+//    sDatum = [self convertToJavaUTF8Byte:&appID]; // appID
+//    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+//
+//    Byte cmd = 1;
+//    sDatum = [self convertToJavaUTF8Byte:&cmd]; // command
+//    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+//
+//    Byte dataType = 2;
+//    sDatum = [self convertToJavaUTF8Byte:&dataType]; // dataType
+//    [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+//
+//    int dataLen = 3;
+//    int dataLenBE = CFSwapInt32HostToBig(dataLen);   // dataLength
+//    [outputStream write:(uint8_t *)&dataLenBE maxLength:4];
+//
+//    // If the data is an array of ints, send like this
+//    NSUInteger nInt[3];
+//    nInt[0] = CFSwapInt32HostToBig(5);
+//    nInt[1] = CFSwapInt32HostToBig(7);
+//    nInt[2] = CFSwapInt32HostToBig(9);
+//    NSData *intData = [NSData dataWithBytes:&nInt length:sizeof(nInt)];
+//    [outputStream write:(const uint8_t *)[intData bytes] maxLength: [intData length]];
                   
 
     // Header (again)
-    appID = 40; 
-    sDatum = [[NSData alloc] initWithBytes:&appID length:1];
+  Byte  appID = 40; 
+  NSData  *sDatum = [[NSData alloc] initWithBytes:&appID length:1];
     
     sDatum = [self convertToJavaUTF8Byte:&appID]; // appID
     [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
     
-    cmd = 1;
+   Byte cmd = 1;
     sDatum = [self convertToJavaUTF8Byte:&cmd]; // command
     [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
     
-    dataType = 1;
+    Byte dataType = 1;
     sDatum = [self convertToJavaUTF8Byte:&dataType]; // dataType
     [outputStream write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
 
-    dataLen = [inputMessageField.text length];
-    dataLenBE = CFSwapInt32HostToBig(dataLen);   // dataLength
+    int dataLen = [inputMessageField.text length];
+    int dataLenBE = CFSwapInt32HostToBig(dataLen);   // dataLength
     [outputStream write:(uint8_t *)&dataLenBE maxLength:4];
     
     // If the data is a string or array of bytes, send like this

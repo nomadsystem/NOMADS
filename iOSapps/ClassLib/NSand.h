@@ -21,11 +21,11 @@
 
 //- (void) sendWithGrain:(NGrain *) myGrain;
 
-- (void) sendWithGrainElts_AppID:(Byte)a 
-                 Command:(Byte)c 
-                DataType:(Byte)dT 
-                 DataLen:(int)dL 
-               DataArray:(NSData *)dA;
+//- (void) sendWithGrainElts_AppID:(Byte)a 
+//                 Command:(Byte)c 
+//                DataType:(Byte)dT 
+//                         DataLen:(int)dL; 
+//             //  DataString:(NSString *)str;
 
 //- (NGrain) getGrain;
 
@@ -34,5 +34,6 @@
 - (void) connect;
 
 - (void) close;
+- (void) fooWith_AppID: (Byte) i Command:(Byte)c DataType:(Byte)dT DataLen:(int)dL DataString:(NSString *)str;
 
 @end
