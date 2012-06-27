@@ -8,6 +8,9 @@
 #import "DiscussViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
+#import "NAppID.h"
+#import "NCommand.h"
+#import "NDataType.h"
 
 //@interface DiscussViewController ()
 
@@ -17,10 +20,10 @@
 
 @synthesize inputDiscussField;
 @synthesize tableView;
-@synthesize inputStream, outputStream;
 @synthesize discussPromptLabel;
 @synthesize sendDiscussButton;
 @synthesize messages;
+//@synthesize discussSand;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -28,6 +31,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        discussSand = [NSand alloc];
         UITabBarItem *tbi = [self tabBarItem];
         [tbi setTitle:@"Group Discuss"];
     }
@@ -40,9 +44,8 @@
     
 	// Do any additional setup after loading the view.
   //  [self initNetworkCommunication];
-//    mySand = [NSand alloc];
-//    [mySand connect];
-    NSLog(@"mySand connect");
+
+    [discussSand connect];
     
     inputDiscussField.text = @"";
     discussPromptLabel.text = @"Discuss Prompt";
@@ -56,54 +59,37 @@
 	self.tableView.dataSource = self;
 }
 
-- (void) initNetworkCommunication {
-	
-	CFReadStreamRef readStream;
-	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
-	
-	inputStream = (__bridge NSInputStream *)readStream;
-	outputStream = (__bridge NSOutputStream *)writeStream;
-	[inputStream setDelegate:self];
-	[outputStream setDelegate:self];
-	[inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[inputStream open];
-	[outputStream open];
-    
-    [self sendToNOMADSappID:20 sendToNOMADSoutMessage:@""];
-}
-
-- (NSData*) convertToJavaUTF8Int : (NSInteger*) appID 
-{ 
-    //     NSUInteger len = [appID lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-    //     Byte buffer[2]; 
-    //     buffer[0] = (0xff & (len >> 8)); 
-    //     buffer[1] = (0xff & len); 
-    NSMutableData *outData = [NSMutableData dataWithCapacity:1]; 
-    [outData appendBytes:appID length:1];
-    return outData;
-}
-
-- (NSData*) convertToJavaUTF8 : (NSString*) str { 
-    NSUInteger len = [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-    Byte buffer[2]; 
-    buffer[0] = (0xff & (len >> 8)); 
-    buffer[1] = (0xff & len); 
-    NSMutableData *outData = [NSMutableData dataWithCapacity:2]; 
-    [outData appendBytes:buffer length:2]; 
-    [outData appendData:[str dataUsingEncoding:NSUTF8StringEncoding]]; 
-    return outData;
-}
-
 
 
 - (IBAction)sendDiscuss:(id)sender
 {
     NSLog(@"Entered sendDiscuss");
     [inputDiscussField resignFirstResponder];
-    [self sendToNOMADSappID:20 sendToNOMADSoutMessage:inputDiscussField.text];
-    NSLog(@"Sent Data from Discuss");
+    //AppID
+    NAppID *appID = [[NAppID alloc] init];
+    Byte myAppID = appID->WEB_CHAT;
+    NSLog(@"myAppID =  %i\n", myAppID);
+    
+    //COMMAND
+    NCommand *command = [[NCommand alloc] init];
+    Byte myCommand = command->SEND_MESSAGE;
+    NSLog(@"myCommand =  %i\n", myCommand);
+    
+    //DATA TYPE
+    NDataType *dataType = [[NDataType alloc] init];
+    Byte myDataType = dataType->BYTE;
+    NSLog(@"myDataType =  %i\n", myDataType);
+    
+    //DATA LENGTH
+    int myDataLength = [inputDiscussField.text length];
+    NSLog(@"myDataLength =  %i\n", myDataLength);
+    
+    //DATA ARRAY (String from inputDiscussField)
+    NSData *sData = [inputDiscussField.text dataUsingEncoding:NSUTF8StringEncoding];  // String
+    NSLog(@"myDataArray = %@\n", sData);
+    
+    [discussSand sendWithGrainElts_AppID:myAppID Command:myCommand DataType:myDataType DataLen:myDataLength DataArray:sData];
+
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:NO];
 }
@@ -274,39 +260,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return messages.count;
     
-}
-
-- (void) sendToNOMADSappID:(int)appID sendToNOMADSoutMessage:(NSString *)outMessage
-{
-    
-
-    NSLog(@"outMessage = %@", outMessage);
-    
-    NSData *aData = [self convertToJavaUTF8Int:&appID]; //Store AppID as NSData
-    NSData *data = [self convertToJavaUTF8:outMessage]; //Store text as NSData
-    
-    int aDataLength = [aData length]; //Get length of AppID
-    int dataLength = [data length]; //Get text length
-    
-    //Write AppID as String to outputStream
-    int aNum = [outputStream write:(const uint8_t *)[aData bytes] maxLength:aDataLength];
-    //Write text to outputStream
-    int num = [outputStream write:(const uint8_t *)[data bytes] maxLength:dataLength];
-    
-    //Check and make sure data was sent out properly
-	if (-1 == aNum) {
-        NSLog(@"Error writing appID to stream %@: %@", outputStream, [outputStream streamError]);
-    }
-    else {
-        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
-    }
-    
-	if (-1 == num) {
-        NSLog(@"Error writing data to stream %@: %@", outputStream, [outputStream streamError]);
-    }
-    else {
-        NSLog(@"Wrote %i bytes to stream %@.", num, outputStream);
-    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *) textField

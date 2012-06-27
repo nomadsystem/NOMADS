@@ -34,48 +34,9 @@
 
 }
 
-//- (void) initNetworkCommunication {
-//	
-//	CFReadStreamRef readStream;
-//	CFWriteStreamRef writeStream;
-//	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"nomads.music.virginia.edu", 52911, &readStream, &writeStream);
-//	
-//	inputStream = (__bridge NSInputStream *)readStream;
-//	outputStream = (__bridge NSOutputStream *)writeStream;
-//	[inputStream setDelegate:self];
-//	[outputStream setDelegate:self];
-//	[inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//	[outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//	[inputStream open];
-//	[outputStream open];
-//    
-//}
-
-//- (NSData*) convertToJavaUTF8Int : (NSInteger*) appID 
-//{ 
-//    //     NSUInteger len = [appID lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-//    //     Byte buffer[2]; 
-//    //     buffer[0] = (0xff & (len >> 8)); 
-//    //     buffer[1] = (0xff & len); 
-//    NSMutableData *outData = [NSMutableData dataWithCapacity:1]; 
-//    [outData appendBytes:appID length:1];
-//    return outData;
-//}
-
-//- (NSData*) convertToJavaUTF8 : (NSString*) str { 
-//    NSUInteger len = [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; 
-//    Byte buffer[2]; 
-//    buffer[0] = (0xff & (len >> 8)); 
-//    buffer[1] = (0xff & len); 
-//    NSMutableData *outData = [NSMutableData dataWithCapacity:2]; 
-//    [outData appendBytes:buffer length:2]; 
-//    [outData appendData:[str dataUsingEncoding:NSUTF8StringEncoding]]; 
-//    return outData;
-//}
 
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
-    NSLog(@"mySand connect");
  //   [self sendToNOMADSappID:40 sendToNOMADSoutMessage:loginTextField.text];
     loginTextField.text = @"";
     [loginTextField setHidden:NO];
@@ -89,93 +50,93 @@
 
 
 
-- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
-    
-	NSLog(@"stream event %i", streamEvent);
-	
-	switch (streamEvent) {
-			
-		case NSStreamEventOpenCompleted:
-			NSLog(@"Stream opened");
-			break;
-		case NSStreamEventHasBytesAvailable:
-            
-            
-            if (theStream == inputStream) {
-				
-				uint8_t buffer[1024];
-				unichar data[1024];
-                
-                unsigned int len = 0;
-                unsigned int sLen = 0;
-                int appID;
-				
-                //This while statement seems redundant 
-				while ([inputStream hasBytesAvailable]) {
-					len = [inputStream read:buffer maxLength:sizeof(buffer)];
-					if (len > 0) {
-						
-                        
-						NSMutableString *output = [[NSMutableString alloc] initWithBytes:buffer length:len encoding:NSUTF8StringEncoding];
-                        
-                        sLen = [output length];
-                        [output getCharacters:data range:NSMakeRange(0, sLen)];
-                        
-                        appID = (int) data[0];
-                        NSLog(@"CURRENT APP_ID: %d", appID);
-                        
-                        const char *data2 = [output UTF8String];
-                        char *cpy = calloc([output length]+1, 1);
-                        strncpy(cpy, data2+3, [output length]-3);
-                        printf("String %s\n",cpy);
-                        
-                        NSMutableString *textFromNOMADS = [[NSMutableString alloc] initWithCString:cpy encoding:NSUTF8StringEncoding];
-                        
-                        for (int i=0;i<sLen+1;i++) {
-                            NSLog(@"data[%d]: %c\n", i,data[i]);
-                            
-                        }
-                        
-                        //                        for (int i=0;i<sLen;i++) {
-                        //                            NSLog(@"data2[%d]: %c\n", i,data2[i]);
-                        //                            
-                        //                        }
-                        
-                        printf("copy %s\n",cpy);
-                        
-                        if (nil != output) { 
-                            
-                            
-                            
-                            NSLog(@"Logn App Handle");
-                        
-                        }
-                        
-					}
-				}
-			}
-            
-			break;
-            
-			
-		case NSStreamEventErrorOccurred:
-			
-			NSLog(@"Can not connect to the host!");
-			break;
-			
-		case NSStreamEventEndEncountered:
-            
-            [theStream close];
-            [theStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-            //    [theStream release];
-            theStream = nil;
-			
-			break;
-		default:
-			NSLog(@"Unknown event");
-	}
-    
-}
+//- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
+//    
+//	NSLog(@"stream event %i", streamEvent);
+//	
+//	switch (streamEvent) {
+//			
+//		case NSStreamEventOpenCompleted:
+//			NSLog(@"Stream opened");
+//			break;
+//		case NSStreamEventHasBytesAvailable:
+//            
+//            
+//            if (theStream == inputStream) {
+//				
+//				uint8_t buffer[1024];
+//				unichar data[1024];
+//                
+//                unsigned int len = 0;
+//                unsigned int sLen = 0;
+//                int appID;
+//				
+//                //This while statement seems redundant 
+//				while ([inputStream hasBytesAvailable]) {
+//					len = [inputStream read:buffer maxLength:sizeof(buffer)];
+//					if (len > 0) {
+//						
+//                        
+//						NSMutableString *output = [[NSMutableString alloc] initWithBytes:buffer length:len encoding:NSUTF8StringEncoding];
+//                        
+//                        sLen = [output length];
+//                        [output getCharacters:data range:NSMakeRange(0, sLen)];
+//                        
+//                        appID = (int) data[0];
+//                        NSLog(@"CURRENT APP_ID: %d", appID);
+//                        
+//                        const char *data2 = [output UTF8String];
+//                        char *cpy = calloc([output length]+1, 1);
+//                        strncpy(cpy, data2+3, [output length]-3);
+//                        printf("String %s\n",cpy);
+//                        
+//                        NSMutableString *textFromNOMADS = [[NSMutableString alloc] initWithCString:cpy encoding:NSUTF8StringEncoding];
+//                        
+//                        for (int i=0;i<sLen+1;i++) {
+//                            NSLog(@"data[%d]: %c\n", i,data[i]);
+//                            
+//                        }
+//                        
+//                        //                        for (int i=0;i<sLen;i++) {
+//                        //                            NSLog(@"data2[%d]: %c\n", i,data2[i]);
+//                        //                            
+//                        //                        }
+//                        
+//                        printf("copy %s\n",cpy);
+//                        
+//                        if (nil != output) { 
+//                            
+//                            
+//                            
+//                            NSLog(@"Logn App Handle");
+//                        
+//                        }
+//                        
+//					}
+//				}
+//			}
+//            
+//			break;
+//            
+//			
+//		case NSStreamEventErrorOccurred:
+//			
+//			NSLog(@"Can not connect to the host!");
+//			break;
+//			
+//		case NSStreamEventEndEncountered:
+//            
+//            [theStream close];
+//            [theStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//            //    [theStream release];
+//            theStream = nil;
+//			
+//			break;
+//		default:
+//			NSLog(@"Unknown event");
+//	}
+//    
+//}
 
 
 //- (void) sendToNOMADSappID:(int)appID sendToNOMADSoutMessage:(NSString *)outMessage
