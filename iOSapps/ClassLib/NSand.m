@@ -34,7 +34,6 @@
     CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
 	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)@"nomads.music.virginia.edu", 52912, &readStream, &writeStream);
-	
 	streamIn = (__bridge NSInputStream *)readStream;
 	streamOut = (__bridge NSOutputStream *)writeStream;
 	[streamIn setDelegate:self];
@@ -46,56 +45,76 @@
     NSLog(@"NSand: Connecting, Streams Open ");
 }
 
+- (void) fooWith_AppID:(Byte)a 
+     Command:(Byte)c
+    DataType:(Byte)dT
+     DataLen:(int)dL
+   DataString:(NSString *)str;
+{
+    NSLog(@"foo got i:  %d\n",a);
+    
+    //Byte appID 
+    NSData *sDatum = [[NSData alloc] initWithBytes:&a length:1];
+    sDatum = [self convertToByteToStreamOut:&a]; // appID
+    int aNum = [streamOut write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+    if (-1 == aNum) {
+        NSLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
+    }
+    else {
+        NSLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+    }
+    
+    //    Byte cmd = 1;
+    sDatum = [self convertToByteToStreamOut:&c]; // command
+    int cNum = [streamOut write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+    if (-1 == cNum) {
+        NSLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+    }
+    else {
+        NSLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+    }
+    
+    //    Byte dataType = 1;
+    sDatum = [self convertToByteToStreamOut:&dT]; // dataType
+    int dTypeNum = [streamOut write:(const uint8_t *)[sDatum bytes] maxLength: [sDatum length]];
+    if (-1 == dTypeNum) {
+        NSLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+    }
+    else {
+        NSLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+    }
+    
+    //    dataLen = [inputMessageField.text length];
+    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+    if (-1 == dLenNum) {
+        NSLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+    }
+    else {
+        NSLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+    }
+    
+    // If the data is a string or array of bytes, send like this
+    NSData *sData = [str dataUsingEncoding:NSUTF8StringEncoding];  // String
+    int dArrayNum = [streamOut write:(const uint8_t *)[sData bytes] maxLength: [sData length]];
+    if (-1 == dArrayNum) {
+        NSLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+    }
+    else {
+        NSLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+    }
+}
+
 - (NGrain *) getGrain 
 {
     NSLog(@"NSand: getGrain: (NGrain) ");
 }
 
-- (NGrain *) getGrainElts_AppID: (Byte)appID
+- (NGrain *) getGrainElts_AppID:(Byte)appID 
 {
     
 }
 
-//- (void) sendWithGrain:(NGrain *) myGrain;
-//{
-//    NSLog(@"NSand: sendGrain: (NGrain) ");
-//    int aNum = [streamOut write: &(myGrain->appID) maxLength:1];
-//    
-//    //    NSData *command_Data = c; //Store Command as NSData
-//    int cNum = [streamOut write: &(myGrain->command) maxLength:1];
-//    
-//    //    NSData *dType_Data = dT; //Store DataType as NSData
-//    int dTypeNum = [streamOut write: &(myGrain->dataType) maxLength:1];
-//    
-//    //   NSData *dLen_Data = dL; //Store DataLength as NSData
-//    int dLenNum = [streamOut write: myGrain->dataLen maxLength:1]; //STK Syntax?
-//    
-//    int dArrayNum = [streamOut write: [myGrain->dataArray bytes] maxLength:myGrain->dataLen];
-//    
-//    
-//    //Check and make sure data was sent out properly
-//	if (-1 == aNum) {
-//        NSLog(@"Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-//    }
-//    else if (-1 == cNum) {
-//        NSLog(@"Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-//    }
-//    else if (-1 == dTypeNum) {
-//        NSLog(@"Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-//    }
-//    else if (-1 == dLenNum) {
-//        NSLog(@"Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-//    }
-//    else if (-1 == dArrayNum) {
-//        NSLog(@"Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
-//    }
-//    else {
-//        NSLog(@"Wrote %i bytes to stream %@.", dArrayNum, streamOut);
-//    }
-//    
-//    
-//	
-//}
 
 - (NSData*) convertToByteToStreamOut : (Byte*) myByte 
 { 
