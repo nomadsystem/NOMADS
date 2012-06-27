@@ -1,0 +1,56 @@
+TChatClient
+v7
+r1
+cCheck dependencies
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/Classes/../ChatClientViewController.xib
+c000000004FABF1770000000000005E5D
+t1336668535
+s24157
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/MainWindow.xib
+c000000004DDF805F0000000000004E4D
+t1306493023
+s20045
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app
+t2
+s0
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app/Contents/Info.plist
+t2
+s0
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app/Contents/PkgInfo
+t2
+s0
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app/Contents/Resources/ChatClientViewController.nib
+t2
+s0
+
+N/Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app/Contents/Resources/MainWindow.nib
+t2
+s0
+
+NChatClient-Info.plist
+c000000004DDFA5150000000000000379
+t1306502421
+s889
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies358362954#358362954#0(63"[BEROR]error: There is no SDK with the name or path 'iphoneos'1(4@55"error: There is no SDK with the name or path 'iphoneos'358362954#18446744073709551615#0#0(1@0"0(0#1#0"17201007872#0"0#
+
+CCompileXIB /Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/Classes/../ChatClientViewController.xib
+r0
+
+CCompileXIB /Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/MainWindow.xib
+r0
+
+CProcessInfoPlistFile /Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app/Contents/Info.plist ChatClient-Info.plist
+r0
+
+CTouch /Users/topper/Dropbox/IMRG/iOS_Code/DT_iOS_Code/ChatClient/build/Debug/ChatClient.app
+r0
+
