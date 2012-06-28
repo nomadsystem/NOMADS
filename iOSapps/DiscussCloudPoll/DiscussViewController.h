@@ -9,7 +9,7 @@
 #import "NSand.h"
 
 
-@interface DiscussViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface DiscussViewController : UIViewController <SandDelegate, NSStreamDelegate, UITableViewDelegate, UITableViewDataSource>
 {
 
 

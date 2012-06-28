@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B5653EC159CB4F800D6CA1B /* NAppID.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653E1159CB4F800D6CA1B /* NAppID.m */; };
+		0B5653ED159CB4F800D6CA1B /* NCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653E3159CB4F800D6CA1B /* NCommand.m */; };
+		0B5653EE159CB4F800D6CA1B /* NDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653E5159CB4F800D6CA1B /* NDataType.m */; };
+		0B5653EF159CB4F800D6CA1B /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653E7159CB4F800D6CA1B /* NGlobals.m */; };
+		0B5653F0159CB4F800D6CA1B /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653E9159CB4F800D6CA1B /* NGrain.m */; };
+		0B5653F1159CB4F800D6CA1B /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5653EB159CB4F800D6CA1B /* NSand.m */; };
 		1D3623260D0F684500981E51 /* ChatClientAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* ChatClientAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -18,6 +24,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B5653E0159CB4F800D6CA1B /* NAppID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppID.h; path = ../ClassLib/NAppID.h; sourceTree = "<group>"; };
+		0B5653E1159CB4F800D6CA1B /* NAppID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NAppID.m; path = ../ClassLib/NAppID.m; sourceTree = "<group>"; };
+		0B5653E2159CB4F800D6CA1B /* NCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommand.h; path = ../ClassLib/NCommand.h; sourceTree = "<group>"; };
+		0B5653E3159CB4F800D6CA1B /* NCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NCommand.m; path = ../ClassLib/NCommand.m; sourceTree = "<group>"; };
+		0B5653E4159CB4F800D6CA1B /* NDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDataType.h; path = ../ClassLib/NDataType.h; sourceTree = "<group>"; };
+		0B5653E5159CB4F800D6CA1B /* NDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDataType.m; path = ../ClassLib/NDataType.m; sourceTree = "<group>"; };
+		0B5653E6159CB4F800D6CA1B /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGlobals.h; path = ../ClassLib/NGlobals.h; sourceTree = "<group>"; };
+		0B5653E7159CB4F800D6CA1B /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGlobals.m; path = ../ClassLib/NGlobals.m; sourceTree = "<group>"; };
+		0B5653E8159CB4F800D6CA1B /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGrain.h; path = ../ClassLib/NGrain.h; sourceTree = "<group>"; };
+		0B5653E9159CB4F800D6CA1B /* NGrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGrain.m; path = ../ClassLib/NGrain.m; sourceTree = "<group>"; };
+		0B5653EA159CB4F800D6CA1B /* NSand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSand.h; path = ../ClassLib/NSand.h; sourceTree = "<group>"; };
+		0B5653EB159CB4F800D6CA1B /* NSand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSand.m; path = ../ClassLib/NSand.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* ChatClientAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatClientAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* ChatClientAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatClientAppDelegate.m; sourceTree = "<group>"; };
@@ -70,6 +88,18 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0B5653E0159CB4F800D6CA1B /* NAppID.h */,
+				0B5653E1159CB4F800D6CA1B /* NAppID.m */,
+				0B5653E2159CB4F800D6CA1B /* NCommand.h */,
+				0B5653E3159CB4F800D6CA1B /* NCommand.m */,
+				0B5653E4159CB4F800D6CA1B /* NDataType.h */,
+				0B5653E5159CB4F800D6CA1B /* NDataType.m */,
+				0B5653E6159CB4F800D6CA1B /* NGlobals.h */,
+				0B5653E7159CB4F800D6CA1B /* NGlobals.m */,
+				0B5653E8159CB4F800D6CA1B /* NGrain.h */,
+				0B5653E9159CB4F800D6CA1B /* NGrain.m */,
+				0B5653EA159CB4F800D6CA1B /* NSand.h */,
+				0B5653EB159CB4F800D6CA1B /* NSand.m */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -174,6 +204,12 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* ChatClientAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* ChatClientViewController.m in Sources */,
+				0B5653EC159CB4F800D6CA1B /* NAppID.m in Sources */,
+				0B5653ED159CB4F800D6CA1B /* NCommand.m in Sources */,
+				0B5653EE159CB4F800D6CA1B /* NDataType.m in Sources */,
+				0B5653EF159CB4F800D6CA1B /* NGlobals.m in Sources */,
+				0B5653F0159CB4F800D6CA1B /* NGrain.m in Sources */,
+				0B5653F1159CB4F800D6CA1B /* NSand.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
