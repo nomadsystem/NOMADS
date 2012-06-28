@@ -6,20 +6,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSand.h"
 
-@interface CloudViewController : UIViewController <NSStreamDelegate, UITextFieldDelegate>
+@interface CloudViewController : UIViewController <SandDelegate, NSStreamDelegate, UITextFieldDelegate>
 {
-    
-    NSInputStream	*inputStream;
-    NSOutputStream	*outputStream;
+    NSand   *cloudSand;
     NSMutableArray	*messages;
     
     UILabel __weak *cloudLabel;
 }
+
+@property (strong, retain) NSand *cloudSand;
 @property (weak, nonatomic) IBOutlet UILabel *cloudLabel;
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
-@property (nonatomic, retain) NSInputStream *inputStream;
-@property (nonatomic, retain) NSOutputStream *outputStream;
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (weak, nonatomic) IBOutlet UIButton *sendCloudButton;
 
