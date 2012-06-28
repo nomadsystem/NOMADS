@@ -20,9 +20,6 @@
 		F96590E51562A401004A6C23 /* CloudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F96590E41562A401004A6C23 /* CloudViewController.m */; };
 		F96590E71562A448004A6C23 /* DiscussViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E61562A448004A6C23 /* DiscussViewController.xib */; };
 		F96590E91562A45E004A6C23 /* CloudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F96590E81562A45E004A6C23 /* CloudViewController.xib */; };
-		F98BAF51159B711D001ABC41 /* NAppID.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF46159B711D001ABC41 /* NAppID.m */; };
-		F98BAF52159B711D001ABC41 /* NCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF48159B711D001ABC41 /* NCommand.m */; };
-		F98BAF53159B711D001ABC41 /* NDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF4A159B711D001ABC41 /* NDataType.m */; };
 		F98BAF54159B711D001ABC41 /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF4C159B711D001ABC41 /* NGlobals.m */; };
 		F98BAF55159B711D001ABC41 /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF4E159B711D001ABC41 /* NGrain.m */; };
 		F98BAF56159B711D001ABC41 /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = F98BAF50159B711D001ABC41 /* NSand.m */; };
@@ -52,12 +49,6 @@
 		F96590E41562A401004A6C23 /* CloudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudViewController.m; sourceTree = "<group>"; };
 		F96590E61562A448004A6C23 /* DiscussViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscussViewController.xib; sourceTree = "<group>"; };
 		F96590E81562A45E004A6C23 /* CloudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloudViewController.xib; sourceTree = "<group>"; };
-		F98BAF45159B711D001ABC41 /* NAppID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppID.h; path = ../ClassLib/NAppID.h; sourceTree = "<group>"; };
-		F98BAF46159B711D001ABC41 /* NAppID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NAppID.m; path = ../ClassLib/NAppID.m; sourceTree = "<group>"; };
-		F98BAF47159B711D001ABC41 /* NCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommand.h; path = ../ClassLib/NCommand.h; sourceTree = "<group>"; };
-		F98BAF48159B711D001ABC41 /* NCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NCommand.m; path = ../ClassLib/NCommand.m; sourceTree = "<group>"; };
-		F98BAF49159B711D001ABC41 /* NDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDataType.h; path = ../ClassLib/NDataType.h; sourceTree = "<group>"; };
-		F98BAF4A159B711D001ABC41 /* NDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDataType.m; path = ../ClassLib/NDataType.m; sourceTree = "<group>"; };
 		F98BAF4B159B711D001ABC41 /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGlobals.h; path = ../ClassLib/NGlobals.h; sourceTree = "<group>"; };
 		F98BAF4C159B711D001ABC41 /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGlobals.m; path = ../ClassLib/NGlobals.m; sourceTree = "<group>"; };
 		F98BAF4D159B711D001ABC41 /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGrain.h; path = ../ClassLib/NGrain.h; sourceTree = "<group>"; };
@@ -89,12 +80,6 @@
 		F96590BA1562A2DF004A6C23 = {
 			isa = PBXGroup;
 			children = (
-				F98BAF45159B711D001ABC41 /* NAppID.h */,
-				F98BAF46159B711D001ABC41 /* NAppID.m */,
-				F98BAF47159B711D001ABC41 /* NCommand.h */,
-				F98BAF48159B711D001ABC41 /* NCommand.m */,
-				F98BAF49159B711D001ABC41 /* NDataType.h */,
-				F98BAF4A159B711D001ABC41 /* NDataType.m */,
 				F98BAF4B159B711D001ABC41 /* NGlobals.h */,
 				F98BAF4C159B711D001ABC41 /* NGlobals.m */,
 				F98BAF4D159B711D001ABC41 /* NGrain.h */,
@@ -237,9 +222,6 @@
 				F96590E51562A401004A6C23 /* CloudViewController.m in Sources */,
 				F9306DA7156440A90057F8FE /* PollViewController.m in Sources */,
 				F9B1B70A156ABEDA001CBF5B /* LoginViewController.m in Sources */,
-				F98BAF51159B711D001ABC41 /* NAppID.m in Sources */,
-				F98BAF52159B711D001ABC41 /* NCommand.m in Sources */,
-				F98BAF53159B711D001ABC41 /* NDataType.m in Sources */,
 				F98BAF54159B711D001ABC41 /* NGlobals.m in Sources */,
 				F98BAF55159B711D001ABC41 /* NGrain.m in Sources */,
 				F98BAF56159B711D001ABC41 /* NSand.m in Sources */,

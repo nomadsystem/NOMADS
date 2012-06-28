@@ -22,7 +22,7 @@
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
         serverName = @"nomads.music.virginia.edu";
-        serverPort = 52912; //DT's server port
+        serverPort = SERVER_PORT_SK; 
     }
     return self;
 }
@@ -38,7 +38,7 @@
 {
     CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)@"nomads.music.virginia.edu", 52912, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)serverName, serverPort, &readStream, &writeStream);
 	streamIn = (__bridge NSInputStream *)readStream;
 	streamOut = (__bridge NSOutputStream *)writeStream;
 	[streamIn setDelegate:self];
