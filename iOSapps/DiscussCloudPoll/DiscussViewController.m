@@ -8,9 +8,6 @@
 #import "DiscussViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
-#import "NAppID.h"
-#import "NCommand.h"
-#import "NDataType.h"
 #import "NGlobals.h"
 
 //@interface DiscussViewController ()
@@ -37,13 +34,6 @@
         discussSand = [[NSand alloc] init]; 
         
         [discussSand connect];
-//        [[discussSand streamIn] setDelegate:self];
-//        [[discussSand streamOut] setDelegate:self];
-//        [[discussSand streamIn] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//        [[discussSand streamOut] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//        [[discussSand streamIn] open];
-//        [[discussSand streamOut] open];
-
     }
     [discussSand setDelegate:self];
     
@@ -75,41 +65,30 @@
 {
     NSLog(@"Entered sendDiscuss");
     
-
-    
     //AppID
-    NAppID *appID = [[NAppID alloc] init];
-    Byte myAppID = appID->WEB_CHAT;
+    Byte myAppID = WEB_CHAT;
     NSLog(@"myAppID =  %i\n", myAppID);
     
     //COMMAND
-    NCommand *command = [[NCommand alloc] init];
-    Byte myCommand = command->SEND_MESSAGE;
+    Byte myCommand = SEND_MESSAGE;
     NSLog(@"myCommand =  %i\n", myCommand);
     
     //DATA TYPE
-    NDataType *dataType = [[NDataType alloc] init];
-    Byte myDataType = dataType->BYTE;
+    Byte myDataType = BYTE;
     NSLog(@"myDataType =  %i\n", myDataType);
     
     //DATA LENGTH
-//    int myDataLength = [inputDiscussField.text length];
-//    NSLog(@"myDataLength =  %i\n", myDataLength);
-
+    //****STK Currently set directly in sendWithGrainElts
     
     //DATA ARRAY (String from inputDiscussField)
-//    NSData *sData = [inputDiscussField.text dataUsingEncoding:NSUTF8StringEncoding];  // String
-//    NSLog(@"myDataArray = %@\n", sData);
+    //****STK Currently set directly in sendWithGrainElts
     
-  // [discussSand fooWith_AppID:20 Command:1 DataType:1 DataLen:[inputDiscussField.text length]];
     [discussSand sendWithGrainElts_AppID:20 
                                  Command:1 
                                 DataType:1 
                                  DataLen:[inputDiscussField.text length] 
                                   String:inputDiscussField.text];
-    
-//    [[self discussSand] sendWithGrainElts_AppID:myAppID Command:myCommand DataType:myDataType DataLen:myDataLength DataArray:sData];
-    
+        
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:NO];
     [inputDiscussField resignFirstResponder];
@@ -122,26 +101,20 @@
     
     if (nil != inGrain) { 
         
-        if(inGrain->appID == 22)//Text from Discuss Prompt
+        if(inGrain->appID == DISCUSS_PROMPT)//Text from Discuss Prompt
         {
             //    NSLog(@"Filtering AppID 22");
             //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
             discussPromptLabel.text = inGrain->str;
         }
-        else if(inGrain->appID == WEB_CHAT) //Text from Student Discuss
+        else if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
         { 
             //    NSLog(@"Filtering AppID 20");
             //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
             [self messageReceived:inGrain->str];
             NSLog(@"Got Discuss Data");
         } 
-        else if(inGrain->appID == 24)//Text from Instructor Discuss
-        { 
-            //    NSLog(@"Filtering AppID 20");
-            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
-            [self messageReceived:inGrain->str];
-        }
-        else if(inGrain->appID == 1)//Text from Instructor Panel
+        else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel****STK This will need to be changed to Commands
         {
             if ([inGrain->str isEqualToString:@"DISABLE_DISCUSS_BUTTON"])
             {
@@ -211,7 +184,7 @@
 	return messages.count;
     
 }
-
+//****STK Enter key not implemented (it was causing problems. . .)
 //- (BOOL)textFieldShouldReturn:(UITextField *) textField
 //{   
 //    if (textField == inputDiscussField) 
