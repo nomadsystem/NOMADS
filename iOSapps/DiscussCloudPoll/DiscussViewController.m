@@ -83,9 +83,9 @@
     //DATA ARRAY (String from inputDiscussField)
     //****STK Currently set directly in sendWithGrainElts
     
-    [discussSand sendWithGrainElts_AppID:20 
-                                 Command:1 
-                                DataType:1 
+    [discussSand sendWithGrainElts_AppID:myAppID 
+                                 Command:myCommand 
+                                DataType:myDataType 
                                  DataLen:[inputDiscussField.text length] 
                                   String:inputDiscussField.text];
         
