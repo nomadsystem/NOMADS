@@ -8,45 +8,54 @@
 
 #import "NGrain.h"
 
-
-
 @implementation NGrain
-//@synthesize appID;
-//@synthesize command;
-//@synthesize dataType;
-//@synthesize dataLen;
-//@synthesize dataArray;
-//+ (id)init //initialization function
-//{
-//    //Perhaps unnecessary. . .****STK 6/22/12
-//    self = [super init]; //Here to get initialization from parent class first
-//    if (self) { //if we get that initialization, override it
-//    }
-//    return self;
-//}
 
-- (id)initWithGrainElts_AppID:(Byte)a 
-            Command:(Byte)c 
-           DataType:(Byte)dT 
-            DataLen:(int)dL 
-          DataArray:(NSData *)dA
+- (id)init //initialization function
 {
-    return [self initWithGrainElts_AppID:appID 
-                                 Command:command 
-                                DataType:dataType 
-                                 DataLen:dataLen 
-                               DataArray:dataArray];
+    //Perhaps unnecessary. . .****STK 6/22/12
+    self = [super init]; //Here to get initialization from parent class first
+    if (self) { //if we get that initialization, override it
+    }
+    return self;
+}
+
+- (void)setGrainElts_AppID:(Byte)a 
+                      Command:(Byte)c 
+                     DataType:(Byte)dT 
+                      DataLen:(int)dL 
+                       String:(NSString *)s
+{   
+    appID = a;
+    command = c;
+    dataType = dT;
+    dataLen = dL;
+    str = s;
+}
+
+
+- (void)setGrainElts_AppID:(Byte)a 
+                      Command:(Byte)c 
+                     DataType:(Byte)dT 
+                      DataLen:(int)dL 
+                       Number:(NSNumber *)n
+{   
+    appID = a;
+    command = c;
+    dataType = dT;
+    dataLen = dL;
+    num = n;
 }
 
 
 - (void)print
 {
     NSLog(@"NGrain -> print()");
-    NSLog(@"appID = %@",appID);
-    NSLog(@"command = %@",command);
-    NSLog(@"dataType = %@",dataType);
-    NSLog(@"dataLen = %@",dataLen);
-    NSLog(@"dataArray = %@", dataArray); //This is temporary until we get other global variables classes made
+    NSLog(@"appID = %d",appID);
+    NSLog(@"command = %d",command);
+    NSLog(@"dataType = %d",dataType);
+    NSLog(@"dataLen = %d",dataLen);
+    NSLog(@"str = %@\n",str);
+//    NSLog(@"dataArray = %@", dataArray); //This is temporary until we get other global variables classes made
 }
 
 @end

@@ -4,20 +4,20 @@
 //  Initial version, DJT on 6/22/12.
 //
 
-#import <Foundation/Foundation.h>
+typedef enum {
+    WEB_CHAT = 20,
+    FOO = 1
+} NGAppID;
+
 
 @interface NGlobals : NSObject
-{
-  @public int clientDebugLevel;
-  @public int serverDebugLevel;
-  @public int libraryDebugLevel;
-  @public NSString    *serverName;
-  @public int serverPort;
-  @public int serverPortDT;
-  @public int serverPortSK;
-  @public int serverPortPT;
-  @public int serverPortMB;
+{   
+//    NGAppID appID;
+   
 }
+
+//@property (nonatomic) NGAppID appID;
+
 
 @end
 
