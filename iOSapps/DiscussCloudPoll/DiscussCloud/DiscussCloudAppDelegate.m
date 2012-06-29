@@ -10,18 +10,25 @@
 #import "DiscussViewController.h"
 #import "CloudViewController.h"
 #import "PollViewController.h"
+#import "NGlobals.h"
+#import "NGrain.h"
+#import "NSand.h"
 
 @implementation DiscussCloudAppDelegate
 
 @synthesize window = _window;
+@synthesize appSand;
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-//    NSand *mySand = [NSand alloc];
-//    [mySand connect];
+    appSand = [[NSand alloc] init]; 
+    
+    [appSand connect];
+    [appSand setDelegate:self];
     
     LoginViewController *lvc = [[LoginViewController alloc] init];
 //    DiscussViewController *dvc = [[DiscussViewController alloc] init];
@@ -39,6 +46,11 @@
     [self.window makeKeyAndVisible];
     return YES;
 }
+- (void)dataReadyHandle:(NGrain *)inGrain;
+{
+    NSLog(@"AppD: I GOT DATA FROM SAND!!!\n");
+}
+
 
 - (void)makeTabBar {
     DiscussViewController *dvc = [[DiscussViewController alloc] init];

@@ -11,7 +11,7 @@
 
 @protocol SandDelegate <NSObject>
 @required
-- (void) dataReadyHandle:(NGrain *)grain;
+- (void) dataReadyHandle:(NGrain *)grain;  // OUTPUT:  function we'll call from our delegate
 @end
 
 @interface NSand : NSObject <NSStreamDelegate>
@@ -20,13 +20,13 @@
 	NSOutputStream	*streamOut;   
     NSString    *serverName; //= @"nomads.music.virginia.edu";
     int       serverPort; //52911; //DT's server port
-    id <SandDelegate> delegate;
+    id <SandDelegate> delegate;  // OUTPUT:  where we send our signal
     NGrain *grain;
 }
 
 @property (nonatomic, retain) NSInputStream *streamIn;
 @property (nonatomic, retain) NSOutputStream *streamOut;
-@property (retain) id delegate;
+@property (retain) id delegate;  // OUTPUt:  where we send our signal
 @property (retain) NGrain *grain;
 
 // - (void) sendWithGrain:(NGrain *) myGrain;

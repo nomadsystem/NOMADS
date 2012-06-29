@@ -10,7 +10,6 @@
 #import "LoginViewController.h"
 
 @implementation LoginViewController
-@synthesize inputStream, outputStream;
 @synthesize loginTextField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

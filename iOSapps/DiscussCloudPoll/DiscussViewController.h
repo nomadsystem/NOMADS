@@ -7,20 +7,24 @@
 
 #import <UIKit/UIKit.h>
 #import "NSand.h"
+#import "NGrain.h"
+#import "DiscussCloudAppDelegate.h"
 
 
-@interface DiscussViewController : UIViewController <SandDelegate, NSStreamDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface DiscussViewController : UIViewController <SandDelegate, UITableViewDelegate, UITableViewDataSource> // INPUT: DCAppDelegate needed to receive
 {
 
 
-    NSand   *discussSand;
+    NSand   *appSand;
+    DiscussCloudAppDelegate *appDelegate;
     
 	UILabel         __weak *discussPromptLabel;
     UITableView		__weak *tableView;
 	NSMutableArray	*messages;
 }
 
-@property (strong, retain) NSand *discussSand;
+@property (strong, retain) NSand *appSand;
+@property (strong, retain) DiscussCloudAppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -33,5 +37,7 @@
 
 - (IBAction)sendDiscuss:(id)sender;
 - (void) messageReceived:(NSString *)message;
+- (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
+
 
 @end

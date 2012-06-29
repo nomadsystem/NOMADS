@@ -6,11 +6,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSand.h"
 
-@interface DiscussCloudAppDelegate : UIResponder <UIApplicationDelegate>
 
+@interface DiscussCloudAppDelegate : UIResponder <SandDelegate, UIApplicationDelegate>  // INPUT: SandDelegate needed to receive signal
+
+{
+    @public NSand   *appSand;
+}
+
+@property (strong, retain) NSand *appSand;
 @property (strong, nonatomic) UIWindow *window;
 
+- (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
 - (void) makeTabBar;
 
 @end
