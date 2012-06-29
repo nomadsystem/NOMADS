@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>DiscussCloud.xcscheme</key>
+		<key>NOMADS_Bindle.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>F96590C41562A2DF004A6C23</key>
+		<key>F9FFFC14159E36830011760F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

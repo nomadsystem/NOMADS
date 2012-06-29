@@ -8,15 +8,15 @@
 #import <UIKit/UIKit.h>
 #import "NSand.h"
 #import "NGrain.h"
-#import "DiscussCloudAppDelegate.h"
+#import "BindleAppDelegate.h"
 
 
 @interface DiscussViewController : UIViewController <SandDelegate, UITableViewDelegate, UITableViewDataSource> // INPUT: DCAppDelegate needed to receive
 {
-
-
+    
+    
     NSand   *appSand;
-    DiscussCloudAppDelegate *appDelegate;
+    BindleAppDelegate *appDelegate;
     
 	UILabel         __weak *discussPromptLabel;
     UITableView		__weak *tableView;
@@ -24,7 +24,7 @@
 }
 
 @property (strong, retain) NSand *appSand;
-@property (strong, retain) DiscussCloudAppDelegate *appDelegate;
+@property (strong, retain) BindleAppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
