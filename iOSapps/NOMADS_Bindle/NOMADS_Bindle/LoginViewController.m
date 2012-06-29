@@ -6,7 +6,7 @@
 //
 #import "NSand.h"
 #import "NGrain.h"
-#import "DiscussCloudAppDelegate.h"
+#import "BindleAppDelegate.h"
 #import "LoginViewController.h"
 
 @implementation LoginViewController
@@ -39,7 +39,7 @@
  //   [self sendToNOMADSappID:40 sendToNOMADSoutMessage:loginTextField.text];
     loginTextField.text = @"";
     [loginTextField setHidden:NO];
-    DiscussCloudAppDelegate *appDelegate = (DiscussCloudAppDelegate *)[[UIApplication sharedApplication] delegate];
+   BindleAppDelegate *appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     [[self view] removeFromSuperview];
     [appDelegate makeTabBar]; 
