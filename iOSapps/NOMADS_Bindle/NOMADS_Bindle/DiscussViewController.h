@@ -11,8 +11,9 @@
 #import "BindleAppDelegate.h"
 
 
-@interface DiscussViewController : UIViewController <SandDelegate, UITableViewDelegate, UITableViewDataSource> // INPUT: DCAppDelegate needed to receive
-{
+//    INPUT: DCAppDelegate needed to receive
+
+@interface DiscussViewController : UIViewController <SandDelegate, UITableViewDelegate, UITableViewDataSource> {
     
     
     NSand   *appSand;

@@ -23,15 +23,21 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     appSand = [[NSand alloc] init]; 
     
+    // SAND:  set a pointer inside appSand so we get notified when network data is available
+    int x = [appSand getNextDelegate];
+    [appSand setDelegate:self delNum:x];
+
+    // SAND: Connect the network streams
     [appSand connect];
-    [appSand setDelegate:self];
     
     LoginViewController *lvc = [[LoginViewController alloc] init];
-//    DiscussViewController *dvc = [[DiscussViewController alloc] init];
+
+    //    DiscussViewController *dvc = [[DiscussViewController alloc] init];
 //    CloudViewController *cvc = [[CloudViewController alloc] init];
 //    PollViewController *pvc = [[PollViewController alloc] init];
     
@@ -46,6 +52,9 @@
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+// input data function ===================================================================
+
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
     NSLog(@"AppD: I GOT DATA FROM SAND!!!\n");

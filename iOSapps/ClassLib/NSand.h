@@ -2,8 +2,7 @@
 //  NSand.h
 //  DiscussCloudPoll
 //
-//  Created by Steven Kemper on 6/22/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Initial version, Steven Kemper on 6/22/12.
 //
 
 #import <Foundation/Foundation.h>
@@ -20,16 +19,26 @@
 	NSOutputStream	*streamOut;   
     NSString    *serverName; //= @"nomads.music.virginia.edu";
     int       serverPort; //52911; //DT's server port
-    id <SandDelegate> delegate;  // OUTPUT:  where we send our signal
-    NGrain *grain;
+    id <SandDelegate> delegate[10];  // OUTPUT:  where we send our signal
+    NGrain *grain;  
+    int numDelegates;
 }
 
 @property (nonatomic, retain) NSInputStream *streamIn;
 @property (nonatomic, retain) NSOutputStream *streamOut;
-@property (retain) id delegate;  // OUTPUt:  where we send our signal
+
 @property (retain) NGrain *grain;
 
+// Modified accessor functions so we can be specific about delegate numbers =======================
+// NB:  we don't want to use @synthesize for these any more
+
+- (void) setDelegate: (id<SandDelegate>) inDelegate delNum:(int)num;
+- (id<SandDelegate>) delegate:(int) delNum;
+- (int) getNextDelegate;
+
 // - (void) sendWithGrain:(NGrain *) myGrain;
+
+// Network data sending functions =================================================================
 
 - (void) sendWithGrainElts_AppID:(Byte)a 
                          Command:(Byte)c 

@@ -14,7 +14,7 @@
 
 //@end
 
-@implementation DiscussViewController 
+@implementation DiscussViewController
 
 @synthesize inputDiscussField;
 @synthesize tableView;
@@ -33,7 +33,10 @@
         UITabBarItem *tbi = [self tabBarItem];
         [tbi setTitle:@"Group Discuss"];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate->appSand setDelegate:self];
+
+        // SAND:  set a pointer inside appSand so we get notified when network data is available
+        int x = [appDelegate->appSand getNextDelegate];
+        [appDelegate->appSand setDelegate:self delNum:x];
     }
     
     return self;
@@ -92,6 +95,8 @@
     [inputDiscussField setHidden:NO];
     [inputDiscussField resignFirstResponder];
 }
+
+// input data function ============================================
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {

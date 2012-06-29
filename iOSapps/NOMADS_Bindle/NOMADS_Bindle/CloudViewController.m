@@ -29,11 +29,11 @@
         // Custom initialization
         UITabBarItem *tbi = [self tabBarItem];
         [tbi setTitle:@"Thought Cloud"];
-        cloudSand = [[NSand alloc] init]; 
+        //cloudSand = [[NSand alloc] init]; 
         
      //   [cloudSand connect];
     }
-    [cloudSand setDelegate:self];
+    //[cloudSand setDelegate:self];
     return self;
 }
 
@@ -80,36 +80,37 @@
     inputCloudField.text = @"";
     [inputCloudField setHidden:NO];
 }
-//- (void)dataReadyHandle:(NGrain *)inGrain
-//{
-//    NSLog(@"CVC: I GOT DATA FROM SAND!!!\n");
-//    
-//    if (nil != inGrain) { 
-//        
-//        if(inGrain->appID == CLOUD_PROMPT)//Text from Discuss Prompt
-//        {
-//            cloudLabel.text = inGrain->str;
-//        }
-//        else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel
-//        {
-//            if ([inGrain->str isEqualToString:@"DISABLE_CLOUD_BUTTON"])
-//            {
-//                [sendCloudButton setEnabled:NO];
-//                sendCloudButton.titleLabel.textColor = [UIColor grayColor];
-//                [inputCloudField setBackgroundColor:[UIColor grayColor]];
-//            }
-//            else if ([inGrain->str isEqualToString:@"ENABLE_CLOUD_BUTTON"])
-//            {
-//                [sendCloudButton setEnabled:YES];
-//                sendCloudButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0]; 
-//                [inputCloudField setBackgroundColor:[UIColor whiteColor]];
-//            }
-//        }
-//        else {
-//            NSLog(@"No Data for Discuss App");
-//        }
-//    }
-//}
+
+- (void)dataReadyHandle:(NGrain *)inGrain
+{
+    NSLog(@"CVC: I GOT DATA FROM SAND!!!\n");
+    
+    if (nil != inGrain) { 
+        
+        if(inGrain->appID == CLOUD_PROMPT)//Text from Discuss Prompt
+        {
+            cloudLabel.text = inGrain->str;
+        }
+        else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel
+        {
+            if ([inGrain->str isEqualToString:@"DISABLE_CLOUD_BUTTON"])
+            {
+                [sendCloudButton setEnabled:NO];
+                sendCloudButton.titleLabel.textColor = [UIColor grayColor];
+                [inputCloudField setBackgroundColor:[UIColor grayColor]];
+            }
+            else if ([inGrain->str isEqualToString:@"ENABLE_CLOUD_BUTTON"])
+            {
+                [sendCloudButton setEnabled:YES];
+                sendCloudButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0]; 
+                [inputCloudField setBackgroundColor:[UIColor whiteColor]];
+            }
+        }
+        else {
+            NSLog(@"No Data for Discuss App");
+        }
+    }
+}
 
 
 - (void) messageReceived:(NSString *)message {
