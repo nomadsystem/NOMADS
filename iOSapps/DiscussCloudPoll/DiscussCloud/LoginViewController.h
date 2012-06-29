@@ -8,17 +8,13 @@
 #import <UIKit/UIKit.h>
 
 
-@interface LoginViewController : UIViewController <NSStreamDelegate>
+@interface LoginViewController : UIViewController 
 {
 
-	NSInputStream	*inputStream;
-	NSOutputStream	*outputStream;
     
 }
 @property (weak, nonatomic) IBOutlet UITextField *loginTextField;
 
-@property (nonatomic, retain) NSInputStream *inputStream;
-@property (nonatomic, retain) NSOutputStream *outputStream;
 
 
 
