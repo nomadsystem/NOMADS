@@ -5,7 +5,7 @@
 //  Created by Steven Kemper on 5/15/12.
 //
 
-#import "DiscussCloudAppDelegate.h"
+#import "BindleAppDelegate.h"
 #import "LoginViewController.h"
 #import "DiscussViewController.h"
 #import "CloudViewController.h"
@@ -14,7 +14,7 @@
 #import "NGrain.h"
 #import "NSand.h"
 
-@implementation DiscussCloudAppDelegate
+@implementation BindleAppDelegate
 
 @synthesize window = _window;
 @synthesize appSand;

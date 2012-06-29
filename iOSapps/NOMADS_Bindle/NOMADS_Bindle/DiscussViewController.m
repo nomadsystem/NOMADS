@@ -4,7 +4,7 @@
 //
 //  Created by Steven Kemper on 5/15/12.
 //
-#import "DiscussCloudAppDelegate.h"
+#import "BindleAppDelegate.h"
 #import "DiscussViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
@@ -32,7 +32,7 @@
         // Custom initialization
         UITabBarItem *tbi = [self tabBarItem];
         [tbi setTitle:@"Group Discuss"];
-        appDelegate = (DiscussCloudAppDelegate *)[[UIApplication sharedApplication] delegate];
+        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate->appSand setDelegate:self];
     }
     
