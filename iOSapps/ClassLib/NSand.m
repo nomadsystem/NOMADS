@@ -2,27 +2,54 @@
 //  NSand.m
 //  DiscussCloudPoll
 //
-//  Created by Steven Kemper on 6/22/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Initial version, Steven Kemper on 6/22/12.
 //
 
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
 
-
 @implementation NSand
 
 @synthesize streamIn, streamOut;
-@synthesize delegate; // OUTPUT: needed to store our delegat's pointer (eg., a top-level AppDelegate)
 @synthesize grain;
 
-- (id)init //initialization function
+// Modified accessor functions so we can be specific about delegate numbers ================
+
+- (id<SandDelegate>) delegate:(int) delNum
+{
+    if (delNum > 9) {
+        NSLog(@"ERROR: max 10 SandDelegates\n");
+        exit(1);
+    }
+    return delegate[delNum];
+}
+
+- (void) setDelegate: (id<SandDelegate>) inDelegate
+              delNum:(int)num
+{
+    if (num > 9) {
+        NSLog(@"ERROR: max 10 SandDelegates\n");
+        exit(1);
+    }
+    delegate[num] = inDelegate;
+    numDelegates++;
+}
+
+- (int) getNextDelegate
+{
+    return numDelegates;
+}
+
+//initialization function ===================================================================
+
+- (id)init 
 {
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
         serverName = @"nomads.music.virginia.edu";
         serverPort = SERVER_PORT_SK; 
+        numDelegates = 0;
     }
     return self;
 }
@@ -32,7 +59,7 @@
     
 }
 
-// Connect ===============================================================
+// Connect ===================================================================================
 
 - (void)connect
 {
@@ -50,7 +77,7 @@
     NSLog(@"NSand: Connecting, Streams Open ");
 }
 
-// sendWithGrain_AppID (for strings) ======================================================
+// sendWithGrain_AppID (for strings) =========================================================
 
 
 - (void) sendWithGrainElts_AppID:(Byte)a 
@@ -177,13 +204,7 @@
     }
 }
 
-// =============================================================================================
-
-//   STREAM
-
-// =============================================================================================
-
-
+//   stream function ==========================================================================
 
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
     
@@ -257,7 +278,11 @@
                                            String:(NSString *)output];
                         
                         [grain print];
-                        [[self delegate] dataReadyHandle:grain];
+                        for (int x=0;x<numDelegates;x++) {
+                            if (self->delegate[x] != nil) {
+                                [self->delegate[x] dataReadyHandle:grain];
+                            }
+                        }
                     }
                 }
             }
@@ -283,7 +308,7 @@
     
 }
 
-
+// not used (yet?) =========================================================================
 
 - (NGrain *) getGrain 
 {
