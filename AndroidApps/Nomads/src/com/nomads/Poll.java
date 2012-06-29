@@ -8,7 +8,6 @@ import nomads.v210.*;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,42 +15,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class Poll extends Activity {
-	private NSand pollSand;
+	private NSand sand;
 	private NGrain grain;
-	private NomadsAppThread nThread;
-	final Handler handle = new Handler();
-	
+
 	TextView question, textOut, textMin, textMax;
 	SeekBar seekBar;
 	Button buttonSend;
 	
 	byte currentQuestionType = 0;
-    
-    private class NomadsAppThread extends Thread {
-		Poll client; //Replace with current class name
-
-		public NomadsAppThread(Poll _client) {
-			client = _client;
-			pollSand = new NSand();
-			pollSand.connect();
-		}
-		
-		public void run() {			
-			NGlobals.lPrint("NomadsAppThread -> run()");
-			while (true) {
-				grain = pollSand.getGrain();
-				grain.print(); //prints grain data to console
-				handle.post(updateUI);
-			}
-		}
-		
-		final Runnable updateUI = new Runnable() {
-	    	@Override
-	        public void run() {
-				client.setUI();
-	        }
-	    };
-	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +37,6 @@ public class Poll extends Activity {
 		buttonSend = (Button)findViewById(R.id.send);
 		buttonSend.setOnClickListener(buttonListener);
 		buttonSend.setVisibility(View.GONE);
-		
-		startThread();
 	}
 	
 	@Override
@@ -83,31 +52,11 @@ public class Poll extends Activity {
 		Log.i("Poll", "is paused");
 //		stopThread();
 	}
-	
-	public synchronized void startThread(){
-		if(nThread == null){
-			nThread = new NomadsAppThread(this);
-			nThread.start();
-			Log.i("PollThread", "Thread started.");
-		}
-		else{
-			Log.i("PollThread", "startThread: pollThread == !null.");
-		}
-	}
 
-	public synchronized void stopThread(){
-		if(nThread != null){
-			pollSand.close();
-			Thread moribund = nThread;
-			nThread = null;
-			moribund.interrupt();
-			Log.i("PollThread", "Thread stopped.");
-		}
-	}
-	
-	
 //update poll information from teacherpoll app
-    public void setUI(){
+    public void parseGrain(NGrain _grain){
+    	grain = _grain;
+    	
     	Log.i("Poll", "setUI()");
 
 		String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
@@ -188,7 +137,7 @@ public class Poll extends Activity {
 			int tLen = tString.length();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			pollSand.sendGrain(NAppID.STUDENT_POLL, currentQuestionType, NDataType.BYTE, tLen, tStringAsBytes);
+			sand.sendGrain(NAppID.STUDENT_POLL, currentQuestionType, NDataType.BYTE, tLen, tStringAsBytes);
 			
 			// The data 
 			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
@@ -255,4 +204,9 @@ public class Poll extends Activity {
 //			Log.i("Poll", "onStopTrackingTouch:");
 		}
 	};
+	
+	public void setSand(NSand _sand) {
+		sand = _sand;
+		Log.i("Discuss", "setSand()");
+	}
 }

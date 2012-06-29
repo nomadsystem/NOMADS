@@ -8,7 +8,6 @@ import nomads.v210.*;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class Cloud extends Activity {
-	private NSand cloudSand;
+	private NSand sand;
 	private NGrain grain;
-	private NomadsAppThread nThread;
-	final Handler handle = new Handler();
 	
 	EditText input;
 	TextView topic;
@@ -27,31 +24,6 @@ public class Cloud extends Activity {
 	String tempString = "";
 	Button speak;
 
-	private class NomadsAppThread extends Thread {
-		Cloud client; //Replace with current class name
-
-		public NomadsAppThread(Cloud _client) {
-			client = _client;
-			cloudSand = new NSand();
-			cloudSand.connect();
-		}
-		
-		public void run() {			
-			NGlobals.lPrint("NomadsAppThread -> run()");
-			while (true) {
-				grain = cloudSand.getGrain();
-				grain.print(); //prints grain data to console
-				handle.post(updateUI);
-			}
-		}
-		
-		final Runnable updateUI = new Runnable() {
-	    	@Override
-	        public void run() {
-				client.setUI();
-	        }
-	    };
-	}
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -63,8 +35,6 @@ public class Cloud extends Activity {
 		messageView = (TextView)findViewById(R.id.messageViewer);
 		speak = (Button)findViewById(R.id.send);
 		speak.setOnClickListener(buttonSendOnClickListener);
-		
-		startThread();
 	}
 	
 	@Override
@@ -81,28 +51,9 @@ public class Cloud extends Activity {
 //		stopThread();
 	}
 	
-	public synchronized void startThread(){
-		if(nThread == null){
-			nThread = new NomadsAppThread(this);
-			nThread.start();
-			Log.i("CloudThread", "Thread started.");
-		}
-		else{
-			Log.i("CloudThread", "startThread: cloudThread == !null.");
-		}
-	}
-
-	public synchronized void stopThread(){
-		if(nThread != null){
-			cloudSand.close();
-			Thread moribund = nThread;
-			nThread = null;
-			moribund.interrupt();
-			Log.i("CloudThread", "Thread stopped.");
-		}
-	}
-	
-	public void setUI() {
+	public void parseGrain(NGrain _grain) {
+		grain = _grain;
+		
 		Log.i("Cloud", "setUI()");
 
 		String msg = new String(grain.bArray);
@@ -136,19 +87,24 @@ public class Cloud extends Activity {
 			int tLen = tString.length();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			cloudSand.sendGrain((byte)NAppID.CLOUD_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			sand.sendGrain((byte)NAppID.CLOUD_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 			
 			// The data 
-			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+			Log.i("Cloud", "sending:  (" + tLen + ") of this data type");
 
 			//                for (int i=0; i<tLen; i++) {
-			//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+			//                Log.i("Cloud", "sending:  " + tString.charAt(i));
 			//                streamOut.writeByte(tString.charAt(i));
 			//                }
 
-			NGlobals.cPrint("sending: (" + tString + ")");
+			Log.i("Cloud", "sending: (" + tString + ")");
 			input.setText("");
 			input.requestFocus();
 		}
 	};
+	
+	public void setSand(NSand _sand) {
+		sand = _sand;
+		Log.i("Discuss", "setSand()");
+	}
 }
