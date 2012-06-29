@@ -9,7 +9,7 @@
 #import "NSand.h"
 
 
-@interface DiscussCloudAppDelegate : UIResponder <SandDelegate, UIApplicationDelegate>  // INPUT: SandDelegate needed to receive signal
+@interface BindleAppDelegate : UIResponder <SandDelegate, UIApplicationDelegate>  // INPUT: SandDelegate needed to receive signal
 
 {
     @public NSand   *appSand;
