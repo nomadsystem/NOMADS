@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "NSand.h"
 
-@interface CloudViewController : UIViewController <SandDelegate, NSStreamDelegate, UITextFieldDelegate>
+@interface CloudViewController : UIViewController < NSStreamDelegate, UITextFieldDelegate>
 {
     NSand   *cloudSand;
     NSMutableArray	*messages;

@@ -14,7 +14,7 @@
 @implementation NSand
 
 @synthesize streamIn, streamOut;
-@synthesize delegate;
+@synthesize delegate; // OUTPUT: needed to store our delegat's pointer (eg., a top-level AppDelegate)
 @synthesize grain;
 
 - (id)init //initialization function
@@ -60,9 +60,7 @@
                  String:(NSString *)str;
 {
     NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    NSLog(@"foo got i:  %d\n",a);
-    
+        
     //Byte appID 
     appIDDatum = [self convertToByteToStreamOut:&a]; // appID
     int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];

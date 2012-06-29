@@ -4,7 +4,7 @@
 //
 //  Created by Steven Kemper on 5/15/12.
 //
-
+#import "DiscussCloudAppDelegate.h"
 #import "DiscussViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
@@ -21,7 +21,8 @@
 @synthesize discussPromptLabel;
 @synthesize sendDiscussButton;
 @synthesize messages;
-@synthesize discussSand;
+@synthesize appSand; //Our implementation of NSand
+@synthesize appDelegate;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -31,11 +32,9 @@
         // Custom initialization
         UITabBarItem *tbi = [self tabBarItem];
         [tbi setTitle:@"Group Discuss"];
-        discussSand = [[NSand alloc] init]; 
-        
-        [discussSand connect];
+        appDelegate = (DiscussCloudAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate->appSand setDelegate:self];
     }
-    [discussSand setDelegate:self];
     
     return self;
 }
@@ -83,21 +82,20 @@
     //DATA ARRAY (String from inputDiscussField)
     //****STK Currently set directly in sendWithGrainElts
     
-    [discussSand sendWithGrainElts_AppID:myAppID 
-                                 Command:myCommand 
-                                DataType:myDataType 
-                                 DataLen:[inputDiscussField.text length] 
-                                  String:inputDiscussField.text];
+    [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
+                                          Command:myCommand 
+                                         DataType:myDataType 
+                                          DataLen:[inputDiscussField.text length] 
+                                           String:inputDiscussField.text];
         
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:NO];
     [inputDiscussField resignFirstResponder];
 }
 
-
-- (void)dataReadyHandle:(NGrain *)inGrain;
+- (void)dataReadyHandle:(NGrain *)inGrain
 {
-    NSLog(@"I GOT DATA FROM SAND!!!\n");
+    NSLog(@"DVC: I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
@@ -135,6 +133,7 @@
             NSLog(@"No Data for Discuss App");
         }
     }
+
 }
 
 - (void) messageReceived:(NSString *)message {
