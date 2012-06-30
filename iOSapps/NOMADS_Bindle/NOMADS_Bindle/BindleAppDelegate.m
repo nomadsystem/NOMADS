@@ -56,7 +56,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
-    NSLog(@"AppD: I GOT DATA FROM SAND!!!\n");
+    CLog(@"I GOT DATA FROM SAND!!!\n");
 }
 
 
