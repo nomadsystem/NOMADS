@@ -35,8 +35,7 @@
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
 
         // SAND:  set a pointer inside appSand so we get notified when network data is available
-        int x = [appDelegate->appSand getNextDelegate];
-        [appDelegate->appSand setDelegate:self delNum:x];
+        [appDelegate->appSand setDelegate:self];
     }
     
     return self;

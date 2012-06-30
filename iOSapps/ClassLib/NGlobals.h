@@ -4,6 +4,8 @@
 //  Initial version, DJT on 6/22/12.
 //
 
+#define MAX_DELEGATES 10
+
 //AppIDs
 typedef enum {
     SERVER = 0,
