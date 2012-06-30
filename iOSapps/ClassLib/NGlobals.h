@@ -4,6 +4,37 @@
 //  Initial version, DJT on 6/22/12.
 //
 
+// Set max # of Sand delegates here
+#define MAX_DELEGATES 10
+
+// DEBUG vars, used by MACRO functions below
+//      - comment out each to disable printout
+#define CLIENT_DEBUG
+#define LIBRARY_DEBUG
+#define SERVER_DEBUG
+//#define SOME_OTHER_DEBUG
+
+// Use these in place of NSLog from now on
+
+#ifdef CLIENT_DEBUG
+#   define CLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define CLog(...)
+#endif
+
+#ifdef LIBRARY_DEBUG
+#   define LLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define LLog(...)
+#endif
+
+#ifdef SERVER_DEBUG
+#   define SLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define SLog(...)
+#endif
+
+
 //AppIDs
 typedef enum {
     SERVER = 0,
@@ -100,16 +131,22 @@ typedef enum {
     SERVER_PORT_MB = 52914,
 } NGPort;
 
+// Convenience
+typedef enum {
+    OFF=0,
+    ON=1
+} offOn;
+
 //STK Todo: Add enum for debug printing
 
 @interface NGlobals : NSObject
 {   
-    //    NGAppID appID,
-    
+    // We may or may not ever use these, C/L/SLog macros above are better
+    //      - keeping for now to preserve similarity to Java SAND code
+    BOOL serverDebugLevel;    
+    BOOL libraryDebugLevel;    
+    BOOL clientDebugLevel;
 }
-
-//@property (nonatomic) NGAppID appID,
-
 
 @end
 

@@ -18,27 +18,21 @@
 
 - (id<SandDelegate>) delegate:(int) delNum
 {
-    if (delNum > 9) {
-        NSLog(@"ERROR: max 10 SandDelegates\n");
+    if (delNum > MAX_DELEGATES) {
+        NSLog(@"ERROR AppSand:delegate: only MAX_DELEGATES allow SandDelegates\n");
         exit(1);
     }
     return delegate[delNum];
 }
 
 - (void) setDelegate: (id<SandDelegate>) inDelegate
-              delNum:(int)num
 {
-    if (num > 9) {
-        NSLog(@"ERROR: max 10 SandDelegates\n");
+    delegate[numDelegates] = inDelegate;
+    numDelegates++;    
+    if (numDelegates > MAX_DELEGATES) {
+        NSLog(@"ERROR AppSand:setDelegate: only MAX_DELEGATES allowed SandDelegates\n");
         exit(1);
     }
-    delegate[num] = inDelegate;
-    numDelegates++;
-}
-
-- (int) getNextDelegate
-{
-    return numDelegates;
 }
 
 //initialization function ===================================================================
