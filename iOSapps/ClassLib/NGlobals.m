@@ -11,6 +11,9 @@
 {
   self = [super init];
   if (self) {
+      serverDebugLevel = ON;
+      clientDebugLevel = ON;
+      libraryDebugLevel = ON;
   }
   return self;
 }

@@ -29,8 +29,7 @@
     appSand = [[NSand alloc] init]; 
     
     // SAND:  set a pointer inside appSand so we get notified when network data is available
-    int x = [appSand getNextDelegate];
-    [appSand setDelegate:self delNum:x];
+    [appSand setDelegate:self];
 
     // SAND: Connect the network streams
     [appSand connect];
@@ -57,7 +56,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
-    NSLog(@"AppD: I GOT DATA FROM SAND!!!\n");
+    CLog(@"I GOT DATA FROM SAND!!!\n");
 }
 
 

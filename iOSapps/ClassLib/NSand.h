@@ -32,9 +32,8 @@
 // Modified accessor functions so we can be specific about delegate numbers =======================
 // NB:  we don't want to use @synthesize for these any more
 
-- (void) setDelegate: (id<SandDelegate>) inDelegate delNum:(int)num;
+- (void) setDelegate: (id<SandDelegate>) inDelegate;
 - (id<SandDelegate>) delegate:(int) delNum;
-- (int) getNextDelegate;
 
 // - (void) sendWithGrain:(NGrain *) myGrain;
 
