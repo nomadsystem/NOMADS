@@ -4,7 +4,6 @@
 //
 //  Created by Steven Kemper on 5/15/12.
 //
-#import "BindleAppDelegate.h"
 #import "DiscussViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
@@ -23,6 +22,7 @@
 @synthesize messages;
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
+@synthesize tbi;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -30,7 +30,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        UITabBarItem *tbi = [self tabBarItem];
+        tbi = [self tabBarItem];
+   //     [tbi setEnabled:NO];
         [tbi setTitle:@"Group Discuss"];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -93,6 +94,7 @@
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:NO];
     [inputDiscussField resignFirstResponder];
+
 }
 
 // input data function ============================================

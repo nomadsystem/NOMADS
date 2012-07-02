@@ -3,21 +3,37 @@
 //  DiscussCloudPoll
 //
 //  Created by Steven Kemper on 5/16/12.
+//  Updated to use NSAND on 7/2/12
 //
 
-#import <UIKit/UIKit.h>
+#ifndef POLLVIEWCONTROLLER
+#define POLLVIEWCONTROLLER
 
-@interface PollViewController : UIViewController <NSStreamDelegate>
+#import <UIKit/UIKit.h>
+#import "NSand.h"
+#import "NGrain.h"
+#import "BindleAppDelegate.h"
+
+@interface PollViewController : UIViewController <SandDelegate>
 {
     UIView			*yesNoView;
 	UIView			*aeView;
     UIView          *blankView;
     UIView          *oneToTenView;
     
-	NSInputStream	*inputStream;
-	NSOutputStream	*outputStream;
+    NSand   *appSand;
+    BindleAppDelegate *appDelegate;
+    
 	NSMutableArray	*messages;
+    
+    @public UITabBarItem __weak *tbi;
 }
+
+
+@property (strong, retain) NSand *appSand;
+@property (strong, retain) BindleAppDelegate *appDelegate;
+@property (weak, nonatomic) UITabBarItem *tbi;
+
 
 
 @property (strong, nonatomic) IBOutlet UIView *aeView;
@@ -27,8 +43,6 @@
 @property (strong, nonatomic) IBOutlet UIView *blankView;
 @property (weak, nonatomic) IBOutlet UILabel *pollPromptAeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pollPromptBlankLabel;
-@property (nonatomic, retain) NSInputStream *inputStream;
-@property (nonatomic, retain) NSOutputStream *outputStream;
 @property (weak, nonatomic) IBOutlet UILabel *pollPromptOneToTenLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pollOneToTenValLabel;
 
@@ -49,3 +63,5 @@
 - (void) messageReceived:(NSString *)message;
 
 @end
+
+#endif

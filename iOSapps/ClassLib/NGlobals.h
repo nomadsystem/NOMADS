@@ -3,7 +3,8 @@
 //
 //  Initial version, DJT on 6/22/12.
 //
-
+#ifndef NGLOBALS
+#define NGLOBALS
 // Set max # of Sand delegates here
 #define MAX_DELEGATES 10
 
@@ -150,4 +151,4 @@ typedef enum {
 
 @end
 
-
+#endif
