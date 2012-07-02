@@ -30,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
 		F9FFFC15159E36830011760F /* NOMADS_Bindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9FFFC19159E36830011760F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9FFFC1B159E36830011760F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -38,7 +39,6 @@
 		F9FFFC23159E36840011760F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F9FFFC25159E36840011760F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F9FFFC27159E36840011760F /* NOMADS_Bindle-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NOMADS_Bindle-Prefix.pch"; sourceTree = "<group>"; };
-		F9FFFC30159E36BE0011760F /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
 		F9FFFC31159E36BE0011760F /* BindleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BindleAppDelegate.m; sourceTree = "<group>"; };
 		F9FFFC33159E36D10011760F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F9FFFC34159E36D10011760F /* DiscussViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscussViewController.h; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 				F9FFFC38159E36D10011760F /* PollViewController.m */,
 				F9FFFC39159E36D10011760F /* PollViewController.xib */,
 				F9FFFC3A159E36D10011760F /* SandDunes1_960x640.png */,
-				F9FFFC30159E36BE0011760F /* BindleAppDelegate.h */,
+				F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */,
 				F9FFFC31159E36BE0011760F /* BindleAppDelegate.m */,
 				F9FFFC20159E36840011760F /* Supporting Files */,
 			);
@@ -327,6 +327,7 @@
 				F9FFFC2F159E36840011760F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

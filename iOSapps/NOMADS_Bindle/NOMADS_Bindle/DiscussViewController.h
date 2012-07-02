@@ -4,6 +4,8 @@
 //
 //  Created by Steven Kemper on 5/15/12.
 //
+#ifndef DISCUSSVIEWCONTROLLER
+#define DISCUSSVIEWCONTROLLER
 
 #import <UIKit/UIKit.h>
 #import "NSand.h"
@@ -22,6 +24,8 @@
 	UILabel         __weak *discussPromptLabel;
     UITableView		__weak *tableView;
 	NSMutableArray	*messages;
+    
+    @public UITabBarItem __weak *tbi;
 }
 
 @property (strong, retain) NSand *appSand;
@@ -31,6 +35,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *discussPromptLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sendDiscussButton;
+@property (weak, nonatomic) IBOutlet UITabBarItem *tbi;
 
 @property (nonatomic, retain) NSMutableArray *messages;
 
@@ -42,3 +47,4 @@
 
 
 @end
+#endif

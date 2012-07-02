@@ -4,6 +4,9 @@
 //
 //  Initial version, Steven Kemper on 6/22/12.
 //
+#ifndef NSAND
+#define NSAND
+
 
 #import <Foundation/Foundation.h>
 #import "NGrain.h"
@@ -60,3 +63,4 @@
 
 @end
 
+#endif

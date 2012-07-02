@@ -23,31 +23,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
+    
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     appSand = [[NSand alloc] init]; 
     
     // SAND:  set a pointer inside appSand so we get notified when network data is available
     [appSand setDelegate:self];
-
+    
     // SAND: Connect the network streams
     [appSand connect];
     
-    LoginViewController *lvc = [[LoginViewController alloc] init];
-
-    //    DiscussViewController *dvc = [[DiscussViewController alloc] init];
-//    CloudViewController *cvc = [[CloudViewController alloc] init];
-//    PollViewController *pvc = [[PollViewController alloc] init];
-    
-    //Set up Tab Bar Controller
-//    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-//    NSArray *viewControllers = [NSArray arrayWithObjects:dvc, cvc, pvc, nil];
-   // [tabBarController setViewControllers:viewControllers];
-    
-//    [[self window] setRootViewController:tabBarController];
-    [[self window] setRootViewController:lvc];
- //   self.window.backgroundColor = [UIColor whiteColor];
+    //lvc = [[LoginViewController alloc] init];
+    // LoginViewController *lvc = [[LoginViewController alloc] init];
+    //[[self window] setRootViewController:lvc];
+    [self makeTabBar];
+    //   self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -62,14 +53,29 @@
 
 - (void)makeTabBar {
     DiscussViewController *dvc = [[DiscussViewController alloc] init];
-    CloudViewController *cvc = [[CloudViewController alloc] init];
-    PollViewController *pvc = [[PollViewController alloc] init];
+    discussTBI = dvc->tbi;
     
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:dvc, cvc, pvc, nil];
+    CloudViewController *cvc = [[CloudViewController alloc] init];
+    cloudTBI = cvc->tbi;
+    
+    PollViewController *pvc = [[PollViewController alloc] init];
+    pollTBI = pvc->tbi;
+    
+    [self tabBarItemsEnabled:NO];
+    LoginViewController *lvc = [[LoginViewController alloc] init];
+    
+    tabBarController = [[UITabBarController alloc] init];
+    NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc,  nil];
     [tabBarController setViewControllers:viewControllers];
+    [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
     
     [[self window] setRootViewController:tabBarController];
+}
+
+- (void)tabBarItemsEnabled:(BOOL)val {
+    [discussTBI setEnabled:val];
+    [cloudTBI setEnabled:val];
+    [pollTBI setEnabled:val];
 }
 
 
