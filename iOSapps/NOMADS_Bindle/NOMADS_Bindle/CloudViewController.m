@@ -4,7 +4,6 @@
 //
 //  Created by Steven Kemper on 5/15/12.
 //
-
 #import "CloudViewController.h"
 #import "NSand.h"
 #import "NGrain.h"
@@ -16,10 +15,12 @@
 
 @implementation CloudViewController
 @synthesize cloudLabel;
+@synthesize sendCloudButton;
 @synthesize inputCloudField;
 @synthesize messages;
-@synthesize sendCloudButton;
-@synthesize cloudSand;
+@synthesize appSand;
+@synthesize appDelegate;
+@synthesize tbi;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -27,11 +28,12 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        UITabBarItem *tbi = [self tabBarItem];
+        tbi = [self tabBarItem];
         [tbi setTitle:@"Thought Cloud"];
-        //cloudSand = [[NSand alloc] init]; 
-        
-     //   [cloudSand connect];
+        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; 
+        // SAND:  set a pointer inside appSand so we get notified when network data is available
+        [appDelegate->appSand setDelegate:self];
+
     }
     //[cloudSand setDelegate:self];
     return self;
@@ -71,11 +73,11 @@
     //DATA ARRAY (String from inputDiscussField)
     //****STK Currently set directly in sendWithGrainElts
     
-    [cloudSand sendWithGrainElts_AppID:myAppID 
-                                 Command:myCommand 
-                                DataType:myDataType 
-                                 DataLen:[inputCloudField.text length] 
-                                  String:inputCloudField.text];
+    [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
+                                          Command:myCommand 
+                                         DataType:myDataType 
+                                          DataLen:[inputCloudField.text length] 
+                                           String:inputCloudField.text];
 
     inputCloudField.text = @"";
     [inputCloudField setHidden:NO];
