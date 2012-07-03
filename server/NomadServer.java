@@ -87,7 +87,8 @@ public class NomadServer implements Runnable {
 	byte incByteData[] = new byte[1000];
 
 	byte incAppCmd, incAppDataType;
-	int incAppDataLen, incAppID;
+	int incAppDataLen;
+	byte incAppID;
 
 	NGrain inGrain;
 
@@ -103,41 +104,41 @@ public class NomadServer implements Runnable {
 	// 1 ---- READ ---------------------------------------
 	// ---------------------------------------------------
 
-	NGlobals.sPrint("reading data ...");
+	NGlobals.sPrint("===== READING =====");
 
-
-	// Get client number of inc client
-	tCNum = clientThreadNum[THREAD_ID];
-	currentClient = clients[tCNum];
-
-	// Read in the COMMAND
-	// dtx:  copied to NomadServerThread
-	// inSand.setSock(currentClient.getSock());
-	// inSand.openSocketStreams();
-	
-
-	// TOFIX:  change to getXXX acccessor functions
-
+	// Read in relevant SAND header info
 	incAppID = myGrain.appID;
 	incAppCmd = myGrain.command;
 	incAppDataType = myGrain.dataType;
 	incAppDataLen = myGrain.dataLen;
 
+	// Print out at the SERVER level
 	NGlobals.sPrint("appID: " + incAppID);
 	NGlobals.sPrint("command: " + incAppCmd);
 	NGlobals.sPrint("dataType: " + incAppDataType);
 	NGlobals.sPrint("dataLen: " + incAppDataLen);
 
-	// Read each specific BLOCK
+	// Get client number of inc client
+	tCNum = clientThreadNum[THREAD_ID];
+	currentClient = clients[tCNum];
+
+	// REGISTER the client's appID with the SERVER client thread
+	if (clients[tCNum].getAppID() == -1) {
+	    NGlobals.sPrint("===== REGISTERING =====");
+
+	    NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
+	    clients[tCNum].setAppID(incAppID);
+	}
+
+	// Read each specific BLOCK (INT OR BYTE)
 	if (incAppDataType == NDataType.INT) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		NGlobals.sPrint("INT: " + myGrain.iArray[j]);
+		//NGlobals.sPrint("INT: " + myGrain.iArray[j]);
 	    }
 	}
-		
 	if (incAppDataType == NDataType.BYTE) {
 	    for (int j = 0; j < incAppDataLen; j++) {
-		NGlobals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
+		// NGlobals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
 	    }
 	}
     
@@ -147,16 +148,27 @@ public class NomadServer implements Runnable {
 
 	// For each client SEND ALL DATA
 
-	NGlobals.sPrint("sending data ...");
+	NGlobals.sPrint("===== WRITING =====");
 
 	for (int c = 0; c < clientCount; c++) {
-	    
+	
 	    // Get the client off the master list
 	    currentClient = clients[c];
+	    NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
 
+	    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+
+	    if (incAppID == NAppID.SOUND_SWARM) {
+		if (currentClient.getAppID() == NAppID.SOUND_SWARM_DISPLAY) {
+		    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+		    int[] x = new int[1];
+		    x[0] = THREAD_ID;
+		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
+		}
+	    }
 	    
+	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
 	    myGrain.print();
-
 	    // Write the data out
 	    currentClient.threadSand.sendGrain(myGrain);
 

@@ -58,8 +58,9 @@ public class NAppID {
     public static byte C_INSTRUCTOR_SAND_POINTER = 93;
 
     public static byte SOUND_SWARM = 100;
-    public static byte C_SOUND_SWARM = 101;
-    public static byte SPHERE_MOVER = 102;
+    public static byte SOUND_SWARM_DISPLAY = 101;
+    public static byte C_SOUND_SWARM = 102;
+    public static byte SPHERE_MOVER = 103;
 
     public static byte STUD_EMRG_SYNTH = 110;
     public static byte C_STUD_EMRG_SYNTH = 111;
