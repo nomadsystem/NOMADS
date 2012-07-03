@@ -1,0 +1,189 @@
+import java.applet.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.text.*;
+import nomads.technosonics.*;
+
+public class SandPointer extends Applet implements MouseListener,
+						   MouseMotionListener {
+
+	private static final long serialVersionUID = 1L;
+	private SandPointerThread client = null;
+	int width, height;
+	int x, y; // coords of the box
+	int mx, my; // recent mouse coords
+	int personnum;
+	private boolean assigned = false;
+	boolean isMouseDraggingBox = false;
+	private Socket socket = null;
+	private DataInputStream streamIn = null;
+	private DataOutputStream streamOut = null;
+	private String serverName = globals.serverName;
+	private int serverPort = globals.serverPort;
+
+	public void init() {
+		connect(serverName, serverPort);
+		width = getSize().width;
+		height = getSize().height;
+		setBackground(Color.black);
+
+		x = width / 2 - 20;
+		y = height / 2 - 20;
+
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+		mx = e.getX();
+		my = e.getY();
+		if (x < mx && mx < x + 40 && y < my && my < y + 40) {
+			isMouseDraggingBox = true;
+		}
+		e.consume();
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		/*if (isMouseDraggingBox) {
+			try {
+				double myx = (mx - (width / 2)) / ((double) width * 3);
+				double myy = (my - (height / 2)) / ((double) height * 3);
+				String towrite = "move" + " " + personnum + " " + myx + " "
+						+ myy;
+				System.out.println("Byte is " + app_id.STUDENT_SAND_POINTER + " and write is "
+						+ towrite);
+				streamOut.writeByte(app_id.STUDENT_SAND_POINTER);
+				streamOut.writeUTF(towrite);
+			} catch (IOException ioe) {
+				System.out.println("Error writing...");
+			}
+		}*/
+		isMouseDraggingBox = false;
+		e.consume();
+	}
+
+	public void mouseMoved(MouseEvent e) {
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		if (isMouseDraggingBox) {
+			// get the latest mouse position
+			int new_mx = e.getX();
+			int new_my = e.getY();
+
+			// displace the box by the distance the mouse moved since the last
+			// event
+			// Note that "x += ...;" is just shorthand for "x = x + ...;"
+
+			if (new_mx < 5)
+			    new_mx = 5;
+			if (new_mx > 490)
+			    new_mx = 490;
+			if (new_my < 5)
+			    new_my = 5;
+			if (new_my > 490)
+			    new_my = 490;
+
+			x += new_mx - mx;
+			y += new_my - my;
+
+			// update our data
+			mx = new_mx;
+			my = new_my;
+
+			
+			if (isMouseDraggingBox) {
+				try {
+					double myx = (mx - (width / 2)) / ((double) width * 3);
+					double myy = (my - (height / 2)) / ((double) height * 3);
+				    NumberFormat formatter = new DecimalFormat("#0.0000");
+				    String towrite = new String("C:" + new_mx + ":" + new_my);
+				    //System.out.println("Byte is " + app_id.STUDENT_SAND_POINTER + " and write is "
+				    //			+ towrite);
+					streamOut.writeByte(app_id.STUDENT_SAND_POINTER);
+					streamOut.writeUTF(towrite);
+				} catch (IOException ioe) {
+					System.out.println("Error writing...");
+				}
+			}
+			
+			
+			repaint();
+			e.consume();
+		}
+	}
+
+	public void paint(Graphics g) {
+
+	    int ksize = 5;
+	    int xpoints[] = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
+	    int ypoints[] = {y+(int)(ksize/2), y-(int)(ksize/2), y+(int)(ksize/2), y+(int)(ksize*1.5)};
+		
+	    g.setColor(Color.ORANGE);
+	    g.fillPolygon(xpoints, ypoints, xpoints.length);
+		//		g.fillRect(x, y, 10, 10);
+	}
+	
+	public void connect(String serverName, int serverPort) {
+		System.out.println("Establishing connection. Please wait ...");
+		try {
+			socket = new Socket(serverName, serverPort);
+			System.out.println("Connected");
+			open();
+		} catch (UnknownHostException uhe) {
+			System.out.println("How unknown");
+		} catch (IOException ioe) {
+			System.out.println("Unexpected exception: ");
+		}
+	}
+	
+	public void open() {
+		try {
+			streamOut = new DataOutputStream(socket.getOutputStream());
+			 client = new SandPointerThread(this, socket);
+			streamOut.writeByte(app_id.STUDENT_SAND_POINTER);
+			streamOut.writeUTF("new");
+
+		} catch (IOException ioe) {
+			System.out.println("Error opening output stream: ");
+		}
+	}
+	
+	public void close() {
+		try {
+			if (streamOut != null)
+				streamOut.close();
+			if (streamIn != null)
+				streamIn.close();
+			if (socket != null)
+				socket.close();
+		} catch (IOException ioe) {
+			System.out.println("Error closing...");
+		}
+	}
+	
+	public void handle(byte b, String s) {
+		if (b == app_id.STUDENT_SAND_POINTER) {
+			if (s.contains("assigned") && assigned == false) {
+				String delims = "[ ]+";
+				String[] tokens = s.split(delims);
+				personnum = Integer.parseInt(tokens[1]);
+				System.out.println("This new sphere is assigned value "
+						+ tokens[1]);
+				assigned = true;
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,14 @@
+<HTML>
+<head>
+<title>Sand Pointer</title>
+</head>
+
+<body bgcolor="#000000" text="#ffffcc" link="#ff6666" vlink="#cccccc">
+<center>
+<p>
+Swarm Synth
+<p>
+</font>
+
+<applet code="SandPointer.class" width=500 height=500></applet>
+</HTML>

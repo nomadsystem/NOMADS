@@ -1,0 +1,20 @@
+<HTML>
+<head>
+<title>Sand Pointer</title>
+</head>
+<script Language="JavaScript">
+var width=600;
+var height=700;
+self.resizeTo(width,height);
+self.moveTo(50,50);
+
+</script>
+<body bgcolor="#000000" text="#ffffcc" link="#ff6666" vlink="#cccccc">
+<center>
+<p>
+Swarm Synth
+<p>
+</font>
+
+<applet code="SandPointer.class" width=500 height=500></applet>
+</HTML>
