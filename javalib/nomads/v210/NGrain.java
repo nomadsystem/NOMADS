@@ -42,21 +42,21 @@ public class NGrain {
 	}
 
 	public void print() {
-		System.out.println("NGrain -> print()");
-		System.out.println("appID =" + appID);
-		System.out.println("commd =" + command);
-		System.out.println("dataType =" + dataType);
-		System.out.println("dLen  =" + dataLen);
+		NGlobals.lPrint("NGrain -> print()");
+		NGlobals.lPrint("appID =" + appID);
+		NGlobals.lPrint("commd =" + command);
+		NGlobals.lPrint("dataType =" + dataType);
+		NGlobals.lPrint("dLen  =" + dataLen);
 
 		if (dataType == 1) {
 			for (int i=0;i<dataLen;i++) {
-				System.out.println("BYTE: " + bArray[i]);
+			    NGlobals.lPrint("BYTE: " + (char)bArray[i]);
 			}
 		} 
 
 		if (dataType == NDataType.INT) {
 			for (int i=0;i<dataLen;i++) {
-				System.out.println("INT: " + iArray[i]);
+				NGlobals.lPrint("INT: " + iArray[i]);
 			}
 		} 
 
