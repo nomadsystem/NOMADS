@@ -11,6 +11,8 @@ public class NCommand {
     public static byte SYNTH_DISABLE = 7;//uGroove
     public static byte SYNTH_START = 8;//uGroove
     public static byte SYNTH_STOP = 9;//uGroove
-    public static byte SEND_SPRITEYX = 10;  // SoundSwarm
-    
+    public static byte LOGIN = 10;
+
+    public static byte SEND_SPRITE_XY = 20;  // SoundSwarm
+    public static byte SEND_THREAD_ID = 21;
 }
