@@ -10,6 +10,7 @@
 #import "DiscussViewController.h"
 #import "CloudViewController.h"
 #import "PollViewController.h"
+#import "SwarmViewController.h"
 #import "NGlobals.h"
 #import "NGrain.h"
 #import "NSand.h"
@@ -61,11 +62,14 @@
     PollViewController *pvc = [[PollViewController alloc] init];
     pollTBI = pvc->tbi;
     
+    SwarmViewController *svc = [[SwarmViewController alloc] init];
+    swarmTBI = svc->tbi;
+    
     [self tabBarItemsEnabled:NO];
     LoginViewController *lvc = [[LoginViewController alloc] init];
     
     tabBarController = [[UITabBarController alloc] init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc,  nil];
+    NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc, svc,  nil];
     [tabBarController setViewControllers:viewControllers];
     [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
     
@@ -76,6 +80,7 @@
     [discussTBI setEnabled:val];
     [cloudTBI setEnabled:val];
     [pollTBI setEnabled:val];
+    [swarmTBI setEnabled:val];
 }
 
 

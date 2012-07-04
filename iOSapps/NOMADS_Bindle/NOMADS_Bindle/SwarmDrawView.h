@@ -1,6 +1,5 @@
 //
-//  TouchDrawView.h
-//  TouchTracker
+//  SwarmDrawView.h
 //
 //  Created by Steven Kemper on 7/3/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -8,10 +7,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TouchDrawView : UIView
+@interface SwarmDrawView : UIView
 {
-    NSMutableDictionary *linesInProcess;
-    NSMutableArray *completeLines;
+
     CGPoint myFingerPoint;
 }
 @property (nonatomic) CGPoint myFingerPoint;

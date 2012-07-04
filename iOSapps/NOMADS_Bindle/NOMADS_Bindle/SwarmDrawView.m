@@ -1,14 +1,13 @@
 //
-//  TouchDrawView.m
-//  TouchTracker
+//  SwarmDrawView.m
 //
 //  Created by Steven Kemper on 7/3/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "TouchDrawView.h"
+#import "SwarmDrawView.h"
 
-@implementation TouchDrawView
+@implementation SwarmDrawView
 @synthesize myFingerPoint;
 
 -(id)initWithFrame:(CGRect)r
@@ -16,7 +15,7 @@
     self = [super initWithFrame:r];
     if (self) {
                 
-        [self setBackgroundColor:[UIColor whiteColor]];
+   //     [self setBackgroundColor:[UIColor whiteColor]];
         
         [self setMultipleTouchEnabled:YES];
         
@@ -65,8 +64,8 @@
         
         //Create a line for the value
         CGPoint loc = [t locationInView:self];
-        NSLog(@" loc = %f", loc.x);
-        NSLog(@" loc = %f", loc.y);
+        NSLog(@"SWARM_X loc = %f", loc.x);
+        NSLog(@"SWARM_Y loc = %f", loc.y);
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
         
@@ -87,8 +86,8 @@
         CGPoint loc = [t locationInView:self];
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
-        NSLog(@" loc = %f", loc.x);
-        NSLog(@" loc = %f", loc.y);
+        NSLog(@"SWARM_X loc = %f", loc.x);
+        NSLog(@"SWARM_Y loc = %f", loc.y);
     }
     //Redraw
     [self setNeedsDisplay];
