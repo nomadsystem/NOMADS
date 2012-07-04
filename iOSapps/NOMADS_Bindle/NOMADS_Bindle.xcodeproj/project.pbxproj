@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F994864C15A4B080001969E8 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864915A4B080001969E8 /* SwarmDrawView.m */; };
+		F994864D15A4B080001969E8 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864B15A4B080001969E8 /* SwarmViewController.m */; };
 		F9FFFC1A159E36830011760F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC19159E36830011760F /* UIKit.framework */; };
 		F9FFFC1C159E36830011760F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC1B159E36830011760F /* Foundation.framework */; };
 		F9FFFC1E159E36830011760F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC1D159E36830011760F /* CoreGraphics.framework */; };
@@ -31,6 +33,10 @@
 
 /* Begin PBXFileReference section */
 		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
+		F994864815A4B07F001969E8 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SwarmDrawView.h; sourceTree = "<group>"; };
+		F994864915A4B080001969E8 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
+		F994864A15A4B080001969E8 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SwarmViewController.h; sourceTree = "<group>"; };
+		F994864B15A4B080001969E8 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
 		F9FFFC15159E36830011760F /* NOMADS_Bindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9FFFC19159E36830011760F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F9FFFC1B159E36830011760F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -113,6 +119,10 @@
 				F9FFFC50159E37410011760F /* NGrain.m */,
 				F9FFFC51159E37410011760F /* NSand.h */,
 				F9FFFC52159E37410011760F /* NSand.m */,
+				F994864815A4B07F001969E8 /* SwarmDrawView.h */,
+				F994864915A4B080001969E8 /* SwarmDrawView.m */,
+				F994864A15A4B080001969E8 /* SwarmViewController.h */,
+				F994864B15A4B080001969E8 /* SwarmViewController.m */,
 				F9FFFC41159E36E70011760F /* CloudViewController.h */,
 				F9FFFC42159E36E70011760F /* CloudViewController.m */,
 				F9FFFC43159E36E70011760F /* CloudViewController.xib */,
@@ -224,6 +234,8 @@
 				F9FFFC53159E37410011760F /* NGlobals.m in Sources */,
 				F9FFFC54159E37410011760F /* NGrain.m in Sources */,
 				F9FFFC55159E37410011760F /* NSand.m in Sources */,
+				F994864C15A4B080001969E8 /* SwarmDrawView.m in Sources */,
+				F994864D15A4B080001969E8 /* SwarmViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

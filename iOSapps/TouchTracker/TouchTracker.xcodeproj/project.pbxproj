@@ -13,7 +13,6 @@
 		F99841B115A37DC20058AF9B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F99841AF15A37DC20058AF9B /* InfoPlist.strings */; };
 		F99841B315A37DC20058AF9B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F99841B215A37DC20058AF9B /* main.m */; };
 		F99841B715A37DC20058AF9B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F99841B615A37DC20058AF9B /* AppDelegate.m */; };
-		F99841BF15A37DFE0058AF9B /* Line.m in Sources */ = {isa = PBXBuildFile; fileRef = F99841BE15A37DFE0058AF9B /* Line.m */; };
 		F99841C215A37EE40058AF9B /* TouchDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F99841C115A37EE30058AF9B /* TouchDrawView.m */; };
 		F99841C515A37F570058AF9B /* TouchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F99841C415A37F570058AF9B /* TouchViewController.m */; };
 /* End PBXBuildFile section */
@@ -29,8 +28,6 @@
 		F99841B415A37DC20058AF9B /* TouchTracker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TouchTracker-Prefix.pch"; sourceTree = "<group>"; };
 		F99841B515A37DC20058AF9B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F99841B615A37DC20058AF9B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F99841BD15A37DFE0058AF9B /* Line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Line.h; sourceTree = "<group>"; };
-		F99841BE15A37DFE0058AF9B /* Line.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Line.m; sourceTree = "<group>"; };
 		F99841C015A37EE30058AF9B /* TouchDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchDrawView.h; sourceTree = "<group>"; };
 		F99841C115A37EE30058AF9B /* TouchDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchDrawView.m; sourceTree = "<group>"; };
 		F99841C315A37F570058AF9B /* TouchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchViewController.h; sourceTree = "<group>"; };
@@ -56,8 +53,6 @@
 			children = (
 				F99841C315A37F570058AF9B /* TouchViewController.h */,
 				F99841C415A37F570058AF9B /* TouchViewController.m */,
-				F99841BD15A37DFE0058AF9B /* Line.h */,
-				F99841BE15A37DFE0058AF9B /* Line.m */,
 				F99841C015A37EE30058AF9B /* TouchDrawView.h */,
 				F99841C115A37EE30058AF9B /* TouchDrawView.m */,
 				F99841AC15A37DC20058AF9B /* TouchTracker */,
@@ -168,7 +163,6 @@
 			files = (
 				F99841B315A37DC20058AF9B /* main.m in Sources */,
 				F99841B715A37DC20058AF9B /* AppDelegate.m in Sources */,
-				F99841BF15A37DFE0058AF9B /* Line.m in Sources */,
 				F99841C215A37EE40058AF9B /* TouchDrawView.m in Sources */,
 				F99841C515A37F570058AF9B /* TouchViewController.m in Sources */,
 			);
@@ -274,6 +268,7 @@
 				F99841BC15A37DC20058AF9B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
