@@ -20,6 +20,7 @@
     UITabBarItem *discussTBI;
     UITabBarItem *cloudTBI;
     UITabBarItem *pollTBI;
+    UITabBarItem *swarmTBI;
     
 }
 
