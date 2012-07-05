@@ -42,7 +42,7 @@
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
         serverName = @"nomads.music.virginia.edu";
-        serverPort = SERVER_PORT_SK; 
+        serverPort = SERVER_PORT_DT; 
         numDelegates = 0;
     }
     return self;
@@ -69,19 +69,20 @@
 	[streamIn open];
 	[streamOut open];
     NSLog(@"NSand: Connecting, Streams Open ");
+    [self sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_MESSAGE DataType:BYTE DataLen:1 String:@"a"];
 }
 
 // sendWithGrain_AppID (for strings) =========================================================
 
 
 - (void) sendWithGrainElts_AppID:(Byte)a 
-                Command:(Byte)c
-               DataType:(Byte)dT
-                DataLen:(int)dL
-                 String:(NSString *)str;
+                         Command:(Byte)c
+                        DataType:(Byte)dT
+                         DataLen:(int)dL
+                          String:(NSString *)str;
 {
     NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-        
+    
     //Byte appID 
     appIDDatum = [self convertToByteToStreamOut:&a]; // appID
     int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
@@ -133,14 +134,14 @@
     }
 }
 
-// sendWithGrain_AppID (for numbers) ====================================================
+// sendWithGrain_AppID (for Ints) ====================================================
 
 
 - (void) sendWithGrainElts_AppID:(Byte)a 
-                Command:(Byte)c
-               DataType:(Byte)dT
-                DataLen:(int)dL
-                    Number:(NSNumber *)num;
+                         Command:(Byte)c
+                        DataType:(Byte)dT
+                         DataLen:(int)dL
+                         Integer:(int *)myInt;
 {
     NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
     
@@ -187,15 +188,18 @@
     }
     
     // If the data is a string or array of bytes, send like this
-    dDatum = [NSData dataWithBytes:&num length:sizeof(index)];
-
-    int dArrayNum = [streamOut write:(const uint8_t *)[dDatum bytes] maxLength: [dDatum length]];
-    if (-1 == dArrayNum) {
-        NSLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+    for (int i=0;i<dL;i++) {
+        int intDataBE = CFSwapInt32HostToBig(myInt[i]); // dataLength
+        int dArrayNum = [streamOut write:(uint8_t *)&intDataBE maxLength:4];
+        if (-1 == dArrayNum) {
+            NSLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            NSLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+        }
     }
-    else {
-        NSLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
-    }
+    
+    
 }
 
 //   stream function ==========================================================================
@@ -216,14 +220,14 @@
                 Byte cmd,cBuf[1];
                 Byte dType,dTBuf[1];
                 int dLen,dLBuf[1];
-
+                
                 unsigned int len = 0;
 				
                 // TODO : change this to read into a buffer and then parse out appID, cmd, etc...
                 
                 //This while statement seems redundant 
 				if ([streamIn hasBytesAvailable]) {
-
+                    
                     len = [streamIn read:aBuf maxLength:sizeof(aBuf)];
                     if (len > 0) {
                         appID = aBuf[0];
@@ -244,11 +248,11 @@
                     
                     // read in our string
                     
-                    if (dType == 1) {
+                    if (dType == BYTE) {
                         uint8_t *sBuffer = (uint8_t *)malloc(sizeof(uint8_t)*dLen); 
                         len = [streamIn read:(uint8_t *)sBuffer maxLength:sizeof(sBuffer)];
                         NSLog(@"NSAND:  string buf read = %d\n",len);
-
+                        
                         NSMutableString *output = [[NSMutableString alloc] initWithBytes:sBuffer length:len encoding:NSUTF8StringEncoding];
                         
                         if  (len < dLen){
@@ -259,9 +263,10 @@
                                 NSLog(@"output = %@\n",output);
                                 NSLog(@"leftOver = %@\n",leftOver);
                                 [output appendString:leftOver];
-                                 
+                                
                             }
-                        }                        
+                        } 
+                        
                         
                         grain = [[NGrain alloc] init];
                         
@@ -278,27 +283,68 @@
                             }
                         }
                     }
+                    
+                    if (dType == INT) {
+                        int x=0; // int / byte counter for our iBuffer
+                        
+                        // just read one int here
+                        int *iBuffer = (int *)malloc(sizeof(int)*dLen);
+                        int tempI;
+                        
+                        while ([streamIn hasBytesAvailable] && (x < dLen)) {
+                            len = [streamIn read:(uint8_t *)&tempI maxLength:sizeof(int)];
+                            if ((len > 0) && (x < dLen)) {
+                                iBuffer[x] = CFSwapInt32BigToHost(tempI);
+                            }
+                            NSLog(@"SAND:  read %d more bytes\n",len);
+                            NSLog(@"SAND:  INT [%d] = %d\n",x,iBuffer[x]);
+                            x++;
+                        }
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        grain = [[NGrain alloc] init];
+                        
+                        
+                        [grain setGrainElts_AppID:appID 
+                                          Command:(Byte)cmd
+                                         DataType:(Byte)dType 
+                                          DataLen:(int)dLen
+                                          Integer:(int *)iBuffer];
+                        
+                        [grain print];
+                        for (int x=0;x<numDelegates;x++) {
+                            if (self->delegate[x] != nil) {
+                                [self->delegate[x] dataReadyHandle:grain];
+                            }
+                        }
+                    }
+                    
                 }
             }
             
-			break;
-			
-		case NSStreamEventErrorOccurred:
-			
-			NSLog(@"Can not connect to the host!");
-			break;
-			
-		case NSStreamEventEndEncountered:
+            break;
+            
+        case NSStreamEventErrorOccurred:
+            
+            NSLog(@"Can not connect to the host!");
+            break;
+            
+        case NSStreamEventEndEncountered:
             
             [theStream close];
             [theStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             //    [theStream release];
             theStream = nil;
-			
-			break;
-		default:
-			NSLog(@"Unknown event");
-	}
+            
+            break;
+        default:
+            NSLog(@"Unknown event");
+    }
     
 }
 

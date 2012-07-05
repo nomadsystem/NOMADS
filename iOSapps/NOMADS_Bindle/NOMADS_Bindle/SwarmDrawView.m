@@ -6,9 +6,14 @@
 //
 
 #import "SwarmDrawView.h"
+#import "NSand.h"
+#import "NGrain.h"
+#import "NGlobals.h"
 
 @implementation SwarmDrawView
 @synthesize myFingerPoint;
+@synthesize appSand; //Our implementation of NSand
+@synthesize appDelegate;
 
 -(id)initWithFrame:(CGRect)r
 {
@@ -16,6 +21,10 @@
     if (self) {
                 
    //     [self setBackgroundColor:[UIColor whiteColor]];
+        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        // SAND:  set a pointer inside appSand so we get notified when network data is available
+        [appDelegate->appSand setDelegate:self];
         
         [self setMultipleTouchEnabled:YES];
         
@@ -30,6 +39,32 @@
     }
     return self;
 }
+
+//Data Ready Handle======================================================
+
+- (void)dataReadyHandle:(NGrain *)inGrain
+{
+    //This delegate not being 
+    // CLog(@"I GOT DATA FROM SAND!!!\n");
+    
+    if (nil != inGrain) { 
+        
+        //        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
+        //        {
+        //            //    NSLog(@"Filtering AppID 22");
+        //            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+        //            //do something
+        //        }
+        
+        //        else {
+        //            NSLog(@"No Data for Swarm App");
+        //        }
+    }
+    
+}
+
+
+//Drawing Stuff======================================================
 
 
 -(void)drawRect:(CGRect)rect
@@ -52,6 +87,8 @@
     [self setNeedsDisplay];
 }
 
+//Touch Input Stuff======================================================
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     for (UITouch *t in touches) {
@@ -62,7 +99,7 @@
             return;
         }
         
-        //Create a line for the value
+        //Create a point for the value
         CGPoint loc = [t locationInView:self];
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
@@ -82,12 +119,20 @@
         //Find the line for this touch
      //   myLine = [linesInProcess objectForKey:key];
         
-        //Update the line
+        //Update the point
         CGPoint loc = [t locationInView:self];
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
+        
+        int xy[2];
+        
+        xy[0] = (int) loc.x;
+        xy[1] = (int) loc.y;
+        
+        
+        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT DataLen:2 Integer:xy];
     }
     //Redraw
     [self setNeedsDisplay];
@@ -98,8 +143,8 @@
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
         
-        //If this is a double tap, 'line' will be nil,
-        //so make sure not to add it to the array
+        //If this is a double tap, point will be nil,
+        //Do stuff here when touch ends
         
 
     }

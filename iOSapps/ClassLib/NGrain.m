@@ -37,13 +37,13 @@
                       Command:(Byte)c 
                      DataType:(Byte)dT 
                       DataLen:(int)dL 
-                       Number:(NSNumber *)n
+                       Integer:(int *)iA; 
 {   
     appID = a;
     command = c;
     dataType = dT;
     dataLen = dL;
-    num = n;
+    iArray = iA;
 }
 
 

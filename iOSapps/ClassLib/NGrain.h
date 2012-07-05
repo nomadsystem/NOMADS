@@ -18,7 +18,7 @@
     @public Byte dataType; 
     @public int dataLen;
     @public NSString *str;
-    @public NSNumber *num;
+    @public int *iArray;
 }
 
 - (void) setGrainElts_AppID:(Byte)a 
@@ -27,11 +27,11 @@
                        DataLen:(int)dL 
                          String:(NSString *)str; 
 
-- (void) setWithGrainElts_AppID:(Byte)a 
-                       Command:(Byte)c 
-                      DataType:(Byte)dT 
-                       DataLen:(int)dL 
-                        Number:(NSString *)num; 
+- (void)setGrainElts_AppID:(Byte)a 
+                   Command:(Byte)c 
+                  DataType:(Byte)dT 
+                   DataLen:(int)dL 
+                   Integer:(int *)iA; 
 
 - (void) print;
 

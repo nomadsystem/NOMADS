@@ -5,15 +5,27 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef SWARM_DRAW_VIEW
+#define SWARM_DRAW_VIEW
 
-@interface SwarmDrawView : UIView
+#import <Foundation/Foundation.h>
+#import "NSand.h"
+#import "NGrain.h"
+#import "BindleAppDelegate.h"
+
+@interface SwarmDrawView : UIView <SandDelegate>
 {
 
+    NSand   *appSand;
+    BindleAppDelegate *appDelegate;
     CGPoint myFingerPoint;
 }
+@property (strong, retain) NSand *appSand;
+@property (strong, retain) BindleAppDelegate *appDelegate;
 @property (nonatomic) CGPoint myFingerPoint;
 - (void)clearAll;
 - (void)endTouches:(NSSet *)touches;
 
 @end
+
+#endif
