@@ -47,20 +47,21 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    CLog(@"I GOT DATA FROM SAND!!!\n");
+    //This delegate not being 
+   // CLog(@"I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
-        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
-        {
-            //    NSLog(@"Filtering AppID 22");
-            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
-            //do something
-        }
+//        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
+//        {
+//            //    NSLog(@"Filtering AppID 22");
+//            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+//            //do something
+//        }
        
-        else {
-            NSLog(@"No Data for Swarm App");
-        }
+//        else {
+//            NSLog(@"No Data for Swarm App");
+//        }
     }
     
 }
