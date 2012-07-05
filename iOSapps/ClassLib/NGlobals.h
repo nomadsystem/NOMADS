@@ -96,6 +96,7 @@ typedef enum {
     C_STUD_EMRG_SYNTH = 111,
     INSTRUCT_EMRG_SYNTH_PROMPT = 112,
     C_INSTRUCT_EMRG_SYNTH_PROMPT = 113,
+    
 } NGAppID;
 
 //NCommand 
@@ -110,7 +111,7 @@ typedef enum {
     SYNTH_DISABLE = 7,//uGroove
     SYNTH_START = 8,//uGroove
     SYNTH_STOP = 9,//uGroove
-    SEND_SPRITEYX = 10,  // SoundSwarm
+    SEND_SPRITE_XY = 20,  // SoundSwarm
 } NGCommand;
 
 //NDataType

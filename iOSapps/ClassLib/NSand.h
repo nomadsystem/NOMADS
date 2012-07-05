@@ -52,7 +52,7 @@
                          Command:(Byte)c 
                         DataType:(Byte)dT 
                          DataLen:(int)dL
-                          Number:(NSNumber*)num;
+                          Integer:(int *)myInt;
 
 //- (NGrain) getGrain;
 
