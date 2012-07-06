@@ -19,8 +19,8 @@
 {
     self = [super initWithFrame:r];
     if (self) {
-                
-   //     [self setBackgroundColor:[UIColor whiteColor]];
+        
+        //     [self setBackgroundColor:[UIColor whiteColor]];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -34,8 +34,24 @@
         CGFloat screenHeight = screenRect.size.height;
         myFingerPoint.x = (screenWidth * 0.5);
         myFingerPoint.y = (screenHeight * 0.5);
-   //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
-
+        
+        maxTrails = 10;
+        // earlier on in your code put this (below)
+        
+        xTrail = (int *)malloc(sizeof(int)*maxTrails);
+        yTrail = (int *)malloc(sizeof(int)*maxTrails);
+        
+        for (int i=0;i<maxTrails;i++) {
+            xTrail[i]=(screenWidth * 0.5);
+            yTrail[i]=(screenHeight * 0.5);
+        }
+        decayColor = 1.0;
+        decayColorChangeDelta = decayColor/(float)maxTrails;
+    //    NSLog(@" brightness = %f ", brightness);
+    //    NSLog(@" brightDelta = %f ", brightDelta);
+        
+        //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
+        
     }
     return self;
 }
@@ -69,19 +85,42 @@
 
 -(void)drawRect:(CGRect)rect
 {
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextAddEllipseInRect(context,(CGRectMake (myFingerPoint.x, myFingerPoint.y, 12.0, 12.0)));
-                              CGContextDrawPath(context, kCGPathFill);
-                              CGContextStrokePath(context);
+    
+    for(int i=maxTrails;i>0;i--) {
+        xTrail[i] = xTrail[i-1];
+        yTrail[i] = yTrail[i-1];
+    }
+    
+    xTrail[0] = myFingerPoint.x;
+    yTrail[0] = myFingerPoint.y;
+    
+    
+    
+    decayColor = 1.0;
+    for (int i=0; i<maxTrails; i++) {   
+        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));
+        CGContextDrawPath(context, kCGPathFill);
+        //     CGContextFillPath(context);
+        CGContextStrokePath(context);
+        
+        decayColor = (decayColor - decayColorChangeDelta);
+        NSLog(@" Brightness = %f", decayColor);
+        
+    }
+    
+    
     
 }
 
 -(void)clearAll
 {
     //Clear the Collections
-//    [linesInProcess removeAllObjects];
-//    [completeLines removeAllObjects];
+    //    [linesInProcess removeAllObjects];
+    //    [completeLines removeAllObjects];
     
     //Redraw
     [self setNeedsDisplay];
@@ -100,6 +139,7 @@
         }
         
         //Create a point for the value
+        touchColor = 0.0;
         CGPoint loc = [t locationInView:self];
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
@@ -107,7 +147,7 @@
         myFingerPoint.y = loc.y;
         
         //Put pair in dictionary
-//        [linesInProcess setObject:newLine forKey:key];
+        //        [linesInProcess setObject:newLine forKey:key];
     }
 }
 
@@ -117,7 +157,7 @@
     for (UITouch *t in touches) {
         
         //Find the line for this touch
-     //   myLine = [linesInProcess objectForKey:key];
+        //   myLine = [linesInProcess objectForKey:key];
         
         //Update the point
         CGPoint loc = [t locationInView:self];
@@ -143,10 +183,11 @@
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
         
+        touchColor = 0.6;
         //If this is a double tap, point will be nil,
         //Do stuff here when touch ends
         
-
+        
     }
     //Redraw
     [self setNeedsDisplay];

@@ -19,6 +19,14 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     CGPoint myFingerPoint;
+    int maxTrails;
+    int *xTrail;
+    int *yTrail;
+    int currentRedColor;
+    float decayColor;
+    float decayColorChangeDelta;
+    float touchColor;
+    
 }
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
