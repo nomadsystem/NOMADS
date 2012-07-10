@@ -9,6 +9,7 @@ import nomads.v210.*;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -34,8 +35,8 @@ public class DiscussClient extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.discuss);
-	    input = (EditText)findViewById(R.id.textout);
-		topic = (TextView)findViewById(R.id.promptin);
+	    input = (EditText)findViewById(R.id.textOut);
+		topic = (TextView)findViewById(R.id.promptIn);
 		chatWindow = (TextView)findViewById(R.id.messageViewer);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		speak = (Button)findViewById(R.id.send);
@@ -80,7 +81,8 @@ public class DiscussClient extends Activity {
 			}			
 		}
 		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
-			chatWindow.append(msg + "\n");
+			appendTextAndScroll(msg);
+			Log.i("Discuss", "ChatWindow: " + msg);
 			input.requestFocus();
 		}
 		else {
@@ -121,4 +123,19 @@ public class DiscussClient extends Activity {
 		sand = _sand;
 		Log.i("Discuss", "setSand()");
 	}
+	
+	private void appendTextAndScroll(String text)
+	{
+	    if(chatWindow != null){
+	    	chatWindow.append(text + "\n");
+	        final Layout layout = chatWindow.getLayout();
+	        if(layout != null){
+	            int scrollDelta = layout.getLineBottom(chatWindow.getLineCount() - 1) 
+	                - chatWindow.getScrollY() - chatWindow.getHeight();
+	            if(scrollDelta > 0)
+	            	chatWindow.scrollBy(0, scrollDelta);
+	        }
+	    }
+	}
+
 }

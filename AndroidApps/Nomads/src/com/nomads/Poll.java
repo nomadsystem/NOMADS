@@ -28,7 +28,7 @@ public class Poll extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.poll);
-	    question = (TextView)findViewById(R.id.promptin);
+	    question = (TextView)findViewById(R.id.promptIn);
 	    textMin = (TextView)findViewById(R.id.min);
 	    textMax = (TextView)findViewById(R.id.max);
 	    seekBar = (SeekBar)findViewById(R.id.pollBar);
