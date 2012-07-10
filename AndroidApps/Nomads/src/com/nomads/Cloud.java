@@ -20,7 +20,6 @@ public class Cloud extends Activity {
 	
 	EditText input;
 	TextView topic;
-	TextView messageView;
 	String tempString = "";
 	Button speak;
 
@@ -30,9 +29,8 @@ public class Cloud extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.cloud);
-	    input = (EditText)findViewById(R.id.textout);
-		topic = (TextView)findViewById(R.id.promptin);
-		messageView = (TextView)findViewById(R.id.messageViewer);
+	    input = (EditText)findViewById(R.id.textOut);
+		topic = (TextView)findViewById(R.id.promptIn);
 		speak = (Button)findViewById(R.id.send);
 		speak.setOnClickListener(buttonSendOnClickListener);
 	}

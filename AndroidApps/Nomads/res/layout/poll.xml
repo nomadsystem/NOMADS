@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/promptin"
+        android:id="@+id/promptIn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/incoming"
