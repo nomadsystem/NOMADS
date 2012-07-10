@@ -14,6 +14,7 @@ import android.widget.TabHost;
 public class TabbedBindle extends TabActivity {
 	Activity currentActivity;
 	final Handler handle = new Handler();
+	TabHost tabHost;
 	
 	NSand sand;
 	private NGrain grain;
@@ -54,22 +55,31 @@ public class TabbedBindle extends TabActivity {
 	    startThread();
 
 	    Resources res = getResources(); // Resource object to get Drawables
-	    TabHost tabHost = getTabHost();  // The activity TabHost
+	    tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
 	    Intent intent;  // Reusable Intent for each tab
 	    
 	    tabHost.setOnTabChangedListener(TabChangeListener);
 
 	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, DiscussClient.class);
+	    intent = new Intent().setClass(this, Join.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("discuss")
-	    	.setIndicator("Discuss", res.getDrawable(R.drawable.ic_tab_test))
+	    spec = tabHost.newTabSpec("join")
+	    	.setIndicator("Join", res.getDrawable(R.drawable.ic_tab_test))
 	    	.setContent(intent);
 	    tabHost.addTab(spec);
+	    
+	    // send TabbedBindle instance to Join to enable/disable tabs
+//	    intent.putExtra
 
 	    // Do the same for the other tabs
+	    intent = new Intent().setClass(this, DiscussClient.class);
+	    spec = tabHost.newTabSpec("discuss")
+    	.setIndicator("Discuss", res.getDrawable(R.drawable.ic_tab_test))
+    	.setContent(intent);
+	    tabHost.addTab(spec);
+	    
 	    intent = new Intent().setClass(this, Cloud.class);
 	    spec = tabHost.newTabSpec("cloud")
 	    	.setIndicator("Cloud", res.getDrawable(R.drawable.ic_tab_test))
@@ -82,27 +92,41 @@ public class TabbedBindle extends TabActivity {
 	    	.setContent(intent);
 	    tabHost.addTab(spec);
 	    
-//	    tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
+	    // Disabled all but Login tab
+	    for (int i=1; i<=3; i++){
+			tabHost.getTabWidget().getChildAt(i).setEnabled(false);
+		}
+	    
+	    // to hide:
+	    // tabHost.getTabWidget().getChildAt(i).setVisibility(View.GONE);
+	    // or ...(View.INVISIBLE);
 
 	    // Set the first active tab
 	    tabHost.setCurrentTab(0);
 	}
 
-			TabHost.OnTabChangeListener TabChangeListener = new TabHost.OnTabChangeListener() {
-	        @Override
-	        public void onTabChanged(String tabId) {
-	            currentActivity = getCurrentActivity();
-	            if (currentActivity instanceof DiscussClient) {
-	                ((DiscussClient) currentActivity).setSand(sand);
-	            }
-	            else if (currentActivity instanceof Cloud) { 
-	                ((Cloud) currentActivity).setSand(sand);
-	            }
-	            else if (currentActivity instanceof Poll) { 
-	                ((Poll) currentActivity).setSand(sand);
-	            }
-	        }
-		};
+	// Set the current target for sand messages based on active tab
+	TabHost.OnTabChangeListener TabChangeListener = new TabHost.OnTabChangeListener() {
+        @Override
+        public void onTabChanged(String tabId) {
+            currentActivity = getCurrentActivity();
+            if (currentActivity instanceof Join) {
+                ((Join) currentActivity).setSand(sand);
+                
+                // this should go above (see line 73)
+                ((Join) currentActivity).setTB(TabbedBindle.this);
+            }
+            else if (currentActivity instanceof DiscussClient) {
+                ((DiscussClient) currentActivity).setSand(sand);
+            }
+            else if (currentActivity instanceof Cloud) {
+                ((Cloud) currentActivity).setSand(sand);
+            }
+            else if (currentActivity instanceof Poll) {
+                ((Poll) currentActivity).setSand(sand);
+            }
+        }
+	};
 	
 	private void sendGrain() {
 		if (currentActivity instanceof DiscussClient) {
@@ -114,6 +138,33 @@ public class TabbedBindle extends TabActivity {
         else if (currentActivity instanceof Poll) { 
             ((Poll) currentActivity).parseGrain(grain);
         }
+	}
+	
+	public void setTabs(int _tabs) {
+		if (_tabs==0){
+			for (int i=1; i<=3; i++){
+				tabHost.getTabWidget().getChildAt(i).setEnabled(false);
+			}
+		}
+		else if (_tabs==1){
+			for (int i=1; i<=3; i++){
+				tabHost.getTabWidget().getChildAt(i).setEnabled(true);
+			}
+		}
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		Log.i("Login", "is resumed");
+//		startThread();
+	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+		Log.i("Login", "is paused");
+//		stopThread();
 	}
 	
 	public synchronized void startThread() {
