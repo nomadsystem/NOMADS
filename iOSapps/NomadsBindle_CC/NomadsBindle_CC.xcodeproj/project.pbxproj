@@ -1488,12 +1488,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NomadsBindle_CC/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"NomadsBindle_CC/libs/kazmath/include\"";
 				INFOPLIST_FILE = NomadsBindle_CC/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1507,11 +1509,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NomadsBindle_CC/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"NomadsBindle_CC/libs/kazmath/include\"";
 				INFOPLIST_FILE = NomadsBindle_CC/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1581,6 +1585,7 @@
 				A8D4CAD815ACB1D30074E83D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8D4CB1D15ACB6C40074E83D /* Build configuration list for PBXNativeTarget "CCLib" */ = {
 			isa = XCConfigurationList;
@@ -1589,6 +1594,7 @@
 				A8D4CB1F15ACB6C40074E83D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
