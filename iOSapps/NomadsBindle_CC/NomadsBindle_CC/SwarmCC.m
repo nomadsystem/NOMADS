@@ -57,49 +57,61 @@
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
+        
+        // schedule update method for sending data
+        [self schedule:@selector(sendPos:) interval:0.2];
 	}
 	return self;
 }
 
 -(void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    beingMoved = true;
 	UITouch *touch = [touches anyObject];
 	CGPoint touchLocation = [touch locationInView: [touch view]];	
 	touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
 	
 	[label setPosition:touchLocation];
-    // ???
-    //currentCoords = [NSString stringWithFormat:@"%@", NSStringFromCGPoint(touchLocation)];
-    
-    // Should be in ViewController?
-     
-    //AppID
-    Byte myAppID = SOUND_SWARM;
-    NSLog(@"myAppID =  %i\n", myAppID);
-
-    //COMMAND
-    Byte myCommand = SEND_SPRITE_XY;
-    NSLog(@"myCommand =  %i\n", myCommand);
-
-    //DATA TYPE
-    Byte myDataType = INT;
-    NSLog(@"myDataType =  %i\n", myDataType);
-
-    //DATA LENGTH
-    //STK Currently set directly in sendWithGrainElts
-
-    //DATA ARRAY
-    NSInteger myDataInt[2];
     myDataInt[0] = touchLocation.x;
     myDataInt[1] = touchLocation.y;
-
-    [appDelegate->appSand sendWithGrainElts_AppID:myAppID
-                                          Command:myCommand 
-                                         DataType:myDataType 
-                                          DataLen:2
-                                          Integer:myDataInt];
-    
 }
+
+-(void)ccTouchesEnded:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    beingMoved = false;
+}
+
+- (void)sendPos:(ccTime)delta
+{
+    if (beingMoved) {
+        //NSLog(@"SendPos()");
+        //AppID
+        Byte myAppID = SOUND_SWARM;
+        //NSLog(@"myAppID =  %i\n", myAppID);
+        
+        //COMMAND
+        Byte myCommand = SEND_SPRITE_XY;
+        //NSLog(@"myCommand =  %i\n", myCommand);
+        
+        //DATA TYPE
+        Byte myDataType = INT;
+        //NSLog(@"myDataType =  %i\n", myDataType);
+        
+        //DATA LENGTH
+        //STK Currently set directly in sendWithGrainElts
+
+        //DATA ARRAY
+        //myDataInt is updated in ccTouchesMoved
+        
+        [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                              Command:myCommand 
+                                             DataType:myDataType 
+                                              DataLen:2
+                                              Integer:myDataInt];
+    }
+
+}
+
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {

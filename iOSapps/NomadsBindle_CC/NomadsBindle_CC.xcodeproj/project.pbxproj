@@ -1541,6 +1541,7 @@
 				A851C5A115AEA1A400CC5B8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8D4C93715ACB1CF0074E83D /* Build configuration list for PBXProject "NomadsBindle_CC" */ = {
 			isa = XCConfigurationList;
