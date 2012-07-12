@@ -19,6 +19,8 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     CCLabelTTF *label;
+    NSInteger myDataInt[2];
+    BOOL beingMoved;
 }
 
 @property (strong, retain) NSand *appSand;

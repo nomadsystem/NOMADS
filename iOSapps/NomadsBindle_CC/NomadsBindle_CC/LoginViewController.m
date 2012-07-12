@@ -87,12 +87,12 @@
 }
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    CLog(@"LVC: I GOT DATA FROM SAND!!!\n");
+    //CLog(@"LVC: I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
         //To be implemented
-        CLog(@"LVC: DataReadyHandle");
+        //CLog(@"LVC: DataReadyHandle");
     }
     
 }

@@ -101,7 +101,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    CLog(@"I GOT DATA FROM SAND!!!\n");
+    //CLog(@"I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
@@ -116,7 +116,7 @@
             //    NSLog(@"Filtering AppID 20");
             //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
             [self messageReceived:inGrain->str];
-            NSLog(@"Got Discuss Data");
+            //NSLog(@"Got Discuss Data");
         } 
         else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel****STK This will need to be changed to Commands
         {
@@ -136,7 +136,7 @@
             }
         }
         else {
-            NSLog(@"No Data for Discuss App");
+            //NSLog(@"No Data for Discuss App");
         }
     }
 

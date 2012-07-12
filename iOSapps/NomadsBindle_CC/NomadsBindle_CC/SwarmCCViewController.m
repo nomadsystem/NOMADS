@@ -200,7 +200,7 @@
     // e.g. self.myOutlet = nil;
     
     // Add to end of viewDidUnload
-    [[CCDirector sharedDirector] end];
+    //[[CCDirector sharedDirector] end];
 }
 
 
