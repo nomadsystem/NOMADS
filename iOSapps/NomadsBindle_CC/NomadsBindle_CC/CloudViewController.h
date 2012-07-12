@@ -19,18 +19,18 @@
     BindleAppDelegate *appDelegate;
     NSMutableArray	*messages;
     
-    UILabel __unsafe_unretained *cloudLabel;
-    @public UITabBarItem __unsafe_unretained *tbi;
+    UILabel __weak *cloudLabel;
+    @public UITabBarItem __weak *tbi;
 }
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *cloudLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UITextField *inputCloudField;
+@property (weak, nonatomic) IBOutlet UILabel *cloudLabel;
+@property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
 @property (nonatomic, retain) NSMutableArray *messages;
-@property (unsafe_unretained, nonatomic) IBOutlet UIButton *sendCloudButton;
-@property (unsafe_unretained, nonatomic) UITabBarItem *tbi;
+@property (weak, nonatomic) IBOutlet UIButton *sendCloudButton;
+@property (weak, nonatomic) UITabBarItem *tbi;
 
 - (IBAction)sendCloud:(id)sender;
 @end

@@ -9,13 +9,20 @@
 
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
+#import "NSand.h"
+#import "NGrain.h"
+#import "BindleAppDelegate.h"
 
 // HelloWorldLayer
 @interface SwarmCC : CCLayer
 {
+    NSand   *appSand;
+    BindleAppDelegate *appDelegate;
     CCLabelTTF *label;
-    NSString *currentCoords;
 }
+
+@property (strong, retain) NSand *appSand;
+@property (strong, retain) BindleAppDelegate *appDelegate;
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;

@@ -7,8 +7,13 @@
 //
 
 #import "SwarmCC.h"
+#import "NGlobals.h"
 
 @implementation SwarmCC
+
+@synthesize appSand;
+@synthesize appDelegate;
+
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
@@ -32,12 +37,9 @@
 	if( (self=[super init])) {
         
         NSLog(@"Init");
-        
-        // initialize string
-        currentCoords = @"0";
 		
 		// create and initialize a Label
-		label = [CCLabelTTF labelWithString:currentCoords fontName:@"Marker Felt" fontSize:64];
+		label = [CCLabelTTF labelWithString:@"*" fontName:@"Marker Felt" fontSize:64];
         
 		// ask director the the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
@@ -50,6 +52,11 @@
         
         // enable touch events
         self.isTouchEnabled = YES;
+        
+        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        // SAND:  set a pointer inside appSand so we get notified when network data is available
+        [appDelegate->appSand setDelegate:self];
 	}
 	return self;
 }
@@ -65,8 +72,6 @@
     //currentCoords = [NSString stringWithFormat:@"%@", NSStringFromCGPoint(touchLocation)];
     
     // Should be in ViewController?
-    /*
-    NSLog(@"Entered sendDiscuss");
      
     //AppID
     Byte myAppID = SOUND_SWARM;
@@ -77,32 +82,47 @@
     NSLog(@"myCommand =  %i\n", myCommand);
 
     //DATA TYPE
-    Byte myDataType = BYTE;
+    Byte myDataType = INT;
     NSLog(@"myDataType =  %i\n", myDataType);
 
     //DATA LENGTH
-    //****STK Currently set directly in sendWithGrainElts
+    //STK Currently set directly in sendWithGrainElts
 
     //DATA ARRAY
-    //****STK Currently set directly in sendWithGrainElts
+    NSInteger myDataInt[2];
+    myDataInt[0] = touchLocation.x;
+    myDataInt[1] = touchLocation.y;
 
     [appDelegate->appSand sendWithGrainElts_AppID:myAppID
                                           Command:myCommand 
                                          DataType:myDataType 
                                           DataLen:2
-                                           String:xyCoords;
-    */
+                                          Integer:myDataInt];
+    
+}
+
+- (void)dataReadyHandle:(NGrain *)inGrain
+{
+    //This delegate not being 
+    // CLog(@"I GOT DATA FROM SAND!!!\n");
+    
+    if (nil != inGrain) { 
+        
+        //        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
+        //        {
+        //            //    NSLog(@"Filtering AppID 22");
+        //            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+        //            //do something
+        //        }
+        
+        //        else {
+        //            NSLog(@"No Data for Swarm App");
+        //        }
+    }
+    
 }
 
 
 // on "dealloc" you need to release all your retained objects
-- (void) dealloc
-{
-	// in case you have something to dealloc, do it in this method
-	// in this particular example nothing needs to be released.
-	// cocos2d will automatically release all the children (Label)
-	
-	// don't forget to call "super dealloc"
-	[super dealloc];
-}
+- (void) dealloc {}
 @end

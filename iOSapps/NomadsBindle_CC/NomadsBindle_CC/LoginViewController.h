@@ -24,10 +24,10 @@
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 
-@property (unsafe_unretained, nonatomic) IBOutlet UITextField *loginTextField;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *connectStatusLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UIButton *loginButton;
-@property (unsafe_unretained, nonatomic) IBOutlet UIButton *disconnectButton;
+@property (weak, nonatomic) IBOutlet UITextField *loginTextField;
+@property (weak, nonatomic) IBOutlet UILabel *connectStatusLabel;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
 
 
 - (IBAction)loginButton:(id)sender;
