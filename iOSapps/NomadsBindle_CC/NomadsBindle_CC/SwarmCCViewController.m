@@ -204,9 +204,7 @@
 }
 
 
-- (void)dealloc {
-    [super dealloc];
-}
+- (void)dealloc {}
 
 
 @end

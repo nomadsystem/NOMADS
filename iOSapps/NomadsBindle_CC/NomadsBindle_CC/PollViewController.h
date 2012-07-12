@@ -32,19 +32,19 @@
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
-@property (unsafe_unretained, nonatomic) UITabBarItem *tbi;
+@property (weak, nonatomic) UITabBarItem *tbi;
 
 
 
 @property (strong, nonatomic) IBOutlet UIView *aeView;
 @property (strong, nonatomic) IBOutlet UIView *yesNoView;
 @property (strong, nonatomic) IBOutlet UIView *oneToTenView;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *pollPromptYesNoLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pollPromptYesNoLabel;
 @property (strong, nonatomic) IBOutlet UIView *blankView;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *pollPromptAeLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *pollPromptBlankLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *pollPromptOneToTenLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *pollOneToTenValLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pollPromptAeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pollPromptBlankLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pollPromptOneToTenLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pollOneToTenValLabel;
 
 
 @property (nonatomic, retain) NSMutableArray *messages;

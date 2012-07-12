@@ -23,7 +23,7 @@
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
-@property (unsafe_unretained, nonatomic) IBOutlet UITabBarItem *tbi;
+@property (weak, nonatomic) IBOutlet UITabBarItem *tbi;
 
 - (void)dataReadyHandle:(NGrain *)inGrain;
 

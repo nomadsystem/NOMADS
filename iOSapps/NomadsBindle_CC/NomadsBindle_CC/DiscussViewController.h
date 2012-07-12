@@ -21,21 +21,21 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     
-	UILabel         __unsafe_unretained *discussPromptLabel;
-    UITableView		__unsafe_unretained *tableView;
+	UILabel         __weak *discussPromptLabel;
+    UITableView		__weak *tableView;
 	NSMutableArray	*messages;
     
-    @public UITabBarItem __unsafe_unretained *tbi;
+    @public UITabBarItem __weak *tbi;
 }
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
-@property (unsafe_unretained, nonatomic) IBOutlet UITextField *inputDiscussField;
-@property (unsafe_unretained, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (unsafe_unretained, nonatomic) IBOutlet UILabel *discussPromptLabel;
-@property (unsafe_unretained, nonatomic) IBOutlet UIButton *sendDiscussButton;
-@property (unsafe_unretained, nonatomic) IBOutlet UITabBarItem *tbi;
+@property (weak, nonatomic) IBOutlet UILabel *discussPromptLabel;
+@property (weak, nonatomic) IBOutlet UIButton *sendDiscussButton;
+@property (weak, nonatomic) IBOutlet UITabBarItem *tbi;
 
 @property (nonatomic, retain) NSMutableArray *messages;
 
