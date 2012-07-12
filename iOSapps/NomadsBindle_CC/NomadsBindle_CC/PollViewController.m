@@ -152,7 +152,7 @@ int oneToTenVoteVal;
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    CLog(@"PVC: I GOT DATA FROM SAND!!!\n");
+    //CLog(@"PVC: I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
@@ -189,7 +189,7 @@ int oneToTenVoteVal;
         } 
         
         else {
-            CLog(@"No Data for Poll App");
+            //CLog(@"No Data for Poll App");
         }
     }
 }

@@ -85,7 +85,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    NSLog(@"CVC: I GOT DATA FROM SAND!!!\n");
+    //NSLog(@"CVC: I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
@@ -109,7 +109,7 @@
             }
         }
         else {
-            NSLog(@"No Data for Discuss App");
+            //NSLog(@"No Data for Discuss App");
         }
     }
 }
