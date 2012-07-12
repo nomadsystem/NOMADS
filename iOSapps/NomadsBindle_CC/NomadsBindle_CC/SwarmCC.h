@@ -21,6 +21,7 @@
     CCLabelTTF *label;
     NSInteger myDataInt[2];
     BOOL beingMoved;
+    CGSize size, sizeJava;
 }
 
 @property (strong, retain) NSand *appSand;
