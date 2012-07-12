@@ -42,7 +42,11 @@
 		label = [CCLabelTTF labelWithString:@"*" fontName:@"Marker Felt" fontSize:64];
         
 		// ask director the the window size
-		CGSize size = [[CCDirector sharedDirector] winSize];
+		size = [[CCDirector sharedDirector] winSize];
+        
+        // set Java display window size
+        sizeJava.width = 500;
+        sizeJava.height = 400;
         
 		// position the label on the center of the screen
 		label.position =  ccp( size.width /2 , size.height/2 );
@@ -68,12 +72,14 @@
 {
     beingMoved = true;
 	UITouch *touch = [touches anyObject];
-	CGPoint touchLocation = [touch locationInView: [touch view]];	
+	CGPoint touchLocation = [touch locationInView: [touch view]];
 	touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
 	
 	[label setPosition:touchLocation];
-    myDataInt[0] = touchLocation.x;
-    myDataInt[1] = touchLocation.y;
+    // scale touch range to SoundSwarmDisplay (Java) window size
+    myDataInt[0] = (touchLocation.x * (1/size.width)) * sizeJava.width;
+    // Y needs to be flipped
+    myDataInt[1] = ((size.height - touchLocation.y) * (1/size.height)) * sizeJava.height;
 }
 
 -(void)ccTouchesEnded:(UITouch *)touch withEvent:(UIEvent *)event
