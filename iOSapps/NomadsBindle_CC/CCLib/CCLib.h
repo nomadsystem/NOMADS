@@ -2,7 +2,7 @@
 //  CCLib.h
 //  CCLib
 //
-//  Created by Paul Turowski on 7/12/12.
+//  Created by Paul Turowski on 7/16/12.
 //  Copyright (c) 2012 University of Oregon. All rights reserved.
 //
 
