@@ -5,9 +5,10 @@ import java.lang.Object.*;
 import nomads.v210.*;
 
 public class NomadServer implements Runnable {  
-    private NomadServerThread clients[] = new NomadServerThread[3000];
+    private NomadServerThread clients[] = new NomadServerThread[5000];
     private NomadServerThread currentClient;
     private short clientThreadNum[] = new short[100000];
+
     private String IPsLoggedIn[] = new String[1000];
     private String users[] = new String[1000];
     
@@ -76,9 +77,56 @@ public class NomadServer implements Runnable {
 	}
     }
 
+   public synchronized void getFiles(String iDir) {
+	File dir = new File(iDir); 
+	children = dir.list(new DirFilter(".")); 
+	if (children == null) { // Either dir does not exist or is not a directory 
+	} else { 
+	    for (int i=0; i<children.length; i++) { // Get filename of file or directory 
+		String filename = children[i]; 
+		NGlobals.sPrint("Getting file:  " + filename); 
+	    } 
+	} // It is also possible to filter the list of returned files. 
+	// This example does not return any files that start with `.'. 
+
+	// FilenameFilter filter = new FilenameFilter() { 
+	// 	public boolean accept(File dir, String name) {
+	// 	    return !name.startsWith("."); 
+	// 	} 
+	//     };
+	
+	// children = dir.list(filter); 
+    }
+
+    private synchronized short checkIP (String IP) {
+    	NGlobals.sPrint("          checkIP(" + IP + ")");
+	
+    	for (int i = 0; i < IPCount; i++) {
+	    if (IPsLoggedIn[i] == null)
+		return (short)-1;
+	    if (IPsLoggedIn[i].equals(IP))
+		return (short)i;
+	}
+	return (short)-1;
+    }
+
+    class DirFilter implements FilenameFilter {
+	String afn;
+	DirFilter(String afn) { this.afn = afn; }
+	public boolean accept(File dir, String name) {
+	    // Strip path information:
+	    String f = new File(name).getName();
+	    return f.indexOf(afn) != -1;
+	}
+    }
+
+    // ================================================================
+    //    handle ( THREAD_ID , grain )
+    // ================================================================
+
     public synchronized void handle(int THREAD_ID, NGrain myGrain)  {  
 	String tUser, IP, tempString;
-	int loginStatus = 0;
+	Boolean tLoginStatus = false;
 	int cNum = -1;
 	int cIPNum = -1;
 	int nBlocks; //number of "blocks" of data
@@ -95,14 +143,11 @@ public class NomadServer implements Runnable {
     	NGlobals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
     	
 		
-	// =====================================================================================================
-	// BEGIN Main data routing code
-	// =====================================================================================================
 
 	// Do the following for EACH client
 
-	// 1 ---- READ ---------------------------------------
-	// ---------------------------------------------------
+	// 1 ---- READ ------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 
 	NGlobals.sPrint("===== READING =====");
 
@@ -118,47 +163,108 @@ public class NomadServer implements Runnable {
 	NGlobals.sPrint("dataType: " + incAppDataType);
 	NGlobals.sPrint("dataLen: " + incAppDataLen);
 
+	// Thread admin stuff ---------------------------------------------------------------------
+
 	// Get client number of inc client
 	tCNum = clientThreadNum[THREAD_ID];
+
+	if (tCNum < 0) {
+	    NGlobals.sPrint("   ERROR:  client thread not found.");
+	    // TODO:  send the bye command!!!
+	    remove(THREAD_ID);
+	    return;
+	}
+
 	currentClient = clients[tCNum];
 
-	// REGISTER the client's appID with the SERVER client thread
-	if (clients[tCNum].getAppID() == -1) {
+	// Login and THREAD registration ----------------------------------------------------------
+
+	// 1: check if client thread is registered
+	//    if not reg, REGISTER the client's appID with the SERVER client thread
+	if (currentClient.getAppID() == -1) {
 	    NGlobals.sPrint("===== REGISTERING =====");
-
 	    NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
-	    clients[tCNum].setAppID(incAppID);
+	    currentClient.setAppID(incAppID);
 	}
 
-	// Read each specific BLOCK (INT OR BYTE)
-	if (incAppDataType == NDataType.INT) {
-	    for (int j = 0; j < incAppDataLen; j++) {
-		//NGlobals.sPrint("INT: " + myGrain.iArray[j]);
+	// 2: check login
+	//      only the LOGIN app can log you in
+	//      if you're not logged in, you get booted
+
+	tLoginStatus = currentClient.getLoginStatus();
+	if (currentClient.getAppID() == NAppID.LOGIN) {
+	    if (tLoginStatus == true) {
+		// send back "you're already logged in" message / LOGIN_STATUS w/ value = 2
+		byte[] dx = new byte[1];
+		dx[0] = 2;
+		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.BYTE, 1, dx);
+	    }
+	    else {
+		// Log the client in
+		String tString = new String(myGrain.bArray);
+		NGlobals.sPrint("Got username: " + tString);
+		clients[tCNum].setUser(tString);
+
+		// Set new login status 
+		clients[tCNum].setLoginStatus(true);
+		tLoginStatus = currentClient.getLoginStatus();
+
+		// send back "successful login" message / LOGIN_STATUS w/ value = 1
+		byte[] dx = new byte[1];
+		dx[0] = 1;
+		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.BYTE, 1, dx);
 	    }
 	}
-	if (incAppDataType == NDataType.BYTE) {
-	    for (int j = 0; j < incAppDataLen; j++) {
-		// NGlobals.sPrint("BYTE: " + (char) myGrain.bArray[j]);
-	    }
+
+	// Comment this out to turn back on login
+
+	// tLoginStatus = true;
+
+	// Kick -------------------------------------------------------------------------------------
+
+	// X:  if you're not the LOGIN app providing the correct info, you get booted here
+	if (tLoginStatus == false) {
+	    NGlobals.sPrint("   WARNING:  client THREAD NOT logged in.");
+	    remove(THREAD_ID);
+	    // TODO: send back some sand data re: login info
+	    return;
 	}
-    
 
-	// 2 ---- WRITE ---------------------------------------
-	// ---------------------------------------------------
+	// ====================================================================================
+	//  At this point we're logged in, and we have your SAND data GRAIN
+	// ====================================================================================
 
-	// For each client SEND ALL DATA
+	NGlobals.sPrint("   client THREAD logged in.");
+
+	// Grab IP (more for data logging)
+
+	IP = currentClient.getIP();
+
+	// 2 ---- WRITE -----------------------------------------------------------------
+	// ------------------------------------------------------------------------------
+
+	// ====================================================================================================R
+	// BEGIN Main data routing code
+	//
+	//    each    if (incAppID ==   )    block below corresponds to a single app's input data GRAIN
+	//    depending on who is sending us data
+	//    we cycle through all (or a subset of) clients and send data out
+	//
+	// ====================================================================================================R
 
 	NGlobals.sPrint("===== WRITING =====");
 
-	for (int c = 0; c < clientCount; c++) {
-	
-	    // Get the client off the master list
-	    currentClient = clients[c];
-	    NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+	// Sound SWARM Routing Logic ==========================================================================R
 
-	    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+	// TODO:  send 3 ints instead, 1st int is the THREAD_ID
 
-	    if (incAppID == NAppID.SOUND_SWARM) {
+	if (incAppID == NAppID.SOUND_SWARM) {
+	    for (int c = 0; c < clientCount; c++) {
+		
+		// Get the client off the master list
+		currentClient = clients[c];
+		NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+		
 		if (currentClient.getAppID() == NAppID.SOUND_SWARM_DISPLAY) {
 		    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
 		    int[] x = new int[1];
@@ -166,22 +272,37 @@ public class NomadServer implements Runnable {
 		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
 		}
 	    }
-	    
+
+	}
+
+	// GENERIC Logic =============================================================
+	//    -for each client SEND ALL DATA
+
+	else {
 	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
-	    myGrain.print();
-	    // Write the data out
-	    currentClient.threadSand.sendGrain(myGrain);
-
-	}   
-	// END --------------------------------------------------------------------
-	NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
-
-	// Free up memory
-	if (myGrain != null) {
-	    myGrain = null;
+	    for (int c = 0; c < clientCount; c++) {
+		
+		// Get the client off the master list
+		currentClient = clients[c];
+		NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
+		
+		// Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+		
+		
+		myGrain.print();
+		// Write the data out
+		currentClient.threadSand.sendGrain(myGrain);
+		
+	    }   
+	    // END --------------------------------------------------------------------
+	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+	    
+	    // Free up memory
+	    if (myGrain != null) {
+		myGrain = null;
+	    }
 	}
     }
-
     
     // =====================================================================================================
     // END main data routing code --- handle() fn
@@ -221,9 +342,6 @@ public class NomadServer implements Runnable {
 
     	NGlobals.sPrint("     clientCount = " + clientCount);
     	NGlobals.sPrint("     clients.length = " + clients.length);
-
-
-	
 
     	if (clientCount < clients.length) {  
 	    NGlobals.sPrint("  Client accepted: " + socket);
