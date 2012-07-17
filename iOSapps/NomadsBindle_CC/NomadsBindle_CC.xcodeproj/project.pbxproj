@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A890459C15B48EB40009BB6A /* Cursor.m in Sources */ = {isa = PBXBuildFile; fileRef = A890459715B48EB40009BB6A /* Cursor.m */; };
-		A890459D15B48EB40009BB6A /* MovableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A890459915B48EB40009BB6A /* MovableObject.m */; };
-		A890459E15B48EB40009BB6A /* SwarmCC.m in Sources */ = {isa = PBXBuildFile; fileRef = A890459B15B48EB40009BB6A /* SwarmCC.m */; };
 		A89045A915B48F780009BB6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8D4C94D15ACB1CF0074E83D /* Foundation.framework */; };
-		A89045AF15B48F780009BB6A /* CCLib.m in Sources */ = {isa = PBXBuildFile; fileRef = A89045AE15B48F780009BB6A /* CCLib.m */; };
 		A89045B315B48FAE0009BB6A /* libCCLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89045A815B48F780009BB6A /* libCCLib.a */; };
 		A89046A815B490270009BB6A /* CCAction.h in Headers */ = {isa = PBXBuildFile; fileRef = A89045B615B490270009BB6A /* CCAction.h */; };
 		A89046A915B490270009BB6A /* CCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A89045B715B490270009BB6A /* CCAction.m */; };
@@ -241,7 +237,6 @@
 		A890478915B490270009BB6A /* vec4.c in Sources */ = {isa = PBXBuildFile; fileRef = A89046A415B490270009BB6A /* vec4.c */; };
 		A890479315B4A0970009BB6A /* ring.plist in Resources */ = {isa = PBXBuildFile; fileRef = A890479115B4A0970009BB6A /* ring.plist */; };
 		A890479415B4A0970009BB6A /* ring.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = A890479215B4A0970009BB6A /* ring.pvr.ccz */; };
-		A890479A15B4C3AC0009BB6A /* Cursor.plist in Resources */ = {isa = PBXBuildFile; fileRef = A890479915B4C3AC0009BB6A /* Cursor.plist */; };
 		A8D4C94215ACB1CF0074E83D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8D4C94115ACB1CF0074E83D /* QuartzCore.framework */; };
 		A8D4C94415ACB1CF0074E83D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8D4C94315ACB1CF0074E83D /* OpenGLES.framework */; };
 		A8D4C94615ACB1CF0074E83D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8D4C94515ACB1CF0074E83D /* OpenAL.framework */; };
@@ -274,27 +269,23 @@
 		A8D4CAF415ACB5610074E83D /* PollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CAE715ACB5610074E83D /* PollViewController.m */; };
 		A8D4CAF515ACB5610074E83D /* PollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8D4CAE815ACB5610074E83D /* PollViewController.xib */; };
 		A8D4CAF915ACB5840074E83D /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = A8D4CAF815ACB5840074E83D /* SandDunes1_960x640.png */; };
-		A8D4CB0B15ACB6730074E83D /* NAppID.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0015ACB6730074E83D /* NAppID.m */; };
-		A8D4CB0C15ACB6730074E83D /* NCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0215ACB6730074E83D /* NCommand.m */; };
-		A8D4CB0D15ACB6730074E83D /* NDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0415ACB6730074E83D /* NDataType.m */; };
-		A8D4CB0E15ACB6730074E83D /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0615ACB6730074E83D /* NGlobals.m */; };
-		A8D4CB0F15ACB6730074E83D /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0815ACB6730074E83D /* NGrain.m */; };
-		A8D4CB1015ACB6730074E83D /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CB0A15ACB6730074E83D /* NSand.m */; };
 		A8D4CD0115ACC22D0074E83D /* SwarmCCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */; };
 		A8D4CD0215ACC22D0074E83D /* SwarmCCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */; };
+		A8FC9F8415B5ED6A00D76CF7 /* Cursor.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F6E15B5ED6A00D76CF7 /* Cursor.m */; };
+		A8FC9F8515B5ED6A00D76CF7 /* Cursor.plist in Resources */ = {isa = PBXBuildFile; fileRef = A8FC9F6F15B5ED6A00D76CF7 /* Cursor.plist */; };
+		A8FC9F8615B5ED6A00D76CF7 /* MovableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7115B5ED6A00D76CF7 /* MovableObject.m */; };
+		A8FC9F8815B5ED6A00D76CF7 /* NCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7515B5ED6A00D76CF7 /* NCommand.m */; };
+		A8FC9F8915B5ED6A00D76CF7 /* NDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7715B5ED6A00D76CF7 /* NDataType.m */; };
+		A8FC9F8A15B5ED6A00D76CF7 /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7915B5ED6A00D76CF7 /* NGlobals.m */; };
+		A8FC9F8B15B5ED6A00D76CF7 /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7B15B5ED6A00D76CF7 /* NGrain.m */; };
+		A8FC9F8C15B5ED6A00D76CF7 /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7D15B5ED6A00D76CF7 /* NSand.m */; };
+		A8FC9F8D15B5ED6A00D76CF7 /* SwarmCC.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F7F15B5ED6A00D76CF7 /* SwarmCC.m */; };
+		A8FC9F8E15B5ED6A00D76CF7 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */; };
+		A8FC9F8F15B5ED6A00D76CF7 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A890459615B48EB40009BB6A /* Cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cursor.h; sourceTree = "<group>"; };
-		A890459715B48EB40009BB6A /* Cursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cursor.m; sourceTree = "<group>"; };
-		A890459815B48EB40009BB6A /* MovableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovableObject.h; sourceTree = "<group>"; };
-		A890459915B48EB40009BB6A /* MovableObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovableObject.m; sourceTree = "<group>"; };
-		A890459A15B48EB40009BB6A /* SwarmCC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmCC.h; sourceTree = "<group>"; };
-		A890459B15B48EB40009BB6A /* SwarmCC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmCC.m; sourceTree = "<group>"; };
 		A89045A815B48F780009BB6A /* libCCLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCCLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A89045AC15B48F780009BB6A /* CCLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CCLib-Prefix.pch"; sourceTree = "<group>"; };
-		A89045AD15B48F780009BB6A /* CCLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCLib.h; sourceTree = "<group>"; };
-		A89045AE15B48F780009BB6A /* CCLib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCLib.m; sourceTree = "<group>"; };
 		A89045B615B490270009BB6A /* CCAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAction.h; sourceTree = "<group>"; };
 		A89045B715B490270009BB6A /* CCAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCAction.m; sourceTree = "<group>"; };
 		A89045B815B490270009BB6A /* CCActionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCActionCamera.h; sourceTree = "<group>"; };
@@ -526,11 +517,8 @@
 		A89046A515B490270009BB6A /* LICENSE_cocos2d.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE_cocos2d.txt; sourceTree = "<group>"; };
 		A89046A615B490270009BB6A /* LICENSE_CocosDenshion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE_CocosDenshion.txt; sourceTree = "<group>"; };
 		A89046A715B490270009BB6A /* LICENSE_Kazmath.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE_Kazmath.txt; sourceTree = "<group>"; };
-		A890478F15B494DA0009BB6A /* CommonProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProtocols.h; sourceTree = "<group>"; };
-		A890479015B495360009BB6A /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		A890479115B4A0970009BB6A /* ring.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ring.plist; path = Resources/ring.plist; sourceTree = "<group>"; };
 		A890479215B4A0970009BB6A /* ring.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; name = ring.pvr.ccz; path = Resources/ring.pvr.ccz; sourceTree = "<group>"; };
-		A890479915B4C3AC0009BB6A /* Cursor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Cursor.plist; sourceTree = "<group>"; };
 		A8D4C93D15ACB1CF0074E83D /* NomadsBindle_CC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NomadsBindle_CC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D4C94115ACB1CF0074E83D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A8D4C94315ACB1CF0074E83D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -571,22 +559,33 @@
 		A8D4CAE715ACB5610074E83D /* PollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollViewController.m; sourceTree = "<group>"; };
 		A8D4CAE815ACB5610074E83D /* PollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollViewController.xib; sourceTree = "<group>"; };
 		A8D4CAF815ACB5840074E83D /* SandDunes1_960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SandDunes1_960x640.png; path = Resources/SandDunes1_960x640.png; sourceTree = "<group>"; };
-		A8D4CAFF15ACB6730074E83D /* NAppID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAppID.h; sourceTree = "<group>"; };
-		A8D4CB0015ACB6730074E83D /* NAppID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAppID.m; sourceTree = "<group>"; };
-		A8D4CB0115ACB6730074E83D /* NCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NCommand.h; sourceTree = "<group>"; };
-		A8D4CB0215ACB6730074E83D /* NCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NCommand.m; sourceTree = "<group>"; };
-		A8D4CB0315ACB6730074E83D /* NDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDataType.h; sourceTree = "<group>"; };
-		A8D4CB0415ACB6730074E83D /* NDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDataType.m; sourceTree = "<group>"; };
-		A8D4CB0515ACB6730074E83D /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGlobals.h; sourceTree = "<group>"; };
-		A8D4CB0615ACB6730074E83D /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGlobals.m; sourceTree = "<group>"; };
-		A8D4CB0715ACB6730074E83D /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGrain.h; sourceTree = "<group>"; };
-		A8D4CB0815ACB6730074E83D /* NGrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGrain.m; sourceTree = "<group>"; };
-		A8D4CB0915ACB6730074E83D /* NSand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSand.h; sourceTree = "<group>"; };
-		A8D4CB0A15ACB6730074E83D /* NSand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSand.m; sourceTree = "<group>"; };
 		A8D4CCFE15ACC22C0074E83D /* SwarmCCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmCCViewController.h; sourceTree = "<group>"; };
 		A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmCCViewController.m; sourceTree = "<group>"; };
 		A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwarmCCViewController.xib; sourceTree = "<group>"; };
 		A8D4CD0315ACC3400074E83D /* GameConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
+		A8FC9F6B15B5ED6A00D76CF7 /* CommonProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProtocols.h; sourceTree = "<group>"; };
+		A8FC9F6C15B5ED6A00D76CF7 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		A8FC9F6D15B5ED6A00D76CF7 /* Cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cursor.h; sourceTree = "<group>"; };
+		A8FC9F6E15B5ED6A00D76CF7 /* Cursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cursor.m; sourceTree = "<group>"; };
+		A8FC9F6F15B5ED6A00D76CF7 /* Cursor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Cursor.plist; sourceTree = "<group>"; };
+		A8FC9F7015B5ED6A00D76CF7 /* MovableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovableObject.h; sourceTree = "<group>"; };
+		A8FC9F7115B5ED6A00D76CF7 /* MovableObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovableObject.m; sourceTree = "<group>"; };
+		A8FC9F7415B5ED6A00D76CF7 /* NCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NCommand.h; sourceTree = "<group>"; };
+		A8FC9F7515B5ED6A00D76CF7 /* NCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NCommand.m; sourceTree = "<group>"; };
+		A8FC9F7615B5ED6A00D76CF7 /* NDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDataType.h; sourceTree = "<group>"; };
+		A8FC9F7715B5ED6A00D76CF7 /* NDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDataType.m; sourceTree = "<group>"; };
+		A8FC9F7815B5ED6A00D76CF7 /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGlobals.h; sourceTree = "<group>"; };
+		A8FC9F7915B5ED6A00D76CF7 /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGlobals.m; sourceTree = "<group>"; };
+		A8FC9F7A15B5ED6A00D76CF7 /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGrain.h; sourceTree = "<group>"; };
+		A8FC9F7B15B5ED6A00D76CF7 /* NGrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGrain.m; sourceTree = "<group>"; };
+		A8FC9F7C15B5ED6A00D76CF7 /* NSand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSand.h; sourceTree = "<group>"; };
+		A8FC9F7D15B5ED6A00D76CF7 /* NSand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSand.m; sourceTree = "<group>"; };
+		A8FC9F7E15B5ED6A00D76CF7 /* SwarmCC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmCC.h; sourceTree = "<group>"; };
+		A8FC9F7F15B5ED6A00D76CF7 /* SwarmCC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmCC.m; sourceTree = "<group>"; };
+		A8FC9F8015B5ED6A00D76CF7 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmDrawView.h; sourceTree = "<group>"; };
+		A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
+		A8FC9F8215B5ED6A00D76CF7 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
+		A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -618,40 +617,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A890459515B48EB40009BB6A /* CCObjects */ = {
-			isa = PBXGroup;
-			children = (
-				A890478F15B494DA0009BB6A /* CommonProtocols.h */,
-				A890479015B495360009BB6A /* Constants.h */,
-				A890459615B48EB40009BB6A /* Cursor.h */,
-				A890459715B48EB40009BB6A /* Cursor.m */,
-				A890459815B48EB40009BB6A /* MovableObject.h */,
-				A890459915B48EB40009BB6A /* MovableObject.m */,
-				A890459A15B48EB40009BB6A /* SwarmCC.h */,
-				A890459B15B48EB40009BB6A /* SwarmCC.m */,
-				A890479915B4C3AC0009BB6A /* Cursor.plist */,
-			);
-			path = CCObjects;
-			sourceTree = "<group>";
-		};
-		A89045AA15B48F780009BB6A /* CCLib */ = {
-			isa = PBXGroup;
-			children = (
-				A89045AD15B48F780009BB6A /* CCLib.h */,
-				A89045AE15B48F780009BB6A /* CCLib.m */,
-				A89045AB15B48F780009BB6A /* Supporting Files */,
-			);
-			path = CCLib;
-			sourceTree = "<group>";
-		};
-		A89045AB15B48F780009BB6A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				A89045AC15B48F780009BB6A /* CCLib-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		A89045B415B490270009BB6A /* libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -989,8 +954,6 @@
 		A8D4C93215ACB1CF0074E83D = {
 			isa = PBXGroup;
 			children = (
-				A8D4CAFE15ACB6730074E83D /* ClassLib */,
-				A89045AA15B48F780009BB6A /* CCLib */,
 				A8D4C94015ACB1CF0074E83D /* Frameworks */,
 				A8D4C95315ACB1CF0074E83D /* NomadsBindle_CC */,
 				A8D4C93E15ACB1CF0074E83D /* Products */,
@@ -1025,8 +988,8 @@
 		A8D4C95315ACB1CF0074E83D /* NomadsBindle_CC */ = {
 			isa = PBXGroup;
 			children = (
-				A89045B415B490270009BB6A /* libs */,
-				A890459515B48EB40009BB6A /* CCObjects */,
+				A8FC9F9215B5EE2800D76CF7 /* NomadsLib */,
+				A8FC9F9115B5EDFF00D76CF7 /* CC */,
 				A8D4CADB15ACB5610074E83D /* BindleAppDelegate.h */,
 				A8D4CADC15ACB5610074E83D /* BindleAppDelegate.m */,
 				A8D4CADD15ACB5610074E83D /* CloudViewController.h */,
@@ -1036,6 +999,7 @@
 				A8D4CAE115ACB5610074E83D /* DiscussViewController.m */,
 				A8D4CAE215ACB5610074E83D /* DiscussViewController.xib */,
 				A8D4CD0315ACC3400074E83D /* GameConfig.h */,
+				A89045B415B490270009BB6A /* libs */,
 				A8D4CAE315ACB5610074E83D /* LoginViewController.h */,
 				A8D4CAE415ACB5610074E83D /* LoginViewController.m */,
 				A8D4CAE515ACB5610074E83D /* LoginViewController.xib */,
@@ -1047,6 +1011,10 @@
 				A8D4CCFE15ACC22C0074E83D /* SwarmCCViewController.h */,
 				A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */,
 				A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */,
+				A8FC9F8015B5ED6A00D76CF7 /* SwarmDrawView.h */,
+				A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */,
+				A8FC9F8215B5ED6A00D76CF7 /* SwarmViewController.h */,
+				A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */,
 			);
 			path = NomadsBindle_CC;
 			sourceTree = "<group>";
@@ -1083,23 +1051,37 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		A8D4CAFE15ACB6730074E83D /* ClassLib */ = {
+		A8FC9F9115B5EDFF00D76CF7 /* CC */ = {
 			isa = PBXGroup;
 			children = (
-				A8D4CAFF15ACB6730074E83D /* NAppID.h */,
-				A8D4CB0015ACB6730074E83D /* NAppID.m */,
-				A8D4CB0115ACB6730074E83D /* NCommand.h */,
-				A8D4CB0215ACB6730074E83D /* NCommand.m */,
-				A8D4CB0315ACB6730074E83D /* NDataType.h */,
-				A8D4CB0415ACB6730074E83D /* NDataType.m */,
-				A8D4CB0515ACB6730074E83D /* NGlobals.h */,
-				A8D4CB0615ACB6730074E83D /* NGlobals.m */,
-				A8D4CB0715ACB6730074E83D /* NGrain.h */,
-				A8D4CB0815ACB6730074E83D /* NGrain.m */,
-				A8D4CB0915ACB6730074E83D /* NSand.h */,
-				A8D4CB0A15ACB6730074E83D /* NSand.m */,
+				A8FC9F7E15B5ED6A00D76CF7 /* SwarmCC.h */,
+				A8FC9F7F15B5ED6A00D76CF7 /* SwarmCC.m */,
+				A8FC9F7015B5ED6A00D76CF7 /* MovableObject.h */,
+				A8FC9F7115B5ED6A00D76CF7 /* MovableObject.m */,
+				A8FC9F6B15B5ED6A00D76CF7 /* CommonProtocols.h */,
+				A8FC9F6C15B5ED6A00D76CF7 /* Constants.h */,
+				A8FC9F6D15B5ED6A00D76CF7 /* Cursor.h */,
+				A8FC9F6E15B5ED6A00D76CF7 /* Cursor.m */,
+				A8FC9F6F15B5ED6A00D76CF7 /* Cursor.plist */,
 			);
-			path = ClassLib;
+			name = CC;
+			sourceTree = "<group>";
+		};
+		A8FC9F9215B5EE2800D76CF7 /* NomadsLib */ = {
+			isa = PBXGroup;
+			children = (
+				A8FC9F7415B5ED6A00D76CF7 /* NCommand.h */,
+				A8FC9F7515B5ED6A00D76CF7 /* NCommand.m */,
+				A8FC9F7615B5ED6A00D76CF7 /* NDataType.h */,
+				A8FC9F7715B5ED6A00D76CF7 /* NDataType.m */,
+				A8FC9F7815B5ED6A00D76CF7 /* NGlobals.h */,
+				A8FC9F7915B5ED6A00D76CF7 /* NGlobals.m */,
+				A8FC9F7A15B5ED6A00D76CF7 /* NGrain.h */,
+				A8FC9F7B15B5ED6A00D76CF7 /* NGrain.m */,
+				A8FC9F7C15B5ED6A00D76CF7 /* NSand.h */,
+				A8FC9F7D15B5ED6A00D76CF7 /* NSand.m */,
+			);
+			name = NomadsLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1327,7 +1309,7 @@
 				A8D4CD0215ACC22D0074E83D /* SwarmCCViewController.xib in Resources */,
 				A890479315B4A0970009BB6A /* ring.plist in Resources */,
 				A890479415B4A0970009BB6A /* ring.pvr.ccz in Resources */,
-				A890479A15B4C3AC0009BB6A /* Cursor.plist in Resources */,
+				A8FC9F8515B5ED6A00D76CF7 /* Cursor.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1338,7 +1320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A89045AF15B48F780009BB6A /* CCLib.m in Sources */,
 				A89046A915B490270009BB6A /* CCAction.m in Sources */,
 				A89046AB15B490270009BB6A /* CCActionCamera.m in Sources */,
 				A89046AD15B490270009BB6A /* CCActionCatmullRom.m in Sources */,
@@ -1452,16 +1433,17 @@
 				A8D4CAF015ACB5610074E83D /* DiscussViewController.m in Sources */,
 				A8D4CAF215ACB5610074E83D /* LoginViewController.m in Sources */,
 				A8D4CAF415ACB5610074E83D /* PollViewController.m in Sources */,
-				A8D4CB0B15ACB6730074E83D /* NAppID.m in Sources */,
-				A8D4CB0C15ACB6730074E83D /* NCommand.m in Sources */,
-				A8D4CB0D15ACB6730074E83D /* NDataType.m in Sources */,
-				A8D4CB0E15ACB6730074E83D /* NGlobals.m in Sources */,
-				A8D4CB0F15ACB6730074E83D /* NGrain.m in Sources */,
-				A8D4CB1015ACB6730074E83D /* NSand.m in Sources */,
 				A8D4CD0115ACC22D0074E83D /* SwarmCCViewController.m in Sources */,
-				A890459C15B48EB40009BB6A /* Cursor.m in Sources */,
-				A890459D15B48EB40009BB6A /* MovableObject.m in Sources */,
-				A890459E15B48EB40009BB6A /* SwarmCC.m in Sources */,
+				A8FC9F8415B5ED6A00D76CF7 /* Cursor.m in Sources */,
+				A8FC9F8615B5ED6A00D76CF7 /* MovableObject.m in Sources */,
+				A8FC9F8815B5ED6A00D76CF7 /* NCommand.m in Sources */,
+				A8FC9F8915B5ED6A00D76CF7 /* NDataType.m in Sources */,
+				A8FC9F8A15B5ED6A00D76CF7 /* NGlobals.m in Sources */,
+				A8FC9F8B15B5ED6A00D76CF7 /* NGrain.m in Sources */,
+				A8FC9F8C15B5ED6A00D76CF7 /* NSand.m in Sources */,
+				A8FC9F8D15B5ED6A00D76CF7 /* SwarmCC.m in Sources */,
+				A8FC9F8E15B5ED6A00D76CF7 /* SwarmDrawView.m in Sources */,
+				A8FC9F8F15B5ED6A00D76CF7 /* SwarmViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1600,6 +1582,7 @@
 				A89045B215B48F780009BB6A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8D4C93715ACB1CF0074E83D /* Build configuration list for PBXProject "NomadsBindle_CC" */ = {
 			isa = XCConfigurationList;
