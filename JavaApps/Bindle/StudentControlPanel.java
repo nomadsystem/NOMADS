@@ -10,7 +10,7 @@ import nomads.v210.*;
 public class StudentControlPanel extends JApplet  implements  ActionListener {
 	// Change to your directory
 	// for production version, just use "/"
-	String user = new String("http://nomads.music.virginia.edu/turowski/NOMADS/JavaApps/");
+	String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
 	
 	NSand studentControlPanelSand;
 	private NomadsAppThread nThread;
