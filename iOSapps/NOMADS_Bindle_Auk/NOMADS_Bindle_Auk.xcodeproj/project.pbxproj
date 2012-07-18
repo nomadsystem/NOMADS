@@ -1,0 +1,325 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77B715B70D0200C71BB1 /* UIKit.framework */; };
+		F91C77BA15B70D0200C71BB1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77B915B70D0200C71BB1 /* Foundation.framework */; };
+		F91C77BC15B70D0200C71BB1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */; };
+		F91C77D715B70D4F00C71BB1 /* BindleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77CF15B70D4F00C71BB1 /* BindleAppDelegate.m */; };
+		F91C77D815B70D4F00C71BB1 /* CloudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77D115B70D4F00C71BB1 /* CloudViewController.m */; };
+		F91C77D915B70D4F00C71BB1 /* CloudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77D215B70D4F00C71BB1 /* CloudViewController.xib */; };
+		F91C77DA15B70D5000C71BB1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C77D315B70D4F00C71BB1 /* Default.png */; };
+		F91C77DB15B70D5000C71BB1 /* DiscussViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77D515B70D4F00C71BB1 /* DiscussViewController.m */; };
+		F91C77DC15B70D5000C71BB1 /* DiscussViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77D615B70D4F00C71BB1 /* DiscussViewController.xib */; };
+		F91C77E115B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */; };
+		F91C77E215B70DCC00C71BB1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77DF15B70DCC00C71BB1 /* LoginViewController.m */; };
+		F91C77E315B70DCC00C71BB1 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77E015B70DCC00C71BB1 /* LoginViewController.xib */; };
+		F91C77F415B70DD900C71BB1 /* PollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77EA15B70DD900C71BB1 /* PollViewController.m */; };
+		F91C77F515B70DD900C71BB1 /* PollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77EB15B70DD900C71BB1 /* PollViewController.xib */; };
+		F91C77F615B70DD900C71BB1 /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */; };
+		F91C77F715B70DD900C71BB1 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */; };
+		F91C77F815B70DD900C71BB1 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77F015B70DD900C71BB1 /* SwarmViewController.m */; };
+		F91C77FF15B70E1500C71BB1 /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FA15B70E1500C71BB1 /* NGlobals.m */; };
+		F91C780015B70E1500C71BB1 /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FC15B70E1500C71BB1 /* NGrain.m */; };
+		F91C780115B70E1500C71BB1 /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FE15B70E1500C71BB1 /* NSand.m */; };
+		F91C780315B70E3200C71BB1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C780215B70E3200C71BB1 /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle_Auk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F91C77B715B70D0200C71BB1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F91C77B915B70D0200C71BB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F91C77CE15B70D4F00C71BB1 /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
+		F91C77CF15B70D4F00C71BB1 /* BindleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BindleAppDelegate.m; sourceTree = "<group>"; };
+		F91C77D015B70D4F00C71BB1 /* CloudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudViewController.h; sourceTree = "<group>"; };
+		F91C77D115B70D4F00C71BB1 /* CloudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudViewController.m; sourceTree = "<group>"; };
+		F91C77D215B70D4F00C71BB1 /* CloudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloudViewController.xib; sourceTree = "<group>"; };
+		F91C77D315B70D4F00C71BB1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F91C77D415B70D4F00C71BB1 /* DiscussViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscussViewController.h; sourceTree = "<group>"; };
+		F91C77D515B70D4F00C71BB1 /* DiscussViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscussViewController.m; sourceTree = "<group>"; };
+		F91C77D615B70D4F00C71BB1 /* DiscussViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiscussViewController.xib; sourceTree = "<group>"; };
+		F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
+		F91C77DE15B70DCC00C71BB1 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		F91C77DF15B70DCC00C71BB1 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		F91C77E015B70DCC00C71BB1 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		F91C77E515B70DD900C71BB1 /* NOMADS_Bindle_Auk-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NOMADS_Bindle_Auk-Info.plist"; sourceTree = "<group>"; };
+		F91C77E615B70DD900C71BB1 /* NOMADS_Bindle_Auk-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NOMADS_Bindle_Auk-Prefix.pch"; sourceTree = "<group>"; };
+		F91C77E915B70DD900C71BB1 /* PollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollViewController.h; sourceTree = "<group>"; };
+		F91C77EA15B70DD900C71BB1 /* PollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollViewController.m; sourceTree = "<group>"; };
+		F91C77EB15B70DD900C71BB1 /* PollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollViewController.xib; sourceTree = "<group>"; };
+		F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SandDunes1_960x640.png; sourceTree = "<group>"; };
+		F91C77ED15B70DD900C71BB1 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmDrawView.h; sourceTree = "<group>"; };
+		F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
+		F91C77EF15B70DD900C71BB1 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
+		F91C77F015B70DD900C71BB1 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
+		F91C77F915B70E1500C71BB1 /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGlobals.h; path = ../../ClassLib/NGlobals.h; sourceTree = "<group>"; };
+		F91C77FA15B70E1500C71BB1 /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGlobals.m; path = ../../ClassLib/NGlobals.m; sourceTree = "<group>"; };
+		F91C77FB15B70E1500C71BB1 /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGrain.h; path = ../../ClassLib/NGrain.h; sourceTree = "<group>"; };
+		F91C77FC15B70E1500C71BB1 /* NGrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGrain.m; path = ../../ClassLib/NGrain.m; sourceTree = "<group>"; };
+		F91C77FD15B70E1500C71BB1 /* NSand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSand.h; path = ../../ClassLib/NSand.h; sourceTree = "<group>"; };
+		F91C77FE15B70E1500C71BB1 /* NSand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSand.m; path = ../../ClassLib/NSand.m; sourceTree = "<group>"; };
+		F91C780215B70E3200C71BB1 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F91C780415B70E8300C71BB1 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F91C77B015B70D0200C71BB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */,
+				F91C77BA15B70D0200C71BB1 /* Foundation.framework in Frameworks */,
+				F91C77BC15B70D0200C71BB1 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F91C77A815B70D0100C71BB1 = {
+			isa = PBXGroup;
+			children = (
+				F91C780415B70E8300C71BB1 /* iPhone_AppIcon_57x57.png */,
+				F91C77BD15B70D0200C71BB1 /* NOMADS_Bindle_Auk */,
+				F91C77B615B70D0200C71BB1 /* Frameworks */,
+				F91C77B415B70D0200C71BB1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F91C77B415B70D0200C71BB1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F91C77B615B70D0200C71BB1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F91C77B715B70D0200C71BB1 /* UIKit.framework */,
+				F91C77B915B70D0200C71BB1 /* Foundation.framework */,
+				F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F91C77BD15B70D0200C71BB1 /* NOMADS_Bindle_Auk */ = {
+			isa = PBXGroup;
+			children = (
+				F91C780215B70E3200C71BB1 /* main.m */,
+				F91C77F915B70E1500C71BB1 /* NGlobals.h */,
+				F91C77FA15B70E1500C71BB1 /* NGlobals.m */,
+				F91C77FB15B70E1500C71BB1 /* NGrain.h */,
+				F91C77FC15B70E1500C71BB1 /* NGrain.m */,
+				F91C77FD15B70E1500C71BB1 /* NSand.h */,
+				F91C77FE15B70E1500C71BB1 /* NSand.m */,
+				F91C77E515B70DD900C71BB1 /* NOMADS_Bindle_Auk-Info.plist */,
+				F91C77E615B70DD900C71BB1 /* NOMADS_Bindle_Auk-Prefix.pch */,
+				F91C77E915B70DD900C71BB1 /* PollViewController.h */,
+				F91C77EA15B70DD900C71BB1 /* PollViewController.m */,
+				F91C77EB15B70DD900C71BB1 /* PollViewController.xib */,
+				F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */,
+				F91C77ED15B70DD900C71BB1 /* SwarmDrawView.h */,
+				F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */,
+				F91C77EF15B70DD900C71BB1 /* SwarmViewController.h */,
+				F91C77F015B70DD900C71BB1 /* SwarmViewController.m */,
+				F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */,
+				F91C77DE15B70DCC00C71BB1 /* LoginViewController.h */,
+				F91C77DF15B70DCC00C71BB1 /* LoginViewController.m */,
+				F91C77E015B70DCC00C71BB1 /* LoginViewController.xib */,
+				F91C77CE15B70D4F00C71BB1 /* BindleAppDelegate.h */,
+				F91C77CF15B70D4F00C71BB1 /* BindleAppDelegate.m */,
+				F91C77D015B70D4F00C71BB1 /* CloudViewController.h */,
+				F91C77D115B70D4F00C71BB1 /* CloudViewController.m */,
+				F91C77D215B70D4F00C71BB1 /* CloudViewController.xib */,
+				F91C77D315B70D4F00C71BB1 /* Default.png */,
+				F91C77D415B70D4F00C71BB1 /* DiscussViewController.h */,
+				F91C77D515B70D4F00C71BB1 /* DiscussViewController.m */,
+				F91C77D615B70D4F00C71BB1 /* DiscussViewController.xib */,
+			);
+			path = NOMADS_Bindle_Auk;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F91C77B215B70D0200C71BB1 /* NOMADS_Bindle_Auk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F91C77CB15B70D0200C71BB1 /* Build configuration list for PBXNativeTarget "NOMADS_Bindle_Auk" */;
+			buildPhases = (
+				F91C77AF15B70D0200C71BB1 /* Sources */,
+				F91C77B015B70D0200C71BB1 /* Frameworks */,
+				F91C77B115B70D0200C71BB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NOMADS_Bindle_Auk;
+			productName = NOMADS_Bindle_Auk;
+			productReference = F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F91C77AA15B70D0100C71BB1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = NOMADS_Bindle_Auk;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = F91C77AD15B70D0100C71BB1 /* Build configuration list for PBXProject "NOMADS_Bindle_Auk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F91C77A815B70D0100C71BB1;
+			productRefGroup = F91C77B415B70D0200C71BB1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F91C77B215B70D0200C71BB1 /* NOMADS_Bindle_Auk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F91C77B115B70D0200C71BB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C77D915B70D4F00C71BB1 /* CloudViewController.xib in Resources */,
+				F91C77DA15B70D5000C71BB1 /* Default.png in Resources */,
+				F91C77DC15B70D5000C71BB1 /* DiscussViewController.xib in Resources */,
+				F91C77E115B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png in Resources */,
+				F91C77E315B70DCC00C71BB1 /* LoginViewController.xib in Resources */,
+				F91C77F515B70DD900C71BB1 /* PollViewController.xib in Resources */,
+				F91C77F615B70DD900C71BB1 /* SandDunes1_960x640.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F91C77AF15B70D0200C71BB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C77D715B70D4F00C71BB1 /* BindleAppDelegate.m in Sources */,
+				F91C77D815B70D4F00C71BB1 /* CloudViewController.m in Sources */,
+				F91C77DB15B70D5000C71BB1 /* DiscussViewController.m in Sources */,
+				F91C77E215B70DCC00C71BB1 /* LoginViewController.m in Sources */,
+				F91C77F415B70DD900C71BB1 /* PollViewController.m in Sources */,
+				F91C77F715B70DD900C71BB1 /* SwarmDrawView.m in Sources */,
+				F91C77F815B70DD900C71BB1 /* SwarmViewController.m in Sources */,
+				F91C77FF15B70E1500C71BB1 /* NGlobals.m in Sources */,
+				F91C780015B70E1500C71BB1 /* NGrain.m in Sources */,
+				F91C780115B70E1500C71BB1 /* NSand.m in Sources */,
+				F91C780315B70E3200C71BB1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F91C77C915B70D0200C71BB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F91C77CA15B70D0200C71BB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F91C77CC15B70D0200C71BB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
+				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F91C77CD15B70D0200C71BB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
+				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F91C77AD15B70D0100C71BB1 /* Build configuration list for PBXProject "NOMADS_Bindle_Auk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F91C77C915B70D0200C71BB1 /* Debug */,
+				F91C77CA15B70D0200C71BB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F91C77CB15B70D0200C71BB1 /* Build configuration list for PBXNativeTarget "NOMADS_Bindle_Auk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F91C77CC15B70D0200C71BB1 /* Debug */,
+				F91C77CD15B70D0200C71BB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F91C77AA15B70D0100C71BB1 /* Project object */;
+}
