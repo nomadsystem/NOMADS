@@ -11,25 +11,21 @@
 #import <UIKit/UIKit.h>
 #import "NSand.h"
 
+@class AukViewController; 
 
 @interface BindleAppDelegate : UIResponder <SandDelegate, UIApplicationDelegate>  // INPUT: SandDelegate needed to receive signal
 
 {
     @public NSand   *appSand;
-    UITabBarController *tabBarController;
-    UITabBarItem *discussTBI;
-    UITabBarItem *cloudTBI;
-    UITabBarItem *pollTBI;
-    UITabBarItem *swarmTBI;
+    AukViewController *avc;
     
 }
 
 @property (strong, retain) NSand *appSand;
 @property (strong, nonatomic) UIWindow *window;
-//@property UITabBarController *tabBarController;
+@property (nonatomic, retain) IBOutlet AukViewController *avc;
 
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
-- (void) makeTabBar;
 - (void)tabBarItemsEnabled:(BOOL)val;
 
 @end

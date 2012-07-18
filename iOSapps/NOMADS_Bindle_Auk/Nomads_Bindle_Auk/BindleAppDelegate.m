@@ -6,11 +6,9 @@
 //
 
 #import "BindleAppDelegate.h"
-#import "LoginViewController.h"
 #import "DiscussViewController.h"
-#import "CloudViewController.h"
-#import "PollViewController.h"
 #import "SwarmViewController.h"
+#import "AukViewController.h"
 #import "NGlobals.h"
 #import "NGrain.h"
 #import "NSand.h"
@@ -19,11 +17,16 @@
 
 @synthesize window = _window;
 @synthesize appSand;
+@synthesize avc;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    avc = [[AukViewController alloc] init];
+    [[self window] setRootViewController:avc];
+    [self.window makeKeyAndVisible];
+    
     
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -32,15 +35,8 @@
     // SAND:  set a pointer inside appSand so we get notified when network data is available
     [appSand setDelegate:self];
     
-    // SAND: Connect the network streams
-    //[appSand connect];
-    
-    //lvc = [[LoginViewController alloc] init];
-    // LoginViewController *lvc = [[LoginViewController alloc] init];
-    //[[self window] setRootViewController:lvc];
-    [self makeTabBar];
     //   self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -49,38 +45,6 @@
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
     CLog(@"I GOT DATA FROM SAND!!!\n");
-}
-
-
-- (void)makeTabBar {
-    DiscussViewController *dvc = [[DiscussViewController alloc] init];
-    discussTBI = dvc->tbi;
-    
-    CloudViewController *cvc = [[CloudViewController alloc] init];
-    cloudTBI = cvc->tbi;
-    
-    PollViewController *pvc = [[PollViewController alloc] init];
-    pollTBI = pvc->tbi;
-    
-    SwarmViewController *svc = [[SwarmViewController alloc] init];
-    swarmTBI = svc->tbi;
-    
-    [self tabBarItemsEnabled:NO];
-    LoginViewController *lvc = [[LoginViewController alloc] init];
-    
-    tabBarController = [[UITabBarController alloc] init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc, svc,  nil];
-    [tabBarController setViewControllers:viewControllers];
-    [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
-    
-    [[self window] setRootViewController:tabBarController];
-}
-
-- (void)tabBarItemsEnabled:(BOOL)val {
-    [discussTBI setEnabled:val];
-    [cloudTBI setEnabled:val];
-    [pollTBI setEnabled:val];
-    [swarmTBI setEnabled:val];
 }
 
 
