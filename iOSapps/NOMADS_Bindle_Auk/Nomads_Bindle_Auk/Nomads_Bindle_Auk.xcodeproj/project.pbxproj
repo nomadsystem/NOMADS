@@ -1,0 +1,264 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F91C778E15B70C8500C71BB1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C778D15B70C8500C71BB1 /* UIKit.framework */; };
+		F91C779015B70C8500C71BB1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C778F15B70C8500C71BB1 /* Foundation.framework */; };
+		F91C779215B70C8500C71BB1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C779115B70C8500C71BB1 /* CoreGraphics.framework */; };
+		F91C779815B70C8500C71BB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F91C779615B70C8500C71BB1 /* InfoPlist.strings */; };
+		F91C779A15B70C8600C71BB1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C779915B70C8600C71BB1 /* main.m */; };
+		F91C779E15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C779D15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F91C778915B70C8500C71BB1 /* Nomads_Bindle_Auk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nomads_Bindle_Auk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F91C778D15B70C8500C71BB1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F91C778F15B70C8500C71BB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F91C779115B70C8500C71BB1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F91C779515B70C8500C71BB1 /* Nomads_Bindle_Auk-Info.plist */ = {isa = PBXFileReference; path = "Nomads_Bindle_Auk-Info.plist"; sourceTree = "<group>"; };
+		F91C779715B70C8500C71BB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F91C779915B70C8600C71BB1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F91C779B15B70C8600C71BB1 /* Nomads_Bindle_Auk-Prefix.pch */ = {isa = PBXFileReference; path = "Nomads_Bindle_Auk-Prefix.pch"; sourceTree = "<group>"; };
+		F91C779C15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.h */ = {isa = PBXFileReference; path = NOMADS_Bindle_AukAppDelegate.h; sourceTree = "<group>"; };
+		F91C779D15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NOMADS_Bindle_AukAppDelegate.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F91C778615B70C8500C71BB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C778E15B70C8500C71BB1 /* UIKit.framework in Frameworks */,
+				F91C779015B70C8500C71BB1 /* Foundation.framework in Frameworks */,
+				F91C779215B70C8500C71BB1 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F91C777E15B70C8500C71BB1 = {
+			isa = PBXGroup;
+			children = (
+				F91C779315B70C8500C71BB1 /* Nomads_Bindle_Auk */,
+				F91C778C15B70C8500C71BB1 /* Frameworks */,
+				F91C778A15B70C8500C71BB1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F91C778A15B70C8500C71BB1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F91C778915B70C8500C71BB1 /* Nomads_Bindle_Auk.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F91C778C15B70C8500C71BB1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F91C778D15B70C8500C71BB1 /* UIKit.framework */,
+				F91C778F15B70C8500C71BB1 /* Foundation.framework */,
+				F91C779115B70C8500C71BB1 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F91C779315B70C8500C71BB1 /* Nomads_Bindle_Auk */ = {
+			isa = PBXGroup;
+			children = (
+				F91C779C15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.h */,
+				F91C779D15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.m */,
+				F91C779415B70C8500C71BB1 /* Supporting Files */,
+			);
+			path = Nomads_Bindle_Auk;
+			sourceTree = "<group>";
+		};
+		F91C779415B70C8500C71BB1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F91C779515B70C8500C71BB1 /* Nomads_Bindle_Auk-Info.plist */,
+				F91C779615B70C8500C71BB1 /* InfoPlist.strings */,
+				F91C779915B70C8600C71BB1 /* main.m */,
+				F91C779B15B70C8600C71BB1 /* Nomads_Bindle_Auk-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F91C778815B70C8500C71BB1 /* Nomads_Bindle_Auk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F91C77A115B70C8600C71BB1 /* Build configuration list for PBXNativeTarget "Nomads_Bindle_Auk" */;
+			buildPhases = (
+				F91C778515B70C8500C71BB1 /* Sources */,
+				F91C778615B70C8500C71BB1 /* Frameworks */,
+				F91C778715B70C8500C71BB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nomads_Bindle_Auk;
+			productName = Nomads_Bindle_Auk;
+			productReference = F91C778915B70C8500C71BB1 /* Nomads_Bindle_Auk.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F91C778015B70C8500C71BB1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = NOMADS_Bindle_Auk;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = F91C778315B70C8500C71BB1 /* Build configuration list for PBXProject "Nomads_Bindle_Auk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F91C777E15B70C8500C71BB1;
+			productRefGroup = F91C778A15B70C8500C71BB1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F91C778815B70C8500C71BB1 /* Nomads_Bindle_Auk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F91C778715B70C8500C71BB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C779815B70C8500C71BB1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F91C778515B70C8500C71BB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91C779A15B70C8600C71BB1 /* main.m in Sources */,
+				F91C779E15B70C8600C71BB1 /* NOMADS_Bindle_AukAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F91C779615B70C8500C71BB1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F91C779715B70C8500C71BB1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F91C779F15B70C8600C71BB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F91C77A015B70C8600C71BB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F91C77A215B70C8600C71BB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Nomads_Bindle_Auk/Nomads_Bindle_Auk-Prefix.pch";
+				INFOPLIST_FILE = "Nomads_Bindle_Auk/Nomads_Bindle_Auk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F91C77A315B70C8600C71BB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Nomads_Bindle_Auk/Nomads_Bindle_Auk-Prefix.pch";
+				INFOPLIST_FILE = "Nomads_Bindle_Auk/Nomads_Bindle_Auk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F91C778315B70C8500C71BB1 /* Build configuration list for PBXProject "Nomads_Bindle_Auk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F91C779F15B70C8600C71BB1 /* Debug */,
+				F91C77A015B70C8600C71BB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F91C77A115B70C8600C71BB1 /* Build configuration list for PBXNativeTarget "Nomads_Bindle_Auk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F91C77A215B70C8600C71BB1 /* Debug */,
+				F91C77A315B70C8600C71BB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F91C778015B70C8500C71BB1 /* Project object */;
+}
