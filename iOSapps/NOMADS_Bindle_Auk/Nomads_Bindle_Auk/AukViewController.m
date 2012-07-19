@@ -9,6 +9,7 @@
 //
 
 #import "AukViewController.h"
+#import "SwarmDrawView.h"
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
@@ -26,7 +27,6 @@
 @synthesize appDelegate;
 @synthesize loginView;
 @synthesize aukView;
-@synthesize promptLabel;
 @synthesize connectionLabel;
 @synthesize joinTextField;
 @synthesize aukToolbar;
@@ -35,6 +35,8 @@
 @synthesize aukBarButtonSettings;
 @synthesize inputDiscussField;
 @synthesize inputCloudField;
+@synthesize swarmView;
+@synthesize promptLabel;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -53,9 +55,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     //Hides our "hidden" text fields for discuss and cloud
     inputDiscussField.hidden = YES; 
-    inputCloudField.hidden = YES; 
+    inputCloudField.hidden = YES;
+    
+    //Initialize label
+    [[self promptLabel] setText: @"NOMADS Prompt"];
+    [[self promptLabel] setTextColor:[UIColor blackColor]];
     
     //Initially hides the navigation bar in the login view
     loginNavBar.hidden = YES;
@@ -67,6 +74,28 @@
     //Initialize backgrounds 
     [[self loginView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
     [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+    
+    [[self swarmView] setBackgroundColor:[UIColor whiteColor]];
+    
+    //Initialization for size of SwarmDraw View
+    CGRect screenRect = [swarmView bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    CGPoint myCGPoint;
+    myCGPoint.x = 0;
+    myCGPoint.y = 0;
+    
+    CGSize myCGSize;
+    myCGSize.height = screenHeight;
+    myCGSize.width = screenWidth;
+    
+    CGRect myCGRect;
+    myCGRect.origin = myCGPoint;
+    myCGRect.size = myCGSize;
+    
+    [swarmView addSubview:[[SwarmDrawView alloc] initWithFrame:myCGRect]];    
+    
     
     //Initialize toolbar in Auk view
     [[self aukToolbar] setTranslucent:YES];
@@ -102,7 +131,9 @@
         [leaveNomadsButton setHidden:NO];
         
         connectionLabel.text = @"Connected to NOMADS!";
+        
         [self.view bringSubviewToFront:aukView];
+        
         loginNavBar.hidden = NO;
     }
     //If there's no text, connect with a "space" for now 
@@ -126,12 +157,14 @@
 // Auk view items ===============================================
 
 - (IBAction)discussButton:(id)sender {
+    [aukView bringSubviewToFront:inputDiscussField];
     [inputDiscussField setHidden:NO];
     [inputDiscussField becomeFirstResponder];
     
 }
 
 - (IBAction)cloudButton:(id)sender {
+    [aukView bringSubviewToFront:inputCloudField];
     [inputCloudField setHidden:NO];
     [inputCloudField becomeFirstResponder];
 }
@@ -182,6 +215,7 @@
         inputDiscussField.text = @"";
         [inputDiscussField setHidden:YES];
         [inputDiscussField resignFirstResponder];
+        [aukView sendSubviewToBack:inputDiscussField];
     }
     
     //---------------------------------------------------
@@ -217,6 +251,7 @@
         inputCloudField.text = @"";
         [inputCloudField setHidden:YES];
         [inputCloudField resignFirstResponder];
+        [aukView sendSubviewToBack:inputCloudField];
     }
     
     //---------------------------------------------------
@@ -229,8 +264,7 @@
 
 - (void)viewDidUnload
 {
-    [self setPromptLabel:nil];
-    promptLabel = nil;
+
     [self setConnectionLabel:nil];
     connectionLabel = nil;
     [self setJoinNomadsButton:nil];
@@ -249,6 +283,8 @@
     [self setLoginNavTitle:nil];
     [self setLoginNavBackButton:nil];
     [self setLoginNavBackButton:nil];
+    [self setSwarmView:nil];
+    [self setPromptLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

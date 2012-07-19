@@ -18,10 +18,11 @@
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
-    __weak UILabel *promptLabel;
     __weak UILabel *connectionLabel;
-    __weak UIView *loginView;
-    __weak UIView *aukView;
+    __weak UILabel *promptLabel;
+    UIView *loginView;
+    UIView *aukView;
+    UIView *swarmView;
     __weak UITextField *inputDiscussField;
     __weak UITextField *inputCloudField;
     __weak UIBarButtonItem *loginNavBackButton;
@@ -37,9 +38,8 @@
 @property (strong, retain) BindleAppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UIButton *joinNomadsButton;
 @property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
-@property (weak, nonatomic) IBOutlet UIView *loginView;
-@property (weak, nonatomic) IBOutlet UIView *aukView;
-@property (weak, nonatomic) IBOutlet UILabel *promptLabel;
+@property (strong, nonatomic) IBOutlet UIView *loginView;
+@property (strong, nonatomic) IBOutlet UIView *aukView;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITextField *joinTextField;
 @property (weak, nonatomic) IBOutlet UIToolbar *aukToolbar;
@@ -48,6 +48,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *aukBarButtonSettings;
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
+@property (strong, nonatomic) IBOutlet UIView *swarmView;
+@property (weak, nonatomic) IBOutlet UILabel *promptLabel;
 - (IBAction)discussButton:(id)sender;
 - (IBAction)cloudButton:(id)sender;
 - (IBAction)settingsButton:(id)sender;

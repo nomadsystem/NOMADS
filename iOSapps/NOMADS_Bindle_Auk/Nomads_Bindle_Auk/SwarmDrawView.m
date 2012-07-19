@@ -20,7 +20,8 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        //     [self setBackgroundColor:[UIColor whiteColor]];
+        
+        [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -29,11 +30,11 @@
         [self setMultipleTouchEnabled:YES];
         
         //Code to get the point to start at the center of the screen
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGFloat screenWidth = screenRect.size.width;
-        CGFloat screenHeight = screenRect.size.height;
-        myFingerPoint.x = (screenWidth * 0.5);
-        myFingerPoint.y = (screenHeight * 0.5);
+        CGRect viewRect = [self bounds];
+        CGFloat viewWidth = viewRect.size.width;
+        CGFloat viewHeight = viewRect.size.height;
+        myFingerPoint.x = (viewWidth * 0.5);
+        myFingerPoint.y = (viewHeight * 0.5);
         
         maxTrails = 10;
         // earlier on in your code put this (below)
@@ -42,13 +43,13 @@
         yTrail = (int *)malloc(sizeof(int)*maxTrails);
         
         for (int i=0;i<maxTrails;i++) {
-            xTrail[i]=(screenWidth * 0.5);
-            yTrail[i]=(screenHeight * 0.5);
+            xTrail[i]=(viewWidth * 0.5);
+            yTrail[i]=(viewHeight * 0.5);
         }
         decayColor = 1.0;
-        decayColorChangeDelta = decayColor/(float)maxTrails;
-    //    NSLog(@" brightness = %f ", brightness);
-    //    NSLog(@" brightDelta = %f ", brightDelta);
+        decayColorChangeDelta = (decayColor/(float)maxTrails);
+        //    NSLog(@" brightness = %f ", brightness);
+        //    NSLog(@" brightDelta = %f ", brightDelta);
         
         //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
         
@@ -88,7 +89,6 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    
     for(int i=maxTrails;i>0;i--) {
         xTrail[i] = xTrail[i-1];
         yTrail[i] = yTrail[i-1];
@@ -97,21 +97,16 @@
     xTrail[0] = myFingerPoint.x;
     yTrail[0] = myFingerPoint.y;
     
-    
-    
     decayColor = 1.0;
     for (int i=0; i<maxTrails; i++) {   
+        NSLog(@" shape number (i) = %d", i);
         CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
-        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));
+        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
         CGContextDrawPath(context, kCGPathFill);
         //     CGContextFillPath(context);
         CGContextStrokePath(context);
-        
-        decayColor = (decayColor - decayColorChangeDelta);
-        NSLog(@" Brightness = %f", decayColor);
-        
+        decayColor = (decayColor - decayColorChangeDelta);        
     }
-    
     
     
 }
@@ -149,6 +144,7 @@
         //Put pair in dictionary
         //        [linesInProcess setObject:newLine forKey:key];
     }
+    [self setNeedsDisplay];
 }
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -175,18 +171,13 @@
         [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT DataLen:2 Integer:xy];
     }
     //Redraw
-    [self setNeedsDisplay];
 }
 
 - (void)endTouches:(NSSet *)touches
 {
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
-        
         touchColor = 0.6;
-        //If this is a double tap, point will be nil,
-        //Do stuff here when touch ends
-        
         
     }
     //Redraw
