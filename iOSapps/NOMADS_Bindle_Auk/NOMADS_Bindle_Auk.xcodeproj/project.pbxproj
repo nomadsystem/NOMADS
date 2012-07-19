@@ -15,16 +15,17 @@
 		F91C77DB15B70D5000C71BB1 /* DiscussViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77D515B70D4F00C71BB1 /* DiscussViewController.m */; };
 		F91C77DC15B70D5000C71BB1 /* DiscussViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77D615B70D4F00C71BB1 /* DiscussViewController.xib */; };
 		F91C77E115B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */; };
-		F91C77F515B70DD900C71BB1 /* PollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C77EB15B70DD900C71BB1 /* PollViewController.xib */; };
 		F91C77F615B70DD900C71BB1 /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */; };
 		F91C77F715B70DD900C71BB1 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */; };
-		F91C77F815B70DD900C71BB1 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77F015B70DD900C71BB1 /* SwarmViewController.m */; };
 		F91C77FF15B70E1500C71BB1 /* NGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FA15B70E1500C71BB1 /* NGlobals.m */; };
 		F91C780015B70E1500C71BB1 /* NGrain.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FC15B70E1500C71BB1 /* NGrain.m */; };
 		F91C780115B70E1500C71BB1 /* NSand.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C77FE15B70E1500C71BB1 /* NSand.m */; };
 		F91C780315B70E3200C71BB1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C780215B70E3200C71BB1 /* main.m */; };
 		F91C781915B72A6A00C71BB1 /* AukViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C781715B72A6A00C71BB1 /* AukViewController.m */; };
 		F91C781A15B72A6A00C71BB1 /* AukViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C781815B72A6A00C71BB1 /* AukViewController.xib */; };
+		F921171215B8874E00B78B43 /* 1342721861_Cog.png in Resources */ = {isa = PBXBuildFile; fileRef = F921171115B8874E00B78B43 /* 1342721861_Cog.png */; };
+		F921173715B89CBF00B78B43 /* 1342727465_Discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = F921173615B89CBF00B78B43 /* 1342727465_Discussion.png */; };
+		F921173B15B89DDD00B78B43 /* 1342727762_weather_09.png in Resources */ = {isa = PBXBuildFile; fileRef = F921173A15B89DDD00B78B43 /* 1342727762_weather_09.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,12 +42,9 @@
 		F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
 		F91C77E515B70DD900C71BB1 /* NOMADS_Bindle_Auk-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NOMADS_Bindle_Auk-Info.plist"; sourceTree = "<group>"; };
 		F91C77E615B70DD900C71BB1 /* NOMADS_Bindle_Auk-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NOMADS_Bindle_Auk-Prefix.pch"; sourceTree = "<group>"; };
-		F91C77EB15B70DD900C71BB1 /* PollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollViewController.xib; sourceTree = "<group>"; };
 		F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SandDunes1_960x640.png; sourceTree = "<group>"; };
 		F91C77ED15B70DD900C71BB1 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmDrawView.h; sourceTree = "<group>"; };
 		F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
-		F91C77EF15B70DD900C71BB1 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
-		F91C77F015B70DD900C71BB1 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
 		F91C77F915B70E1500C71BB1 /* NGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGlobals.h; path = ../../ClassLib/NGlobals.h; sourceTree = "<group>"; };
 		F91C77FA15B70E1500C71BB1 /* NGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NGlobals.m; path = ../../ClassLib/NGlobals.m; sourceTree = "<group>"; };
 		F91C77FB15B70E1500C71BB1 /* NGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NGrain.h; path = ../../ClassLib/NGrain.h; sourceTree = "<group>"; };
@@ -58,6 +56,9 @@
 		F91C781615B72A6A00C71BB1 /* AukViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AukViewController.h; sourceTree = "<group>"; };
 		F91C781715B72A6A00C71BB1 /* AukViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AukViewController.m; sourceTree = "<group>"; };
 		F91C781815B72A6A00C71BB1 /* AukViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AukViewController.xib; sourceTree = "<group>"; };
+		F921171115B8874E00B78B43 /* 1342721861_Cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1342721861_Cog.png; sourceTree = "<group>"; };
+		F921173615B89CBF00B78B43 /* 1342727465_Discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1342727465_Discussion.png; sourceTree = "<group>"; };
+		F921173A15B89DDD00B78B43 /* 1342727762_weather_09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1342727762_weather_09.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +78,9 @@
 		F91C77A815B70D0100C71BB1 = {
 			isa = PBXGroup;
 			children = (
+				F921173A15B89DDD00B78B43 /* 1342727762_weather_09.png */,
+				F921173615B89CBF00B78B43 /* 1342727465_Discussion.png */,
+				F921171115B8874E00B78B43 /* 1342721861_Cog.png */,
 				F91C780415B70E8300C71BB1 /* iPhone_AppIcon_57x57.png */,
 				F91C77BD15B70D0200C71BB1 /* NOMADS_Bindle_Auk */,
 				F91C77B615B70D0200C71BB1 /* Frameworks */,
@@ -114,12 +118,9 @@
 				F91C77FE15B70E1500C71BB1 /* NSand.m */,
 				F91C77E515B70DD900C71BB1 /* NOMADS_Bindle_Auk-Info.plist */,
 				F91C77E615B70DD900C71BB1 /* NOMADS_Bindle_Auk-Prefix.pch */,
-				F91C77EB15B70DD900C71BB1 /* PollViewController.xib */,
 				F91C77EC15B70DD900C71BB1 /* SandDunes1_960x640.png */,
 				F91C77ED15B70DD900C71BB1 /* SwarmDrawView.h */,
 				F91C77EE15B70DD900C71BB1 /* SwarmDrawView.m */,
-				F91C77EF15B70DD900C71BB1 /* SwarmViewController.h */,
-				F91C77F015B70DD900C71BB1 /* SwarmViewController.m */,
 				F91C77DD15B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png */,
 				F91C77CE15B70D4F00C71BB1 /* BindleAppDelegate.h */,
 				F91C77CF15B70D4F00C71BB1 /* BindleAppDelegate.m */,
@@ -188,9 +189,11 @@
 				F91C77DA15B70D5000C71BB1 /* Default.png in Resources */,
 				F91C77DC15B70D5000C71BB1 /* DiscussViewController.xib in Resources */,
 				F91C77E115B70DCC00C71BB1 /* iPhone_AppIcon_57x57.png in Resources */,
-				F91C77F515B70DD900C71BB1 /* PollViewController.xib in Resources */,
 				F91C77F615B70DD900C71BB1 /* SandDunes1_960x640.png in Resources */,
 				F91C781A15B72A6A00C71BB1 /* AukViewController.xib in Resources */,
+				F921171215B8874E00B78B43 /* 1342721861_Cog.png in Resources */,
+				F921173715B89CBF00B78B43 /* 1342727465_Discussion.png in Resources */,
+				F921173B15B89DDD00B78B43 /* 1342727762_weather_09.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +207,6 @@
 				F91C77D715B70D4F00C71BB1 /* BindleAppDelegate.m in Sources */,
 				F91C77DB15B70D5000C71BB1 /* DiscussViewController.m in Sources */,
 				F91C77F715B70DD900C71BB1 /* SwarmDrawView.m in Sources */,
-				F91C77F815B70DD900C71BB1 /* SwarmViewController.m in Sources */,
 				F91C77FF15B70E1500C71BB1 /* NGlobals.m in Sources */,
 				F91C780015B70E1500C71BB1 /* NGrain.m in Sources */,
 				F91C780115B70E1500C71BB1 /* NSand.m in Sources */,
