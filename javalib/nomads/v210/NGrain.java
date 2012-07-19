@@ -7,10 +7,10 @@ public class NGrain {
 	public byte dataType; //For some reason, it wouldn't compile with "dataType" ***STK 6/15/12
 	public int dataLen;
 
+	public byte[] uArray;
 	public byte[] bArray;
 	public int[] iArray;
-	float[] fArray;
-	double[] dArray;
+	public float[] fArray;
 
 	public NGrain(byte a, byte c, byte dT, int dL, byte[] bA) {
 		appID = a;
@@ -33,13 +33,6 @@ public class NGrain {
 		dataLen = dL;
 		fArray = fA;
 	}
-	public NGrain(byte a, byte c, byte dT, int dL, double[] dA) {
-		appID = a;
-		command = c;
-		dataType = dT;
-		dataLen = dL;
-		dArray = dA;
-	}
 
 	public void print() {
 		NGlobals.lPrint("NGrain -> print()");
@@ -48,17 +41,33 @@ public class NGrain {
 		NGlobals.lPrint("dataType =" + dataType);
 		NGlobals.lPrint("dLen  =" + dataLen);
 
-		if (dataType == 1) {
+		if (dataType == NDataType.CHAR) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("BYTE: " + (char)bArray[i]);
+			    NGlobals.lPrint("CHAR: " + (char)bArray[i]);
 			}
 		} 
 
-		if (dataType == NDataType.INT) {
+		else if (dataType == NDataType.UINT8) {
 			for (int i=0;i<dataLen;i++) {
-				NGlobals.lPrint("INT: " + iArray[i]);
+			    NGlobals.lPrint("UINT8: " + bArray[i]);
 			}
 		} 
+
+		else if (dataType == NDataType.INT32) {
+			for (int i=0;i<dataLen;i++) {
+			    NGlobals.lPrint("INT32: " + iArray[i]);
+			}
+		} 
+
+		else if (dataType == NDataType.FLOAT32) {
+			for (int i=0;i<dataLen;i++) {
+			    NGlobals.lPrint("INT32: " + fArray[i]);
+			}
+		} 
+
+		else {
+		    NGlobals.lPrint("NGRAIN:  UNKNOWN DATA TYPE\n");
+		}
 
 	}
 }

@@ -2,10 +2,12 @@ package nomads.v210;
 
 
 public class NDataType {
-    public static byte FOO = 0;
-    public static byte BYTE = 1;
-    public static byte INT = 2;
-    public static byte FLOAT = 3;
-    public static byte DOUBLE = 4;
-    public static byte NO_DATA = 5;
+    public static byte NO_DATA = 0;
+    public static byte BYTE = 1;   // TOFIX:  should become char - need to change in all java code
+    public static byte CHAR = 1;   // temp fix
+    public static byte UINT8 = 2;  // temp fix 
+    public static byte INT = 3;    // TOFIX:  should become int32 - need to change in all java code
+    public static byte INT32 = 3;  // temp fix
+    public static byte FLOAT = 4;      // TOFIX:  should become int32 - need to change in all java code
+    public static byte FLOAT32 = 4;    // temp fix
 }
