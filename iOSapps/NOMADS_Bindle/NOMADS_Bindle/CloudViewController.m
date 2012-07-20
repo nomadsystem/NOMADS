@@ -64,7 +64,7 @@
     NSLog(@"myCommand =  %i\n", myCommand);
     
     //DATA TYPE
-    Byte myDataType = BYTE;
+    Byte myDataType = CHAR;
     NSLog(@"myDataType =  %i\n", myDataType);
     
     //DATA LENGTH
