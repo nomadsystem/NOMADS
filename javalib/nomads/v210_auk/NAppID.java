@@ -1,4 +1,4 @@
-package nomads.v210;
+package nomads.v210_auk;
 
 // Panel apps < 10;
 // Client apps mod 10, ie., 10,20,30,40,50
@@ -14,6 +14,7 @@ public class NAppID {
     public static byte C_STUDENT_PANEL = 4;
     public static byte CENSOR = 5;
     public static byte MONITOR = 6;
+    public static byte BINDLE = 7;
 
     public static byte DEBUG = 10;
 

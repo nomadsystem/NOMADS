@@ -1,10 +1,10 @@
-package nomads.v210;
+package nomads.v210_auk;
 
 import java.util.*;
 import java.net.*;
 import java.io.*;
 import java.text.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 //import java.applet.*;  // Maybe need
 
