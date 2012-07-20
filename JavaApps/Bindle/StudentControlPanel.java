@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 
 public class StudentControlPanel extends JApplet  implements  ActionListener {

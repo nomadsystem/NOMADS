@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.util.Random;
 import java.util.*;
 import java.lang.*;
-import nomads.v210_Auk.*;
+import nomads.v210_auk.*;
 
 public class OC_Cloud extends JPanel {   
 	
