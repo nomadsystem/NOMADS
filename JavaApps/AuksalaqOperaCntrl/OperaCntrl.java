@@ -22,7 +22,7 @@ import java.util.Random;
 import java.net.*;
 import java.io.*;
 import netscape.javascript.*;
-import nomads.v210_Auk.*;
+import nomads.v210_auk.*;
 
 public class OperaCntrl extends JApplet implements ActionListener, KeyListener, Runnable {   
 

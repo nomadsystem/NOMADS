@@ -12,7 +12,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.lang.*;
 import java.util.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 // writes bytes and strings seperately
 
