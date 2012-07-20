@@ -280,8 +280,6 @@
 		A8D4CAF915ACB5840074E83D /* SandDunes1_960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = A8D4CAF815ACB5840074E83D /* SandDunes1_960x640.png */; };
 		A8D4CD0115ACC22D0074E83D /* SwarmCCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */; };
 		A8D4CD0215ACC22D0074E83D /* SwarmCCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */; };
-		A8FC9F8E15B5ED6A00D76CF7 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */; };
-		A8FC9F8F15B5ED6A00D76CF7 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -582,10 +580,6 @@
 		A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmCCViewController.m; sourceTree = "<group>"; };
 		A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwarmCCViewController.xib; sourceTree = "<group>"; };
 		A8D4CD0315ACC3400074E83D /* GameConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
-		A8FC9F8015B5ED6A00D76CF7 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmDrawView.h; sourceTree = "<group>"; };
-		A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
-		A8FC9F8215B5ED6A00D76CF7 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
-		A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1044,10 +1038,6 @@
 				A8D4CCFE15ACC22C0074E83D /* SwarmCCViewController.h */,
 				A8D4CCFF15ACC22C0074E83D /* SwarmCCViewController.m */,
 				A8D4CD0015ACC22D0074E83D /* SwarmCCViewController.xib */,
-				A8FC9F8015B5ED6A00D76CF7 /* SwarmDrawView.h */,
-				A8FC9F8115B5ED6A00D76CF7 /* SwarmDrawView.m */,
-				A8FC9F8215B5ED6A00D76CF7 /* SwarmViewController.h */,
-				A8FC9F8315B5ED6A00D76CF7 /* SwarmViewController.m */,
 			);
 			path = NomadsBindle_CC;
 			sourceTree = "<group>";
@@ -1434,8 +1424,6 @@
 				A8D4CAF215ACB5610074E83D /* LoginViewController.m in Sources */,
 				A8D4CAF415ACB5610074E83D /* PollViewController.m in Sources */,
 				A8D4CD0115ACC22D0074E83D /* SwarmCCViewController.m in Sources */,
-				A8FC9F8E15B5ED6A00D76CF7 /* SwarmDrawView.m in Sources */,
-				A8FC9F8F15B5ED6A00D76CF7 /* SwarmViewController.m in Sources */,
 				A8AA677715B5F80400ABF867 /* Cursor.m in Sources */,
 				A8AA677915B5F80400ABF867 /* MovableObject.m in Sources */,
 				A8AA677A15B5F80400ABF867 /* SwarmCC.m in Sources */,
@@ -1582,6 +1570,7 @@
 				A8AA659515B5F59800ABF867 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8D4C93715ACB1CF0074E83D /* Build configuration list for PBXProject "NomadsBindle_CC" */ = {
 			isa = XCConfigurationList;
