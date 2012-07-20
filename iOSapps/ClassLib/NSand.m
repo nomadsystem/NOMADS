@@ -42,7 +42,7 @@
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
         serverName = @"nomads.music.virginia.edu";
-        serverPort = SERVER_PORT_DT; 
+        serverPort = SERVER_PORT_SK; 
         numDelegates = 0;
     }
     return self;

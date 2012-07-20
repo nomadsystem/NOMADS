@@ -114,10 +114,8 @@ typedef enum {
     SYNTH_DISABLE = 7,//uGroove
     SYNTH_START = 8,//uGroove
     SYNTH_STOP = 9,//uGroove
-    
     REGISTER = 10,
     LOGIN_STATUS = 11,
-    
     SEND_SPRITE_XY = 20,  // SoundSwarm
 
 } NGCommand;

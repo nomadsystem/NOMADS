@@ -192,12 +192,14 @@ public class NomadServer implements Runnable {
 	//      if you're not logged in, you get booted
 
 	tLoginStatus = currentClient.getLoginStatus();
-	if (currentClient.getAppID() == NAppID.LOGIN) {
+	if (incAppID == NAppID.LOGIN) {
 	    if (tLoginStatus == true) {
 		// send back "you're already logged in" message / LOGIN_STATUS w/ value = 2
+		NGlobals.sPrint("  LOGIN client [" + tCNum + "] already logged in.\n" + incAppID);
+
 		byte[] dx = new byte[1];
 		dx[0] = 2;
-		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.BYTE, 1, dx);
+		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.UINT8, 1, dx);
 	    }
 	    else {
 		// Log the client in
@@ -209,16 +211,18 @@ public class NomadServer implements Runnable {
 		clients[tCNum].setLoginStatus(true);
 		tLoginStatus = currentClient.getLoginStatus();
 
+		NGlobals.sPrint("  LOGIN client [" + tCNum + "] logging in, sending back confirmation info.\n" + incAppID);
+
 		// send back "successful login" message / LOGIN_STATUS w/ value = 1
 		byte[] dx = new byte[1];
 		dx[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.BYTE, 1, dx);
+		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.UINT8, 1, dx);
 	    }
 	}
 
-	// Comment this out to turn back on login
+	// Comment this out to turn back on login : LOGIN TOGGLE
 
-	// tLoginStatus = true;
+	tLoginStatus = true;
 
 	// Kick -------------------------------------------------------------------------------------
 
@@ -270,6 +274,10 @@ public class NomadServer implements Runnable {
 		    int[] x = new int[1];
 		    x[0] = THREAD_ID;
 		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
+		    NGlobals.sPrint("Sending SOUND_SWARM: x/y coordinates\n");
+		    currentClient.threadSand.sendGrain(myGrain);
+		    myGrain.print();
+
 		}
 	    }
 
