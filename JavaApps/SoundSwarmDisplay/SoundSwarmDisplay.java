@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 import com.softsynth.jsyn.*;
 import com.softsynth.jsyn.view11x.ExponentialPortFader;

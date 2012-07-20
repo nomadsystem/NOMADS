@@ -70,7 +70,7 @@ public class NSand
 
 			if (myGrain.dataType == NDataType.FLOAT) {
 				for (int i=0; i<myGrain.dataLen; i++) {
-					streamOut.writeInt(myGrain.fArray[i]);
+					streamOut.writeFloat(myGrain.fArray[i]);
 				}
 			}
 

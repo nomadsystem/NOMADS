@@ -9,7 +9,7 @@ import java.net.*;
 import java.text.*;
 import java.applet.*;
 import netscape.javascript.*;
-import nomads.v210_Auk.*;
+import nomads.v210_auk.*;
 
 import com.softsynth.jsyn.*;
 
