@@ -1,10 +1,4 @@
-
-/*
-  NOMADS Auksalaq NGlobals v.210
-  Revised/cleaned, 6/20/2012, Steven Kemper
- */
-
-package nomads.v210_Auk;
+package nomads.v210;
 
 
 public class NGlobals {
@@ -26,19 +20,19 @@ public class NGlobals {
 
     public static void cPrint(String str) {
 	if (clientDebugLevel > 0) {
-	    System.out.println(str);
+	    System.out.println("CLIENT: " + str);
 	}
     }
 
     public static void sPrint(String str) {
 	if (serverDebugLevel > 0) {
-	    System.out.println(str);
+	    System.out.println("SERVER: " + str);
 	}
     }
 
     public static void lPrint(String str) {
 	if (libraryDebugLevel > 0) {
-	    System.out.println(str);
+	    System.out.println("LIB: "+ str);
 	}
     }
     
