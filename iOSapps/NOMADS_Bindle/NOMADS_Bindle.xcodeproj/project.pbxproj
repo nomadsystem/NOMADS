@@ -33,6 +33,8 @@
 
 /* Begin PBXFileReference section */
 		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
+		F9616FA915B9C439007BA941 /* NAppIDMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppIDMain.h; path = ../../ClassLib/NAppIDMain.h; sourceTree = "<group>"; };
+		F9616FAA15B9C439007BA941 /* NCommandMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommandMain.h; path = ../../ClassLib/NCommandMain.h; sourceTree = "<group>"; };
 		F994864815A4B07F001969E8 /* SwarmDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmDrawView.h; sourceTree = "<group>"; };
 		F994864915A4B080001969E8 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
 		F994864A15A4B080001969E8 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
@@ -113,6 +115,8 @@
 		F9FFFC1F159E36840011760F /* NOMADS_Bindle */ = {
 			isa = PBXGroup;
 			children = (
+				F9616FA915B9C439007BA941 /* NAppIDMain.h */,
+				F9616FAA15B9C439007BA941 /* NCommandMain.h */,
 				F9FFFC4D159E37410011760F /* NGlobals.h */,
 				F9FFFC4E159E37410011760F /* NGlobals.m */,
 				F9FFFC4F159E37410011760F /* NGrain.h */,

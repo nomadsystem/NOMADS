@@ -19,7 +19,6 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     __weak UILabel *connectionLabel;
-    __weak UILabel *promptLabel;
     UIView *loginView;
     UIView *aukView;
     UIView *swarmView;
@@ -49,7 +48,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
 @property (strong, nonatomic) IBOutlet UIView *swarmView;
-@property (weak, nonatomic) IBOutlet UILabel *promptLabel;
 - (IBAction)discussButton:(id)sender;
 - (IBAction)cloudButton:(id)sender;
 - (IBAction)settingsButton:(id)sender;

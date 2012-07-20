@@ -9,17 +9,19 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
+#import "NAppIDAuk.h"
+#import "NCommandAuk.h"
 
 @implementation SwarmDrawView
 @synthesize myFingerPoint;
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
 
+
 -(id)initWithFrame:(CGRect)r
 {
     self = [super initWithFrame:r];
     if (self) {
-        
         
         [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -89,6 +91,9 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    
+    // The Dot ======================================================
+    
     for(int i=maxTrails;i>0;i--) {
         xTrail[i] = xTrail[i-1];
         yTrail[i] = yTrail[i-1];
@@ -99,7 +104,6 @@
     
     decayColor = 1.0;
     for (int i=0; i<maxTrails; i++) {   
-        NSLog(@" shape number (i) = %d", i);
         CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
         CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
         CGContextDrawPath(context, kCGPathFill);
@@ -108,6 +112,26 @@
         decayColor = (decayColor - decayColorChangeDelta);        
     }
     
+    // The Text =====================================================
+    
+    NSString *nsstr = @"NOMADS Bindle"; //Incoming NSString 
+    const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
+    int len = strlen(str); //get length of string
+    
+    CGRect viewRect = [self bounds];
+    CGFloat viewHeight = viewRect.size.height;
+        
+    CGContextSelectFont (context, 
+                         "Helvetica-Bold",
+                         viewHeight/20,
+                         kCGEncodingMacRoman);
+    CGContextSetCharacterSpacing (context, 5);
+    CGContextSetTextDrawingMode (context, kCGTextFillStroke);
+    CGContextSetRGBFillColor (context, 0, 1, 0, .5);
+    CGContextSetRGBStrokeColor (context, 0, 0, 1, 1); 
+    CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
+    
+    CGContextShowTextAtPoint (context, 40, 40, str, len); 
     
 }
 
@@ -168,7 +192,7 @@
         xy[1] = (int) loc.y;
         
         
-        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT DataLen:2 Integer:xy];
+        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
     }
     //Redraw
 }
