@@ -12,6 +12,8 @@
 #import "PollViewController.h"
 #import "SwarmViewController.h"
 #import "NGlobals.h"
+#import "NAppIDMain.h"
+#import "NCommandMain.h"
 #import "NGrain.h"
 #import "NSand.h"
 

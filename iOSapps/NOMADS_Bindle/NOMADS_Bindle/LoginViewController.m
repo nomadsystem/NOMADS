@@ -7,6 +7,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
+#import "NAppIDMain.h"
+#import "NCommandMain.h"
 #import "LoginViewController.h"
 #import "DiscussViewController.h"
 #import "CloudViewController.h"

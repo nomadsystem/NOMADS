@@ -13,6 +13,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
+#import "NAppIDAuk.h"
+#import "NCommandAuk.h"
 
 
 
@@ -36,7 +38,6 @@
 @synthesize inputDiscussField;
 @synthesize inputCloudField;
 @synthesize swarmView;
-@synthesize promptLabel;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -59,10 +60,6 @@
     //Hides our "hidden" text fields for discuss and cloud
     inputDiscussField.hidden = YES; 
     inputCloudField.hidden = YES;
-    
-    //Initialize label
-    [[self promptLabel] setText: @"NOMADS Prompt"];
-    [[self promptLabel] setTextColor:[UIColor blackColor]];
     
     //Initially hides the navigation bar in the login view
     loginNavBar.hidden = YES;
@@ -122,7 +119,7 @@
     if ([joinTextField.text length] > 0){
         [appDelegate->appSand sendWithGrainElts_AppID:LOGIN 
                                               Command:SEND_MESSAGE 
-                                             DataType:BYTE 
+                                             DataType:CHAR 
                                               DataLen:[joinTextField.text length] 
                                                String:joinTextField.text];
         joinTextField.text = @"";
@@ -197,7 +194,7 @@
         NSLog(@"myCommand =  %i\n", myCommand);
         
         //DATA TYPE
-        Byte myDataType = BYTE;
+        Byte myDataType = CHAR;
         NSLog(@"myDataType =  %i\n", myDataType);
         
         //DATA LENGTH
@@ -233,7 +230,7 @@
         NSLog(@"myCommand =  %i\n", myCommand);
         
         //DATA TYPE
-        Byte myDataType = BYTE;
+        Byte myDataType = CHAR;
         NSLog(@"myDataType =  %i\n", myDataType);
         
         //DATA LENGTH
@@ -284,7 +281,6 @@
     [self setLoginNavBackButton:nil];
     [self setLoginNavBackButton:nil];
     [self setSwarmView:nil];
-    [self setPromptLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
