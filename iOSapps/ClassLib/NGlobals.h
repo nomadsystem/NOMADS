@@ -3,8 +3,8 @@
 //
 //  Initial version, DJT on 6/22/12.
 //
-#ifndef NGLOBALS
-#define NGLOBALS
+#ifndef NGLOBALS_H
+#define NGLOBALS_H
 // Set max # of Sand delegates here
 #define MAX_DELEGATES 10
 
@@ -101,27 +101,34 @@ typedef enum {
 
 //NCommand 
 typedef enum {
-    RES1 = 0,
+    NOOP = 0,
+
     SEND_MESSAGE = 1,
+
     QUESTION_TYPE_YES_NO = 2,
     QUESTION_TYPE_ONE_TO_TEN = 3,
     QUESTION_TYPE_A_TO_E = 4,
     VOTE = 5, //command from Instructor Panel to PollStudent ****STK 6/18/12
+
     SYNTH_ENABLE = 6, //uGroove
     SYNTH_DISABLE = 7,//uGroove
     SYNTH_START = 8,//uGroove
     SYNTH_STOP = 9,//uGroove
+    
+    REGISTER = 10,
+    LOGIN_STATUS = 11,
+    
     SEND_SPRITE_XY = 20,  // SoundSwarm
+
 } NGCommand;
 
 //NDataType
 typedef enum {
-    FOO = 0,
-    BYTE = 1,
-    INT = 2,
-    FLOAT = 3,
-    DOUBLE = 4,
-    NO_DATA = 5,
+    NO_DATA = 0,
+    CHAR = 1,
+    UINT8 = 2,
+    INT32 = 3,
+    FLOAT32 = 4,
 } NGDataType;
 
 //Port Number

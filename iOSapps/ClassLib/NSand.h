@@ -4,8 +4,8 @@
 //
 //  Initial version, Steven Kemper on 6/22/12.
 //
-#ifndef NSAND
-#define NSAND
+#ifndef NSAND_H
+#define NSAND_H
 
 
 #import <Foundation/Foundation.h>

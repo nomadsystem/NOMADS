@@ -5,8 +5,8 @@
 //  Created by Steven Kemper on 6/22/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-#ifndef NGRAIN
-#define NGRAIN
+#ifndef NGRAIN_H
+#define NGRAIN_H
 
 
 #import <Foundation/Foundation.h>
@@ -17,21 +17,36 @@
     @public Byte command;
     @public Byte dataType; 
     @public int dataLen;
+    @public uint8_t *uArray;
     @public NSString *str;
     @public int *iArray;
+    @public float *fArray;
+    
 }
+
+- (void) setGrainElts_AppID:(Byte)a 
+                    Command:(Byte)c 
+                   DataType:(Byte)dT 
+                    DataLen:(int)dL 
+                      Uint8:(Byte *)bA; 
 
 - (void) setGrainElts_AppID:(Byte)a 
                        Command:(Byte)c 
                       DataType:(Byte)dT 
                        DataLen:(int)dL 
-                         String:(NSString *)str; 
+                         String:(NSString *)s; 
 
 - (void)setGrainElts_AppID:(Byte)a 
                    Command:(Byte)c 
                   DataType:(Byte)dT 
                    DataLen:(int)dL 
-                   Integer:(int *)iA; 
+                   Int32:(int *)iA; 
+
+- (void)setGrainElts_AppID:(Byte)a 
+                   Command:(Byte)c 
+                  DataType:(Byte)dT 
+                   DataLen:(int)dL 
+                  Float32:(float *)fA; 
 
 - (void) print;
 
