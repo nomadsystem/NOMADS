@@ -29,6 +29,15 @@
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
         
+        numChatLines = 15; //Initialize number of chat lines to display
+        
+        chatLines = [[NSMutableArray alloc] initWithCapacity:numChatLines];
+        
+        //Initialize array for lines of discussion
+        for (int i=0;i<numChatLines;i++) {
+            [chatLines insertObject:@"X" atIndex:i];
+        }
+        
         [self setMultipleTouchEnabled:YES];
         
         //Code to get the point to start at the center of the screen
@@ -64,20 +73,26 @@
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
     //This delegate not being 
-    // CLog(@"I GOT DATA FROM SAND!!!\n");
+    CLog(@"SwarmDrawView: Data Ready Handle\n");
     
     if (nil != inGrain) { 
+        if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
+        { 
+            
+//            for (int i=(numChatLines-1);i>0;i--) {
+//                [chatLines insertobjectAtIndex:i] = [chatLines objectAtIndex:i-1];
+//                NSString *tString = [chatLines objectAtIndex:i];
+//                CLog(@"String %@ at position %d", tString, i);
+//            }
+            [chatLines addObject:inGrain->str];
+            CLog(@"chatLines = %@", chatLines);
+            if ([chatLines count] > numChatLines) {
+                [chatLines removeObjectAtIndex:0];
+            }
+            [self setNeedsDisplay];
+            
+        } 
         
-        //        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
-        //        {
-        //            //    NSLog(@"Filtering AppID 22");
-        //            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
-        //            //do something
-        //        }
-        
-        //        else {
-        //            NSLog(@"No Data for Swarm App");
-        //        }
     }
     
 }
@@ -116,11 +131,12 @@
     
     NSString *nsstr = @"NOMADS Bindle"; //Incoming NSString 
     const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
+    
     int len = strlen(str); //get length of string
     
     CGRect viewRect = [self bounds];
     CGFloat viewHeight = viewRect.size.height;
-        
+    
     CGContextSelectFont (context, 
                          "Helvetica-Bold",
                          viewHeight/20,
@@ -132,6 +148,20 @@
     CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
     
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
+    
+    CGFloat tH = (int)(viewHeight*1.1);
+    CGFloat chatSpace = tH/numChatLines;
+    CGFloat chatYLoc = viewHeight-chatSpace;
+    CGFloat chatXLoc = 20;
+    
+    for (int i=0;i<numChatLines;i++) {
+        
+        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
+        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
+       printf("My String %s\n", str);
+        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+        chatYLoc -= chatSpace;
+    }
     
 }
 

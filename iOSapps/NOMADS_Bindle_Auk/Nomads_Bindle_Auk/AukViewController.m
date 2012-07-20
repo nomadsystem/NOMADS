@@ -1,9 +1,7 @@
 //
 //  AukViewController.m
 //  NOMADS_Bindle_Auk
-//  
-//
-//
+
 //  Created by Steven Kemper on 7/18/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
@@ -16,17 +14,16 @@
 #import "NAppIDAuk.h"
 #import "NCommandAuk.h"
 
-
-
 @implementation AukViewController
+
+@synthesize appSand; //Our implementation of NSand
+@synthesize appDelegate;
+
 @synthesize loginNavBackButton;
 @synthesize joinNomadsButton;
 @synthesize leaveNomadsButton;
-
 @synthesize loginNavTitle;
 @synthesize loginNavBar;
-@synthesize appSand; //Our implementation of NSand
-@synthesize appDelegate;
 @synthesize loginView;
 @synthesize aukView;
 @synthesize connectionLabel;
@@ -104,9 +101,9 @@
 // input data function ============================================
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    
+    CLog(@"AVC: Data Ready Handle\n");
     if (nil != inGrain) {
-        CLog(@"AVC: Data Ready Handle\n");
+      //  CLog(@"AVC: Data Ready Handle\n");
     }
 }
 
