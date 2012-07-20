@@ -1,12 +1,11 @@
 //
-//  DiscussCloudAppDelegate.m
-//  DiscussCloud
+//  BindleAppDelegate.m
+//  
 //
 //  Created by Steven Kemper on 5/15/12.
 //
 
 #import "BindleAppDelegate.h"
-#import "DiscussViewController.h"
 #import "SwarmViewController.h"
 #import "AukViewController.h"
 #import "NGlobals.h"
@@ -19,16 +18,12 @@
 
 @synthesize window = _window;
 @synthesize appSand;
-@synthesize avc;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    avc = [[AukViewController alloc] init];
-    [[self window] setRootViewController:avc];
-    [self.window makeKeyAndVisible];
-    
+        
     
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -36,7 +31,10 @@
     
     // SAND:  set a pointer inside appSand so we get notified when network data is available
     [appSand setDelegate:self];
-    
+    AukViewController *avc = [[AukViewController alloc] init];
+    [[self window] setRootViewController:avc];
+    [self.window makeKeyAndVisible];
+
     //   self.window.backgroundColor = [UIColor whiteColor];
     
     return YES;
@@ -46,7 +44,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
-    CLog(@"I GOT DATA FROM SAND!!!\n");
+    CLog(@"App Delegate dataReadyHandle");
 }
 
 
