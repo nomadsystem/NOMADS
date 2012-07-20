@@ -31,6 +31,9 @@
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
+
+
+        
     }
     return self;
 }
@@ -50,11 +53,14 @@
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
     
+
     
     if ([loginTextField.text length] > 0){
+        [appDelegate->appSand connect];
+
         [appDelegate->appSand sendWithGrainElts_AppID:LOGIN 
                                               Command:SEND_MESSAGE 
-                                             DataType:BYTE 
+                                             DataType:CHAR 
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
         loginTextField.text = @"";

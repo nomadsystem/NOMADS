@@ -64,7 +64,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_YES_NO 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -74,7 +74,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_YES_NO 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -83,7 +83,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_A_TO_E 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -93,7 +93,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_A_TO_E 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -103,7 +103,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_A_TO_E 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -113,7 +113,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_A_TO_E 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -123,7 +123,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_A_TO_E 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[answerString length] 
                                            String:answerString];
 }
@@ -141,7 +141,7 @@ int oneToTenVoteVal;
     
     [appDelegate->appSand sendWithGrainElts_AppID:STUDENT_POLL 
                                           Command:QUESTION_TYPE_ONE_TO_TEN 
-                                         DataType:BYTE 
+                                         DataType:CHAR 
                                           DataLen:[voteValString length] 
                                            String:voteValString];
     NSLog(@"VOTE VAL STRING: %@",voteValString);

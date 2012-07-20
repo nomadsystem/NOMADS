@@ -7,6 +7,7 @@
 //
 
 #import "NGrain.h"
+#import "NGlobals.h"
 
 @implementation NGrain
 
@@ -18,6 +19,20 @@
     }
     return self;
 }
+
+- (void)setGrainElts_AppID:(Byte)a 
+                   Command:(Byte)c 
+                  DataType:(Byte)dT 
+                   DataLen:(int)dL 
+                    Uint8:(uint8_t *)uA
+{   
+    appID = a;
+    command = c;
+    dataType = dT;
+    dataLen = dL;
+    uArray = uA;
+}
+
 
 - (void)setGrainElts_AppID:(Byte)a 
                       Command:(Byte)c 
@@ -46,16 +61,50 @@
     iArray = iA;
 }
 
+- (void)setGrainElts_AppID:(Byte)a 
+                   Command:(Byte)c 
+                  DataType:(Byte)dT 
+                   DataLen:(int)dL 
+                   Float:(float *)fA; 
+{   
+    appID = a;
+    command = c;
+    dataType = dT;
+    dataLen = dL;
+    fArray = fA;
+}
 
+// DT:  fix for different data types
 - (void)print
 {
+    int i;
     NSLog(@"NGrain -> print()");
     NSLog(@"appID = %d",appID);
     NSLog(@"command = %d",command);
     NSLog(@"dataType = %d",dataType);
     NSLog(@"dataLen = %d",dataLen);
-    NSLog(@"str = %@\n",str);
-//    NSLog(@"dataArray = %@", dataArray); //This is temporary until we get other global variables classes made
+    if (dataType == CHAR) {
+        NSLog(@"str = %@\n",str);
+    }
+    else if (dataType == UINT8) {
+        NSLog(@"uint8:");
+        for(i=0;i<dataLen;i++) {
+            NSLog(@" %d ",uArray[i]);
+        }
+    }
+    else if (dataType == INT32) {
+        NSLog(@"int32:");
+        for(i=0;i<dataLen;i++) {
+            NSLog(@" %d ",iArray[i]);
+        }
+    }
+    else if (dataType == FLOAT32) {
+        NSLog(@"float32:");
+        for(i=0;i<dataLen;i++) {
+            NSLog(@" %f ",fArray[i]);
+        }
+    }
 }
-
+    
+    
 @end
