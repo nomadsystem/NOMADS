@@ -18,6 +18,7 @@
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
+    
     __weak UILabel *connectionLabel;
     UIView *loginView;
     UIView *aukView;
@@ -33,8 +34,10 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *loginNavBackButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *loginNavTitle;
 @property (weak, nonatomic) IBOutlet UINavigationBar *loginNavBar;
+
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
+
 @property (weak, nonatomic) IBOutlet UIButton *joinNomadsButton;
 @property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
 @property (strong, nonatomic) IBOutlet UIView *loginView;
@@ -48,6 +51,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
 @property (strong, nonatomic) IBOutlet UIView *swarmView;
+
+- (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
+
+
 - (IBAction)discussButton:(id)sender;
 - (IBAction)cloudButton:(id)sender;
 - (IBAction)settingsButton:(id)sender;
