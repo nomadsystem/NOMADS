@@ -9,6 +9,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
+#import "NAppIDMain.h"
+#import "NCommandMain.h"
 
 @implementation SwarmDrawView
 @synthesize myFingerPoint;

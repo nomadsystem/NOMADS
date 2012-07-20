@@ -10,6 +10,8 @@
 #import "SwarmViewController.h"
 #import "AukViewController.h"
 #import "NGlobals.h"
+#import "NAppIDAuk.h"
+#import "NCommandAuk.h"
 #import "NGrain.h"
 #import "NSand.h"
 
