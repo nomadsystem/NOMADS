@@ -192,7 +192,7 @@ public class NomadServer implements Runnable {
 	//      if you're not logged in, you get booted
 
 	tLoginStatus = currentClient.getLoginStatus();
-	if (incAppID == NAppID.LOGIN) {
+	if ((incAppID == NAppID.BINDLE) && (incAppCmd == NAppid.LOGIN)) {
 	    if (tLoginStatus == true) {
 		// send back "you're already logged in" message / LOGIN_STATUS w/ value = 2
 		NGlobals.sPrint("  LOGIN client [" + tCNum + "] already logged in.\n" + incAppID);

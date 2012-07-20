@@ -16,6 +16,7 @@ public class NCommand {
 
     public static byte REGISTER = 10;
     public static byte LOGIN_STATUS = 11;
+    public static byte LOGIN = 12;
 
     public static byte SEND_SPRITE_XY = 20;  // SoundSwarm
     public static byte SEND_THREAD_ID = 21;
