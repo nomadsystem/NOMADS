@@ -177,10 +177,9 @@ public class OperaClient extends JApplet implements Runnable
 		operaSand.connect();
 		int d[] = new int[1];
 		d[0] = 0;
-		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 		nThread = new NomadsAppThread(this);
 		nThread.start();
-
+		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 	}
 
@@ -231,40 +230,40 @@ public class OperaClient extends JApplet implements Runnable
 			//if Appid= conductor panel, command = droplet status, get value, if zero diable, if 1 enable
 
 			if (incCmd == NCommand.SET_DROPLET_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Pointer.myBusReader.amplitude.set(0.0);
 					NGlobals.cPrint("Setting Droplets to OFF");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Pointer.myBusReader.amplitude.set(1.0);
 					NGlobals.cPrint("Setting Droplets to ON");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Discuss.speak.setEnabled(false);
 					NGlobals.cPrint("DISCUSS_STATUS false");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Discuss.speak.setEnabled(true);
 					NGlobals.cPrint("DISCUSS_STATUS true");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_CLOUD_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Cloud.speak.setEnabled(false);
 					NGlobals.cPrint("CLOUD_STATUS false");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Cloud.speak.setEnabled(true);
 					NGlobals.cPrint("CLOUD_STATUS true");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_DROPLET_VOLUME) {	
-				double tDropVal = (double)grain.iArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
+				double tDropVal = (double)grain.bArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
 				float tDropVolume = (float)(Math.pow(tDropVal, 2)/10000.0);
 
 				NGlobals.cPrint("tDropVolume = " + tDropVolume);

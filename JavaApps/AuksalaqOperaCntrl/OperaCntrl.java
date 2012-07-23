@@ -240,7 +240,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		operaSand = new NSand();
 		operaSand.connect();
 
-		int d[] = new int[1];
+		byte d[] = new byte[1];
 		d[0] = 0;
 
 		nThread = new NomadsAppThread(this);
@@ -296,40 +296,40 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		if (incAppID == NAppID.SERVER) {
 			NGlobals.cPrint("Got data from SERVER: " + text);
-			if (text.length() > 1) {
+		       if (text.length() > 1) {
 				temp = text.substring(0,4);
 
 				// checked = new JLabel("CHECKED: 0");
 				// cleaned = new JLabel("CLEANED: 0");
 				// counted = new JLabel("CLIENTS: 0");
 				if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-					if (grain.iArray[0] == 0) {
+					if (grain.bArray[0] == 0) {
 						discussCntrl.getModel().setSelected(false);
 						NGlobals.cPrint("ControlPanel Discuss disable");
 					}
-					else if (grain.iArray[0] == 1) {
+					else if (grain.bArray[0] == 1) {
 						discussCntrl.getModel().setSelected(true);
 						NGlobals.cPrint("ControlPanel Discuss enable");
 					}
 				}
 
 				if (incCmd == NCommand.SET_CLOUD_STATUS) {
-					if (grain.iArray[0] == 0) {
+					if (grain.bArray[0] == 0) {
 						cloudCntrl.getModel().setSelected(false);
 						NGlobals.cPrint("ControlPanel Cloud Disable");
 					}
-					else if (grain.iArray[0] == 1) {
+					else if (grain.bArray[0] == 1) {
 						cloudCntrl.getModel().setSelected(true);
 						NGlobals.cPrint("ControlPanel Cloud Enable");
 					}
 				}
 
 				if (incCmd == NCommand.SET_POINTER_STATUS) {
-					if (grain.iArray[0] == 0) {
+					if (grain.bArray[0] == 0) {
 						pointerCntrl.getModel().setSelected(false);
 						NGlobals.cPrint("ControlPanel Pointer Disable");
 					}
-					else if (grain.iArray[0] == 1) {
+					else if (grain.bArray[0] == 1) {
 						pointerCntrl.getModel().setSelected(true);
 						NGlobals.cPrint("ControlPanel Pointer Enable");
 					}
@@ -337,11 +337,11 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 
 				if (incCmd == NCommand.SET_DROPLET_STATUS) {
-					if (grain.iArray[0] == 0) {
+					if (grain.bArray[0] == 0) {
 						dropletCntrl.getModel().setSelected(false);
 						NGlobals.cPrint("ControlPanel Pointer disable");
 					}
-					else if (grain.iArray[0] == 1) {
+					else if (grain.bArray[0] == 1) {
 						dropletCntrl.getModel().setSelected(true);
 						NGlobals.cPrint("ControlPanel Pointer enable");
 					}
@@ -366,7 +366,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 			Object source = ae.getSource();
 			//	NGlobals.cPrint("entering speakListener");
 
-			int d[] = new int[1]; //to stash settings data
+			byte d[] = new byte[1]; //to stash settings data
 			
 			if (source == discussClear) {
 				NGlobals.cPrint("Action:  discussClear");
@@ -396,7 +396,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 			boolean pressed = buttonModel.isPressed();
 			boolean selected = buttonModel.isSelected();
 			
-			int d[] = new int[1]; //to stash settings data
+			byte d[] = new byte[1]; //to stash settings data
 			
 			if (abstractButton == discussCntrl) {
 				if (selected) {
@@ -457,36 +457,36 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 	ChangeListener sliderListener = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
-			int d[] = new int[1]; //to stash settings data
+			byte d[] = new byte[1]; //to stash settings data
 			
 			String n;
 			String tempString;
 			JSlider source = (JSlider)e.getSource();
 			if (source == discussAlpha) {
-				d[0] = (int)source.getValue();
+				d[0] = (byte)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_ALPHA, (byte)NDataType.UINT8, 1, d );
 				NGlobals.cPrint("discussAlpha:" + d);  
 			}
 			if (source == cloudAlpha) {
-				d[0] = (int)source.getValue();
+				d[0] = (byte)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_ALPHA, (byte)NDataType.UINT8, 1, d );
 				NGlobals.cPrint("cloudAlpha:" + d); 
 
 			}
 			if (source == pointerAlpha) {
-				d[0] = (int)source.getValue();
+				d[0] = (byte)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_ALPHA, (byte)NDataType.UINT8, 1, d );
 				NGlobals.cPrint("pointerAlpha:" + d); 
 
 			}
 			if (source == dropletLevel) {
-				d[0] = (int)source.getValue();
+				d[0] = (byte)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.UINT8, 1, d );
 				NGlobals.cPrint("dropletLevel:" + d); 
 
 			}
 			if (source == mainVolLevel) {
-				d[0] = (int)source.getValue();
+				d[0] = (byte)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_MAIN_VOLUME, (byte)NDataType.UINT8, 1, d );
 				NGlobals.cPrint("mainVolLevel:" + d); 
 			}
