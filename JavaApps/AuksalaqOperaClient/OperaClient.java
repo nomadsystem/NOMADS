@@ -171,11 +171,12 @@ public class OperaClient extends JApplet implements Runnable
 		add(panel2, BorderLayout.CENTER);
 		//		add(myOC_Pointer, BorderLayout.EAST);
 		//		add(myDiscussDisplayOnly, BorderLayout.WEST);
-		
+
 
 		operaSand = new NSand(); 
-		operaSand.connect();
-
+		int d[] = new int[1];
+		d[0] = 0;
+		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 
@@ -194,69 +195,75 @@ public class OperaClient extends JApplet implements Runnable
 
 		grain = operaSand.getGrain();
 		grain.print(); //prints grain data to console
-		
+
 		incAppID = grain.appID;
 		incCmd = grain.command;
-		
+
 		String text = new String(grain.bArray);
-		
-	//	String input, tTest;
-		
-		
-//		tTest = text; 
-//
-//		if (text.length() >= 4){
-//			tTest = text.substring(0, 4);
-//			NGlobals.cPrint("tTest =" + tTest);
-//		}
+
+		//	String input, tTest;
+
+
+		//		tTest = text; 
+		//
+		//		if (text.length() >= 4){
+		//			tTest = text.substring(0, 4);
+		//			NGlobals.cPrint("tTest =" + tTest);
+		//		}
 
 		//NOT IMPLEMENTED ****STK 6/20/12
-//		if (bite == app_id.MONITOR) {
-//			if (text.equals("CHECK")) {
-//				try {
-//					streamOut.writeByte((byte)app_id.OPERA_CLIENT);
-//					streamOut.writeUTF("PING");
-//				}
-//				catch(IOException ioe) {
-//					System.out.println("Error writing to output stream: ");
-//				}
-//			}	 
-//		}   
+		//		if (bite == app_id.MONITOR) {
+		//			if (text.equals("CHECK")) {
+		//				try {
+		//					streamOut.writeByte((byte)app_id.OPERA_CLIENT);
+		//					streamOut.writeUTF("PING");
+		//				}
+		//				catch(IOException ioe) {
+		//					System.out.println("Error writing to output stream: ");
+		//				}
+		//			}	 
+		//		}   
 
 		if (incAppID == NAppID.CONDUCTOR_PANEL) {
 			NGlobals.cPrint("from Conductor Panel: " + text);
 
-			if (incCmd == NCommand.OC_DROPLET_ENABLE) {
-				myOC_Pointer.myBusReader.amplitude.set(1.0);
-				NGlobals.cPrint("Setting Droplets to ON");
-			}
-			else if (incCmd == NCommand.OC_DROPLET_DISABLE) {
-				myOC_Pointer.myBusReader.amplitude.set(0.0);
-				NGlobals.cPrint("Setting Droplets to OFF");
+			//if Appid= conductor panel, command = droplet status, get value, if zero diable, if 1 enable
+
+			if (incCmd == NCommand.SET_DROPLET_STATUS) {
+				if (grain.iArray[0] == 0) {
+					myOC_Pointer.myBusReader.amplitude.set(0.0);
+					NGlobals.cPrint("Setting Droplets to OFF");
+				}
+				else if (grain.iArray[0] == 1) {
+					myOC_Pointer.myBusReader.amplitude.set(1.0);
+					NGlobals.cPrint("Setting Droplets to ON");
+				}
 			}
 
-			else if (incCmd == NCommand.OC_DISCUSS_ENABLE) {
-				myOC_Discuss.speak.setEnabled(true);
-				NGlobals.cPrint("OC_DISCUSS_ENABLE");
-			}
-			else if (incCmd == NCommand.OC_DISCUSS_DISABLE) {
-				myOC_Discuss.speak.setEnabled(false);
-				NGlobals.cPrint("OC_DISCUSS_DISABLE");
+			else if (incCmd == NCommand.SET_DISCUSS_STATUS) {
+				if (grain.iArray[0] == 0) {
+					myOC_Discuss.speak.setEnabled(false);
+					NGlobals.cPrint("DISCUSS_STATUS false");
+				}
+				else if (grain.iArray[0] == 1) {
+					myOC_Discuss.speak.setEnabled(true);
+					NGlobals.cPrint("DISCUSS_STATUS true");
+				}
 			}
 
-			else if (incCmd == NCommand.OC_CLOUD_ENABLE) {
-				myOC_Cloud.speak.setEnabled(true);
-				NGlobals.cPrint("OC_CLOUD_ENABLE");
-			}
-			else if (incCmd == NCommand.OC_CLOUD_DISABLE) {
-				myOC_Cloud.speak.setEnabled(false);
-				NGlobals.cPrint("OC_CLOUD_DISABLE");
+			else if (incCmd == NCommand.SET_CLOUD_STATUS) {
+				if (grain.iArray[0] == 0) {
+					myOC_Cloud.speak.setEnabled(false);
+					NGlobals.cPrint("CLOUD_STATUS false");
+				}
+				else if (grain.iArray[0] == 1) {
+					myOC_Cloud.speak.setEnabled(true);
+					NGlobals.cPrint("CLOUD_STATUS true");
+				}
 			}
 
 			else if (incCmd == NCommand.SET_DROPLET_VOLUME) {	
-				double tDropVal = (double)Integer.parseInt(text); //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
-				//		System.out.println("ELSE!!! = " + tDropVal);
-				// float tDropVolume = (float)(tDropVal * 0.01);
+				double tDropVal = (double)grain.iArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
 				float tDropVolume = (float)(Math.pow(tDropVal, 2)/10000.0);
 
 				NGlobals.cPrint("tDropVolume = " + tDropVolume);
@@ -279,30 +286,30 @@ public class OperaClient extends JApplet implements Runnable
 		}
 	}
 
-//	public void open()
-//	{  
-//		try {
-//			streamOut = new DataOutputStream(socket.getOutputStream());
-//			client = new Opera_ClientThread(this, socket);
-//			streamOut.writeByte((byte)app_id.OPERA_CLIENT);
-//			streamOut.writeUTF("PING");
-//
-//			int offsetNew_mx = (int)(myOC_Pointer.origX * 1.4728); // STK scales dot movement to size of Opera Main
-//			int offsetNew_my = (int)(myOC_Pointer.origY * 1.20593);
-//			String towrite = new String("INIT: C:" + offsetNew_mx + ":" + offsetNew_my);
-//			//	System.out.println("Byte is " + app_id.OC_POINTER + " and write is "
-//			//			+ towrite);
-//			//	System.out.println("towrite = " + towrite);
-//			streamOut.writeByte(app_id.OC_POINTER); 
-//			streamOut.writeUTF(towrite);
-//		} 
-//		catch(IOException ioe) { 
-//			System.out.println("Error opening output stream: ");
-//		} 
-//	}
+	//	public void open()
+	//	{  
+	//		try {
+	//			streamOut = new DataOutputStream(socket.getOutputStream());
+	//			client = new Opera_ClientThread(this, socket);
+	//			streamOut.writeByte((byte)app_id.OPERA_CLIENT);
+	//			streamOut.writeUTF("PING");
+	//
+	//			int offsetNew_mx = (int)(myOC_Pointer.origX * 1.4728); // STK scales dot movement to size of Opera Main
+	//			int offsetNew_my = (int)(myOC_Pointer.origY * 1.20593);
+	//			String towrite = new String("INIT: C:" + offsetNew_mx + ":" + offsetNew_my);
+	//			//	System.out.println("Byte is " + app_id.OC_POINTER + " and write is "
+	//			//			+ towrite);
+	//			//	System.out.println("towrite = " + towrite);
+	//			streamOut.writeByte(app_id.OC_POINTER); 
+	//			streamOut.writeUTF(towrite);
+	//		} 
+	//		catch(IOException ioe) { 
+	//			System.out.println("Error opening output stream: ");
+	//		} 
+	//	}
 
 
-	
+
 
 	public void start() {
 		runner = new Thread(this);
@@ -322,8 +329,8 @@ public class OperaClient extends JApplet implements Runnable
 			//	String tInput;
 			Object source = ae.getSource();
 			//	NGlobals.cPrint("entering speakListener");
-			
-			
+
+
 
 			//listener code for speak button
 			if (source == myOC_Discuss.speak)   {
@@ -546,13 +553,13 @@ public class OperaClient extends JApplet implements Runnable
 
 					String towrite = new String("C:" + offsetNew_mx + ":" + offsetNew_my);
 					NGlobals.cPrint( "width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
-					
+
 					int tLen = towrite.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = towrite.getBytes();
 					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 					NGlobals.cPrint("OC_Pointer: towrite: " + towrite);
-					
+
 				}
 
 				myOC_Pointer.repaint();
