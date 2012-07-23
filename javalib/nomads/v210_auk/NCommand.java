@@ -4,6 +4,13 @@ public class NCommand {
     public static byte NOOP = 0;
     public static byte SEND_MESSAGE = 1;
 
+    public static byte SET_DISCUSS_STATUS = 10;
+    public static byte SET_CLOUD_STATUS = 11;
+    public static byte SET_POINTER_STATUS = 12;
+    public static byte SET_DROPLET_STATUS = 13;
+
+
+
     public static byte QUESTION_TYPE_YES_NO = 2;
     public static byte QUESTION_TYPE_ONE_TO_TEN = 3;
     public static byte QUESTION_TYPE_A_TO_E = 4;
