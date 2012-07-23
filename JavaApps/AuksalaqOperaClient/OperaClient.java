@@ -174,6 +174,7 @@ public class OperaClient extends JApplet implements Runnable
 
 
 		operaSand = new NSand(); 
+		operaSand.connect();
 		int d[] = new int[1];
 		d[0] = 0;
 		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
