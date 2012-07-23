@@ -1,6 +1,6 @@
 import java.net.*;
 import java.io.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 public class NomadServerThread extends Thread
 {  private NomadServer       server    = null;
