@@ -118,7 +118,7 @@
         
         // schedule update method for sending data
         // Change interval variable to 
-        [self schedule:@selector(sendPos:) interval:0.2];
+        //[self schedule:@selector(sendPos:) interval:0.2];
 	}
 	return self;
 }
@@ -140,6 +140,31 @@
     myDataInt[0] = (touchLocation.x * (1/size.width)) * sizeJava.width;
     // Y needs to be flipped
     myDataInt[1] = ((size.height - touchLocation.y) * (1/size.height)) * sizeJava.height;
+    
+    //NSLog(@"SendPos()");
+    //AppID
+    Byte myAppID = SOUND_SWARM;
+    //NSLog(@"myAppID =  %i\n", myAppID);
+    
+    //COMMAND
+    Byte myCommand = SEND_SPRITE_XY;
+    //NSLog(@"myCommand =  %i\n", myCommand);
+    
+    //DATA TYPE
+    Byte myDataType = INT;
+    //NSLog(@"myDataType =  %i\n", myDataType);
+    
+    //DATA LENGTH
+    //STK Currently set directly in sendWithGrainElts
+    
+    //DATA ARRAY
+    //myDataInt is updated in ccTouchesMoved
+    
+    [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                          Command:myCommand 
+                                         DataType:myDataType 
+                                          DataLen:2
+                                          Integer:myDataInt];
 }
 
 -(void)ccTouchesEnded:(UITouch *)touch withEvent:(UIEvent *)event
