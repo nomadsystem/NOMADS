@@ -114,8 +114,8 @@
     [appDelegate->appSand connect];
     
     if ([joinTextField.text length] > 0){
-        [appDelegate->appSand sendWithGrainElts_AppID:LOGIN 
-                                              Command:SEND_MESSAGE 
+        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE  
+                                              Command:LOGIN 
                                              DataType:CHAR 
                                               DataLen:[joinTextField.text length] 
                                                String:joinTextField.text];
