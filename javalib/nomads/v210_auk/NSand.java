@@ -222,8 +222,8 @@ public class NSand
 			dL = streamIn.readInt();
 
 			//Detect array type in Grain
-			//Byte array
-			if (dT == NDataType.BYTE) {
+			//Byte array CHAR
+			if (dT == NDataType.CHAR) {
 				byte[] bA = new byte[dL];
 
 				for (int i=0; i< dL; i++) {
@@ -232,6 +232,18 @@ public class NSand
 				}
 				grain = new NGrain(appID, cmd, dT, dL, bA);
 			}
+
+			//Byte array UINT8
+			if (dT == NDataType.UINT8) {
+				byte[] bA = new byte[dL];
+
+				for (int i=0; i< dL; i++) {
+					bA[i] = streamIn.readByte();
+					NGlobals.lPrint("BYTE:  " + bA[i]);
+				}
+				grain = new NGrain(appID, cmd, dT, dL, bA);
+			}
+
 
 			//Int Array
 			else if (dT == NDataType.INT) {
