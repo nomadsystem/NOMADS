@@ -88,6 +88,9 @@
             CLog(@"chatLines = %@", chatLines);
             if ([chatLines count] > numChatLines) {
                 [chatLines removeObjectAtIndex:0];
+                for (int i=([chatLines count] -1); i>0; i--) {
+                    [chatLines objectAtIndex:1] = 
+                }
             }
             [self setNeedsDisplay];
             

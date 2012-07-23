@@ -24,6 +24,7 @@ typedef enum {
     SYNTH_STOP = 9,//uGroove
     REGISTER = 10,
     LOGIN_STATUS = 11,
+    LOGIN = 12,
     SEND_SPRITE_XY = 20,  // SoundSwarm
 
 } NCommands;
