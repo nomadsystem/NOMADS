@@ -20,9 +20,15 @@ public class NomadServer implements Runnable {
     private int eventNum = 0;
     private static int debugLine = 0;
     private static String[] children;
-    private static Boolean requireLogin = false;
     private Calendar cal;
     long nowT,appT,diffT,lagT;
+
+    private static Boolean _OC_DISCUSS_STATUS = false;
+    private static Boolean _OC_CLOUD_STATUS = false;
+    private static Boolean _OC_POINTER_STATUS = false;
+    private static Boolean _OC_DROPLET_STATUS = false;
+
+
 
     int iDay;
     FileOutputStream out; // declare a file output object
@@ -187,58 +193,7 @@ public class NomadServer implements Runnable {
 	    currentClient.setAppID(incAppID);
 	}
 
-	// 2: check login
-	//      only the LOGIN app can log you in
-	//      if you're not logged in, you get booted
-
-	tLoginStatus = currentClient.getLoginStatus();
-	if ((incAppID == NAppID.BINDLE) && (incAppCmd == NCommand.LOGIN)){
-	    if (tLoginStatus == true) {
-		// send back "you're already logged in" message / LOGIN_STATUS w/ value = 2
-		NGlobals.sPrint("  LOGIN client [" + tCNum + "] already logged in.\n" + incAppID);
-
-		byte[] dx = new byte[1];
-		dx[0] = 2;
-		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.UINT8, 1, dx);
-	    }
-	    else {
-		// Log the client in
-		String tString = new String(myGrain.bArray);
-		NGlobals.sPrint("Got username: " + tString);
-		clients[tCNum].setUser(tString);
-
-		// Set new login status 
-		clients[tCNum].setLoginStatus(true);
-		tLoginStatus = currentClient.getLoginStatus();
-
-		NGlobals.sPrint("  LOGIN client [" + tCNum + "] logging in, sending back confirmation info.\n" + incAppID);
-
-		// send back "successful login" message / LOGIN_STATUS w/ value = 1
-		byte[] dx = new byte[1];
-		dx[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.UINT8, 1, dx);
-	    }
-	}
-
-	// Comment this out to turn back on login : LOGIN TOGGLE
-
-	tLoginStatus = true;
-
-	// Kick -------------------------------------------------------------------------------------
-
-	// X:  if you're not the LOGIN app providing the correct info, you get booted here
-	if (tLoginStatus == false) {
-	    NGlobals.sPrint("   WARNING:  client THREAD NOT logged in.");
-	    remove(THREAD_ID);
-	    // TODO: send back some sand data re: login info
-	    return;
-	}
-
-	// ====================================================================================
-	//  At this point we're logged in, and we have your SAND data GRAIN
-	// ====================================================================================
-
-	NGlobals.sPrint("   client THREAD logged in.");
+	// 2: check login  :  NOT NEEDED FOR AUKSALAQ 10/29/12
 
 	// Grab IP (more for data logging)
 
@@ -258,35 +213,64 @@ public class NomadServer implements Runnable {
 
 	NGlobals.sPrint("===== WRITING =====");
 
-	// Sound SWARM Routing Logic ==========================================================================R
+	if (incAppID == NAppID.OPERA_CLIENT) {
 
-	// TODO:  send 3 ints instead, 1st int is the THREAD_ID
-
-	if (incAppID == NAppID.SOUND_SWARM) {
-	    for (int c = 0; c < clientCount; c++) {
-		
-		// Get the client off the master list
-		currentClient = clients[c];
-		NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
-		
-		if (currentClient.getAppID() == NAppID.SOUND_SWARM_DISPLAY) {
-		    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
-		    int[] x = new int[1];
-		    x[0] = THREAD_ID;
-		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
-		    NGlobals.sPrint("Sending SOUND_SWARM: x/y coordinates\n");
-		    currentClient.threadSand.sendGrain(myGrain);
-		    myGrain.print();
-
-		}
+	    int d[] = new int[1];
+	    if (_OC_DISCUSS_STATUS == false) {
+		d[0] = 0;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_DISCUSS_STATUS 0");
+	    }
+	    else if (_OC_DISCUSS_STATUS == true) {
+		d[0] = 1;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_DISCUSS_STATUS 1");
+	    }
+	    if (_OC_CLOUD_STATUS == false) {
+		d[0] = 0;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_CLOUD_STATUS 1");
+	    }
+	    else if (_OC_CLOUD_STATUS == true) {
+		d[0] = 1;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_CLOUD_STATUS 1");
+	    }
+	    if (_OC_POINTER_STATUS == false) {
+		d[0] = 0;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_POINTER_STATUS 0");
+	    }
+	    else if (_OC_POINTER_STATUS == true) {
+		d[0] = 1;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_POINTER_STATUS 1");
+	    }
+	    if (_OC_DROPLET_STATUS == false) {
+		d[0] = 0;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_DROPLET_STATUS 0");
+	    }
+	    else if (_OC_DROPLET_STATUS == true) {
+		d[0] = 1;
+		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
+		if (NGlobals.serverDebugLevel > 0)
+		    NGlobals.sPrint("_SET_DROPLET_STATUS 1");
 	    }
 
 	}
-
+	
 	// GENERIC Logic =============================================================
 	//    -for each client SEND ALL DATA
-
-	else {
+	
+	else if (false) {
 	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
 	    for (int c = 0; c < clientCount; c++) {
 		

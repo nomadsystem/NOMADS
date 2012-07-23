@@ -12,7 +12,6 @@ import nomads.v210_auk.*;
 
 public class OC_Cloud extends JPanel {   
 	
-	
 
 	private String dispMsg = "", temp = "", tID = "";
 	public String lastInput = "";
@@ -29,7 +28,6 @@ public class OC_Cloud extends JPanel {
 	String tempString = "";
 
 	Image backgroundIce;
-
 
 	//background color for the whole applet
 	Color BG = new Color(0,0,204);      
