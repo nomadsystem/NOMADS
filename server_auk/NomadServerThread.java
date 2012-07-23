@@ -92,7 +92,7 @@ public class NomadServerThread extends Thread
 		while (true) {
 			try {  
 			    threadGrain = threadSand.getGrain(streamIn.readByte());
-			    threadGrain.print();
+			    // threadGrain.print();
 			    server.handle(THREAD_ID, threadGrain);
 	       	        }
 			catch(IOException ioe) {  
