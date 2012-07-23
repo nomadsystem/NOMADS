@@ -60,8 +60,8 @@
     if ([loginTextField.text length] > 0){
         [appDelegate->appSand connect];
 
-        [appDelegate->appSand sendWithGrainElts_AppID:LOGIN 
-                                              Command:SEND_MESSAGE 
+        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE 
+                                              Command:LOGIN 
                                              DataType:CHAR 
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];

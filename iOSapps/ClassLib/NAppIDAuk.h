@@ -16,6 +16,7 @@ typedef enum {
     C_STUDENT_PANEL = 4,
     CENSOR = 5,
     MONITOR = 6,
+    BINDLE = 7,
     
     //DEBUG = 10,
     
@@ -29,7 +30,7 @@ typedef enum {
     TEXT_CHAT = 30,
     C_TEXT_CHAT = 31,
     
-    LOGIN = 40,
+ //   LOGIN = 40,
     C_LOGIN = 41,
     
     CLOUD_DISPLAY = 50,
