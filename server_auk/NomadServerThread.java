@@ -9,7 +9,7 @@ public class NomadServerThread extends Thread
     private int				 APP_ID    = -1;
     private String			IP;
     private String			USER;
-    private Boolean loginStatus = false;
+    private byte buttonInitStatus = 0;
     private DataInputStream  streamIn  =  null;
     private DataOutputStream streamOut = null;
     private NGrain threadGrain;
@@ -48,14 +48,14 @@ public class NomadServerThread extends Thread
     	return THREAD_ID;
     }
     
-    public Boolean getLoginStatus() {
-    	System.out.println("          getLoginStatus(" + loginStatus + ")");    
-    	return loginStatus;
+    public byte getButtonInitStatus() {
+    	System.out.println("          getLoginStatus(" + buttonInitStatus + ")");    
+    	return buttonInitStatus;
     }
     
-    public void setLoginStatus(Boolean status) {
+    public void setButtonInitStatus(byte status) {
     	System.out.println("setLoginStatus(" + status + ")");
-    	loginStatus = status;
+    	buttonInitStatus = status;
     }
 
     public int getAppID() {
