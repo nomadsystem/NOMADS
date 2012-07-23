@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.lang.*;
 import java.util.*;
 import java.text.DecimalFormat;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 // writes bytes and strings seperately
 

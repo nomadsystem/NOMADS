@@ -30,6 +30,7 @@
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
+
 @property (weak, nonatomic) IBOutlet UITextField *inputDiscussField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

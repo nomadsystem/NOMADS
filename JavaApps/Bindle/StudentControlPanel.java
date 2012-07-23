@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 
 public class StudentControlPanel extends JApplet  implements  ActionListener {
 	// Change to your directory
 	// for production version, just use "/"
-	String user = new String("http://nomads.music.virginia.edu/turowski/NOMADS/JavaApps/");
+	String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
 	
 	NSand studentControlPanelSand;
 	private NomadsAppThread nThread;

@@ -10,7 +10,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import netscape.javascript.*;
-import nomads.v210.*;
+import nomads.v210_auk.*;
 
 public class JoinApp extends JApplet implements ActionListener {
 	private class NomadsAppThread extends Thread {

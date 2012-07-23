@@ -67,6 +67,14 @@ public class NSand
 					streamOut.writeInt(myGrain.iArray[i]);
 				}
 			}
+
+			if (myGrain.dataType == NDataType.FLOAT) {
+				for (int i=0; i<myGrain.dataLen; i++) {
+					streamOut.writeFloat(myGrain.fArray[i]);
+				}
+			}
+
+
 		}
 		catch(IOException ioe) {  
 			System.out.println("SAND write error");
@@ -138,28 +146,6 @@ public class NSand
 		}
 	}
 
-	// SendGrain with Double Array
-	public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, double[] dArray) {
-
-		try {  
-			// send app id
-			streamOut.writeByte(aID);
-			// send command
-			streamOut.writeByte(cmd);
-			// send data Type
-			streamOut.writeByte(dType);
-			// send data Length
-			streamOut.writeInt(dLen);
-
-			for (int i=0; i<dLen; i++) {
-				streamOut.writeDouble(dArray[i]);
-			}
-		}
-		catch(IOException ioe) {  
-			System.out.println("SAND write error");
-		}
-	}
-
 	//Returns Grain appID, cmd, dT, dL, bA
 	public  NGrain getGrain (byte appID) {
 		NGlobals.lPrint("getGrain");
@@ -208,16 +194,6 @@ public class NSand
 				grain = new NGrain(appID, cmd, dT, dL, fA);
 			}
 
-			//Double Array
-			else if (dT == NDataType.DOUBLE) {
-				double[] dA = new double[dL];
-
-				for (int i=0; i< dL; i++) {
-					dA[i] = streamIn.readDouble();
-					NGlobals.lPrint("DOUBLE:  " + dA[i]);
-				}
-				grain = new NGrain(appID, cmd, dT, dL, dA);
-			}
 		}
 		catch(IOException ioe) {  
 			System.out.println("SAND write error");
@@ -279,16 +255,6 @@ public class NSand
 				grain = new NGrain(appID, cmd, dT, dL, fA);
 			}
 
-			//Double Array
-			else if (dT == NDataType.DOUBLE) {
-				double[] dA = new double[dL];
-
-				for (int i=0; i< dL; i++) {
-					dA[i] = streamIn.readDouble();
-					NGlobals.lPrint("DOUBLE:  " + dA[i]);
-				}
-				grain = new NGrain(appID, cmd, dT, dL, dA);
-			}
 		}
 		catch(IOException ioe) {  
 			System.out.println("SAND write error");

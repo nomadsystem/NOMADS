@@ -12,6 +12,8 @@
 #import "PollViewController.h"
 #import "SwarmViewController.h"
 #import "NGlobals.h"
+#import "NAppIDMain.h"
+#import "NCommandMain.h"
 #import "NGrain.h"
 #import "NSand.h"
 
@@ -33,7 +35,8 @@
     [appSand setDelegate:self];
     
     // SAND: Connect the network streams
-    [appSand connect];
+
+    // [appSand connect];   // DT now done at login
     
     //lvc = [[LoginViewController alloc] init];
     // LoginViewController *lvc = [[LoginViewController alloc] init];

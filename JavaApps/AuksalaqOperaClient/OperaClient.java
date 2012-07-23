@@ -15,7 +15,7 @@ import java.io.*;
 import netscape.javascript.*;
 import java.text.*;
 import java.applet.*;
-import nomads.v210_Auk.*;
+import nomads.v210_auk.*;
 
 public class OperaClient extends JApplet implements Runnable
 {

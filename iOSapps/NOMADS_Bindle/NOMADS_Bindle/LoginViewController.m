@@ -7,6 +7,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
+#import "NAppIDMain.h"
+#import "NCommandMain.h"
 #import "LoginViewController.h"
 #import "DiscussViewController.h"
 #import "CloudViewController.h"
@@ -31,6 +33,9 @@
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
+
+
+        
     }
     return self;
 }
@@ -50,11 +55,14 @@
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
     
+
     
     if ([loginTextField.text length] > 0){
-        [appDelegate->appSand sendWithGrainElts_AppID:LOGIN 
-                                              Command:SEND_MESSAGE 
-                                             DataType:BYTE 
+        [appDelegate->appSand connect];
+
+        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE 
+                                              Command:LOGIN 
+                                             DataType:CHAR 
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
         loginTextField.text = @"";
