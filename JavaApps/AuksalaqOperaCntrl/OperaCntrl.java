@@ -236,10 +236,13 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		i = 0;
 		j = 0;
 		createGUI(getContentPane());
-
+		
 		operaSand = new NSand();
+		operaSand.connect();
+
 		int d[] = new int[1];
 		d[0] = 0;
+
 		operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 		
 		nThread = new NomadsAppThread(this);
