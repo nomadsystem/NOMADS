@@ -219,19 +219,19 @@ public class NomadServer implements Runnable {
 
 	    d[0] = _CP_DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DISCUSS_STATUS: " + d);
+	    NGlobals.lPrint("_CP_DISCUSS_STATUS: " + d[0]);
 
 	    d[0] = _CP_CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_CLOUD_STATUS:  " + d);
+	    NGlobals.lPrint("_CP_CLOUD_STATUS:  " + d[0]);
 	    
 	    d[0] = _CP_POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_POINTER_STATUS:  " + d);
+	    NGlobals.lPrint("_CP_POINTER_STATUS:  " + d[0]);
 
 	    d[0] = _CP_DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DROPLET_STATUS:  " + d);
+	    NGlobals.lPrint("_CP_DROPLET_STATUS:  " + d[0]);
 	    
 	    currentClient.setButtonInitStatus((byte)1);
 	    // tempString = new String("CNT:" + clientCount);
@@ -248,19 +248,19 @@ public class NomadServer implements Runnable {
 
 	    d[0] = _OC_DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DISCUSS_STATUS: " + d);
+	    NGlobals.lPrint("_OC_DISCUSS_STATUS: " + d[0]);
 
 	    d[0] = _OC_CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_CLOUD_STATUS:  " + d);
+	    NGlobals.lPrint("_OC_CLOUD_STATUS:  " + d[0]);
 	    
 	    d[0] = _OC_POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_POINTER_STATUS:  " + d);
+	    NGlobals.lPrint("_OC_POINTER_STATUS:  " + d[0]);
 
 	    d[0] = _OC_DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DROPLET_STATUS:  " + d);
+	    NGlobals.lPrint("_OC_DROPLET_STATUS:  " + d[0]);
 	    
 	    currentClient.setButtonInitStatus((byte)1);
 
