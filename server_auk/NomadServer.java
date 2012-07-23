@@ -23,11 +23,15 @@ public class NomadServer implements Runnable {
     private Calendar cal;
     long nowT,appT,diffT,lagT;
 
-    private static Boolean _OC_DISCUSS_STATUS = false;
-    private static Boolean _OC_CLOUD_STATUS = false;
-    private static Boolean _OC_POINTER_STATUS = false;
-    private static Boolean _OC_DROPLET_STATUS = false;
+    private static byte _OC_DISCUSS_STATUS = 0;
+    private static byte _OC_CLOUD_STATUS = 0;
+    private static byte _OC_POINTER_STATUS = 0;
+    private static byte _OC_DROPLET_STATUS = 0;
 
+    private static byte _CP_DISCUSS_STATUS = 0;
+    private static byte _CP_CLOUD_STATUS = 0;
+    private static byte _CP_POINTER_STATUS = 0;
+    private static byte _CP_DROPLET_STATUS = 0;
 
 
     int iDay;
@@ -147,13 +151,10 @@ public class NomadServer implements Runnable {
 	NGrain inGrain;
 
     	NGlobals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
-    	
-		
 
 	// Do the following for EACH client
 
-	// 1 ---- READ ------------------------------------------------------------------
-	// ------------------------------------------------------------------------------
+	// 1 ---- READ ============================================================================================
 
 	NGlobals.sPrint("===== READING =====");
 
@@ -187,89 +188,121 @@ public class NomadServer implements Runnable {
 
 	// 1: check if client thread is registered
 	//    if not reg, REGISTER the client's appID with the SERVER client thread
+	//
+	//    otherwise KICK if not registering as the very first thing
+	//
 	if (currentClient.getAppID() == -1) {
-	    NGlobals.sPrint("===== REGISTERING =====");
-	    NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
-	    currentClient.setAppID(incAppID);
+	    if (incAppCmd != NCommand.REGISTER) {
+		NGlobals.sPrint("ERROR:  you must REGISTER your app first before sending data\n");
+		remove(THREAD_ID);
+		return;
+	    }
+	    else {
+		NGlobals.sPrint("===== REGISTERING (ONE TIME) =====");
+		NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
+		currentClient.setAppID(incAppID);
+	    }
 	}
 
-	// 2: check login  :  NOT NEEDED FOR AUKSALAQ 10/29/12
+	// 2: INIT =================================================================================================================
 
 	// Grab IP (more for data logging)
 
 	IP = currentClient.getIP();
 
-	// 2 ---- WRITE -----------------------------------------------------------------
-	// ------------------------------------------------------------------------------
+	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
 
-	// ====================================================================================================R
+	    // INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
+
+	    NGlobals.lPrint("  Sending button states to CONDUCTOR PANEL from SERVER.");
+	    byte d[] = new byte[1];
+
+	    d[0] = _CP_DISCUSS_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_CP_DISCUSS_STATUS: " + d);
+
+	    d[0] = _CP_CLOUD_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_CP_CLOUD_STATUS:  " + d);
+	    
+	    d[0] = _CP_POINTER_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_CP_POINTER_STATUS:  " + d);
+
+	    d[0] = _CP_DROPLET_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_CP_DROPLET_STATUS:  " + d);
+	    
+	    currentClient.setButtonInitStatus((byte)1);
+	    // tempString = new String("CNT:" + clientCount);
+	    // clients[cNum].send((byte)NAppID.MONITOR, tempString);
+	    // NGlobals.lPrint("  Sending " + tempString + " to MONITOR client [" + cNum + "] from SERVER");
+	    
+	}
+	
+	// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
+
+	if ((incAppID == NAppID.OPERA_CLIENT) && (currentClient.getButtonInitStatus() == 0)) {
+	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
+	    byte d[] = new byte[1];
+
+	    d[0] = _OC_DISCUSS_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_OC_DISCUSS_STATUS: " + d);
+
+	    d[0] = _OC_CLOUD_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_OC_CLOUD_STATUS:  " + d);
+	    
+	    d[0] = _OC_POINTER_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_OC_POINTER_STATUS:  " + d);
+
+	    d[0] = _OC_DROPLET_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_OC_DROPLET_STATUS:  " + d);
+	    
+	    currentClient.setButtonInitStatus((byte)1);
+
+	    // TODO SEND DROPLET LEVEL
+	    
+	}
+
+
+	// 3 ---- WRITE ===========================================================================================================
+
+	// ====================================================================================================W
 	// BEGIN Main data routing code
 	//
 	//    each    if (incAppID ==   )    block below corresponds to a single app's input data GRAIN
 	//    depending on who is sending us data
 	//    we cycle through all (or a subset of) clients and send data out
 	//
-	// ====================================================================================================R
+	// ====================================================================================================W
+
 
 	NGlobals.sPrint("===== WRITING =====");
 
-	if (incAppID == NAppID.OPERA_CLIENT) {
 
-	    int d[] = new int[1];
-	    if (_OC_DISCUSS_STATUS == false) {
-		d[0] = 0;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_DISCUSS_STATUS 0");
-	    }
-	    else if (_OC_DISCUSS_STATUS == true) {
-		d[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_DISCUSS_STATUS 1");
-	    }
-	    if (_OC_CLOUD_STATUS == false) {
-		d[0] = 0;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_CLOUD_STATUS 1");
-	    }
-	    else if (_OC_CLOUD_STATUS == true) {
-		d[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_CLOUD_STATUS 1");
-	    }
-	    if (_OC_POINTER_STATUS == false) {
-		d[0] = 0;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_POINTER_STATUS 0");
-	    }
-	    else if (_OC_POINTER_STATUS == true) {
-		d[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_POINTER_STATUS 1");
-	    }
-	    if (_OC_DROPLET_STATUS == false) {
-		d[0] = 0;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_DROPLET_STATUS 0");
-	    }
-	    else if (_OC_DROPLET_STATUS == true) {
-		d[0] = 1;
-		currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-		if (NGlobals.serverDebugLevel > 0)
-		    NGlobals.sPrint("_SET_DROPLET_STATUS 1");
-	    }
-
-	}
-	
 	// GENERIC Logic =============================================================
 	//    -for each client SEND ALL DATA
 	
+	// OPERA CLIENT
+
+	if (incAppID == NAppID.CONDUCTOR_PANEL) {
+	    for (int c = 0; c < clientCount; c++) {
+		
+		// Get the client off the master list
+		currentClient = clients[c];
+		if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
+		    myGrain.print();
+		    // Write the data out
+		    currentClient.threadSand.sendGrain(myGrain);
+		}
+	    }   
+	}
+
 	else if (false) {
 	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
 	    for (int c = 0; c < clientCount; c++) {
