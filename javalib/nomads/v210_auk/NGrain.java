@@ -61,7 +61,7 @@ public class NGrain {
 
 		else if (dataType == NDataType.FLOAT32) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("INT32: " + fArray[i]);
+			    NGlobals.lPrint("FLOAT32: " + fArray[i]);
 			}
 		} 
 

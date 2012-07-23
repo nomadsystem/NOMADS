@@ -172,8 +172,31 @@ public class NSand
 				grain = new NGrain(appID, cmd, dT, dL, bA);
 			}
 
+			//Byte array
+			if (dT == NDataType.UINT8) {
+				byte[] bA = new byte[dL];
+
+				for (int i=0; i< dL; i++) {
+					bA[i] = streamIn.readByte();
+					NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+				}
+				grain = new NGrain(appID, cmd, dT, dL, bA);
+			}
+
 			//Int Array
 			else if (dT == NDataType.INT) {
+				int[] iA = new int[dL];
+
+				for (int i=0; i< dL; i++) {
+					iA[i] = streamIn.readInt();
+					NGlobals.lPrint("INT:  " + iA[i]);
+				}
+				grain = new NGrain(appID, cmd, dT, dL, iA);
+			}
+
+
+			//Int Array 32
+			else if (dT == NDataType.INT32) {
 				int[] iA = new int[dL];
 
 				for (int i=0; i< dL; i++) {
@@ -193,6 +216,19 @@ public class NSand
 				}
 				grain = new NGrain(appID, cmd, dT, dL, fA);
 			}
+
+			//Float Array 32
+			else if (dT == NDataType.FLOAT32) {
+				float[] fA = new float[dL];
+
+				for (int i=0; i< dL; i++) {
+					fA[i] = streamIn.readFloat();
+					NGlobals.lPrint("FLOAT:  " + fA[i]);
+				}
+				grain = new NGrain(appID, cmd, dT, dL, fA);
+			}
+			else 
+			    NGlobals.sPrint("WARNING:  unknown SAND data type\n");
 
 		}
 		catch(IOException ioe) {  
