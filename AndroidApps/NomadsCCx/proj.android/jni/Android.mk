@@ -6,9 +6,9 @@ LOCAL_MODULE := game_shared
 
 LOCAL_MODULE_FILENAME := libgame
 
-LOCAL_SRC_FILES := helloworld/main.cpp \
+LOCAL_SRC_FILES := swarm/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp
+                   ../../Classes/Swarm.cpp
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   
 

@@ -17,6 +17,7 @@ public final class R {
         public static final int icon=0x7f020003;
         public static final int nomadslogo=0x7f020004;
         public static final int nomadslogo_tr=0x7f020005;
+        public static final int sanddunes1_960x640=0x7f020006;
     }
     public static final class id {
         public static final int connectedMsg=0x7f050006;
