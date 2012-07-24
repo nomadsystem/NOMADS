@@ -13,20 +13,26 @@ public class NGrain {
 	public float[] fArray;
 
 	public NGrain(byte a, byte c, byte dT, int dL, byte[] bA) {
-		NGlobals.lPrint("creating new NGrain");
-		NGlobals.lPrint("appID =" + appID);
-		NGlobals.lPrint("commd =" + command);
-		NGlobals.lPrint("dataType =" + dataType);
-		NGlobals.lPrint("dLen  =" + dataLen);
-		NGlobals.lPrint("data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
-		
-		appID = a;
+	        appID = a;
 		command = c;
 		dataType = dT;
 		dataLen = dL;
 		bArray = bA;
+		    NGlobals.lPrint("creating new NGrain");
+		    NGlobals.lPrint("appID =" + appID);
+		    NGlobals.lPrint("commd =" + command);
+		    NGlobals.lPrint("dataType =" + dataType);
+		    NGlobals.lPrint("dLen  =" + dataLen);
+		    NGlobals.lPrint("data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
 	}
+
 	public NGrain(byte a, byte c, byte dT, int dL, int[] iA) {
+
+		appID = a;
+		command = c;
+		dataType = dT;
+		dataLen = dL;
+		iArray = iA;
 		NGlobals.lPrint("creating new NGrain");
 		NGlobals.lPrint("appID =" + appID);
 		NGlobals.lPrint("commd =" + command);
@@ -34,25 +40,19 @@ public class NGrain {
 		NGlobals.lPrint("dLen  =" + dataLen);
 		NGlobals.lPrint("data[] = INT/INT32");
 
+	}
+	public NGrain(byte a, byte c, byte dT, int dL, float[] fA) {
 		appID = a;
 		command = c;
 		dataType = dT;
 		dataLen = dL;
-		iArray = iA;
-	}
-	public NGrain(byte a, byte c, byte dT, int dL, float[] fA) {
+		fArray = fA;
 		NGlobals.lPrint("creating new NGrain");
 		NGlobals.lPrint("appID =" + appID);
 		NGlobals.lPrint("commd =" + command);
 		NGlobals.lPrint("dataType =" + dataType);
 		NGlobals.lPrint("dLen  =" + dataLen);
 		NGlobals.lPrint("data[] = FLOAT/FLOAT32");
-
-		appID = a;
-		command = c;
-		dataType = dT;
-		dataLen = dL;
-		fArray = fA;
 	}
 
 	public void print() {
