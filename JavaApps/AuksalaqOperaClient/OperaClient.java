@@ -384,6 +384,12 @@ public class OperaClient extends JApplet implements Runnable
 						int tLen = myOC_Discuss.tInput.length();
 						//    char[] tStringAsChars = tString.toCharArray();
 						byte[] tStringAsBytes = myOC_Discuss.tInput.getBytes();
+						//xxa
+						// byte d[] = new byte[1];
+						// d[0] = 1;
+						// NGlobals.cPrint("OC_Discuss: SENDING FAKE DATA");
+
+						// operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 						operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 						myOC_Discuss.input.setText("");
 						NGlobals.cPrint("OC_Discuss: tInput: " + myOC_Discuss.tInput);
