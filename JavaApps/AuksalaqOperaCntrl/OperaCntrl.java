@@ -531,38 +531,38 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 	ChangeListener sliderListener = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
-			byte d[] = new byte[1]; //to stash settings data
+			int d[] = new int[1]; //to stash settings data
 
 			String n;
 			String tempString;
 			JSlider source = (JSlider)e.getSource();
 			if (source == discussAlpha) {
-				d[0] = (byte)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("ACP: discussAlpha:" + d);  
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: discussAlpha:" + d[0]);  
 			}
 			if (source == cloudAlpha) {
-				d[0] = (byte)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("ACP: cloudAlpha:" + d); 
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: cloudAlpha:" + d[0]); 
 
 			}
 			if (source == pointerAlpha) {
-				d[0] = (byte)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("ACP: pointerAlpha:" + d); 
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: pointerAlpha:" + d[0]); 
 
 			}
 			if (source == dropletLevel) {
-				d[0] = (byte)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("ACP: dropletLevel:" + d); 
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: dropletLevel:" + d[0]); 
 
 			}
 			if (source == mainVolLevel) {
-				d[0] = (byte)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_MAIN_VOLUME, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("ACP: mainVolLevel:" + d); 
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_MAIN_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: mainVolLevel:" + d[0]); 
 			}
 
 		}
