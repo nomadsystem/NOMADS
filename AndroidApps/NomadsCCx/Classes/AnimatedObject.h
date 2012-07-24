@@ -10,7 +10,7 @@
 
 USING_NS_CC;
 
-class AnimatedObject : cocos2d::CCSprite
+class AnimatedObject : public cocos2d::CCSprite
 {
 public:
 	AnimatedObject();

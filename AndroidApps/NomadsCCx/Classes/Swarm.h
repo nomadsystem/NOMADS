@@ -11,12 +11,11 @@ class Swarm : public cocos2d::CCLayer
 {
 	ObjectState swarmState;
 public:
+	Cursor* cursorSprite;
+	CCSpriteBatchNode* sceneSpriteBatchNode;
+
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
-
-//    CCSprite* pSprite;
-    CCSprite* cursorSprite;
-    CCSpriteBatchNode* sceneSpriteBatchNode;
 
     // there's no 'id' in cpp, so return the class pointer
     static cocos2d::CCScene* scene();
