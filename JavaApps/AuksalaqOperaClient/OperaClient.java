@@ -33,6 +33,7 @@ public class OperaClient extends JApplet implements Runnable
 		}
 	}
 
+    private int msgCntr;
 	NSand operaSand;
 	private NomadsAppThread nThread;
 
@@ -53,7 +54,9 @@ public class OperaClient extends JApplet implements Runnable
 	public void init( )
 	{
 
-		String imgPrefix = "http://nomads.music.virginia.edu/images/";
+	    msgCntr = 0;
+	    String imgPrefix = "http://nomads.music.virginia.edu/images/";
+		
 		try { 
 			imgWebBase = new URL(imgPrefix); 
 		} 
@@ -194,6 +197,10 @@ public class OperaClient extends JApplet implements Runnable
 		NGlobals.cPrint("OperaClient -> handle() ... waiting for data ...");
 
 		grain = operaSand.getGrain();
+
+		NGlobals.cPrint("OperaClient -> got data === message num: " + msgCntr);
+		
+
 		grain.print(); //prints grain data to console
 
 		incAppID = grain.appID;
