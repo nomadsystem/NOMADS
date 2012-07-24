@@ -25,3 +25,8 @@ public class NAppID {
     public static Byte DEBUG = 52;
 
 }
+
+// TODO: FIX: for improved DEBUG
+
+//public byte printID (byte id) {
+//}
