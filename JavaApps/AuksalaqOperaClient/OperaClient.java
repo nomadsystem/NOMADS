@@ -270,7 +270,7 @@ public class OperaClient extends JApplet implements Runnable
 			}
 
 			else if (incCmd == NCommand.SET_DROPLET_VOLUME) {	
-				double tDropVal = (double)grain.bArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
+				double tDropVal = (double)grain.iArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
 				float tDropVolume = (float)(Math.pow(tDropVal, 2)/10000.0);
 
 				NGlobals.cPrint("OC: tDropVolume = " + tDropVolume);
