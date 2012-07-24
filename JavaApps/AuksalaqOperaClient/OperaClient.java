@@ -353,7 +353,7 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = myOC_Discuss.tInput.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Discuss.tInput.getBytes();
-					// operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 					myOC_Discuss.input.setText("");
 					NGlobals.cPrint("OC_Discuss: tInput: " + myOC_Discuss.tInput);
 				}
@@ -564,7 +564,7 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = towrite.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = towrite.getBytes();
-					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					// operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 					NGlobals.cPrint("OC_Pointer: towrite: " + towrite);
 
 				}

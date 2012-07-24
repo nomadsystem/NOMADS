@@ -62,7 +62,13 @@ public class NGrain {
 		NGlobals.lPrint("dataType =" + dataType);
 		NGlobals.lPrint("dLen  =" + dataLen);
 
-		if (dataType == NDataType.CHAR) {
+		if (dataType == NDataType.BYTE) {
+			for (int i=0;i<dataLen;i++) {
+			    NGlobals.lPrint("BYTE: " + (char)bArray[i]);
+			}
+		} 
+
+		else if (dataType == NDataType.CHAR) {
 			for (int i=0;i<dataLen;i++) {
 			    NGlobals.lPrint("CHAR: " + (char)bArray[i]);
 			}
