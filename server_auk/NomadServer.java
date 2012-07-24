@@ -38,7 +38,42 @@ public class NomadServer implements Runnable {
     PrintStream p; // declare a print stream object
 
     NGrain myGrain;
-    
+
+    private String printID (byte id) {
+	String[] idList = new String[255];
+	int i;
+	for(i=0;i<255;i++) {
+	    idList[i] = null;
+	}
+
+	// Populate the list
+
+	idList[NAppID.SERVER] = new String("SERVER");
+	idList[NAppID.CONDUCTOR_PANEL] = new String("CONDUCTOR_PANEL");
+	idList[NAppID.OPERA_MAIN] = new String("OPERA_MAIN");
+	idList[NAppID.OPERA_CLIENT] = new String("OPERA_CLIENT");
+	idList[NAppID.OC_DISCUSS] = new String("OC_DISCUSS");
+	idList[NAppID.OC_CLOUD] = new String("OC_CLOUD");
+	idList[NAppID.OC_CLOUD] = new String("OC_LOGIN");
+	idList[NAppID.OC_CLOUD] = new String("OC_POINTER");
+	idList[NAppID.OC_CLOUD] = new String("DISCUSS_TOPIC");
+	idList[NAppID.OC_CLOUD] = new String("CLOUD_TOPIC");
+	idList[NAppID.OC_CLOUD] = new String("MONITOR");
+	idList[NAppID.OC_CLOUD] = new String("CENSOR");
+	idList[NAppID.OC_CLOUD] = new String("DEBUG");
+
+	// Print out the id as a string
+	if (idList[id] != null) {
+	    String rString = new String(idList[id] + "[" + id + "]");
+	    return rString;	
+	}
+	else {
+	    String rString = new String("UNKNOWN[" + id + "]");
+	    return rString;	
+	}
+    }
+
+
     public NomadServer(int port) {  	    
 	for (int i=0;i<100000;i++) {
 	    clientThreadNum[i] = -1;
@@ -209,6 +244,7 @@ public class NomadServer implements Runnable {
 
 	IP = currentClient.getIP();
 
+	currentClient = clients[tCNum];
 	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
 
 	    // INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
@@ -240,7 +276,7 @@ public class NomadServer implements Runnable {
 	}
 	
 	// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
-
+	currentClient = clients[tCNum];
 	if ((incAppID == NAppID.OPERA_CLIENT) && (currentClient.getButtonInitStatus() == 0)) {
 	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
 	    byte d[] = new byte[1];
@@ -267,9 +303,6 @@ public class NomadServer implements Runnable {
 	    
 	}
 
-
-	// 3 ---- WRITE ===========================================================================================================
-
 	// ====================================================================================================W
 	// BEGIN Main data routing code
 	//
@@ -279,6 +312,7 @@ public class NomadServer implements Runnable {
 	//
 	// ====================================================================================================W
 
+	// 3 ---- WRITE ===========================================================================================================
 
 	NGlobals.sPrint("===== WRITING =====");
 
@@ -286,23 +320,98 @@ public class NomadServer implements Runnable {
 
 	if (incAppCmd != NCommand.REGISTER) {
 
+	    // TODO:  add code to cache the button statuses
+	    //        IDEA:  use button_status[array]
+
 	    // incoming appID = CONDUCTOR_PANEL = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-	    
+
 	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
 		// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		
 		for (int c = 0; c < clientCount; c++) {
 		    // Get the client off the master list
 		    currentClient = clients[c];
 
 		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		    if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
-			NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + currentClient.getAppID());
-			myGrain.print();
-			// Write the data out
-			currentClient.threadSand.sendGrain(myGrain);
+			if ((incAppCmd != NCommand.SET_CLOUD_ALPHA) && 
+			    (incAppCmd != NCommand.SET_DISCUSS_ALPHA) &&
+			    (incAppCmd != NCommand.SET_POINTER_ALPHA)) {
+			    
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
 		    }
+
+		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		    if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			if ((incAppCmd != NCommand.SET_DROPLET_VOLUME) && 
+			    (incAppCmd != NCommand.SET_DROPLET_STATUS)) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+		    }
+		    
 		}
 	    }   
+
+	    // incoming appID = OC_DISCUSS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.OC_DISCUSS) {
+
+		if (incAppCmd == NCommand.SEND_MESSAGE) {
+		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    for (int c = 0; c < clientCount; c++) {
+			// Get the client off the master list
+			currentClient = clients[c];
+			
+			// send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			else if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+		    }
+		}   
+	    }
+
+	    // incoming appID = OC_CLOUD = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.OC_CLOUD) {
+
+		if (incAppCmd == NCommand.SEND_MESSAGE) {
+		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    for (int c = 0; c < clientCount; c++) {
+			// Get the client off the master list
+			currentClient = clients[c];
+
+			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+		    }
+		}   
+	    }
+
+
 	}
 
 	else if (false) {
