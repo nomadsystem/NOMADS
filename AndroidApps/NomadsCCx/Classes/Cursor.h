@@ -8,16 +8,11 @@
 
 USING_NS_CC;
 
-class Cursor : cocos2d::CCSprite
+class Cursor : public AnimatedObject
 {
 public:
 	Cursor();
 	virtual ~Cursor();
-	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
-	virtual void touchDelegateRetain();
-	virtual void touchDelegateRelease();
 };
 
 #endif /* CURSOR_H_ */

@@ -82,7 +82,7 @@ bool Swarm::init()
 
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
 
-    cursorSprite = CCSprite::spriteWithSpriteFrameName("untitled_1.png");
+    cursorSprite = CCSprite::spriteWithSpriteFrameName("untitled_6.png");
     cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
     sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
