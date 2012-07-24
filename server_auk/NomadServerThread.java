@@ -92,7 +92,11 @@ public class NomadServerThread extends Thread
 		while (true) {
 			try {  
 			    NGlobals.sPrint("\n-----------------\nTHREAD:  getGrain:  waiting for data...\n");
-			    threadGrain = threadSand.getGrain(streamIn.readByte());
+			    byte tByte = streamIn.readByte();
+			    NGlobals.sPrint("\nTHREAD:  getGrain:  read byte:  " + tByte);
+			    
+			    threadGrain = threadSand.getGrain(tByte);
+
 			    threadGrain.print();
 			    NGlobals.sPrint("THREAD:  server->handle()\n");
 			    server.handle(THREAD_ID, threadGrain);
