@@ -54,39 +54,50 @@ public class NSand
 	    streamOut.writeByte(myGrain.dataType);
 	    // send data Length
 	    streamOut.writeInt(myGrain.dataLen);
+	    NGlobals.lPrint("appID =" + myGrain.appID);
+	    NGlobals.lPrint("commd =" + myGrain.command);
+	    NGlobals.lPrint("dataType =" + myGrain.dataType);
+	    NGlobals.lPrint("dLen  =" + myGrain.dataLen);
+
 
 	    // send data
 	    if (myGrain.dataType == NDataType.BYTE) {
+		NGlobals.lPrint("data[] = BYTE (Deprecated, use CHAR or UINT7)");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeByte(myGrain.bArray[i]);
 		}
 	    }
 
 	    else if (myGrain.dataType == NDataType.UINT8) {
+		NGlobals.lPrint("data[] = UINT8");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeByte(myGrain.bArray[i]);
 		}
 	    }
 
 	    else if (myGrain.dataType == NDataType.INT) {
+		NGlobals.lPrint("data[] = INT (Deprecated, use INT32)");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeInt(myGrain.iArray[i]);
 		}
 	    }
 
 	    else if (myGrain.dataType == NDataType.INT32) {
+		NGlobals.lPrint("data[] = INT32");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeInt(myGrain.iArray[i]);
 		}
 	    }
 
 	    else if (myGrain.dataType == NDataType.FLOAT) {
+		NGlobals.lPrint("data[] = FLOAT (Deprecated, use FLOAT32)");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeFloat(myGrain.fArray[i]);
 		}
 	    }
 
 	    else if (myGrain.dataType == NDataType.FLOAT32) {
+		NGlobals.lPrint("data[] = FLOAT32");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeFloat(myGrain.fArray[i]);
 		}
@@ -116,6 +127,12 @@ public class NSand
 	    // send data Length
 	    streamOut.writeInt(dLen);
 
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
+
 	    for (int i=0; i<dLen; i++) {
 		streamOut.writeByte(bArray[i]);
 	    }
@@ -137,6 +154,11 @@ public class NSand
 	    streamOut.writeByte(dType);
 	    // send data Length
 	    streamOut.writeInt(dLen);
+
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
 
 	    for (int i=0; i<dLen; i++) {
 		streamOut.writeInt(iArray[i]);
@@ -160,6 +182,11 @@ public class NSand
 	    // send data Length
 	    streamOut.writeInt(dLen);
 
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
 	    for (int i=0; i<dLen; i++) {
 		streamOut.writeFloat(fArray[i]);
 	    }
@@ -171,7 +198,7 @@ public class NSand
 
     //Returns Grain appID, cmd, dT, dL, bA
     public  NGrain getGrain (byte aID) {
-	NGlobals.lPrint("getGrain");
+	NGlobals.lPrint(" getGrain: aID: ");
 	byte cmd, dT, appID;
 	int dL;
 	NGrain grain = null;
@@ -185,6 +212,11 @@ public class NSand
 	    dT = streamIn.readByte();
 	    // get data Length
 	    dL = streamIn.readInt();
+
+	    NGlobals.lPrint("appID =" + appID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dT);
+	    NGlobals.lPrint("dLen  =" + dL);
 
 	    //Detect array type in Grain
 	    //Byte array
@@ -289,6 +321,11 @@ public class NSand
 	    dT = streamIn.readByte();
 	    // get data Length
 	    dL = streamIn.readInt();
+
+	    NGlobals.lPrint("appID =" + appID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dT);
+	    NGlobals.lPrint("dLen  =" + dL);
 
 	    //Detect array type in Grain
 	    //Byte array
