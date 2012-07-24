@@ -33,7 +33,7 @@ public class OperaClient extends JApplet implements Runnable
 		}
 	}
 
-    private int msgCntr;
+	private int msgCntr;
 	NSand operaSand;
 	private NomadsAppThread nThread;
 
@@ -54,9 +54,9 @@ public class OperaClient extends JApplet implements Runnable
 	public void init( )
 	{
 
-	    msgCntr = 0;
-	    String imgPrefix = "http://nomads.music.virginia.edu/images/";
-		
+		msgCntr = 0;
+		String imgPrefix = "http://nomads.music.virginia.edu/images/";
+
 		try { 
 			imgWebBase = new URL(imgPrefix); 
 		} 
@@ -199,14 +199,14 @@ public class OperaClient extends JApplet implements Runnable
 		grain = operaSand.getGrain();
 
 		NGlobals.cPrint("OperaClient -> got data === message num: " + msgCntr);
-		
+
 
 		grain.print(); //prints grain data to console
 
 		incAppID = grain.appID;
 		incCmd = grain.command;
 
-		String text = new String(grain.bArray);
+
 
 		//	String input, tTest;
 
@@ -232,40 +232,40 @@ public class OperaClient extends JApplet implements Runnable
 		//		}   
 
 		if (incAppID == NAppID.CONDUCTOR_PANEL) {
-			NGlobals.cPrint("from Conductor Panel: " + text);
+			NGlobals.cPrint("OC: from Conductor Panel: ");
 
 			//if Appid= conductor panel, command = droplet status, get value, if zero diable, if 1 enable
 
 			if (incCmd == NCommand.SET_DROPLET_STATUS) {
 				if (grain.bArray[0] == 0) {
 					myOC_Pointer.myBusReader.amplitude.set(0.0);
-					NGlobals.cPrint("Setting Droplets to OFF");
+					NGlobals.cPrint("OC: Setting Droplets to OFF");
 				}
 				else if (grain.bArray[0] == 1) {
 					myOC_Pointer.myBusReader.amplitude.set(1.0);
-					NGlobals.cPrint("Setting Droplets to ON");
+					NGlobals.cPrint("OC: Setting Droplets to ON");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_DISCUSS_STATUS) {
 				if (grain.bArray[0] == 0) {
 					myOC_Discuss.speak.setEnabled(false);
-					NGlobals.cPrint("DISCUSS_STATUS false");
+					NGlobals.cPrint("OC: DISCUSS_STATUS false");
 				}
 				else if (grain.bArray[0] == 1) {
 					myOC_Discuss.speak.setEnabled(true);
-					NGlobals.cPrint("DISCUSS_STATUS true");
+					NGlobals.cPrint("OC: DISCUSS_STATUS true");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_CLOUD_STATUS) {
 				if (grain.bArray[0] == 0) {
 					myOC_Cloud.speak.setEnabled(false);
-					NGlobals.cPrint("CLOUD_STATUS false");
+					NGlobals.cPrint("OC: CLOUD_STATUS false");
 				}
 				else if (grain.bArray[0] == 1) {
 					myOC_Cloud.speak.setEnabled(true);
-					NGlobals.cPrint("CLOUD_STATUS true");
+					NGlobals.cPrint("OC: CLOUD_STATUS true");
 				}
 			}
 
@@ -273,24 +273,35 @@ public class OperaClient extends JApplet implements Runnable
 				double tDropVal = (double)grain.bArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
 				float tDropVolume = (float)(Math.pow(tDropVal, 2)/10000.0);
 
-				NGlobals.cPrint("tDropVolume = " + tDropVolume);
+				NGlobals.cPrint("OC: tDropVolume = " + tDropVolume);
 				//TO DO: Make this a log function. . .
 				myOC_Pointer.myBusReader.amplitude.set(tDropVolume);
 
 			}
 		}
 		else if (incAppID == NAppID.OC_DISCUSS) {
-			myDiscussDisplayOnly.handle(text);
-			NGlobals.cPrint("Entering Group Discuss");
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				NGlobals.cPrint("OC: incoming discuss text: " + text);
+				myDiscussDisplayOnly.handle(text);
+				NGlobals.cPrint("OC: Setting Discuss Display");
+			}
 		}
 
-		else if (incAppID == NAppID.CLOUD_TOPIC) {
-			myOC_Cloud.handle(text);
+		else if (incAppID == NAppID.OC_CLOUD) {
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				myOC_Cloud.handle(text);
+				NGlobals.cPrint("OC: Entering Cloud Discuss");
+			}
 		}
 
-		else if (incAppID == NAppID.DISCUSS_TOPIC) {
-			myOC_Discuss.handle(text); //Don't need to send AppID again, we've already filtered it out! ***STK 6/20/12
-		}
+		else if (incAppID == NAppID.DISCUSS_TOPIC)
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				myOC_Discuss.handle(text); //Don't need to send AppID again, we've already filtered it out! ***STK 6/20/12
+				NGlobals.cPrint("OC: Setting Discuss Topic");
+			}
 	}
 
 	//	public void open()
