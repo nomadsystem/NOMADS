@@ -8,7 +8,7 @@
 
 USING_NS_CC;
 
-AnimatedObject::AnimatedObject() {
+void AnimatedObject::initAnimatedObject() {
 	// TODO Auto-generated constructor stub
 
 }

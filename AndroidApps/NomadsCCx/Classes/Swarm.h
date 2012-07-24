@@ -2,17 +2,15 @@
 #define __SWARM_SCENE_H__
 
 #include "cocos2d.h"
-#include "CCGlobals.h"
 #include "Cursor.h"
 
 USING_NS_CC;
 
 class Swarm : public cocos2d::CCLayer
 {
-	ObjectState swarmState;
 public:
 	Cursor* cursorSprite;
-	CCSpriteBatchNode* sceneSpriteBatchNode;
+	CCAnimation* swellAnim;
 
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();

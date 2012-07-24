@@ -28,7 +28,6 @@ bool Swarm::init()
     }
 
     Swarm::setTouchEnabled(true);
-    swarmState = kStateIdle;
 
     // set size of Java display
 
@@ -78,14 +77,24 @@ bool Swarm::init()
     CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);
 
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
-    sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
+    CCSpriteBatchNode* sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
 
-    cursorSprite = Cursor::spriteWithSpriteFrameName("untitled_6.png");
+    cursorSprite = new Cursor();
+    cursorSprite->initWithSpriteFrameName("untitled_6.png");
+    cursorSprite->initSprite();
     cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
     sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
     
     this->addChild(sceneSpriteBatchNode);
+
+//    swellAnim = CCAnimation::create();
+//	char* frameName;
+//	for (int i=1; i<12; i++) {
+//		sprintf(frameName, "untitled_%d.png", i);
+//		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
+//		swellAnim->addSpriteFrame(pFrame);
+//	}
 
 //    this->scheduleUpdate();
 
@@ -103,15 +112,15 @@ void Swarm::menuCloseCallback(CCObject* pSender)
 
 bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 {
-	if(swarmState != kStateIdle) return false;
+	if(cursorSprite->currentState != kStateIdle) return false;
 
-	swarmState = kStateActive;
+	cursorSprite->changeState(kStateActive);
 	return true;
 }
 
 void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
 	CCPoint touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
@@ -119,8 +128,8 @@ void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 
 void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
-	swarmState = kStateIdle;
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+	cursorSprite->changeState(kStateIdle);
 }
 
 void Swarm::onEnter()
