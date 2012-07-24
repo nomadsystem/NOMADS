@@ -62,7 +62,7 @@ public class NSand
 
 	    // send data
 	    if (myGrain.dataType == NDataType.BYTE) {
-		NGlobals.lPrint("data[] = BYTE (Deprecated, use CHAR or UINT7)");
+		NGlobals.lPrint("data[] = BYTE (Deprecated, use CHAR or UINT8)");
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeByte(myGrain.bArray[i]);
 		}

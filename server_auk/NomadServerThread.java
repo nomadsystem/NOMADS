@@ -101,7 +101,7 @@ public class NomadServerThread extends Thread
 				server.handle(THREAD_ID, threadGrain);
 			    }
 			    else {
-				NGlobals.sPrint("\n-----\nTHREAD: + " + THREAD_ID + "ERROR:  invalid byte read\n");
+				NGlobals.sPrint("\n-----\nTHREAD: " + THREAD_ID + " WARNING: 0 byte read\n");
 			    }
 	       	        }
 			catch(IOException ioe) {  
