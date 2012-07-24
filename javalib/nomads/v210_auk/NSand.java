@@ -135,6 +135,7 @@ public class NSand
 
 	    for (int i=0; i<dLen; i++) {
 		streamOut.writeByte(bArray[i]);
+		NGlobals.lPrint("BYTE:  " + bArray[i]);
 	    }
 	}
 	catch(IOException ioe) {  
