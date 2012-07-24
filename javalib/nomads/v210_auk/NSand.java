@@ -240,7 +240,7 @@ public class NSand
 
 	    }
 	    else {
-		NGlobals.sPrint("WARNING:  unknown SAND data type\n");
+		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
 	    }
 	}
 	catch(IOException ioe) {  
@@ -343,7 +343,7 @@ public class NSand
 
 	    }
 	    else {
-		NGlobals.sPrint("WARNING:  unknown SAND data type\n");
+		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
 	    }
 
 	}

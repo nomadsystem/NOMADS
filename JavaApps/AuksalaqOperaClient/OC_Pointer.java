@@ -273,7 +273,7 @@ public class OC_Pointer extends JPanel implements Runnable
 	public void run()    // real-time task for thread
 	{
 
-		NGlobals.cPrint("RUN()");
+	    //		NGlobals.cPrint("RUN()");
 
 		while(true) 
 		{

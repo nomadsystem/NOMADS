@@ -191,7 +191,7 @@ public class OperaClient extends JApplet implements Runnable
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
-		NGlobals.cPrint("OperaClient -> handle()");
+		NGlobals.cPrint("OperaClient -> handle() ... waiting for data ...");
 
 		grain = operaSand.getGrain();
 		grain.print(); //prints grain data to console

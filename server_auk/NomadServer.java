@@ -282,22 +282,25 @@ public class NomadServer implements Runnable {
 
 	NGlobals.sPrint("===== WRITING =====");
 
+	// FILTER out some commands that don't need to go past this point
 
-	// GENERIC Logic =============================================================
-	//    -for each client SEND ALL DATA
-	
-	// OPERA CLIENT
+	if (incAppCmd != NCommand.REGISTER) {
 
-	if (incAppID == NAppID.CONDUCTOR_PANEL) {
-	    for (int c = 0; c < clientCount; c++) {
-		
-		// Get the client off the master list
-		currentClient = clients[c];
-		if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
-		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
-		    myGrain.print();
-		    // Write the data out
-		    currentClient.threadSand.sendGrain(myGrain);
+	    // incoming appID = CONDUCTOR_PANEL = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+	    
+	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
+		// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		for (int c = 0; c < clientCount; c++) {
+		    // Get the client off the master list
+		    currentClient = clients[c];
+
+		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		    if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+			NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + currentClient.getAppID());
+			myGrain.print();
+			// Write the data out
+			currentClient.threadSand.sendGrain(myGrain);
+		    }
 		}
 	    }   
 	}
