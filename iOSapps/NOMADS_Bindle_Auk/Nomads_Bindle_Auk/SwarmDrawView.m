@@ -33,10 +33,6 @@
         
         chatLines = [[NSMutableArray alloc] initWithCapacity:numChatLines];
         
-        //Initialize array for lines of discussion
-        for (int i=0;i<numChatLines;i++) {
-            [chatLines insertObject:@"X" atIndex:i];
-        }
         
         [self setMultipleTouchEnabled:YES];
         
@@ -79,19 +75,15 @@
         if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
         { 
             
-//            for (int i=(numChatLines-1);i>0;i--) {
-//                [chatLines insertobjectAtIndex:i] = [chatLines objectAtIndex:i-1];
-//                NSString *tString = [chatLines objectAtIndex:i];
-//                CLog(@"String %@ at position %d", tString, i);
-//            }
-            [chatLines addObject:inGrain->str];
-            CLog(@"chatLines = %@", chatLines);
+            [chatLines addObject:inGrain->str]; //Add the new text to the array
+            
+            
             if ([chatLines count] > numChatLines) {
-                [chatLines removeObjectAtIndex:0];
-                for (int i=([chatLines count] -1); i>0; i--) {
-                    [chatLines objectAtIndex:1] = 
-                }
+                [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
+                                                   //remove the first item
             }
+                        
+            CLog(@"chatLines = %@", chatLines);
             [self setNeedsDisplay];
             
         } 
@@ -152,16 +144,24 @@
     
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
     
-    CGFloat tH = (int)(viewHeight*1.1);
-    CGFloat chatSpace = tH/numChatLines;
-    CGFloat chatYLoc = viewHeight-chatSpace;
+    
+    // Display discussion text
+    
+    CGContextSelectFont (context, 
+                         "Helvetica",
+                         viewHeight/40,
+                         kCGEncodingMacRoman);
+    CGFloat tH = (int)(viewHeight);
+    CGFloat chatSpace = (tH/numChatLines) * 0.4;
+    CGFloat chatYLoc = (viewHeight-chatSpace);
     CGFloat chatXLoc = 20;
     
-    for (int i=0;i<numChatLines;i++) {
+    for (int i=0;i<[chatLines count];i++) {
         
         NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
-        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
-       printf("My String %s\n", str);
+        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+        int len = strlen(str);
+        printf("My String %s\n", str);
         CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
         chatYLoc -= chatSpace;
     }
