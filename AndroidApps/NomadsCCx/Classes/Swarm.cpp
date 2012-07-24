@@ -77,16 +77,16 @@ bool Swarm::init()
     CCTexture2D::PVRImagesHavePremultipliedAlpha(true);
     CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);
 
-    sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
-    this->addChild(sceneSpriteBatchNode);
-
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
+    sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
 
     cursorSprite = CCSprite::spriteWithSpriteFrameName("untitled_6.png");
     cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
     sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
     
+    this->addChild(sceneSpriteBatchNode);
+
 //    this->scheduleUpdate();
 
     return true;
