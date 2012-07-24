@@ -62,18 +62,39 @@ public class NSand
 		}
 	    }
 
-	    if (myGrain.dataType == NDataType.INT) {
+	    else if (myGrain.dataType == NDataType.UINT8) {
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeByte(myGrain.bArray[i]);
+		}
+	    }
+
+	    else if (myGrain.dataType == NDataType.INT) {
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeInt(myGrain.iArray[i]);
 		}
 	    }
 
-	    if (myGrain.dataType == NDataType.FLOAT) {
+	    else if (myGrain.dataType == NDataType.INT32) {
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeInt(myGrain.iArray[i]);
+		}
+	    }
+
+	    else if (myGrain.dataType == NDataType.FLOAT) {
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeFloat(myGrain.fArray[i]);
 		}
 	    }
 
+	    else if (myGrain.dataType == NDataType.FLOAT32) {
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeFloat(myGrain.fArray[i]);
+		}
+	    }
+
+	    else {
+		NGlobals.lPrint("NSAND: sendGrain(nGrain): WARNING:  Unknown NDataType: " + myGrain.dataType);
+	    }
 
 	}
 	catch(IOException ioe) {  
@@ -84,7 +105,7 @@ public class NSand
 
     // SendGrain with Byte Array
     public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
-	NGlobals.lPrint("sendGrain: ");
+	NGlobals.lPrint("sendGrain: ... args ... bArray[]");
 	try {  
 	    // send app id
 	    streamOut.writeByte(aID);
@@ -106,6 +127,7 @@ public class NSand
 
     // SendGrain with Int Array
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+	NGlobals.lPrint("sendGrain: ... args ... iArray[]");
 	try {  
 	    // send app id
 	    streamOut.writeByte(aID);
@@ -127,6 +149,7 @@ public class NSand
 
     // SendGrain with Float Array
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
+	NGlobals.lPrint("sendGrain: ... args ... fArray[]");
 	try {  
 	    // send app id
 	    streamOut.writeByte(aID);
