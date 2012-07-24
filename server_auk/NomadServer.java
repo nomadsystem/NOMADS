@@ -33,12 +33,10 @@ public class NomadServer implements Runnable {
     private static byte _CP_POINTER_STATUS = 0;
     private static byte _CP_DROPLET_STATUS = 0;
 
-
     int iDay;
     FileOutputStream out; // declare a file output object
     PrintStream p; // declare a print stream object
 
-    // xxx
     NGrain myGrain;
     
     public NomadServer(int port) {  	    
@@ -169,6 +167,7 @@ public class NomadServer implements Runnable {
 	NGlobals.sPrint("command: " + incAppCmd);
 	NGlobals.sPrint("dataType: " + incAppDataType);
 	NGlobals.sPrint("dataLen: " + incAppDataLen);
+	myGrain.print();
 
 	// Thread admin stuff ---------------------------------------------------------------------
 
