@@ -561,7 +561,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 			}
 			if (source == mainVolLevel) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_MAIN_VOLUME, (byte)NDataType.INT32, 1, d );
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_SYNTH_VOLUME, (byte)NDataType.INT32, 1, d );
 				NGlobals.cPrint("ACP: mainVolLevel:" + d[0]); 
 			}
 
