@@ -113,12 +113,14 @@
     [joinTextField resignFirstResponder];
     [appDelegate->appSand connect];  
     
+    Byte c[1];
+    c[0] = 1;
     //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
     [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
                                                    Command:REGISTER 
-                                                  DataType:CHAR 
+                                                  DataType:UINT8 
                                                    DataLen:1 
-                                                    String:@"0"];
+                                                    Uint8:c];
     
     if ([joinTextField.text length] > 0){
         
