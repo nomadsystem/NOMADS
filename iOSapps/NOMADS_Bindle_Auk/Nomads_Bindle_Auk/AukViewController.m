@@ -111,14 +111,23 @@
 
 - (IBAction)joinNomadsButton:(id)sender {
     [joinTextField resignFirstResponder];
-    [appDelegate->appSand connect];
+    [appDelegate->appSand connect];  
+    
+    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                                   Command:REGISTER 
+                                                  DataType:CHAR 
+                                                   DataLen:1 
+                                                    String:@"0"];
     
     if ([joinTextField.text length] > 0){
-        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE  
-                                              Command:LOGIN 
-                                             DataType:CHAR 
-                                              DataLen:[joinTextField.text length] 
-                                               String:joinTextField.text];
+        
+        //****STK 7/25/12 Not currently checking login, to be implemented
+//        [appDelegate->appSand sendWithGrainElts_AppID:OC_LOGIN  
+//                                              Command:SEND_MESSAGE 
+//                                             DataType:CHAR 
+//                                              DataLen:[joinTextField.text length] 
+//                                               String:joinTextField.text];
         joinTextField.text = @"";
         [joinTextField setHidden:YES];
         [joinNomadsButton setHidden:YES];
@@ -183,7 +192,7 @@
         CLog(@"Entered sendDiscuss");
         
         //AppID
-        Byte myAppID = WEB_CHAT;
+        Byte myAppID = OC_DISCUSS;
         NSLog(@"myAppID =  %i\n", myAppID);
         
         //COMMAND
@@ -219,7 +228,7 @@
         NSLog(@"Entered sendCloud");
         
         //AppID
-        Byte myAppID = CLOUD_CHAT;
+        Byte myAppID = OC_CLOUD;
         NSLog(@"myAppID =  %i\n", myAppID);
         
         //COMMAND
