@@ -51,28 +51,7 @@ bool Swarm::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
 
-//    /////////////////////////////
-//    // 3. add your codes below...
-//
-//    // add a label shows "Hello World"
-//    // create and initialize a label
-//    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 24);
-//
-//    // position the label on the center of the screen
-//    pLabel->setPosition( ccp(size.width / 2, size.height - 50) );
-//
-//    // add the label as a child to this layer
-//    this->addChild(pLabel, 1);
-//
-//    // add "HelloWorld" splash screen"
-//    pSprite = CCSprite::create("HelloWorld.png");
-//
-//    // position the sprite on the center of the screen
-//    pSprite->setPosition( ccp(size.width/2, size.height/2) );
-//
-//    // add the sprite as a child to this layer
-//    this->addChild(pSprite, 0);
-
+    // Load sprite images
     CCTexture2D::PVRImagesHavePremultipliedAlpha(true);
     CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);
 
@@ -80,22 +59,15 @@ bool Swarm::init()
     CCSpriteBatchNode* sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
 
     cursorSprite = new Cursor();
-    cursorSprite->initWithSpriteFrameName("untitled_6.png");
+
     cursorSprite->initSprite();
-    cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
-    sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
-    
-    this->addChild(sceneSpriteBatchNode);
+	cursorSprite->initWithSpriteFrameName("untitled_6.png");
 
-//    swellAnim = CCAnimation::create();
-//	char* frameName;
-//	for (int i=1; i<12; i++) {
-//		sprintf(frameName, "untitled_%d.png", i);
-//		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
-//		swellAnim->addSpriteFrame(pFrame);
-//	}
+	cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
+	sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
+	this->addChild(sceneSpriteBatchNode);
 //    this->scheduleUpdate();
 
     return true;
@@ -115,12 +87,15 @@ bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	if(cursorSprite->currentState != kStateIdle) return false;
 
 	cursorSprite->changeState(kStateActive);
+//	CCAssert(swellAnim != NULL, "swellAnim is NULL.");
+//	cursorSprite->runAction(theAnim);
+
 	return true;
 }
 
 void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+//	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
 	CCPoint touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
@@ -128,7 +103,7 @@ void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 
 void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+//	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
 	cursorSprite->changeState(kStateIdle);
 }
 

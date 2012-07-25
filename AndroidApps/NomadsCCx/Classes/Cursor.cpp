@@ -4,7 +4,7 @@
 #include "Cursor.h"
 
 Cursor::~Cursor() {
-	// TODO Auto-generated destructor stub
+	swellAnim->release();
 }
 
 bool Cursor::initSprite(){
@@ -24,53 +24,55 @@ bool Cursor::initSprite(){
 void Cursor::initAnimations(){
 	CCLog("initAnimations called.");
 
-//	swellAnim = CCAnimation::create();
-//	CCSpriteFrame* frame;
-	// generate array of frames
-//	for (int i=1; i<=12; i++){
-//		char* tempFileName;
-//		sprintf(tempFileName, "untitled_%i.png", i);
-//		CCSpriteFrame* frame = CCSpriteFrame::frameWithTextureFilename("untitled_12.png");
-//		swellAnim->addSpriteFrame(frame);
-//	}
+	swellAnim = CCAnimation::create();
+	swellAnim->retain();
 
-	//Add frames to animation
-//	swellAnim = CCAnimation::create(spriteFrames, 0.05f);
-	//	swellAnim->setDelayPerUnit(0.05f);
+	char frameName[50] = {0};
 
-//	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
-//    CCSpriteBatchNode* sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
-//
-//	swellAnim = CCAnimation::create();
-//	char* frameName;
-//	for (int i=1; i<12; i++) {
-//	sprintf(frameName, "untitled_%d.png", i);
-//	CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
-//	swellAnim->addSpriteFrame(pFrame);
-//	}
+	for (int i=1; i<=12; i++) {
+		frameName = {0};
+		sprintf(frameName, "untitled_%d.png", i);
+		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
+//		pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("untitled_12.png");
+		swellAnim->addSpriteFrame(pFrame);
+	}
 
+//	swellAnim->addSpriteFrameWithFileName("CloseNormal.png");
+//	swellAnim->addSpriteFrameWithFileName("CloseSelected.png");
+
+	swellAnim->setDelayPerUnit(0.05f);
+	swellAnim->setRestoreOriginalFrame(true);
 }
 
 void Cursor::changeState(ObjectState newState){
 	this->stopAllActions();
 	this->currentState = newState;
 
-	CCAction* action = NULL;
+	CCAnimate* action = NULL;
+
+//	CCAction* action = NULL;
+//	action = CCAnimate::create(swellAnim);
 
 	switch(newState){
 	case kStateIdle:
 		CCLog("Cursor.cpp -> Cursor is idle.");
 //		action = CCAnimate::actionWithAnimation(swellAnim);
+		action = CCAnimate::create(swellAnim);
+		this->runAction(action);
 		break;
 	case kStateActive:
 		CCLog("Cursor.cpp -> Cursor is active.");
 //		action = CCAnimate::actionWithAnimation(swellAnim);
+//		action = CCAnimate::create(swellAnim);
 		break;
 	default:
 		CCLog("Cursor.cpp -> not a valid state!");
 		break;
 	}
-//	this->runAction(action);
+	if (action != NULL){
+		this->runAction(action);
+//		this->runAction(CCSequence::create(anim, anim->reverse(), NULL));
+	}
 }
 
 //CCSpriteBatchNode* Cursor::initSpriteBatchNode (Swarm s) {

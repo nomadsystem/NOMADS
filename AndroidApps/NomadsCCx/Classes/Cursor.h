@@ -13,8 +13,10 @@ class Cursor : public AnimatedObject
 {
 public:
 	ObjectState currentState;
-//	CCAnimation* swellAnim;
+	CCAnimation* swellAnim;
 //	CCAnimation* shrinkAnim;
+//	CCAnimate* action;
+
 	bool initSprite();
 	void initAnimations();
 	void changeState(ObjectState newState);
