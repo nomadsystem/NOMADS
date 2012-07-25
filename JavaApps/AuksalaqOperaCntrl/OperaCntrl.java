@@ -281,12 +281,6 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		incAppID = grain.appID;
 		incCmd = grain.command;
 
-		String text = new String(grain.bArray);
-
-
-		NGlobals.cPrint("ACP: handle(" + text + "," + incAppID + ") [operaCntrl]\n");
-		NGlobals.cPrint("...");
-
 		//		if (incAppID == NAppID.MONITOR) {
 		//			if (text.equals("CHECK")) {
 		//				try {
@@ -299,66 +293,60 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		//			}	 
 		//		}   
 
-		// ========= Pointer ============================================
-
 		if (incAppID == NAppID.SERVER) {
-			NGlobals.cPrint("ACP: Got data from SERVER: " + text);
-			if (text.length() > 1) {
-				temp = text.substring(0,4);
 
-				// checked = new JLabel("CHECKED: 0");
-				// cleaned = new JLabel("CLEANED: 0");
-				// counted = new JLabel("CLIENTS: 0");
-				if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-					if (grain.bArray[0] == 0) {
-						discussCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ACP: Discuss disable");
-					}
-					else if (grain.bArray[0] == 1) {
-						discussCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ACP: Discuss enable");
-					}
-				}
-
-				if (incCmd == NCommand.SET_CLOUD_STATUS) {
-					if (grain.bArray[0] == 0) {
-						cloudCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ACP: Cloud Disable");
-					}
-					else if (grain.bArray[0] == 1) {
-						cloudCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ACP: Cloud Enable");
-					}
-				}
-
-				if (incCmd == NCommand.SET_POINTER_STATUS) {
-					if (grain.bArray[0] == 0) {
-						pointerCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ACP: Pointer Disable");
-					}
-					else if (grain.bArray[0] == 1) {
-						pointerCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ACP: Pointer Enable");
-					}
-				}
-
-
-				if (incCmd == NCommand.SET_DROPLET_STATUS) {
-					if (grain.bArray[0] == 0) {
-						dropletCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ACP: Pointer disable");
-					}
-					else if (grain.bArray[0] == 1) {
-						dropletCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ACP: Pointer enable");
-					}
-				}
-
+		    // checked = new JLabel("CHECKED: 0");
+		    // cleaned = new JLabel("CLEANED: 0");
+		    // counted = new JLabel("CLIENTS: 0");
+		    if (incCmd == NCommand.SET_DISCUSS_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    discussCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Discuss disable");
 			}
+			else if (grain.bArray[0] == 1) {
+			    discussCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Discuss enable");
+			}
+		    }
+
+		    if (incCmd == NCommand.SET_CLOUD_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    cloudCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Cloud Disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    cloudCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Cloud Enable");
+			}
+		    }
+
+		    if (incCmd == NCommand.SET_POINTER_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    pointerCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Pointer Disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    pointerCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Pointer Enable");
+			}
+		    }
+
+
+		    if (incCmd == NCommand.SET_DROPLET_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    dropletCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Pointer disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    dropletCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Pointer enable");
+			}
+		    }
 
 		}
-		NGlobals.cPrint("-------------------------------------------------[OC]\n");
 
+		NGlobals.cPrint("-------------------------------------------------[OC]\n");
+		
 	}
 
 	// ------------------------------------------------------------------------------------------------

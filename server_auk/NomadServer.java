@@ -272,7 +272,7 @@ public class NomadServer implements Runnable {
 	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
 
 	    ix[0] = _SYNTH_VOLUME;
-	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
 	    NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
 
 	    currentClient.setButtonInitStatus((byte)1);
@@ -466,7 +466,7 @@ public class NomadServer implements Runnable {
 	    // incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
 	    if (incAppID == NAppID.OC_POINTER) {
-		if (incAppCmd == NCommand.SEND_SPRITE_THREAD_XY) {
+		if (incAppCmd == NCommand.SEND_SPRITE_XY) {
 
 		    for (int c = 0; c < clientCount; c++) {
 			
