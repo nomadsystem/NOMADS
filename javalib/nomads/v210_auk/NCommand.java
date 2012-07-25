@@ -15,7 +15,7 @@ public class NCommand {
     public static byte SET_DISCUSS_ALPHA = 17;
     public static byte SET_CLOUD_ALPHA = 18;
     public static byte SET_POINTER_ALPHA = 19;
-    public static byte SET_MAIN_VOLUME = 22;
+    public static byte SET_SYNTH_VOLUME = 22;
     
 
     public static byte SYNTH_ENABLE = 6; //uGroove
