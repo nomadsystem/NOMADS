@@ -240,9 +240,9 @@ public class NomadServer implements Runnable {
 
 	// 2: INIT =================================================================================================================
 
-	// Grab IP (more for data logging)
+	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
 
-	IP = currentClient.getIP();
+	IP = currentClient.getIP();   	// Grab IP (more for data logging)
 
 	currentClient = clients[tCNum];
 	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
@@ -412,34 +412,60 @@ public class NomadServer implements Runnable {
 	    }
 
 
-	}
+	    // incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-	else if (false) {
-	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
-	    for (int c = 0; c < clientCount; c++) {
+	    if (incAppID == NAppID.OC_POINTER) {
+		if (incAppCmd == NCommand.SEND_SPRITE_THREAD_XY) {
+
+		    for (int c = 0; c < clientCount; c++) {
+			
+			currentClient = clients[c];
+			NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+			
+			
+			// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+			    
+			    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
+			    int[] x = new int[3];
+			    x[0] = THREAD_ID;
+			    x[1] = myGrain.iArray[0];
+			    x[2] = myGrain.iArray[1];
+			    
+			    currentClient.threadSand.sendGrain(incAppID, NCommand.SEND_SPRITE_THREAD_XY, NDataType.INT32, 3, x);
+			    
+			}
+		    }
+		}
+	    }
+
+	    else if (false) {
+		NGlobals.sPrint("===> sending PASSTHROUGH network data");
+		for (int c = 0; c < clientCount; c++) {
 		
-		// Get the client off the master list
-		currentClient = clients[c];
-		NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
+		    // Get the client off the master list
+		    currentClient = clients[c];
+		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
 		
-		// Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+		    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
 		
 		
-		myGrain.print();
-		// Write the data out
-		currentClient.threadSand.sendGrain(myGrain);
+		    myGrain.print();
+		    // Write the data out
+		    currentClient.threadSand.sendGrain(myGrain);
 		
-	    }   
-	    // END --------------------------------------------------------------------
-	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+		}   
+		// END --------------------------------------------------------------------
+		NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
 	    
-	    // Free up memory
-	    if (myGrain != null) {
-		myGrain = null;
+		// Free up memory
+		if (myGrain != null) {
+		    myGrain = null;
+		}
 	    }
 	}
-    }
-    
+    }    
     // =====================================================================================================
     // END main data routing code --- handle() fn
     // =====================================================================================================
