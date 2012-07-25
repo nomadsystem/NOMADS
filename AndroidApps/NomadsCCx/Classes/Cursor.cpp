@@ -26,29 +26,40 @@ void Cursor::initAnimations(){
 
 	swellAnim = CCAnimation::create();
 	swellAnim->retain();
+	shrinkAnim = CCAnimation::create();
+	shrinkAnim->retain();
 
+	// TO DO: Create a general function for frame loading
 	char frameName[50] = {0};
 
 	for (int i=1; i<=12; i++) {
 		frameName = {0};
 		sprintf(frameName, "untitled_%d.png", i);
 		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
-//		pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("untitled_12.png");
 		swellAnim->addSpriteFrame(pFrame);
+
+		frameName = {0};
+		sprintf(frameName, "untitled_%d.png", 13-i);
+		pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
+		shrinkAnim->addSpriteFrame(pFrame);
 	}
+
+//	pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("untitled_12.png");
 
 //	swellAnim->addSpriteFrameWithFileName("CloseNormal.png");
 //	swellAnim->addSpriteFrameWithFileName("CloseSelected.png");
 
 	swellAnim->setDelayPerUnit(0.05f);
-	swellAnim->setRestoreOriginalFrame(true);
+//	swellAnim->setRestoreOriginalFrame(true);
+	shrinkAnim->setDelayPerUnit(0.05f);
+//	shrinkAnim->setRestoreOriginalFrame(true);
 }
 
 void Cursor::changeState(ObjectState newState){
 	this->stopAllActions();
 	this->currentState = newState;
 
-	CCAnimate* action = NULL;
+	action = NULL;
 
 //	CCAction* action = NULL;
 //	action = CCAnimate::create(swellAnim);
@@ -57,13 +68,11 @@ void Cursor::changeState(ObjectState newState){
 	case kStateIdle:
 		CCLog("Cursor.cpp -> Cursor is idle.");
 //		action = CCAnimate::actionWithAnimation(swellAnim);
-		action = CCAnimate::create(swellAnim);
-		this->runAction(action);
+		action = CCAnimate::create(shrinkAnim);
 		break;
 	case kStateActive:
 		CCLog("Cursor.cpp -> Cursor is active.");
-//		action = CCAnimate::actionWithAnimation(swellAnim);
-//		action = CCAnimate::create(swellAnim);
+		action = CCAnimate::create(swellAnim);
 		break;
 	default:
 		CCLog("Cursor.cpp -> not a valid state!");

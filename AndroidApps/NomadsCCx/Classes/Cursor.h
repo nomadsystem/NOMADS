@@ -11,16 +11,17 @@ USING_NS_CC;
 
 class Cursor : public AnimatedObject
 {
+	CCAnimation* swellAnim;
+	CCAnimation* shrinkAnim;
+	CCAction* action;
+//	CCSpriteBatchNode* sceneSpriteBatchNode;
+
 public:
 	ObjectState currentState;
-	CCAnimation* swellAnim;
-//	CCAnimation* shrinkAnim;
-//	CCAnimate* action;
 
 	bool initSprite();
 	void initAnimations();
 	void changeState(ObjectState newState);
-	CCSpriteBatchNode* sceneSpriteBatchNode;
 //	CCSpriteBatchNode* initSpriteBatchNode (Swarm s);
 
 	virtual ~Cursor();

@@ -62,7 +62,7 @@ bool Swarm::init()
 
     cursorSprite->initSprite();
 
-	cursorSprite->initWithSpriteFrameName("untitled_6.png");
+	cursorSprite->initWithSpriteFrameName("untitled_1.png");
 
 	cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
@@ -87,23 +87,24 @@ bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	if(cursorSprite->currentState != kStateIdle) return false;
 
 	cursorSprite->changeState(kStateActive);
-//	CCAssert(swellAnim != NULL, "swellAnim is NULL.");
-//	cursorSprite->runAction(theAnim);
+	touchPoint = touch->locationInView();
+	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
+	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
 
 	return true;
 }
 
 void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
-//	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
-	CCPoint touchPoint = touch->locationInView();
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+	touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
 }
 
 void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
 {
-//	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
 	cursorSprite->changeState(kStateIdle);
 }
 
