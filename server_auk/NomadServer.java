@@ -27,8 +27,8 @@ public class NomadServer implements Runnable {
     private static byte _CLOUD_STATUS = 0;
     private static byte _POINTER_STATUS = 0;
     private static byte _DROPLET_STATUS = 0;
-    private static byte _DROPLET_VOLUME = 0;
-    private static byte _SYNTH_VOLUME = 0;
+    private static int _DROPLET_VOLUME = 0;
+    private static int _SYNTH_VOLUME = 0;
 
 
 
@@ -266,6 +266,15 @@ public class NomadServer implements Runnable {
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
 	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
+	    int ix[] = new int[1];
+	    ix[0] = _DROPLET_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
+
+	    ix[0] = _SYNTH_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
+
 	    currentClient.setButtonInitStatus((byte)1);
 	    // tempString = new String("CNT:" + clientCount);
 	    // clients[cNum].send((byte)NAppID.MONITOR, tempString);
@@ -295,9 +304,11 @@ public class NomadServer implements Runnable {
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
 	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
-	    d[0] = _DROPLET_VOLUME;
-	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_VOLUME, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_DROPLET_VOLUME:  " + d[0]);
+	    int ix[] = new int[1];
+	    ix[0] = _DROPLET_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
+
 	    currentClient.setButtonInitStatus((byte)1);
 	}
 
@@ -305,10 +316,10 @@ public class NomadServer implements Runnable {
 	currentClient = clients[tCNum];
 	if (incAppID == NAppID.OPERA_MAIN) {
 	    NGlobals.lPrint("  Sending button states to OPERA MAIN from SERVER / CONDUCTOR_PANEL.");
-	    byte d[] = new byte[1];
-	    d[0] = _SYNTH_VOLUME;
-	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_SYNTH_VOLUME:  " + d[0]);
+	    int ix[] = new int[1];
+	    ix[0] = _SYNTH_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
 	}
 
 
@@ -356,11 +367,11 @@ public class NomadServer implements Runnable {
 		}
 		    
 		else if (incAppCmd == NCommand.SET_DROPLET_VOLUME) {
-		    _DROPLET_VOLUME = myGrain.bArray[0];
+		    _DROPLET_VOLUME = myGrain.iArray[0];
 		}
 		
 		else if (incAppCmd == NCommand.SET_SYNTH_VOLUME) {
-		    _SYNTH_VOLUME = myGrain.bArray[0];
+		    _SYNTH_VOLUME = myGrain.iArray[0];
 		}
 
 
