@@ -581,7 +581,7 @@ public class OperaClient extends JApplet implements Runnable
 					xy[0] = offsetNew_mx;
 					xy[1] = offsetNew_my;
 					
-					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_SPRITE_THREAD_XY, (byte)NDataType.INT32, 2, xy );
+					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy );
 
 				}
 
