@@ -25,33 +25,4 @@ public class NAppID {
     public static Byte DEBUG = 52;
 
     // TODO: FIX: for improved DEBUG
-
-    public void printID (byte id) {
-	String[] idList = new String[255];
-	int i;
-	for(i=0;i<255;i++) {
-	    idList[i] = null;
-	}
-
-	// Populate the list
-
-	idList[SERVER] = new String("SERVER");
-	idList[CONDUCTOR_PANEL] = new String("CONDUCTOR_PANEL");
-	idList[OPERA_MAIN] = new String("OPERA_MAIN");
-	idList[OPERA_CLIENT] = new String("OPERA_CLIENT");
-	idList[OC_DISCUSS] = new String("OC_DISCUSS");
-	idList[OC_CLOUD] = new String("OC_CLOUD");
-	idList[OC_CLOUD] = new String("OC_LOGIN");
-	idList[OC_CLOUD] = new String("OC_POINTER");
-	idList[OC_CLOUD] = new String("DISCUSS_TOPIC");
-	idList[OC_CLOUD] = new String("CLOUD_TOPIC");
-	idList[OC_CLOUD] = new String("MONITOR");
-	idList[OC_CLOUD] = new String("CENSOR");
-	idList[OC_CLOUD] = new String("DEBUG");
-
-	// Print out the id as a string
-
-	System.out.println(idList[id]);
-
-    }
 }

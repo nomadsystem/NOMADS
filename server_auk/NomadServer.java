@@ -23,15 +23,14 @@ public class NomadServer implements Runnable {
     private Calendar cal;
     long nowT,appT,diffT,lagT;
 
-    private static byte _OC_DISCUSS_STATUS = 0;
-    private static byte _OC_CLOUD_STATUS = 0;
-    private static byte _OC_POINTER_STATUS = 0;
-    private static byte _OC_DROPLET_STATUS = 0;
+    private static byte _DISCUSS_STATUS = 0;
+    private static byte _CLOUD_STATUS = 0;
+    private static byte _POINTER_STATUS = 0;
+    private static byte _DROPLET_STATUS = 0;
+    private static byte _DROPLET_VOLUME = 0;
+    private static byte _SYNTH_VOLUME = 0;
 
-    private static byte _CP_DISCUSS_STATUS = 0;
-    private static byte _CP_CLOUD_STATUS = 0;
-    private static byte _CP_POINTER_STATUS = 0;
-    private static byte _CP_DROPLET_STATUS = 0;
+
 
     int iDay;
     FileOutputStream out; // declare a file output object
@@ -241,32 +240,31 @@ public class NomadServer implements Runnable {
 	// 2: INIT =================================================================================================================
 
 	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
-
 	IP = currentClient.getIP();   	// Grab IP (more for data logging)
+
+	// INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 
 	currentClient = clients[tCNum];
 	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
 
-	    // INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
-
 	    NGlobals.lPrint("  Sending button states to CONDUCTOR PANEL from SERVER.");
 	    byte d[] = new byte[1];
 
-	    d[0] = _CP_DISCUSS_STATUS;
+	    d[0] = _DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DISCUSS_STATUS: " + d[0]);
+	    NGlobals.lPrint("_DISCUSS_STATUS: " + d[0]);
 
-	    d[0] = _CP_CLOUD_STATUS;
+	    d[0] = _CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_CLOUD_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_CLOUD_STATUS:  " + d[0]);
 	    
-	    d[0] = _CP_POINTER_STATUS;
+	    d[0] = _POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_POINTER_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_POINTER_STATUS:  " + d[0]);
 
-	    d[0] = _CP_DROPLET_STATUS;
+	    d[0] = _DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DROPLET_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
 	    currentClient.setButtonInitStatus((byte)1);
 	    // tempString = new String("CNT:" + clientCount);
@@ -281,27 +279,38 @@ public class NomadServer implements Runnable {
 	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
 	    byte d[] = new byte[1];
 
-	    d[0] = _OC_DISCUSS_STATUS;
+	    d[0] = _DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DISCUSS_STATUS: " + d[0]);
+	    NGlobals.lPrint("_DISCUSS_STATUS: " + d[0]);
 
-	    d[0] = _OC_CLOUD_STATUS;
+	    d[0] = _CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_CLOUD_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_CLOUD_STATUS:  " + d[0]);
 	    
-	    d[0] = _OC_POINTER_STATUS;
+	    d[0] = _POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_POINTER_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_POINTER_STATUS:  " + d[0]);
 
-	    d[0] = _OC_DROPLET_STATUS;
+	    d[0] = _DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DROPLET_STATUS:  " + d[0]);
+	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
+	    d[0] = _DROPLET_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_VOLUME, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_DROPLET_VOLUME:  " + d[0]);
 	    currentClient.setButtonInitStatus((byte)1);
-
-	    // TODO SEND DROPLET LEVEL
-	    
 	}
+
+	// INIT for OPERA_MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
+	currentClient = clients[tCNum];
+	if (incAppID == NAppID.OPERA_MAIN) {
+	    NGlobals.lPrint("  Sending button states to OPERA MAIN from SERVER / CONDUCTOR_PANEL.");
+	    byte d[] = new byte[1];
+	    d[0] = _SYNTH_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_SYNTH_VOLUME:  " + d[0]);
+	}
+
 
 	// ====================================================================================================W
 	// BEGIN Main data routing code
@@ -327,10 +336,41 @@ public class NomadServer implements Runnable {
 
 	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
 		// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+
+		// Store various FEATURE STATES - - - - - - - - - - - - - - - - -
+
+		if (incAppCmd == NCommand.SET_DISCUSS_STATUS) {
+		    _DISCUSS_STATUS = myGrain.bArray[0];
+		}
 		
+		else if (incAppCmd == NCommand.SET_CLOUD_STATUS) {
+		    _CLOUD_STATUS = myGrain.bArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_POINTER_STATUS) {
+		    _POINTER_STATUS = myGrain.bArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_DROPLET_STATUS) {
+		    _DROPLET_STATUS = myGrain.bArray[0];
+		}
+		    
+		else if (incAppCmd == NCommand.SET_DROPLET_VOLUME) {
+		    _DROPLET_VOLUME = myGrain.bArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_SYNTH_VOLUME) {
+		    _SYNTH_VOLUME = myGrain.bArray[0];
+		}
+
+
 		for (int c = 0; c < clientCount; c++) {
 		    // Get the client off the master list
 		    currentClient = clients[c];
+
+
+
+
 
 		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		    if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
