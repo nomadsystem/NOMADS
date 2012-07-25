@@ -604,7 +604,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 					repaint();
 				}
 			}
-			else if (incCmd == NCommand.SET_MAIN_VOLUME) {	
+			else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
 				double tVolumeVal = (double)grain.iArray[0];
 				mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
 				for (i=0;i<numOscs;i++) {
