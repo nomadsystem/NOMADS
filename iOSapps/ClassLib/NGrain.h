@@ -17,24 +17,25 @@
     @public Byte command;
     @public Byte dataType; 
     @public int dataLen;
-    @public uint8_t *uArray;
     @public NSString *str;
+    @public uint8_t *bArray;
     @public int *iArray;
     @public float *fArray;
     
 }
 
-- (void) setGrainElts_AppID:(Byte)a 
-                    Command:(Byte)c 
-                   DataType:(Byte)dT 
-                    DataLen:(int)dL 
-                      Uint8:(Byte *)bA; 
 
 - (void) setGrainElts_AppID:(Byte)a 
                        Command:(Byte)c 
                       DataType:(Byte)dT 
                        DataLen:(int)dL 
                          String:(NSString *)s; 
+
+- (void) setGrainElts_AppID:(Byte)a 
+                    Command:(Byte)c 
+                   DataType:(Byte)dT 
+                    DataLen:(int)dL 
+                      Uint8:(Byte *)bA; 
 
 - (void)setGrainElts_AppID:(Byte)a 
                    Command:(Byte)c 

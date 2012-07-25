@@ -128,24 +128,24 @@
     
     // Display discussion text
     
-    CGContextSelectFont (context, 
-                         "Helvetica",
-                         viewHeight/40,
-                         kCGEncodingMacRoman);
-    CGFloat tH = (int)(viewHeight);
-    CGFloat chatSpace = (tH/numChatLines) * 0.4;
-    CGFloat chatYLoc = (viewHeight-chatSpace);
-    CGFloat chatXLoc = 20;
-    
-    for (int i=0;i<[chatLines count];i++) {
-        
-        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
-        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
-        int len = strlen(str);
-        printf("My String %s\n", str);
-        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
-        chatYLoc -= chatSpace;
-    }
+//    CGContextSelectFont (context, 
+//                         "Helvetica",
+//                         viewHeight/40,
+//                         kCGEncodingMacRoman);
+//    CGFloat tH = (int)(viewHeight);
+//    CGFloat chatSpace = (tH/numChatLines) * 0.4;
+//    CGFloat chatYLoc = (viewHeight-chatSpace);
+//    CGFloat chatXLoc = 20;
+//    
+//    for (int i=0;i<[chatLines count];i++) {
+//        
+//        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
+//        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+//        int len = strlen(str);
+//        printf("My String %s\n", str);
+//        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+//        chatYLoc -= chatSpace;
+//    }
     // The Dot ======================================================
     
     for(int i=maxTrails;i>0;i--) {
@@ -206,6 +206,11 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+
+    int xy[2];
     //Update linesInProcess with moved touches
     for (UITouch *t in touches) {
         
@@ -219,15 +224,46 @@
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
         
-        int xy[2];
+        
         
         xy[0] = (int) loc.x;
         xy[1] = (int) loc.y;
         
         
-        [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
+
     }
-    //Redraw
+    [self setNeedsDisplay];
+    });
+
+       
+    int xy[2];
+    //Update linesInProcess with moved touches
+    for (UITouch *t in touches) {
+        
+        //Find the line for this touch
+        //   myLine = [linesInProcess objectForKey:key];
+        
+        //Update the point
+        CGPoint loc = [t locationInView:self];
+        myFingerPoint.x = loc.x;
+        myFingerPoint.y = loc.y;
+        NSLog(@"SWARM_X loc = %f", loc.x);
+        NSLog(@"SWARM_Y loc = %f", loc.y);
+        
+        
+        
+        xy[0] = (int) loc.x;
+        xy[1] = (int) loc.y;
+        
+        
+        
+    }
+    
+    
+    [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
+    
+
+    
 }
 
 - (void)endTouches:(NSSet *)touches

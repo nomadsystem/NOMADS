@@ -32,8 +32,8 @@ typedef enum {
      SYNTH_STOP = 9,//uGroove
     
     
-     SEND_SPRITE_XY = 20,  // SoundSwarm
-     SEND_THREAD_ID = 21,
+     SEND_SPRITE_THREAD_XY = 20,  // SoundSwarm
+     SEND_SPRITE_XY = 21,
 
 } NCommands;
 
