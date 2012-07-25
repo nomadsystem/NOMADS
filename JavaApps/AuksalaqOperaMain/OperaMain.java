@@ -531,7 +531,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	public void handle() { //bite text
 		int i,j,fc,sc,x,y,quad,lastQuad;
 		float freq,amp;
-		String temp,tAlpha,thread,input, tTest;
+		String temp,tAlpha,input, tTest;
 		int THREAD_ID;
 		float xput,yput;
 
@@ -626,118 +626,99 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		// ========= Pointer ============================================
 
 		else if (incAppID == NAppID.OC_POINTER) {
-			String text = new String(grain.bArray);
 			NGlobals.cPrint("OMP: OC_POINTER\n");
-			if (text.length() > 1) {
-
-				fc = text.indexOf(":");
-				thread = text.substring(0,fc);
-				NGlobals.cPrint("OMP: thread = " + thread);
-				THREAD_ID = (int)Integer.parseInt(thread);
+			if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
+				THREAD_ID = grain.iArray[0];
+				x = grain.iArray[1];
+				y = grain.iArray[2];
+				NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 
 				makeSynth(THREAD_ID);
 
 				NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
 
-				input = text.substring(6,text.length());
-				temp = input.substring(0,2);
+				freq = (float)x;
+				amp = (float)(y/1000);
 
-				if (temp.equals("C:")) {
-					NGlobals.cPrint("OMP: C: = (x,y)");
-					fc = input.indexOf(":");
-					sc = input.indexOf(":", fc+1);
-					NGlobals.cPrint("OMP: fc = " + fc);
-					NGlobals.cPrint("OMP: sc = " + sc);
-					temp = input.substring(2,sc);
-					x = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("OMP: temp " + temp);
-					temp = input.substring(sc+1,input.length());
-					y = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("OMP: temp " + temp);
+				float fx = (float)(x+1000)/(float)2000;
+				float fy = (float)(y+1000)/(float)2000;
 
-					freq = (float)x;
-					amp = (float)(y/1000);
+				x = (int)(fx*width);
+				y = (int)(fy*height);
 
-					float fx = (float)(x+1000)/(float)2000;
-					float fy = (float)(y+1000)/(float)2000;
+				NGlobals.cPrint("OMP: x = " + x);
+				//		amp = 1;
+				NGlobals.cPrint("OMP: y = " + y);
+				NGlobals.cPrint("OMP: fx = " + fx);
+				//		amp = 1;
+				NGlobals.cPrint("OMP: fy = " + fy);
 
-					x = (int)(fx*width);
-					y = (int)(fy*height);
+				//if (x > 900)
+				//	x = 900;
+				xput = (float)(x/0.5);
+				if (xput < 50)
+					xput = 50;
+				if (xput > 900)
+					xput = 900;
 
-					NGlobals.cPrint("OMP: x = " + x);
-					//		amp = 1;
-					NGlobals.cPrint("OMP: y = " + y);
-					NGlobals.cPrint("OMP: fx = " + fx);
-					//		amp = 1;
-					NGlobals.cPrint("OMP: fy = " + fy);
+				//if (y > 900)
+				//	y = 900;
 
-					//if (x > 900)
-					//	x = 900;
-					xput = (float)(x/0.5);
-					if (xput < 50)
-						xput = 50;
-					if (xput > 900)
-						xput = 900;
-
-					//if (y > 900)
-					//	y = 900;
-
-					yput = (float)((y/0.5));
-					if (yput < 0)
-						yput = 0;
-					if (yput > 900)
-						yput = 900;
+				yput = (float)((y/0.5));
+				if (yput < 0)
+					yput = 0;
+				if (yput > 900)
+					yput = 900;
 
 
-					//=============== STK code to get H value for frequency =======================
+				//=============== STK code to get H value for frequency =======================
 
-					double myX, myY, myH_Sqr;
-					double myH;		
-
-
-					if (isOsc[THREAD_ID]) {
-						NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
-
-						sprites[THREAD_ID].x = x;
-						sprites[THREAD_ID].y = y;
-
-						if (x >= origX)
-							myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-						else 
-							myX = (double)(origX - x);
-
-						if (posY >= y)
-							myY = (double)(y - origY);
-						else
-							myY = (double)(origY - y);
-
-						NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+				double myX, myY, myH_Sqr;
+				double myH;		
 
 
-						myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+				if (isOsc[THREAD_ID]) {
+					NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
 
-						myH = Math.sqrt(myH_Sqr); //distance from center
-						NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+					sprites[THREAD_ID].x = x;
+					sprites[THREAD_ID].y = y;
 
-						// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-						double tFreq = (float)myH * 4.0;
+					if (x >= origX)
+						myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+					else 
+						myX = (double)(origX - x);
 
-						if (tFreq > 22050.0)
-							tFreq = 22050.0;
+					if (posY >= y)
+						myY = (double)(y - origY);
+					else
+						myY = (double)(origY - y);
 
-						if (tFreq < 20.0)
-							tFreq = 20.0;
+					NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
 
-						NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-						data[THREAD_ID][1] = tFreq;
-						//	System.out.println("data[1] = " + data[THREAD_ID][1]);
-						envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-						envPlayer[THREAD_ID].envelopePort.clear();
-						envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-						//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
-						repaint();
-					}
+					myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+					myH = Math.sqrt(myH_Sqr); //distance from center
+					NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+					// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+					double tFreq = (float)myH * 4.0;
+
+					if (tFreq > 22050.0)
+						tFreq = 22050.0;
+
+					if (tFreq < 20.0)
+						tFreq = 20.0;
+
+					NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+					data[THREAD_ID][1] = tFreq;
+					//	System.out.println("data[1] = " + data[THREAD_ID][1]);
+					envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+					envPlayer[THREAD_ID].envelopePort.clear();
+					envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+					//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
+					repaint();
 				}
 			}
 		}

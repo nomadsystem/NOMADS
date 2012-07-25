@@ -575,14 +575,13 @@ public class OperaClient extends JApplet implements Runnable
 					float fy = (float)(new_my-ocpCentY)/(float)ocpCentX;
 					int offsetNew_my = (int)(fy*1000);
 
-					String towrite = new String("C:" + offsetNew_mx + ":" + offsetNew_my);
-					NGlobals.cPrint( "width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
+					NGlobals.cPrint("OCP: width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
 
-					int tLen = towrite.length();
-					//    char[] tStringAsChars = tString.toCharArray();
-					byte[] tStringAsBytes = towrite.getBytes();
-					// operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-					NGlobals.cPrint("OC_Pointer: towrite: " + towrite);
+					int[] xy = new int[2];
+					xy[0] = offsetNew_mx;
+					xy[1] = offsetNew_my;
+					
+					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_SPRITE_THREAD_XY, (byte)NDataType.INT32, 2, xy );
 
 				}
 
