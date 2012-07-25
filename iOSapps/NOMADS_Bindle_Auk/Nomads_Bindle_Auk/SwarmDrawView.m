@@ -72,7 +72,7 @@
     CLog(@"SwarmDrawView: Data Ready Handle\n");
     
     if (nil != inGrain) { 
-        if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
+        if(inGrain->appID == OC_DISCUSS) //Text from Student Discuss
         { 
             
             [chatLines addObject:inGrain->str]; //Add the new text to the array
@@ -101,28 +101,9 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    
-    // The Dot ======================================================
-    
-    for(int i=maxTrails;i>0;i--) {
-        xTrail[i] = xTrail[i-1];
-        yTrail[i] = yTrail[i-1];
-    }
-    
-    xTrail[0] = myFingerPoint.x;
-    yTrail[0] = myFingerPoint.y;
-    
-    decayColor = 1.0;
-    for (int i=0; i<maxTrails; i++) {   
-        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
-        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
-        CGContextDrawPath(context, kCGPathFill);
-        //     CGContextFillPath(context);
-        CGContextStrokePath(context);
-        decayColor = (decayColor - decayColorChangeDelta);        
-    }
-    
     // The Text =====================================================
+    
+    // Prompt text
     
     NSString *nsstr = @"NOMADS Bindle"; //Incoming NSString 
     const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
@@ -164,6 +145,25 @@
         printf("My String %s\n", str);
         CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
         chatYLoc -= chatSpace;
+    }
+    // The Dot ======================================================
+    
+    for(int i=maxTrails;i>0;i--) {
+        xTrail[i] = xTrail[i-1];
+        yTrail[i] = yTrail[i-1];
+    }
+    
+    xTrail[0] = myFingerPoint.x;
+    yTrail[0] = myFingerPoint.y;
+    
+    decayColor = 1.0;
+    for (int i=0; i<maxTrails; i++) {   
+        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
+        CGContextDrawPath(context, kCGPathFill);
+        //     CGContextFillPath(context);
+        CGContextStrokePath(context);
+        decayColor = (decayColor - decayColorChangeDelta);        
     }
     
 }
@@ -225,7 +225,7 @@
         xy[1] = (int) loc.y;
         
         
-        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
+        [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
     }
     //Redraw
 }

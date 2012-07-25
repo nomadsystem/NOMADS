@@ -9,23 +9,31 @@
 
 //NAukCommands
 typedef enum {
-    NOOP = 0,
-
-    SEND_MESSAGE = 1,
-
-    QUESTION_TYPE_YES_NO = 2,
-    QUESTION_TYPE_ONE_TO_TEN = 3,
-    QUESTION_TYPE_A_TO_E = 4,
-    VOTE = 5, //command from Instructor Panel to PollStudent ****STK 6/18/12
-
-    SYNTH_ENABLE = 6, //uGroove
-    SYNTH_DISABLE = 7,//uGroove
-    SYNTH_START = 8,//uGroove
-    SYNTH_STOP = 9,//uGroove
-    REGISTER = 10,
-    LOGIN_STATUS = 11,
-    LOGIN = 12,
-    SEND_SPRITE_XY = 20,  // SoundSwarm
+     NOOP = 0,
+     SEND_MESSAGE = 1,
+     REGISTER = 2,
+    
+     SET_DISCUSS_STATUS = 10,
+     SET_CLOUD_STATUS = 11,
+     SET_POINTER_STATUS = 12,
+     SET_DROPLET_STATUS = 13,
+     SET_DROPLET_VOLUME = 14,
+     SET_DISCUSS_DISPLAY_STATUS = 15,
+     SET_CLOUD_DISPLAY_STATUS = 16,
+     SET_DISCUSS_ALPHA = 17,
+     SET_CLOUD_ALPHA = 18,
+     SET_POINTER_ALPHA = 19,
+     SET_MAIN_VOLUME = 22,
+    
+    
+     SYNTH_ENABLE = 6, //uGroove
+     SYNTH_DISABLE = 7,//uGroove
+     SYNTH_START = 8,//uGroove
+     SYNTH_STOP = 9,//uGroove
+    
+    
+     SEND_SPRITE_XY = 20,  // SoundSwarm
+     SEND_THREAD_ID = 21,
 
 } NCommands;
 
