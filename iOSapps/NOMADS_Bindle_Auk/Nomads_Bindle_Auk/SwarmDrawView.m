@@ -207,7 +207,7 @@
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
-    
+    //This loop is for display purposes
     dispatch_async(dispatch_get_main_queue(), ^(void) {
 
     int xy[2];
@@ -235,7 +235,7 @@
     [self setNeedsDisplay];
     });
 
-       
+    //This one sends the data
     int xy[2];
     //Update linesInProcess with moved touches
     for (UITouch *t in touches) {
@@ -250,10 +250,14 @@
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
         
+        float screenScaleX = 5.9;
+        float screenScaleY = 3.33;
+        int screenMinusX = 1000;
+        int screenMinusY = 800;
         
         
-        xy[0] = (int) loc.x;
-        xy[1] = (int) loc.y;
+        xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
+        xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
         
         
         
