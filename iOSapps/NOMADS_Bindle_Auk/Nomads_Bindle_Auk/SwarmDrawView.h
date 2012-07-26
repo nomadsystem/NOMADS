@@ -8,6 +8,7 @@
 #ifndef SWARM_DRAW_VIEW
 #define SWARM_DRAW_VIEW
 
+#import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
 #import "NSand.h"
 #import "NGrain.h"
@@ -28,6 +29,12 @@
     float touchColor;
     NSMutableArray  *chatLines;
     int numChatLines;
+    AVAudioPlayer *audioPlayer;
+    NSTimer *dropletTimer;
+    int fileNum;
+    float currentTimerVal;
+    float lastTimerVal;
+
     
 }
 @property (strong, retain) NSand *appSand;
@@ -39,6 +46,7 @@
 
 - (void)clearAll;
 - (void)endTouches:(NSSet *)touches;
+- (void)playDroplet;
 
 @end
 

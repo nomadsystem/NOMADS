@@ -60,6 +60,11 @@
         
         //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
         
+        
+        currentTimerVal = 4.0;
+        lastTimerVal = 4.0;
+        fileNum = 1;
+        dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -112,6 +117,7 @@
     
     CGRect viewRect = [self bounds];
     CGFloat viewHeight = viewRect.size.height;
+    CGFloat viewWidth = viewRect.size.width;
     
     CGContextSelectFont (context, 
                          "Helvetica-Bold",
@@ -165,6 +171,22 @@
         CGContextStrokePath(context);
         decayColor = (decayColor - decayColorChangeDelta);        
     }
+    
+    //Sounds ======================================================
+    
+
+    
+    int numOfDroplets = 203;
+    float viewXGrid  = (viewWidth / 5);
+    float viewYGrid  = (viewHeight / numOfDroplets);
+    
+    
+    int soundFileNum = (int)(myFingerPoint.y/viewYGrid);
+    
+    fileNum = soundFileNum;
+    currentTimerVal = (myFingerPoint.x/viewXGrid) + 4.0;
+    
+    
     
 }
 
@@ -289,6 +311,41 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self endTouches:touches];
+}
+
+- (void)playDroplet
+{
+    
+    NSString *soundFile;
+     
+    soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNum];
+    
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
+    
+    CLog("URL: %@", url);
+	
+	NSError *error;
+	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+	audioPlayer.numberOfLoops = 0;
+    
+    
+    //****STK Other useful control parameters 
+    //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
+    //    NSLog(@"%f seconds played so far", audioPlayer.currentTime);
+    //    audioPlayer.currentTime = 10; // jump to the 10 second mark
+    //    [audioPlayer pause]; 
+    //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
+	
+	if (audioPlayer == nil)
+		NSLog([error description]);				
+	else 
+		[audioPlayer play];
+    if(currentTimerVal != lastTimerVal) {
+        [dropletTimer invalidate];
+        dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
+        lastTimerVal = currentTimerVal;
+    }
+    
 }
 
 @end
