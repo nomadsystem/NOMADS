@@ -9,11 +9,14 @@ import java.awt.*;
 import java.lang.Math;
 import java.applet.*;
 import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.*;
 import javax.swing.JToggleButton;
 import javax.swing.DefaultButtonModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 
 import java.util.*;
 import java.util.Calendar;
@@ -33,7 +36,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 			client = _client;
 		}
 		public void run()    {			
-			NGlobals.lPrint("NomadsAppThread -> run()");
+			NGlobals.lPrint("ACP: NomadsAppThread -> run()");
 			while (true)  {
 				client.handle();
 			}
@@ -113,7 +116,8 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		mainVolWrapper.add(mainVolLabel);
 
 		discussCntrl = new JToggleButton("Discuss");
-		discussCntrl.addChangeListener(buttonListener);
+		//	discussCntrl.addChangeListener(buttonListener);
+		discussCntrl.addItemListener(buttonListener);
 		discussCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		discussClear = new JButton("Clear");
@@ -122,7 +126,8 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 
 		cloudCntrl = new JToggleButton("Cloud");
-		cloudCntrl.addChangeListener(buttonListener);
+		//		cloudCntrl.addChangeListener(buttonListener);
+		cloudCntrl.addItemListener(buttonListener);
 		cloudCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		cloudClear = new JButton("Clear");
@@ -131,7 +136,8 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 
 		pointerCntrl = new JToggleButton("Pointer");
-		pointerCntrl.addChangeListener(buttonListener);
+		//		pointerCntrl.addChangeListener(buttonListener);
+		pointerCntrl.addItemListener(buttonListener);
 		pointerCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		// pointerClear = new JButton("Clear");
@@ -139,7 +145,8 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		// pointerClear.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		dropletCntrl = new JToggleButton("Droplets");
-		dropletCntrl.addChangeListener(buttonListener);
+		//		dropletCntrl.addChangeListener(buttonListener);
+		dropletCntrl.addItemListener(buttonListener);
 		dropletCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		discussWrapper.setLayout(new BoxLayout(discussWrapper, BoxLayout.Y_AXIS));
@@ -238,12 +245,16 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		createGUI(getContentPane());
 
 		operaSand = new NSand();
-		int d[] = new int[1];
+		operaSand.connect();
+
+		byte d[] = new byte[1];
 		d[0] = 0;
-		operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
-		
+
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+
+		operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
 	}	
 
 	// ------------------------------------------------------------------------------------------------
@@ -262,19 +273,13 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
-		NGlobals.cPrint("OperaCntrl -> handle()");
+		NGlobals.cPrint("ACP: OperaCntrl -> handle()");
 
 		grain = operaSand.getGrain();
 		grain.print(); //prints grain data to console
 
 		incAppID = grain.appID;
 		incCmd = grain.command;
-
-		String text = new String(grain.bArray);
-
-
-		NGlobals.cPrint("handle(" + text + "," + incAppID + ") [operaCntrl]\n");
-		NGlobals.cPrint("...");
 
 		//		if (incAppID == NAppID.MONITOR) {
 		//			if (text.equals("CHECK")) {
@@ -288,66 +293,60 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		//			}	 
 		//		}   
 
-		// ========= Pointer ============================================
-
 		if (incAppID == NAppID.SERVER) {
-			NGlobals.cPrint("Got data from SERVER: " + text);
-			if (text.length() > 1) {
-				temp = text.substring(0,4);
 
-				// checked = new JLabel("CHECKED: 0");
-				// cleaned = new JLabel("CLEANED: 0");
-				// counted = new JLabel("CLIENTS: 0");
-				if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-					if (grain.iArray[0] == 0) {
-						discussCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ControlPanel Discuss disable");
-					}
-					else if (grain.iArray[0] == 1) {
-						discussCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ControlPanel Discuss enable");
-					}
-				}
-
-				if (incCmd == NCommand.SET_CLOUD_STATUS) {
-					if (grain.iArray[0] == 0) {
-						cloudCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ControlPanel Cloud Disable");
-					}
-					else if (grain.iArray[0] == 1) {
-						cloudCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ControlPanel Cloud Enable");
-					}
-				}
-
-				if (incCmd == NCommand.SET_POINTER_STATUS) {
-					if (grain.iArray[0] == 0) {
-						pointerCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ControlPanel Pointer Disable");
-					}
-					else if (grain.iArray[0] == 1) {
-						pointerCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ControlPanel Pointer Enable");
-					}
-				}
-
-
-				if (incCmd == NCommand.SET_DROPLET_STATUS) {
-					if (grain.iArray[0] == 0) {
-						dropletCntrl.getModel().setSelected(false);
-						NGlobals.cPrint("ControlPanel Pointer disable");
-					}
-					else if (grain.iArray[0] == 1) {
-						dropletCntrl.getModel().setSelected(true);
-						NGlobals.cPrint("ControlPanel Pointer enable");
-					}
-				}
-
+		    // checked = new JLabel("CHECKED: 0");
+		    // cleaned = new JLabel("CLEANED: 0");
+		    // counted = new JLabel("CLIENTS: 0");
+		    if (incCmd == NCommand.SET_DISCUSS_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    discussCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Discuss disable");
 			}
+			else if (grain.bArray[0] == 1) {
+			    discussCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Discuss enable");
+			}
+		    }
+
+		    if (incCmd == NCommand.SET_CLOUD_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    cloudCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Cloud Disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    cloudCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Cloud Enable");
+			}
+		    }
+
+		    if (incCmd == NCommand.SET_POINTER_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    pointerCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Pointer Disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    pointerCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Pointer Enable");
+			}
+		    }
+
+
+		    if (incCmd == NCommand.SET_DROPLET_STATUS) {
+			if (grain.bArray[0] == 0) {
+			    dropletCntrl.getModel().setSelected(false);
+			    NGlobals.cPrint("ACP: Pointer disable");
+			}
+			else if (grain.bArray[0] == 1) {
+			    dropletCntrl.getModel().setSelected(true);
+			    NGlobals.cPrint("ACP: Pointer enable");
+			}
+		    }
 
 		}
-		NGlobals.cPrint("-------------------------------------------------[OC]\n");
 
+		NGlobals.cPrint("-------------------------------------------------[OC]\n");
+		
 	}
 
 	// ------------------------------------------------------------------------------------------------
@@ -362,15 +361,15 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 			Object source = ae.getSource();
 			//	NGlobals.cPrint("entering speakListener");
 
-			int d[] = new int[1]; //to stash settings data
-			
+			byte d[] = new byte[1]; //to stash settings data
+
 			if (source == discussClear) {
-				NGlobals.cPrint("Action:  discussClear");
+				NGlobals.cPrint("ACP: Action:  discussClear");
 				d[0] = 0; //0 clears display
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 			}
 			if (source == cloudClear) {
-				NGlobals.cPrint("Action:  cloudClear");
+				NGlobals.cPrint("ACP: Action:  cloudClear");
 				d[0] = 0; //0 clears display
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 			}
@@ -384,107 +383,174 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		}		
 	};
 
-	ChangeListener buttonListener = new ChangeListener() {
-		public void stateChanged(ChangeEvent changeEvent) {
-			AbstractButton abstractButton = (AbstractButton) changeEvent.getSource();
+	//****STK 7/24/12 Changed from changelistener to itemlistener, prevents multiple outputs from single button click
+	ItemListener buttonListener = new ItemListener() {
+		public void itemStateChanged(ItemEvent e) {
+			AbstractButton abstractButton = (AbstractButton) e.getSource();
 			ButtonModel buttonModel = abstractButton.getModel();
-			boolean armed = buttonModel.isArmed();
-			boolean pressed = buttonModel.isPressed();
-			boolean selected = buttonModel.isSelected();
-			
-			int d[] = new int[1]; //to stash settings data
-			
+
+			byte d[] = new byte[1]; //to stash settings data
+
 			if (abstractButton == discussCntrl) {
-				if (selected) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
 					d[0] = 1;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("discussCntrl:  ON");
-				} 
+					NGlobals.cPrint("ACP: discussCntrl:  ON");
+				}
 				else {
 					d[0] = 0;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("discussCntrl:  OFF");
-
+					NGlobals.cPrint("ACP: discussCntrl:  OFF");
 				}
 			}
+
 			else if (abstractButton == cloudCntrl) {
-				if (selected) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
 					d[0] = 1;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("cloudCntrl:  ON");
+					NGlobals.cPrint("ACP: cloudCntrl:  ON");
 
 				} 
 				else {
 					d[0] = 0;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("cloudCntrl:  OFF");
+					NGlobals.cPrint("ACP: cloudCntrl:  OFF");
 
 				}
 			}
-			if (abstractButton == pointerCntrl) {
-				if (selected) {
+
+			else if (abstractButton == pointerCntrl) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
 					d[0] = 1;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("pointerCntrl:  ON");
+					NGlobals.cPrint("ACP: pointerCntrl:  ON");
 
 				} 
 				else {
-					String tString = " "; 
 					d[0] = 0;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("pointerCntrl:  OFF"); 
+					NGlobals.cPrint("ACP: pointerCntrl:  OFF"); 
 				}
 			}
-			if (abstractButton == dropletCntrl) {
-				if (selected) {
+			else if (abstractButton == dropletCntrl) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
 					d[0] = 1;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("dropletCntrl:  ON"); 
+					NGlobals.cPrint("ACP: dropletCntrl:  ON"); 
 
 				} 
 				else {
 					d[0] = 0;
 					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("dropletCntrl:  OFF"); 
+					NGlobals.cPrint("ACP: dropletCntrl:  OFF"); 
 				}
 			}
 		}
 	};
 
+	//****STK 7/24/12 Moved buttons to itemlistener, code below to be deleted once everything is tested...
+	
+	//ChangeListener buttonListener = new ChangeListener() {
+	//	public void stateChanged(ChangeEvent changeEvent) {
+	//		AbstractButton abstractButton = (AbstractButton) changeEvent.getSource();
+	//		ButtonModel buttonModel = abstractButton.getModel();
+	//		boolean armed = buttonModel.isArmed();
+	//		boolean pressed = buttonModel.isPressed();
+	//		boolean selected = buttonModel.isSelected();
+	//
+	//		byte d[] = new byte[1]; //to stash settings data
+	//
+	//		if (abstractButton == discussCntrl) {
+	//			if (selected) {
+	//				d[0] = 1;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("ACP: discussCntrl:  ON");
+	//			} 
+	//			else {
+	//				d[0] = 0;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("discussCntrl:  OFF");
+	//
+	//			}
+	//		}
+	//		else if (abstractButton == cloudCntrl) {
+	//			if (selected) {
+	//				d[0] = 1;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("cloudCntrl:  ON");
+	//
+	//			} 
+	//			else {
+	//				d[0] = 0;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("cloudCntrl:  OFF");
+	//
+	//			}
+	//		}
+	//		if (abstractButton == pointerCntrl) {
+	//			if (selected) {
+	//				d[0] = 1;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("pointerCntrl:  ON");
+	//
+	//			} 
+	//			else {
+	//				String tString = " "; 
+	//				d[0] = 0;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("pointerCntrl:  OFF"); 
+	//			}
+	//		}
+	//		if (abstractButton == dropletCntrl) {
+	//			if (selected) {
+	//				d[0] = 1;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("dropletCntrl:  ON"); 
+	//
+	//			} 
+	//			else {
+	//				d[0] = 0;
+	//				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_STATUS, (byte)NDataType.UINT8, 1, d );
+	//				NGlobals.cPrint("dropletCntrl:  OFF"); 
+	//			}
+	//		}
+	//	}
+	//};
+
 	ChangeListener sliderListener = new ChangeListener() {
 		public void stateChanged(ChangeEvent e) {
 			int d[] = new int[1]; //to stash settings data
-			
+
 			String n;
 			String tempString;
 			JSlider source = (JSlider)e.getSource();
 			if (source == discussAlpha) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("discussAlpha:" + d);  
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: discussAlpha:" + d[0]);  
 			}
 			if (source == cloudAlpha) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("cloudAlpha:" + d); 
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: cloudAlpha:" + d[0]); 
 
 			}
 			if (source == pointerAlpha) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_ALPHA, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("pointerAlpha:" + d); 
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_ALPHA, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: pointerAlpha:" + d[0]); 
 
 			}
 			if (source == dropletLevel) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("dropletLevel:" + d); 
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: dropletLevel:" + d[0]); 
 
 			}
 			if (source == mainVolLevel) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_MAIN_VOLUME, (byte)NDataType.UINT8, 1, d );
-				NGlobals.cPrint("mainVolLevel:" + d); 
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_SYNTH_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: mainVolLevel:" + d[0]); 
 			}
 
 		}
@@ -499,7 +565,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		int v,t,k;
 		k = e.getKeyCode();
-		NGlobals.cPrint("key: " + k);
+		NGlobals.cPrint("ACP: key: " + k);
 		if (k == 103) { 
 			v = discussAlpha.getValue();
 			discussAlpha.setValue(v+3);
@@ -554,7 +620,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 	{
 		Object obj = ae.getSource();
 		if( obj == aButton ) {
-			NGlobals.cPrint("You pressed a button");
+			NGlobals.cPrint("ACP: You pressed a button");
 		}
 	}
 

@@ -33,10 +33,6 @@
         
         chatLines = [[NSMutableArray alloc] initWithCapacity:numChatLines];
         
-        //Initialize array for lines of discussion
-        for (int i=0;i<numChatLines;i++) {
-            [chatLines insertObject:@"X" atIndex:i];
-        }
         
         [self setMultipleTouchEnabled:YES];
         
@@ -76,22 +72,18 @@
     CLog(@"SwarmDrawView: Data Ready Handle\n");
     
     if (nil != inGrain) { 
-        if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
+        if(inGrain->appID == OC_DISCUSS) //Text from Student Discuss
         { 
             
-//            for (int i=(numChatLines-1);i>0;i--) {
-//                [chatLines insertobjectAtIndex:i] = [chatLines objectAtIndex:i-1];
-//                NSString *tString = [chatLines objectAtIndex:i];
-//                CLog(@"String %@ at position %d", tString, i);
-//            }
-            [chatLines addObject:inGrain->str];
-            CLog(@"chatLines = %@", chatLines);
+            [chatLines addObject:inGrain->str]; //Add the new text to the array
+            
+            
             if ([chatLines count] > numChatLines) {
-                [chatLines removeObjectAtIndex:0];
-                for (int i=([chatLines count] -1); i>0; i--) {
-                    [chatLines objectAtIndex:1] = 
-                }
+                [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
+                                                   //remove the first item
             }
+                        
+            CLog(@"chatLines = %@", chatLines);
             [self setNeedsDisplay];
             
         } 
@@ -109,28 +101,9 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    
-    // The Dot ======================================================
-    
-    for(int i=maxTrails;i>0;i--) {
-        xTrail[i] = xTrail[i-1];
-        yTrail[i] = yTrail[i-1];
-    }
-    
-    xTrail[0] = myFingerPoint.x;
-    yTrail[0] = myFingerPoint.y;
-    
-    decayColor = 1.0;
-    for (int i=0; i<maxTrails; i++) {   
-        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
-        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
-        CGContextDrawPath(context, kCGPathFill);
-        //     CGContextFillPath(context);
-        CGContextStrokePath(context);
-        decayColor = (decayColor - decayColorChangeDelta);        
-    }
-    
     // The Text =====================================================
+    
+    // Prompt text
     
     NSString *nsstr = @"NOMADS Bindle"; //Incoming NSString 
     const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
@@ -152,18 +125,45 @@
     
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
     
-    CGFloat tH = (int)(viewHeight*1.1);
-    CGFloat chatSpace = tH/numChatLines;
-    CGFloat chatYLoc = viewHeight-chatSpace;
-    CGFloat chatXLoc = 20;
     
-    for (int i=0;i<numChatLines;i++) {
-        
-        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
-        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
-       printf("My String %s\n", str);
-        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
-        chatYLoc -= chatSpace;
+    // Display discussion text
+    
+//    CGContextSelectFont (context, 
+//                         "Helvetica",
+//                         viewHeight/40,
+//                         kCGEncodingMacRoman);
+//    CGFloat tH = (int)(viewHeight);
+//    CGFloat chatSpace = (tH/numChatLines) * 0.4;
+//    CGFloat chatYLoc = (viewHeight-chatSpace);
+//    CGFloat chatXLoc = 20;
+//    
+//    for (int i=0;i<[chatLines count];i++) {
+//        
+//        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
+//        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+//        int len = strlen(str);
+//        printf("My String %s\n", str);
+//        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+//        chatYLoc -= chatSpace;
+//    }
+    // The Dot ======================================================
+    
+    for(int i=maxTrails;i>0;i--) {
+        xTrail[i] = xTrail[i-1];
+        yTrail[i] = yTrail[i-1];
+    }
+    
+    xTrail[0] = myFingerPoint.x;
+    yTrail[0] = myFingerPoint.y;
+    
+    decayColor = 1.0;
+    for (int i=0; i<maxTrails; i++) {   
+        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
+        CGContextDrawPath(context, kCGPathFill);
+        //     CGContextFillPath(context);
+        CGContextStrokePath(context);
+        decayColor = (decayColor - decayColorChangeDelta);        
     }
     
 }
@@ -206,6 +206,11 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+
+    int xy[2];
     //Update linesInProcess with moved touches
     for (UITouch *t in touches) {
         
@@ -219,15 +224,46 @@
         NSLog(@"SWARM_X loc = %f", loc.x);
         NSLog(@"SWARM_Y loc = %f", loc.y);
         
-        int xy[2];
+        
         
         xy[0] = (int) loc.x;
         xy[1] = (int) loc.y;
         
         
-        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
+
     }
-    //Redraw
+    [self setNeedsDisplay];
+    });
+
+       
+    int xy[2];
+    //Update linesInProcess with moved touches
+    for (UITouch *t in touches) {
+        
+        //Find the line for this touch
+        //   myLine = [linesInProcess objectForKey:key];
+        
+        //Update the point
+        CGPoint loc = [t locationInView:self];
+        myFingerPoint.x = loc.x;
+        myFingerPoint.y = loc.y;
+        NSLog(@"SWARM_X loc = %f", loc.x);
+        NSLog(@"SWARM_Y loc = %f", loc.y);
+        
+        
+        
+        xy[0] = (int) loc.x;
+        xy[1] = (int) loc.y;
+        
+        
+        
+    }
+    
+    
+    [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
+    
+
+    
 }
 
 - (void)endTouches:(NSSet *)touches

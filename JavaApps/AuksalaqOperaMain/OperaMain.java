@@ -136,7 +136,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	//  Temporary placeholder
 	HistoElt tHist;
 
-	String text;
 	int guesser,rGuess,cGuess;
 
 	Image offScreen;
@@ -375,6 +374,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		int d[] = new int[1];
+		d[0] = 0;
+		operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
 		repaint();
 	}	
 
@@ -528,7 +531,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	public void handle() { //bite text
 		int i,j,fc,sc,x,y,quad,lastQuad;
 		float freq,amp;
-		String temp,tAlpha,thread,input, tTest;
+		String temp,tAlpha,input, tTest;
 		int THREAD_ID;
 		float xput,yput;
 
@@ -545,10 +548,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		incAppID = grain.appID;
 		incCmd = grain.command;
 
-		String text = new String(grain.bArray);
-		
 		NGlobals.cPrint("...");
-		NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd + " text= " + text);
+		NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd);
 		NGlobals.cPrint("...");
 
 		quad=0;
@@ -560,51 +561,51 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 
 			if (incCmd == NCommand.SET_DISCUSS_ALPHA) {
-				tAlpha = text;
-				chatA = Integer.parseInt(tAlpha);
+				chatA = grain.iArray[0];
 				setChatColors(chatA);
 				NGlobals.cPrint("Setting ChA to " + chatA);
 				repaint();
 			}
 
 			else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
-				tAlpha = text;
-				cloudA = Integer.parseInt(tAlpha);
+				cloudA = grain.iArray[0];;
 				setCloudColors(cloudA);
 				NGlobals.cPrint("Setting ClA to " + cloudA);
 				repaint();
 			}
 			else if (incCmd == NCommand.SET_POINTER_ALPHA) {
-				tAlpha = text;
-				pointerA = Integer.parseInt(tAlpha);
+				pointerA = grain.iArray[0];;
 				setPointerColors(pointerA);
 				NGlobals.cPrint("Setting PtA to " + pointerA);
 				repaint();
 			}
-			else if (incCmd == NCommand.CLEAR_CLOUD) {  // Cloud reset
-				histoGram.clear();
+			else if (incCmd == NCommand.SET_CLOUD_DISPLAY_STATUS) {  // Cloud reset
+				if(grain.bArray[0] == 0) {
+					histoGram.clear();
 
-				// int tSize = histoGram.size();
-				// for (i=0;i<tSize;i++) {
-				//     histoGram.remove(i);
-				// }
-				NGlobals.cPrint("Resetting cloud...\n");
-				repaint();
-			}
-			else if (incCmd == NCommand.CLEAR_DISCUSS) {  // Cloud reset
-				for (i=0;i<numChatLines;i++) {
-					chatLines[i] = "";
+					// int tSize = histoGram.size();
+					// for (i=0;i<tSize;i++) {
+					//     histoGram.remove(i);
+					// }
+					NGlobals.cPrint("Resetting cloud...\n");
+					repaint();
 				}
-				tH = (int)(height*1.1);
-				chatSpace = tH/numChatLines;
-				chatYLoc = height-chatSpace;
-				chatXLoc = 20;
-				NGlobals.cPrint("Resetting discuss...\n");
-				repaint();
 			}
-			else if (incCmd == NCommand.SET_MAIN_VOLUME) {	
-				input = text; 
-				double tVolumeVal = (double)Integer.parseInt(input);
+			else if (incCmd == NCommand.SET_DISCUSS_DISPLAY_STATUS) {  // Discuss reset
+				if(grain.bArray[0] == 0) {
+					for (i=0;i<numChatLines;i++) {
+						chatLines[i] = "";
+					}
+					tH = (int)(height*1.1);
+					chatSpace = tH/numChatLines;
+					chatYLoc = height-chatSpace;
+					chatXLoc = 20;
+					NGlobals.cPrint("Resetting discuss...\n");
+					repaint();
+				}
+			}
+			else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
+				double tVolumeVal = (double)grain.iArray[0];
 				mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
 				for (i=0;i<numOscs;i++) {
 					int tNum = oscNum[i];
@@ -625,118 +626,99 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		// ========= Pointer ============================================
 
 		else if (incAppID == NAppID.OC_POINTER) {
-
 			NGlobals.cPrint("OMP: OC_POINTER\n");
-			if (text.length() > 1) {
-
-				fc = text.indexOf(":");
-				thread = text.substring(0,fc);
-				NGlobals.cPrint("OMP: thread = " + thread);
-				THREAD_ID = (int)Integer.parseInt(thread);
+			if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
+				THREAD_ID = grain.iArray[0];
+				x = grain.iArray[1];
+				y = grain.iArray[2];
+				NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 
 				makeSynth(THREAD_ID);
 
 				NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
 
-				input = text.substring(6,text.length());
-				temp = input.substring(0,2);
+				freq = (float)x;
+				amp = (float)(y/1000);
 
-				if (temp.equals("C:")) {
-					NGlobals.cPrint("OMP: C: = (x,y)");
-					fc = input.indexOf(":");
-					sc = input.indexOf(":", fc+1);
-					NGlobals.cPrint("OMP: fc = " + fc);
-					NGlobals.cPrint("OMP: sc = " + sc);
-					temp = input.substring(2,sc);
-					x = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("OMP: temp " + temp);
-					temp = input.substring(sc+1,input.length());
-					y = (int)Integer.parseInt(temp);
-					NGlobals.cPrint("OMP: temp " + temp);
+				float fx = (float)(x+1000)/(float)2000;
+				float fy = (float)(y+1000)/(float)2000;
 
-					freq = (float)x;
-					amp = (float)(y/1000);
+				x = (int)(fx*width);
+				y = (int)(fy*height);
 
-					float fx = (float)(x+1000)/(float)2000;
-					float fy = (float)(y+1000)/(float)2000;
+				NGlobals.cPrint("OMP: x = " + x);
+				//		amp = 1;
+				NGlobals.cPrint("OMP: y = " + y);
+				NGlobals.cPrint("OMP: fx = " + fx);
+				//		amp = 1;
+				NGlobals.cPrint("OMP: fy = " + fy);
 
-					x = (int)(fx*width);
-					y = (int)(fy*height);
+				//if (x > 900)
+				//	x = 900;
+				xput = (float)(x/0.5);
+				if (xput < 50)
+					xput = 50;
+				if (xput > 900)
+					xput = 900;
 
-					NGlobals.cPrint("OMP: x = " + x);
-					//		amp = 1;
-					NGlobals.cPrint("OMP: y = " + y);
-					NGlobals.cPrint("OMP: fx = " + fx);
-					//		amp = 1;
-					NGlobals.cPrint("OMP: fy = " + fy);
+				//if (y > 900)
+				//	y = 900;
 
-					//if (x > 900)
-					//	x = 900;
-					xput = (float)(x/0.5);
-					if (xput < 50)
-						xput = 50;
-					if (xput > 900)
-						xput = 900;
-
-					//if (y > 900)
-					//	y = 900;
-
-					yput = (float)((y/0.5));
-					if (yput < 0)
-						yput = 0;
-					if (yput > 900)
-						yput = 900;
+				yput = (float)((y/0.5));
+				if (yput < 0)
+					yput = 0;
+				if (yput > 900)
+					yput = 900;
 
 
-					//=============== STK code to get H value for frequency =======================
+				//=============== STK code to get H value for frequency =======================
 
-					double myX, myY, myH_Sqr;
-					double myH;		
-
-
-					if (isOsc[THREAD_ID]) {
-						NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
-
-						sprites[THREAD_ID].x = x;
-						sprites[THREAD_ID].y = y;
-
-						if (x >= origX)
-							myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-						else 
-							myX = (double)(origX - x);
-
-						if (posY >= y)
-							myY = (double)(y - origY);
-						else
-							myY = (double)(origY - y);
-
-						NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+				double myX, myY, myH_Sqr;
+				double myH;		
 
 
-						myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+				if (isOsc[THREAD_ID]) {
+					NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
 
-						myH = Math.sqrt(myH_Sqr); //distance from center
-						NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+					sprites[THREAD_ID].x = x;
+					sprites[THREAD_ID].y = y;
 
-						// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-						double tFreq = (float)myH * 4.0;
+					if (x >= origX)
+						myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+					else 
+						myX = (double)(origX - x);
 
-						if (tFreq > 22050.0)
-							tFreq = 22050.0;
+					if (posY >= y)
+						myY = (double)(y - origY);
+					else
+						myY = (double)(origY - y);
 
-						if (tFreq < 20.0)
-							tFreq = 20.0;
+					NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
 
-						NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-						data[THREAD_ID][1] = tFreq;
-						//	System.out.println("data[1] = " + data[THREAD_ID][1]);
-						envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-						envPlayer[THREAD_ID].envelopePort.clear();
-						envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-						//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
-						repaint();
-					}
+					myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+					myH = Math.sqrt(myH_Sqr); //distance from center
+					NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+					// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+					double tFreq = (float)myH * 4.0;
+
+					if (tFreq > 22050.0)
+						tFreq = 22050.0;
+
+					if (tFreq < 20.0)
+						tFreq = 20.0;
+
+					NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+					data[THREAD_ID][1] = tFreq;
+					//	System.out.println("data[1] = " + data[THREAD_ID][1]);
+					envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+					envPlayer[THREAD_ID].envelopePort.clear();
+					envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+					//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
+					repaint();
 				}
 			}
 		}
@@ -744,282 +726,289 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		// ========= CLOUD INPUT ============================================
 
 		else if (incAppID == NAppID.OC_CLOUD) {
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				NGlobals.cPrint("OM: CloudText: " + text);
+				NGlobals.cPrint("OC_CLOUD\n");
 
-			NGlobals.cPrint("OC_CLOUD\n");
+				stringLength = text.length(); 
 
-			stringLength = text.length(); 
+				// Then check text locations to avoid collisions *************************
 
-			// Then check text locations to avoid collisions *************************
+				wordFound = 0;
 
-			wordFound = 0;
+				// Check our histogram =============================================
 
-			// Check our histogram =============================================
-
-			for (i=0;i<histoGram.size();i++) {
-				tHist = histoGram.get(i);
-				NGlobals.cPrint("...");
-				NGlobals.cPrint("checking histogram ----- tHist.text = ||>> " + tHist.text + " <<||");
-				NGlobals.cPrint("...");
-				NGlobals.cPrint("  tHist.size = " + tHist.size);
-				NGlobals.cPrint("...");
-				NGlobals.cPrint(" histoGram.size() = " + histoGram.size());
-
-				// 1.  Histogram element [i] matches incoming text -----
-
-				x=tHist.x;
-				y=tHist.y;	       	
-
-				if (tHist.text.compareToIgnoreCase(text) == 0) {
-					wordFound = 1;
+				for (i=0;i<histoGram.size();i++) {
+					tHist = histoGram.get(i);
 					NGlobals.cPrint("...");
-					NGlobals.cPrint(">>>FOUND " + tHist.text + " at [" + x + "]" + "[" + y + "]");
-					NGlobals.cPrint("  INCreasing text size");
-
-					// This will change to be a combination of rank v time (ie., numPasses);
-					tHist.size += 4;
-
-					quad = tHist.quad;
-					NGlobals.cPrint("  quad = " + quad);
-					// if (quad > 75) {
-					// 	tHist.x-=8;
-					// 	tHist.y-=5;
-					// 	if (tHist.x < centerX)
-					// 	    tHist.x = centerX;
-					// 	if (tHist.y < centerY)
-					// 	    tHist.y = centerY;
-					// }
-					// else if (quad > 50) {
-					// 	tHist.x-=8;
-					// 	tHist.y+=5;
-					// 	if (tHist.x < centerX)
-					// 	    tHist.x = centerX;
-					// 	if (tHist.y > centerY)
-					// 	    tHist.y = centerY;
-					// }
-					// else if (quad > 25) {
-					// 	tHist.x+=6;
-					// 	tHist.y+=5;
-					// 	if (tHist.x > centerX)
-					// 	    tHist.x = centerX;
-					// 	if (tHist.y > centerY)
-					// 	    tHist.y = centerY;
-					// }
-					// else {
-					// 	tHist.x+=6;
-					// 	tHist.y-=5;
-					// 	if (tHist.x > centerX)
-					// 	    tHist.x = centerX;
-					// 	if (tHist.y < centerY)
-					// 	    tHist.y = centerY;
-					// }
-
-					if (tHist.size > maxFontSize) {
-						fontSize = maxFontSize;
-					}
-					else {
-						fontSize = tHist.size;
-					}
-					tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
-
-					//i = histoGram.size();  // exit the loop
-
-				}
-
-				// 2a.  Blank cell ... do nothing
-				else if (tHist.text.compareToIgnoreCase("") == 0) {
-					NGlobals.cPrint("|_|");
-				}
-
-				// 2.  Histogram element [i] DOES NOT match incoming text and is > min size -----
-
-				else if (tHist.size > minFontSize) {  // Decrease size (if > min AND modulo 2)
+					NGlobals.cPrint("checking histogram ----- tHist.text = ||>> " + tHist.text + " <<||");
 					NGlobals.cPrint("...");
-					NGlobals.cPrint("  DECreasing word size for " + tHist.text);
+					NGlobals.cPrint("  tHist.size = " + tHist.size);
 					NGlobals.cPrint("...");
-					NGlobals.cPrint("  numPasses = " + numPasses);
-					if (numPasses%2 == 0) {
-						tHist.size--;
-						// quad = tHist.quad;
+					NGlobals.cPrint(" histoGram.size() = " + histoGram.size());
+
+					// 1.  Histogram element [i] matches incoming text -----
+
+					x=tHist.x;
+					y=tHist.y;	       	
+
+					if (tHist.text.compareToIgnoreCase(text) == 0) {
+						wordFound = 1;
+						NGlobals.cPrint("...");
+						NGlobals.cPrint(">>>FOUND " + tHist.text + " at [" + x + "]" + "[" + y + "]");
+						NGlobals.cPrint("  INCreasing text size");
+
+						// This will change to be a combination of rank v time (ie., numPasses);
+						tHist.size += 4;
+
+						quad = tHist.quad;
+						NGlobals.cPrint("  quad = " + quad);
 						// if (quad > 75) {
-						//     tHist.x+=2;
-						//     tHist.y+=2;
+						// 	tHist.x-=8;
+						// 	tHist.y-=5;
+						// 	if (tHist.x < centerX)
+						// 	    tHist.x = centerX;
+						// 	if (tHist.y < centerY)
+						// 	    tHist.y = centerY;
 						// }
 						// else if (quad > 50) {
-						//     tHist.x+=2;
-						//     tHist.y-=2;
+						// 	tHist.x-=8;
+						// 	tHist.y+=5;
+						// 	if (tHist.x < centerX)
+						// 	    tHist.x = centerX;
+						// 	if (tHist.y > centerY)
+						// 	    tHist.y = centerY;
 						// }
 						// else if (quad > 25) {
-						//     tHist.x-=2;
-						//     tHist.y-=2;
+						// 	tHist.x+=6;
+						// 	tHist.y+=5;
+						// 	if (tHist.x > centerX)
+						// 	    tHist.x = centerX;
+						// 	if (tHist.y > centerY)
+						// 	    tHist.y = centerY;
 						// }
 						// else {
-						//     tHist.x-=2;
-						//     tHist.y+=2;
+						// 	tHist.x+=6;
+						// 	tHist.y-=5;
+						// 	if (tHist.x > centerX)
+						// 	    tHist.x = centerX;
+						// 	if (tHist.y < centerY)
+						// 	    tHist.y = centerY;
 						// }
-						// if (tHist.x < 10) 
-						//     tHist.x = 10;
-						// if (tHist.x > (width-10))
-						//     tHist.x = width-10;
-						// if (tHist.y < 10) 
-						//     tHist.y = 10;
-						// if (tHist.y > (height-10))
-						//     tHist.y = height-10;
+
+						if (tHist.size > maxFontSize) {
+							fontSize = maxFontSize;
+						}
+						else {
+							fontSize = tHist.size;
+						}
+						tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+
+						//i = histoGram.size();  // exit the loop
+
 					}
-					if (tHist.size > maxFontSize)
-						tHist.size = maxFontSize;
-					fontSize = tHist.size;
-					tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+
+					// 2a.  Blank cell ... do nothing
+					else if (tHist.text.compareToIgnoreCase("") == 0) {
+						NGlobals.cPrint("|_|");
+					}
+
+					// 2.  Histogram element [i] DOES NOT match incoming text and is > min size -----
+
+					else if (tHist.size > minFontSize) {  // Decrease size (if > min AND modulo 2)
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  DECreasing word size for " + tHist.text);
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  numPasses = " + numPasses);
+						if (numPasses%2 == 0) {
+							tHist.size--;
+							// quad = tHist.quad;
+							// if (quad > 75) {
+							//     tHist.x+=2;
+							//     tHist.y+=2;
+							// }
+							// else if (quad > 50) {
+							//     tHist.x+=2;
+							//     tHist.y-=2;
+							// }
+							// else if (quad > 25) {
+							//     tHist.x-=2;
+							//     tHist.y-=2;
+							// }
+							// else {
+							//     tHist.x-=2;
+							//     tHist.y+=2;
+							// }
+							// if (tHist.x < 10) 
+							//     tHist.x = 10;
+							// if (tHist.x > (width-10))
+							//     tHist.x = width-10;
+							// if (tHist.y < 10) 
+							//     tHist.y = 10;
+							// if (tHist.y > (height-10))
+							//     tHist.y = height-10;
+						}
+						if (tHist.size > maxFontSize)
+							tHist.size = maxFontSize;
+						fontSize = tHist.size;
+						tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+
+						NGlobals.cPrint("...");
+
+						NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  tHist.size= " + tHist.size);
+					}
+
+					// 3.  Histogram element [i] DOES NOT match and is < min size ... delete it
+
+					else if (tHist.size <= minFontSize) {
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  tHist.size= " + tHist.size);
+						NGlobals.cPrint("...");
+						NGlobals.cPrint("  REMoving word: " + tHist.text + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+						fontSize = tHist.size;
+						if (fontSize < minFontSize)
+							fontSize = minFontSize;
+
+						histoGram.remove(i);
+						i--;
+					}			  	
+				}  // end for (i=0;i<histoGram.size();i++)
+
+
+				// No words found, add new word and store relevant data
+				if (wordFound == 0) {
+					// Figure out where to put the text =============================================
+
+					// Find a free cell
+					picker = 1;
 
 					NGlobals.cPrint("...");
 
-					NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
-					NGlobals.cPrint("...");
-					NGlobals.cPrint("  tHist.size= " + tHist.size);
-				}
+					// figure out center, then expand range over time 
 
-				// 3.  Histogram element [i] DOES NOT match and is < min size ... delete it
+					x=y=0;
 
-				else if (tHist.size <= minFontSize) {
-					NGlobals.cPrint("...");
-					NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
-					NGlobals.cPrint("...");
-					NGlobals.cPrint("  tHist.size= " + tHist.size);
-					NGlobals.cPrint("...");
-					NGlobals.cPrint("  REMoving word: " + tHist.text + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+					tHist = new HistoElt();
+					tHist.text = new String(text);
 
-					fontSize = tHist.size;
-					if (fontSize < minFontSize)
-						fontSize = minFontSize;
+					int xMin = 0; // (int)(width * 0.2);
+					int xVar = (int)(width * 0.45);
 
-					histoGram.remove(i);
-					i--;
-				}			  	
-			}  // end for (i=0;i<histoGram.size();i++)
+					int yMin = 0; // (int)(height * 0.2);
+					int yVar = (int)(height * 0.45);
 
-
-			// No words found, add new word and store relevant data
-			if (wordFound == 0) {
-				// Figure out where to put the text =============================================
-
-				// Find a free cell
-				picker = 1;
-
-				NGlobals.cPrint("...");
-
-				// figure out center, then expand range over time 
-
-				x=y=0;
-
-				tHist = new HistoElt();
-				tHist.text = new String(text);
-
-				int xMin = 0; // (int)(width * 0.2);
-				int xVar = (int)(width * 0.45);
-
-				int yMin = 0; // (int)(height * 0.2);
-				int yVar = (int)(height * 0.45);
-
-				lastQuad = quad;
-				quad = randNum.nextInt(5);
-				while (quad == lastQuad) {
+					lastQuad = quad;
 					quad = randNum.nextInt(5);
+					while (quad == lastQuad) {
+						quad = randNum.nextInt(5);
+					}
+					tHist.quad = quad;
+					NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
+					NGlobals.cPrint("setting quad = " + quad);
+
+					int xRand = xMin + randNum.nextInt(xVar);
+					int yRand = yMin + randNum.nextInt(yVar);
+
+					if (quad > 3) {
+						x = centerX + xRand;
+						y = centerY + yRand;
+					}
+					else if (quad > 2) {
+						x = centerX + xRand;
+						y = centerY - yRand;
+					}
+					else if (quad > 1) {
+						x = centerX - xRand;
+						y = centerY - yRand;
+					}
+					else  {
+						x = centerX - xRand;
+						y = centerY + yRand;
+					}
+
+					// if ((x > centerX) && (y > centerY)) {
+					//     quad = 3;
+					// }
+					// if ((x > centerX) && (y < centerY)) {
+					//     quad = 2;
+					// }
+					// if ((x < centerX) && (y < centerY)) {
+					//     quad = 1;
+					// }
+					// if ((x < centerX) && (y > centerY)) {
+					//     quad = 0;
+					// }
+					// tHist.quad = quad;
+
+					NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
+
+					tHist.color = cloudColors[tCloudColorNum]; 	
+					tCloudColorNum++;
+					if (tCloudColorNum > maxCloudColors)
+						tCloudColorNum = 0;	
+
+					fontSize = tHist.size = startFontSize;
+					tHist.pass = numPasses;
+
+					tHist.x = x;
+					tHist.y = y;
+
+					tHist.font = new Font("TimesRoman", Font.PLAIN, tHist.size);
+					histoGram.add(tHist);
+
+					// This will change to be a combination of rank v time (ie., numPasses);
+
+					// DRAW THE TEXT ======================================
+
+					NGlobals.cPrint("...");
+					NGlobals.cPrint("Drawing word: " + text);
+
 				}
-				tHist.quad = quad;
-				NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
-				NGlobals.cPrint("setting quad = " + quad);
 
-				int xRand = xMin + randNum.nextInt(xVar);
-				int yRand = yMin + randNum.nextInt(yVar);
+				// CODE TO CLEAR THE SCREEN, NOT USED AS OF 2/15/2010 ============================
+				//**** If we fill up the cells they clear SK 12/03/09
+				//****Ultimately we should make a button that does this
 
-				if (quad > 3) {
-					x = centerX + xRand;
-					y = centerY + yRand;
-				}
-				else if (quad > 2) {
-					x = centerX + xRand;
-					y = centerY - yRand;
-				}
-				else if (quad > 1) {
-					x = centerX - xRand;
-					y = centerY - yRand;
-				}
-				else  {
-					x = centerX - xRand;
-					y = centerY + yRand;
+				clear = 0;
+				if (clear == 1) {
+					NGlobals.cPrint("CLEAR!");
+					histoGram.clear();
+					clear = 0;
+					i = 0;
+					j = 0;
+					clear = 0;
+					guesser = 0;		
+					NGlobals.cPrint("CLEAR:  clearing rows/cols");
 				}
 
-				// if ((x > centerX) && (y > centerY)) {
-				//     quad = 3;
-				// }
-				// if ((x > centerX) && (y < centerY)) {
-				//     quad = 2;
-				// }
-				// if ((x < centerX) && (y < centerY)) {
-				//     quad = 1;
-				// }
-				// if ((x < centerX) && (y > centerY)) {
-				//     quad = 0;
-				// }
-				// tHist.quad = quad;
+				// END CLEAR CODE ==================================================================
 
-				NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
-
-				tHist.color = cloudColors[tCloudColorNum]; 	
-				tCloudColorNum++;
-				if (tCloudColorNum > maxCloudColors)
-					tCloudColorNum = 0;	
-
-				fontSize = tHist.size = startFontSize;
-				tHist.pass = numPasses;
-
-				tHist.x = x;
-				tHist.y = y;
-
-				tHist.font = new Font("TimesRoman", Font.PLAIN, tHist.size);
-				histoGram.add(tHist);
-
-				// This will change to be a combination of rank v time (ie., numPasses);
-
-				// DRAW THE TEXT ======================================
-
+				numPasses++;
 				NGlobals.cPrint("...");
-				NGlobals.cPrint("Drawing word: " + text);
-
+				NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
+				repaint();
 			}
-
-			// CODE TO CLEAR THE SCREEN, NOT USED AS OF 2/15/2010 ============================
-			//**** If we fill up the cells they clear SK 12/03/09
-			//****Ultimately we should make a button that does this
-
-			clear = 0;
-			if (clear == 1) {
-				NGlobals.cPrint("CLEAR!");
-				histoGram.clear();
-				clear = 0;
-				i = 0;
-				j = 0;
-				clear = 0;
-				guesser = 0;		
-				NGlobals.cPrint("CLEAR:  clearing rows/cols");
-			}
-
-			// END CLEAR CODE ==================================================================
-
-			numPasses++;
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-			repaint();
 		}
 		// END OC_CLOUD ------------------------------------------------------------------------------------
 
 		// OC_DISCUSS ============================================================================================
 
 		else if (incAppID == NAppID.OC_DISCUSS) {
-			for (i=(numChatLines-1);i>0;i--) {
-				chatLines[i] = chatLines[i-1];
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				NGlobals.cPrint("OM: DiscussText: " + text);
+				for (i=(numChatLines-1);i>0;i--) {
+					chatLines[i] = chatLines[i-1];
+				}
+				chatLines[0] = text;
+				repaint();
 			}
-			chatLines[0] = text;
-			repaint();
 		}
 
 		//		if (bite == app_id.MONITOR) {

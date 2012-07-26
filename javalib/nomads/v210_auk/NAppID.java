@@ -7,7 +7,7 @@ package nomads.v210_auk;
 //        writeByte(app_id.WEB_CHAT)
 
 public class NAppID {
-    public static Byte SERVER = 0;
+    public static Byte SERVER = 99;
     public static Byte CONDUCTOR_PANEL = 1;
     public static Byte OPERA_MAIN = 2;
     public static Byte OPERA_CLIENT = 3;
@@ -24,4 +24,5 @@ public class NAppID {
     public static Byte CENSOR = 51;
     public static Byte DEBUG = 52;
 
+    // TODO: FIX: for improved DEBUG
 }

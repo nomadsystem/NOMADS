@@ -33,6 +33,7 @@ public class OperaClient extends JApplet implements Runnable
 		}
 	}
 
+	private int msgCntr;
 	NSand operaSand;
 	private NomadsAppThread nThread;
 
@@ -53,7 +54,9 @@ public class OperaClient extends JApplet implements Runnable
 	public void init( )
 	{
 
+		msgCntr = 0;
 		String imgPrefix = "http://nomads.music.virginia.edu/images/";
+
 		try { 
 			imgWebBase = new URL(imgPrefix); 
 		} 
@@ -174,12 +177,12 @@ public class OperaClient extends JApplet implements Runnable
 
 
 		operaSand = new NSand(); 
+		operaSand.connect();
 		int d[] = new int[1];
 		d[0] = 0;
-		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 		nThread = new NomadsAppThread(this);
 		nThread.start();
-
+		operaSand.sendGrain((byte)NAppID.OPERA_CLIENT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 	}
 
@@ -191,15 +194,19 @@ public class OperaClient extends JApplet implements Runnable
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
-		NGlobals.cPrint("OperaClient -> handle()");
+		NGlobals.cPrint("OperaClient -> handle() ... waiting for data ...");
 
 		grain = operaSand.getGrain();
+
+		NGlobals.cPrint("OperaClient -> got data === message num: " + msgCntr);
+
+
 		grain.print(); //prints grain data to console
 
 		incAppID = grain.appID;
 		incCmd = grain.command;
 
-		String text = new String(grain.bArray);
+
 
 		//	String input, tTest;
 
@@ -225,40 +232,40 @@ public class OperaClient extends JApplet implements Runnable
 		//		}   
 
 		if (incAppID == NAppID.CONDUCTOR_PANEL) {
-			NGlobals.cPrint("from Conductor Panel: " + text);
+			NGlobals.cPrint("OC: from Conductor Panel: ");
 
 			//if Appid= conductor panel, command = droplet status, get value, if zero diable, if 1 enable
 
 			if (incCmd == NCommand.SET_DROPLET_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Pointer.myBusReader.amplitude.set(0.0);
-					NGlobals.cPrint("Setting Droplets to OFF");
+					NGlobals.cPrint("OC: Setting Droplets to OFF");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Pointer.myBusReader.amplitude.set(1.0);
-					NGlobals.cPrint("Setting Droplets to ON");
+					NGlobals.cPrint("OC: Setting Droplets to ON");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Discuss.speak.setEnabled(false);
-					NGlobals.cPrint("DISCUSS_STATUS false");
+					NGlobals.cPrint("OC: DISCUSS_STATUS false");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Discuss.speak.setEnabled(true);
-					NGlobals.cPrint("DISCUSS_STATUS true");
+					NGlobals.cPrint("OC: DISCUSS_STATUS true");
 				}
 			}
 
 			else if (incCmd == NCommand.SET_CLOUD_STATUS) {
-				if (grain.iArray[0] == 0) {
+				if (grain.bArray[0] == 0) {
 					myOC_Cloud.speak.setEnabled(false);
-					NGlobals.cPrint("CLOUD_STATUS false");
+					NGlobals.cPrint("OC: CLOUD_STATUS false");
 				}
-				else if (grain.iArray[0] == 1) {
+				else if (grain.bArray[0] == 1) {
 					myOC_Cloud.speak.setEnabled(true);
-					NGlobals.cPrint("CLOUD_STATUS true");
+					NGlobals.cPrint("OC: CLOUD_STATUS true");
 				}
 			}
 
@@ -266,24 +273,35 @@ public class OperaClient extends JApplet implements Runnable
 				double tDropVal = (double)grain.iArray[0]; //Using text from NGrain byte array--Should change to int array ***STK 6/20/12
 				float tDropVolume = (float)(Math.pow(tDropVal, 2)/10000.0);
 
-				NGlobals.cPrint("tDropVolume = " + tDropVolume);
+				NGlobals.cPrint("OC: tDropVolume = " + tDropVolume);
 				//TO DO: Make this a log function. . .
 				myOC_Pointer.myBusReader.amplitude.set(tDropVolume);
 
 			}
 		}
 		else if (incAppID == NAppID.OC_DISCUSS) {
-			myDiscussDisplayOnly.handle(text);
-			NGlobals.cPrint("Entering Group Discuss");
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				NGlobals.cPrint("OC: incoming discuss text: " + text);
+				myDiscussDisplayOnly.handle(text);
+				NGlobals.cPrint("OC: Setting Discuss Display");
+			}
 		}
 
-		else if (incAppID == NAppID.CLOUD_TOPIC) {
-			myOC_Cloud.handle(text);
+		else if (incAppID == NAppID.OC_CLOUD) {
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				myOC_Cloud.handle(text);
+				NGlobals.cPrint("OC: Entering Cloud Discuss");
+			}
 		}
 
-		else if (incAppID == NAppID.DISCUSS_TOPIC) {
-			myOC_Discuss.handle(text); //Don't need to send AppID again, we've already filtered it out! ***STK 6/20/12
-		}
+		else if (incAppID == NAppID.DISCUSS_TOPIC)
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				myOC_Discuss.handle(text); //Don't need to send AppID again, we've already filtered it out! ***STK 6/20/12
+				NGlobals.cPrint("OC: Setting Discuss Topic");
+			}
 	}
 
 	//	public void open()
@@ -377,6 +395,12 @@ public class OperaClient extends JApplet implements Runnable
 						int tLen = myOC_Discuss.tInput.length();
 						//    char[] tStringAsChars = tString.toCharArray();
 						byte[] tStringAsBytes = myOC_Discuss.tInput.getBytes();
+						//xxa
+						// byte d[] = new byte[1];
+						// d[0] = 1;
+						// NGlobals.cPrint("OC_Discuss: SENDING FAKE DATA");
+
+						// operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 						operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 						myOC_Discuss.input.setText("");
 						NGlobals.cPrint("OC_Discuss: tInput: " + myOC_Discuss.tInput);
@@ -551,14 +575,13 @@ public class OperaClient extends JApplet implements Runnable
 					float fy = (float)(new_my-ocpCentY)/(float)ocpCentX;
 					int offsetNew_my = (int)(fy*1000);
 
-					String towrite = new String("C:" + offsetNew_mx + ":" + offsetNew_my);
-					NGlobals.cPrint( "width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
+					NGlobals.cPrint("OCP: width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
 
-					int tLen = towrite.length();
-					//    char[] tStringAsChars = tString.toCharArray();
-					byte[] tStringAsBytes = towrite.getBytes();
-					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-					NGlobals.cPrint("OC_Pointer: towrite: " + towrite);
+					int[] xy = new int[2];
+					xy[0] = offsetNew_mx;
+					xy[1] = offsetNew_my;
+					
+					operaSand.sendGrain((byte)NAppID.OC_POINTER, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy );
 
 				}
 

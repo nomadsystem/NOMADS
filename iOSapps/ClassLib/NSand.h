@@ -48,11 +48,25 @@
                          DataLen:(int)dL
                           String:(NSString*)str;
 
+
 - (void) sendWithGrainElts_AppID:(Byte)a 
                          Command:(Byte)c 
                         DataType:(Byte)dT 
                          DataLen:(int)dL
-                          Integer:(int *)myInt;
+                         Uint8:(Byte *)myUint8s;
+
+- (void) sendWithGrainElts_AppID:(Byte)a 
+                         Command:(Byte)c 
+                        DataType:(Byte)dT 
+                         DataLen:(int)dL
+                          Int32:(int *)myInt32s;
+
+- (void) sendWithGrainElts_AppID:(Byte)a 
+                         Command:(Byte)c 
+                        DataType:(Byte)dT 
+                         DataLen:(int)dL
+                         Float32:(int *)myFloat32s;
+
 
 //- (NGrain) getGrain;
 

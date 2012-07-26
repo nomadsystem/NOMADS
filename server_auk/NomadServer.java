@@ -23,24 +23,56 @@ public class NomadServer implements Runnable {
     private Calendar cal;
     long nowT,appT,diffT,lagT;
 
-    private static byte _OC_DISCUSS_STATUS = 0;
-    private static byte _OC_CLOUD_STATUS = 0;
-    private static byte _OC_POINTER_STATUS = 0;
-    private static byte _OC_DROPLET_STATUS = 0;
+    private static byte _DISCUSS_STATUS = 0;
+    private static byte _CLOUD_STATUS = 0;
+    private static byte _POINTER_STATUS = 0;
+    private static byte _DROPLET_STATUS = 0;
+    private static int _DROPLET_VOLUME = 0;
+    private static int _SYNTH_VOLUME = 0;
 
-    private static byte _CP_DISCUSS_STATUS = 0;
-    private static byte _CP_CLOUD_STATUS = 0;
-    private static byte _CP_POINTER_STATUS = 0;
-    private static byte _CP_DROPLET_STATUS = 0;
 
 
     int iDay;
     FileOutputStream out; // declare a file output object
     PrintStream p; // declare a print stream object
 
-    // xxx
     NGrain myGrain;
-    
+
+    private String printID (byte id) {
+	String[] idList = new String[255];
+	int i;
+	for(i=0;i<255;i++) {
+	    idList[i] = null;
+	}
+
+	// Populate the list
+
+	idList[NAppID.SERVER] = new String("SERVER");
+	idList[NAppID.CONDUCTOR_PANEL] = new String("CONDUCTOR_PANEL");
+	idList[NAppID.OPERA_MAIN] = new String("OPERA_MAIN");
+	idList[NAppID.OPERA_CLIENT] = new String("OPERA_CLIENT");
+	idList[NAppID.OC_DISCUSS] = new String("OC_DISCUSS");
+	idList[NAppID.OC_CLOUD] = new String("OC_CLOUD");
+	idList[NAppID.OC_CLOUD] = new String("OC_LOGIN");
+	idList[NAppID.OC_CLOUD] = new String("OC_POINTER");
+	idList[NAppID.OC_CLOUD] = new String("DISCUSS_TOPIC");
+	idList[NAppID.OC_CLOUD] = new String("CLOUD_TOPIC");
+	idList[NAppID.OC_CLOUD] = new String("MONITOR");
+	idList[NAppID.OC_CLOUD] = new String("CENSOR");
+	idList[NAppID.OC_CLOUD] = new String("DEBUG");
+
+	// Print out the id as a string
+	if (idList[id] != null) {
+	    String rString = new String(idList[id] + "[" + id + "]");
+	    return rString;	
+	}
+	else {
+	    String rString = new String("UNKNOWN[" + id + "]");
+	    return rString;	
+	}
+    }
+
+
     public NomadServer(int port) {  	    
 	for (int i=0;i<100000;i++) {
 	    clientThreadNum[i] = -1;
@@ -169,6 +201,7 @@ public class NomadServer implements Runnable {
 	NGlobals.sPrint("command: " + incAppCmd);
 	NGlobals.sPrint("dataType: " + incAppDataType);
 	NGlobals.sPrint("dataLen: " + incAppDataLen);
+	myGrain.print();
 
 	// Thread admin stuff ---------------------------------------------------------------------
 
@@ -206,33 +239,42 @@ public class NomadServer implements Runnable {
 
 	// 2: INIT =================================================================================================================
 
-	// Grab IP (more for data logging)
+	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
+	IP = currentClient.getIP();   	// Grab IP (more for data logging)
 
-	IP = currentClient.getIP();
+	// INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 
+	currentClient = clients[tCNum];
 	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
-
-	    // INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 
 	    NGlobals.lPrint("  Sending button states to CONDUCTOR PANEL from SERVER.");
 	    byte d[] = new byte[1];
 
-	    d[0] = _CP_DISCUSS_STATUS;
+	    d[0] = _DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DISCUSS_STATUS: " + d);
+	    NGlobals.lPrint("_DISCUSS_STATUS: " + d[0]);
 
-	    d[0] = _CP_CLOUD_STATUS;
+	    d[0] = _CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_CLOUD_STATUS:  " + d);
+	    NGlobals.lPrint("_CLOUD_STATUS:  " + d[0]);
 	    
-	    d[0] = _CP_POINTER_STATUS;
+	    d[0] = _POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_POINTER_STATUS:  " + d);
+	    NGlobals.lPrint("_POINTER_STATUS:  " + d[0]);
 
-	    d[0] = _CP_DROPLET_STATUS;
+	    d[0] = _DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_CP_DROPLET_STATUS:  " + d);
+	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
+	    int ix[] = new int[1];
+	    ix[0] = _DROPLET_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
+
+	    ix[0] = _SYNTH_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
+
 	    currentClient.setButtonInitStatus((byte)1);
 	    // tempString = new String("CNT:" + clientCount);
 	    // clients[cNum].send((byte)NAppID.MONITOR, tempString);
@@ -241,35 +283,45 @@ public class NomadServer implements Runnable {
 	}
 	
 	// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
-
+	currentClient = clients[tCNum];
 	if ((incAppID == NAppID.OPERA_CLIENT) && (currentClient.getButtonInitStatus() == 0)) {
 	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
 	    byte d[] = new byte[1];
 
-	    d[0] = _OC_DISCUSS_STATUS;
+	    d[0] = _DISCUSS_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DISCUSS_STATUS: " + d);
+	    NGlobals.lPrint("_DISCUSS_STATUS: " + d[0]);
 
-	    d[0] = _OC_CLOUD_STATUS;
+	    d[0] = _CLOUD_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_CLOUD_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_CLOUD_STATUS:  " + d);
+	    NGlobals.lPrint("_CLOUD_STATUS:  " + d[0]);
 	    
-	    d[0] = _OC_POINTER_STATUS;
+	    d[0] = _POINTER_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_POINTER_STATUS:  " + d);
+	    NGlobals.lPrint("_POINTER_STATUS:  " + d[0]);
 
-	    d[0] = _OC_DROPLET_STATUS;
+	    d[0] = _DROPLET_STATUS;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_STATUS, NDataType.UINT8, 1, d);
-	    NGlobals.lPrint("_OC_DROPLET_STATUS:  " + d);
+	    NGlobals.lPrint("_DROPLET_STATUS:  " + d[0]);
 	    
-	    currentClient.setButtonInitStatus((byte)1);
+	    int ix[] = new int[1];
+	    ix[0] = _DROPLET_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
 
-	    // TODO SEND DROPLET LEVEL
-	    
+	    currentClient.setButtonInitStatus((byte)1);
 	}
 
+	// INIT for OPERA_MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
+	currentClient = clients[tCNum];
+	if (incAppID == NAppID.OPERA_MAIN) {
+	    NGlobals.lPrint("  Sending button states to OPERA MAIN from SERVER / CONDUCTOR_PANEL.");
+	    int ix[] = new int[1];
+	    ix[0] = _SYNTH_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
+	}
 
-	// 3 ---- WRITE ===========================================================================================================
 
 	// ====================================================================================================W
 	// BEGIN Main data routing code
@@ -280,55 +332,191 @@ public class NomadServer implements Runnable {
 	//
 	// ====================================================================================================W
 
+	// 3 ---- WRITE ===========================================================================================================
 
 	NGlobals.sPrint("===== WRITING =====");
 
+	// FILTER out some commands that don't need to go past this point
 
-	// GENERIC Logic =============================================================
-	//    -for each client SEND ALL DATA
-	
-	// OPERA CLIENT
+	if (incAppCmd != NCommand.REGISTER) {
 
-	if (incAppID == NAppID.CONDUCTOR_PANEL) {
-	    for (int c = 0; c < clientCount; c++) {
+	    // TODO:  add code to cache the button statuses
+	    //        IDEA:  use button_status[array]
+
+	    // incoming appID = CONDUCTOR_PANEL = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
+		// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+
+		// Store various FEATURE STATES - - - - - - - - - - - - - - - - -
+
+		if (incAppCmd == NCommand.SET_DISCUSS_STATUS) {
+		    _DISCUSS_STATUS = myGrain.bArray[0];
+		}
 		
-		// Get the client off the master list
-		currentClient = clients[c];
-		if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+		else if (incAppCmd == NCommand.SET_CLOUD_STATUS) {
+		    _CLOUD_STATUS = myGrain.bArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_POINTER_STATUS) {
+		    _POINTER_STATUS = myGrain.bArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_DROPLET_STATUS) {
+		    _DROPLET_STATUS = myGrain.bArray[0];
+		}
+		    
+		else if (incAppCmd == NCommand.SET_DROPLET_VOLUME) {
+		    _DROPLET_VOLUME = myGrain.iArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_SYNTH_VOLUME) {
+		    _SYNTH_VOLUME = myGrain.iArray[0];
+		}
+
+
+		for (int c = 0; c < clientCount; c++) {
+		    // Get the client off the master list
+		    currentClient = clients[c];
+
+
+
+
+
+		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		    if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+			if ((incAppCmd != NCommand.SET_CLOUD_ALPHA) && 
+			    (incAppCmd != NCommand.SET_DISCUSS_ALPHA) &&
+			    (incAppCmd != NCommand.SET_POINTER_ALPHA)) {
+			    
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+		    }
+
+		    // send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		    if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			if ((incAppCmd != NCommand.SET_DROPLET_VOLUME) && 
+			    (incAppCmd != NCommand.SET_DROPLET_STATUS)) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+		    }
+		    
+		}
+	    }   
+
+	    // incoming appID = OC_DISCUSS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.OC_DISCUSS) {
+
+		if (incAppCmd == NCommand.SEND_MESSAGE) {
+		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    for (int c = 0; c < clientCount; c++) {
+			// Get the client off the master list
+			currentClient = clients[c];
+			
+			// send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			else if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+		    }
+		}   
+	    }
+
+	    // incoming appID = OC_CLOUD = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.OC_CLOUD) {
+
+		if (incAppCmd == NCommand.SEND_MESSAGE) {
+		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    for (int c = 0; c < clientCount; c++) {
+			// Get the client off the master list
+			currentClient = clients[c];
+
+			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			    myGrain.print();
+			    // Write the data out
+			    currentClient.threadSand.sendGrain(myGrain);
+			}
+
+		    }
+		}   
+	    }
+
+
+	    // incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+	    if (incAppID == NAppID.OC_POINTER) {
+		if (incAppCmd == NCommand.SEND_SPRITE_XY) {
+
+		    for (int c = 0; c < clientCount; c++) {
+			
+			currentClient = clients[c];
+			NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+			
+			
+			// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
+			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+			    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+			    
+			    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
+			    int[] x = new int[3];
+			    x[0] = THREAD_ID;
+			    x[1] = myGrain.iArray[0];
+			    x[2] = myGrain.iArray[1];
+			    
+			    currentClient.threadSand.sendGrain(incAppID, NCommand.SEND_SPRITE_THREAD_XY, NDataType.INT32, 3, x);
+			    
+			}
+		    }
+		}
+	    }
+
+	    else if (false) {
+		NGlobals.sPrint("===> sending PASSTHROUGH network data");
+		for (int c = 0; c < clientCount; c++) {
+		
+		    // Get the client off the master list
+		    currentClient = clients[c];
 		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
+		
+		    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+		
+		
 		    myGrain.print();
 		    // Write the data out
 		    currentClient.threadSand.sendGrain(myGrain);
-		}
-	    }   
-	}
-
-	else if (false) {
-	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
-	    for (int c = 0; c < clientCount; c++) {
 		
-		// Get the client off the master list
-		currentClient = clients[c];
-		NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
-		
-		// Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
-		
-		
-		myGrain.print();
-		// Write the data out
-		currentClient.threadSand.sendGrain(myGrain);
-		
-	    }   
-	    // END --------------------------------------------------------------------
-	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+		}   
+		// END --------------------------------------------------------------------
+		NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
 	    
-	    // Free up memory
-	    if (myGrain != null) {
-		myGrain = null;
+		// Free up memory
+		if (myGrain != null) {
+		    myGrain = null;
+		}
 	    }
 	}
-    }
-    
+    }    
     // =====================================================================================================
     // END main data routing code --- handle() fn
     // =====================================================================================================

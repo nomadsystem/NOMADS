@@ -24,21 +24,7 @@
                    Command:(Byte)c 
                   DataType:(Byte)dT 
                    DataLen:(int)dL 
-                    Uint8:(uint8_t *)uA
-{   
-    appID = a;
-    command = c;
-    dataType = dT;
-    dataLen = dL;
-    uArray = uA;
-}
-
-
-- (void)setGrainElts_AppID:(Byte)a 
-                      Command:(Byte)c 
-                     DataType:(Byte)dT 
-                      DataLen:(int)dL 
-                       String:(NSString *)s
+                    String:(NSString *)s
 {   
     appID = a;
     command = c;
@@ -47,12 +33,25 @@
     str = s;
 }
 
+- (void)setGrainElts_AppID:(Byte)a 
+                   Command:(Byte)c 
+                  DataType:(Byte)dT 
+                   DataLen:(int)dL 
+                    Uint8:(uint8_t *)bA
+{   
+    appID = a;
+    command = c;
+    dataType = dT;
+    dataLen = dL;
+    bArray = bA;
+}
+
 
 - (void)setGrainElts_AppID:(Byte)a 
                       Command:(Byte)c 
                      DataType:(Byte)dT 
                       DataLen:(int)dL 
-                       Integer:(int *)iA; 
+                       Int32:(int *)iA; 
 {   
     appID = a;
     command = c;
@@ -65,7 +64,7 @@
                    Command:(Byte)c 
                   DataType:(Byte)dT 
                    DataLen:(int)dL 
-                   Float:(float *)fA; 
+                   Float32:(float *)fA; 
 {   
     appID = a;
     command = c;
@@ -89,7 +88,7 @@
     else if (dataType == UINT8) {
         NSLog(@"uint8:");
         for(i=0;i<dataLen;i++) {
-            NSLog(@" %d ",uArray[i]);
+            NSLog(@" %d ",bArray[i]);
         }
     }
     else if (dataType == INT32) {

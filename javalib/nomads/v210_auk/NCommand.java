@@ -15,7 +15,7 @@ public class NCommand {
     public static byte SET_DISCUSS_ALPHA = 17;
     public static byte SET_CLOUD_ALPHA = 18;
     public static byte SET_POINTER_ALPHA = 19;
-    public static byte SET_MAIN_VOLUME = 22;
+    public static byte SET_SYNTH_VOLUME = 22;
     
 
     public static byte SYNTH_ENABLE = 6; //uGroove
@@ -23,9 +23,8 @@ public class NCommand {
     public static byte SYNTH_START = 8;//uGroove
     public static byte SYNTH_STOP = 9;//uGroove
 
+    public static byte SEND_SPRITE_THREAD_XY = 20;  // SoundSwarm
+    public static byte SEND_SPRITE_XY = 21;  // SoundSwarm
+    
 
-    public static byte SEND_SPRITE_XY = 20;  // SoundSwarm
-    public static byte SEND_THREAD_ID = 21;
-    
-    
 }
