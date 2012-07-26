@@ -1,19 +1,20 @@
 //AnimatedObject.h
-//
-//Created on: Jul 21, 2012
-//Author: Paul Turowski
+//Paul Turowski. 2012.07.24
 
-#include "cocos2d.h"
 
 #ifndef ANIMATEDOBJECT_H_
 #define ANIMATEDOBJECT_H_
 
+#include "cocos2d.h"
+// move somewhere else
+#include "CCGlobals.h"
+
 USING_NS_CC;
 
-class AnimatedObject : cocos2d::CCSprite
+class AnimatedObject : public cocos2d::CCSprite
 {
 public:
-	AnimatedObject();
+	void initAnimatedObject();
 	virtual ~AnimatedObject();
 };
 

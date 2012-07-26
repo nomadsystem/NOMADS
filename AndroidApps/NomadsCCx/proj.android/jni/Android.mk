@@ -8,7 +8,9 @@ LOCAL_MODULE_FILENAME := libgame
 
 LOCAL_SRC_FILES := swarm/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/Swarm.cpp
+                   ../../Classes/Swarm.cpp \
+                   ../../Classes/AnimatedObject.cpp \
+                   ../../Classes/Cursor.cpp
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   
 
