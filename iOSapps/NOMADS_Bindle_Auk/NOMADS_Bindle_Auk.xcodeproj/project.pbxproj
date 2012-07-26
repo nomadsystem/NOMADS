@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9139F1C15C1B5330093FA29 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9139F1B15C1B5330093FA29 /* AVFoundation.framework */; };
+		F9139F1E15C1B5D10093FA29 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F9139F1D15C1B5D10093FA29 /* sounds */; };
 		F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77B715B70D0200C71BB1 /* UIKit.framework */; };
 		F91C77BA15B70D0200C71BB1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77B915B70D0200C71BB1 /* Foundation.framework */; };
 		F91C77BC15B70D0200C71BB1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F9139F1B15C1B5330093FA29 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F9139F1D15C1B5D10093FA29 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = NOMADS_Bindle_Auk/sounds; sourceTree = "<group>"; };
 		F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle_Auk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91C77B715B70D0200C71BB1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F91C77B915B70D0200C71BB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -63,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9139F1C15C1B5330093FA29 /* AVFoundation.framework in Frameworks */,
 				F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */,
 				F91C77BA15B70D0200C71BB1 /* Foundation.framework in Frameworks */,
 				F91C77BC15B70D0200C71BB1 /* CoreGraphics.framework in Frameworks */,
@@ -75,6 +80,7 @@
 		F91C77A815B70D0100C71BB1 = {
 			isa = PBXGroup;
 			children = (
+				F9139F1D15C1B5D10093FA29 /* sounds */,
 				F921173A15B89DDD00B78B43 /* 1342727762_weather_09.png */,
 				F921173615B89CBF00B78B43 /* 1342727465_Discussion.png */,
 				F921171115B8874E00B78B43 /* 1342721861_Cog.png */,
@@ -96,6 +102,7 @@
 		F91C77B615B70D0200C71BB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9139F1B15C1B5330093FA29 /* AVFoundation.framework */,
 				F91C77B715B70D0200C71BB1 /* UIKit.framework */,
 				F91C77B915B70D0200C71BB1 /* Foundation.framework */,
 				F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */,
@@ -189,6 +196,7 @@
 				F921171215B8874E00B78B43 /* 1342721861_Cog.png in Resources */,
 				F921173715B89CBF00B78B43 /* 1342727465_Discussion.png in Resources */,
 				F921173B15B89DDD00B78B43 /* 1342727762_weather_09.png in Resources */,
+				F9139F1E15C1B5D10093FA29 /* sounds in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

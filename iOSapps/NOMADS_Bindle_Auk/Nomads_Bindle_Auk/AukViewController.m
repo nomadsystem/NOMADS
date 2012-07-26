@@ -94,7 +94,6 @@
     //Initialize toolbar in Auk view
     [[self aukToolbar] setTranslucent:YES];
     
-    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -265,6 +264,9 @@
     
     return YES;   
 }
+
+
+
 //iOS Stuff ==============================================================
 
 - (void)viewDidUnload

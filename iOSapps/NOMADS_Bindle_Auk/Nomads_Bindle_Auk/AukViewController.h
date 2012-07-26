@@ -54,7 +54,6 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
 
-
 - (IBAction)discussButton:(id)sender;
 - (IBAction)cloudButton:(id)sender;
 - (IBAction)settingsButton:(id)sender;
