@@ -6,6 +6,7 @@
 #define ANIMATEDOBJECT_H_
 
 #include "cocos2d.h"
+// move somewhere else
 #include "CCGlobals.h"
 
 USING_NS_CC;

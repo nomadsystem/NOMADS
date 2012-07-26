@@ -1,6 +1,7 @@
 #include "Swarm.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 CCScene* Swarm::scene()
 {
@@ -17,6 +18,13 @@ CCScene* Swarm::scene()
     return scene;
 }
 
+// Load audio
+void Swarm::loadAudio () {
+//	CDSoundEngine::setMixerSampleRate(CD_SAMPLE_RATE_MID);
+	soundEngine = SimpleAudioEngine::sharedEngine();
+	soundEngine->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(TEST_SOUND));
+}
+
 // on "init" you need to initialize your instance
 bool Swarm::init()
 {
@@ -26,6 +34,9 @@ bool Swarm::init()
     {
         return false;
     }
+
+    // load audio files
+    this->loadAudio();
 
     Swarm::setTouchEnabled(true);
 
@@ -91,6 +102,9 @@ bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
 
+	// play audio file
+	soundEngine->playBackgroundMusic(TEST_SOUND, true);
+
 	return true;
 }
 
@@ -106,6 +120,9 @@ void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
 {
 	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
 	cursorSprite->changeState(kStateIdle);
+
+	// stop audio
+	soundEngine->stopBackgroundMusic(true);
 }
 
 void Swarm::onEnter()
