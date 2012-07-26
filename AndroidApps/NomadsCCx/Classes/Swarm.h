@@ -2,21 +2,22 @@
 #define __SWARM_SCENE_H__
 
 #include "cocos2d.h"
-#include "CCGlobals.h"
+#include "SimpleAudioEngine.h"
 #include "Cursor.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 class Swarm : public cocos2d::CCLayer
 {
-	ObjectState swarmState;
-public:
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    virtual bool init();
+	CCPoint touchPoint;
+	SimpleAudioEngine* soundEngine;
 
-//    CCSprite* pSprite;
-    CCSprite* cursorSprite;
-    CCSpriteBatchNode* sceneSpriteBatchNode;
+	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+	virtual bool init();
+	void loadAudio();
+public:
+	Cursor* cursorSprite;
 
     // there's no 'id' in cpp, so return the class pointer
     static cocos2d::CCScene* scene();

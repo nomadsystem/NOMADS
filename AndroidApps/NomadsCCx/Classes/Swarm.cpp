@@ -1,6 +1,7 @@
 #include "Swarm.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 CCScene* Swarm::scene()
 {
@@ -17,6 +18,13 @@ CCScene* Swarm::scene()
     return scene;
 }
 
+// Load audio
+void Swarm::loadAudio () {
+//	CDSoundEngine::setMixerSampleRate(CD_SAMPLE_RATE_MID);
+	soundEngine = SimpleAudioEngine::sharedEngine();
+	soundEngine->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(TEST_SOUND));
+}
+
 // on "init" you need to initialize your instance
 bool Swarm::init()
 {
@@ -27,8 +35,10 @@ bool Swarm::init()
         return false;
     }
 
+    // load audio files
+    this->loadAudio();
+
     Swarm::setTouchEnabled(true);
-    swarmState = kStateIdle;
 
     // set size of Java display
 
@@ -52,41 +62,23 @@ bool Swarm::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
 
-//    /////////////////////////////
-//    // 3. add your codes below...
-//
-//    // add a label shows "Hello World"
-//    // create and initialize a label
-//    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 24);
-//
-//    // position the label on the center of the screen
-//    pLabel->setPosition( ccp(size.width / 2, size.height - 50) );
-//
-//    // add the label as a child to this layer
-//    this->addChild(pLabel, 1);
-//
-//    // add "HelloWorld" splash screen"
-//    pSprite = CCSprite::create("HelloWorld.png");
-//
-//    // position the sprite on the center of the screen
-//    pSprite->setPosition( ccp(size.width/2, size.height/2) );
-//
-//    // add the sprite as a child to this layer
-//    this->addChild(pSprite, 0);
-
+    // Load sprite images
     CCTexture2D::PVRImagesHavePremultipliedAlpha(true);
     CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);
 
-    sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
-    this->addChild(sceneSpriteBatchNode);
-
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
+    CCSpriteBatchNode* sceneSpriteBatchNode = CCSpriteBatchNode::create("ring.pvr.ccz", 12);
 
-    cursorSprite = CCSprite::spriteWithSpriteFrameName("untitled_1.png");
-    cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
+    cursorSprite = new Cursor();
 
-    sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
-    
+    cursorSprite->initSprite();
+
+	cursorSprite->initWithSpriteFrameName("untitled_1.png");
+
+	cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
+
+	sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
+	this->addChild(sceneSpriteBatchNode);
 //    this->scheduleUpdate();
 
     return true;
@@ -103,24 +95,34 @@ void Swarm::menuCloseCallback(CCObject* pSender)
 
 bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 {
-	if(swarmState != kStateIdle) return false;
+	if(cursorSprite->currentState != kStateIdle) return false;
 
-	swarmState = kStateActive;
+	cursorSprite->changeState(kStateActive);
+	touchPoint = touch->locationInView();
+	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
+	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
+
+	// play audio file
+	soundEngine->playBackgroundMusic(TEST_SOUND, true);
+
 	return true;
 }
 
 void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
-	CCPoint touchPoint = touch->locationInView();
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+	touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
 }
 
 void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
 {
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
-	swarmState = kStateIdle;
+	CCAssert(cursorSprite->currentState == kStateActive, "Swarm: unexpected state!");
+	cursorSprite->changeState(kStateIdle);
+
+	// stop audio
+	soundEngine->stopBackgroundMusic(true);
 }
 
 void Swarm::onEnter()

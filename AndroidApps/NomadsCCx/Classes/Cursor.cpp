@@ -1,50 +1,100 @@
-/*
- * Cursor.cpp
- *
- *  Created on: Jul 23, 2012
- *      Author: TRock
- */
+//Cursor.cpp
+//Paul Turowski. 2012.07.24
 
-#include "/Users/TRock/Nomads/AndroidApps/NomadsCCx/Classes/Cursor.h"
-
-Cursor::Cursor() {
-	// TODO Auto-generated constructor stub
-
-}
+#include "Cursor.h"
 
 Cursor::~Cursor() {
-	// TODO Auto-generated destructor stub
+	swellAnim->release();
 }
 
-bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
-{
-	if(swarmState != kStateIdle) return false;
+bool Cursor::initSprite(){
+	CCLog("initSprite called.");
 
-	swarmState = kStateActive;
+	// initialize object state
+	currentState = kStateIdle;
+
+	// initialize parent class
+//	initAnimatedObject();
+
+	// initialize animation sequences
+	initAnimations();
 	return true;
 }
 
-void Cursor::ccTouchMoved(CCTouch* touch, CCEvent* event)
-{
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
-	CCPoint touchPoint = touch->locationInView();
-	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
-//	pSprite->setPosition( CCPointMake(touchPoint.x, getPosition().y) );
+void Cursor::initAnimations(){
+	CCLog("initAnimations called.");
+
+	swellAnim = CCAnimation::create();
+	swellAnim->retain();
+	shrinkAnim = CCAnimation::create();
+	shrinkAnim->retain();
+
+	// TO DO: Create a general function for frame loading
+	char frameName[50] = {0};
+
+	for (int i=1; i<=12; i++) {
+		frameName = {0};
+		sprintf(frameName, "untitled_%d.png", i);
+		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
+		swellAnim->addSpriteFrame(pFrame);
+
+		frameName = {0};
+		sprintf(frameName, "untitled_%d.png", 13-i);
+		pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
+		shrinkAnim->addSpriteFrame(pFrame);
+	}
+
+//	pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("untitled_12.png");
+
+//	swellAnim->addSpriteFrameWithFileName("CloseNormal.png");
+//	swellAnim->addSpriteFrameWithFileName("CloseSelected.png");
+
+	swellAnim->setDelayPerUnit(0.05f);
+//	swellAnim->setRestoreOriginalFrame(true);
+	shrinkAnim->setDelayPerUnit(0.05f);
+//	shrinkAnim->setRestoreOriginalFrame(true);
 }
 
-void Cursor::ccTouchEnded(CCTouch* touch, CCEvent* event)
-{
-	CCAssert(swarmState == kStateActive, L"Swarm: unexpected state!");
-	swarmState = kStateIdle;
+void Cursor::changeState(ObjectState newState){
+	this->stopAllActions();
+	this->currentState = newState;
+
+	action = NULL;
+
+//	CCAction* action = NULL;
+//	action = CCAnimate::create(swellAnim);
+
+	switch(newState){
+	case kStateIdle:
+		CCLog("Cursor.cpp -> Cursor is idle.");
+//		action = CCAnimate::actionWithAnimation(swellAnim);
+		action = CCAnimate::create(shrinkAnim);
+		break;
+	case kStateActive:
+		CCLog("Cursor.cpp -> Cursor is active.");
+		action = CCAnimate::create(swellAnim);
+		break;
+	default:
+		CCLog("Cursor.cpp -> not a valid state!");
+		break;
+	}
+	if (action != NULL){
+		this->runAction(action);
+//		this->runAction(CCSequence::create(anim, anim->reverse(), NULL));
+	}
 }
 
-void Cursor::touchDelegateRetain()
-{
-    this->retain();
-}
-
-void Cursor::touchDelegateRelease()
-{
-    this->release();
-}
-
+//CCSpriteBatchNode* Cursor::initSpriteBatchNode (Swarm s) {
+//	CCTexture2D::PVRImagesHavePremultipliedAlpha(true);
+//	CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);
+//
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("rings.plist");
+//	sceneSpriteBatchNode = CCSpriteBatchNode::batchNodeWithFile("ring.pvr.ccz");
+//
+//	this = CCSprite::spriteWithSpriteFrameName("untitled_6.png");
+//	this->setPosition( ccp(size.width/2, size.height/2) );
+//
+//	sceneSpriteBatchNode->addChild(this, kCursorSpriteZValue, kCursorSpriteTagValue);
+//
+//	return sceneSpriteBatchNode;
+//}
