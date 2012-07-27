@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.TabHost;
 
 public class TabbedBindle extends TabActivity {
+	public static TabbedBindle context;
 	Activity currentActivity;
 	final Handler handle = new Handler();
 	TabHost tabHost;
@@ -49,6 +50,9 @@ public class TabbedBindle extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.main);
+	    
+	    // set public reference to this instance
+	    context = this;
 	    
 	    // Thread needs to start before initializing tabs
 	    // since the reference to sand is sent based on the active tab

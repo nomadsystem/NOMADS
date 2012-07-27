@@ -4,21 +4,24 @@
 
 package com.nomads;
 
-import nomads.v210.*;
-
+import nomads.v210.NAppID;
+import nomads.v210.NGrain;
+import nomads.v210.NSand;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class Discuss extends Activity {
+	private Context ctx;
 	NSand sand;
 	NGrain grain;
 	
@@ -27,8 +30,9 @@ public class Discuss extends Activity {
 	TextView chatWindow;
 	Button speak;
 	String tempString = "";
-	
-	
+
+	AlertDialog.Builder alert;
+	EditText alertInput;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -41,6 +45,9 @@ public class Discuss extends Activity {
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		speak = (Button)findViewById(R.id.send);
 		speak.setOnClickListener(buttonSendOnClickListener);
+		
+		ctx = TabbedBindle.context;
+		alert = new AlertDialog.Builder(ctx);
 	}
 	
 	@Override
@@ -93,29 +100,51 @@ public class Discuss extends Activity {
 	}
 	 
 	Button.OnClickListener buttonSendOnClickListener = new Button.OnClickListener(){
+		
 		@Override
 		public void onClick(View v) {
-			String tString = input.getText().toString();
-			int tLen = tString.length();
-			byte[] tStringAsBytes = tString.getBytes();
-
-			sand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			// need to create new input field each time
+			alertInput = new EditText(ctx);
 			
-			// The data 
-			Log.i("Discuss", "sending:  (" + tLen + ") of this data type");
+			alert.setTitle("Discuss:");
+//			alert.setMessage("Message");
+			alert.setView(alertInput);
 
-			//                for (int i=0; i<tLen; i++) {
-			//                Log.i("Discuss", "sending:  " + tString.charAt(i));
-			//                streamOut.writeByte(tString.charAt(i));
-			//                }
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  String value = alertInput.getText().toString();
+			  	Log.d("Discuss", value);
+			  }
+			});
 
-			Log.i("Discuss", "sending: (" + tString + ")");
-			input.setText("");
-//			input.requestFocus();
-			InputMethodManager imm = (InputMethodManager)getSystemService(
-				      Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+			
+			alert.show();
+//			String tString = input.getText().toString();
+//			int tLen = tString.length();
+//			byte[] tStringAsBytes = tString.getBytes();
+//
+//			sand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+//			
+//			// The data 
+//			Log.i("Discuss", "sending:  (" + tLen + ") of this data type");
+//
+//			//                for (int i=0; i<tLen; i++) {
+//			//                Log.i("Discuss", "sending:  " + tString.charAt(i));
+//			//                streamOut.writeByte(tString.charAt(i));
+//			//                }
+//
+//			Log.i("Discuss", "sending: (" + tString + ")");
+//			input.setText("");
+////			input.requestFocus();
+//			InputMethodManager imm = (InputMethodManager)getSystemService(
+//				      Context.INPUT_METHOD_SERVICE);
+//			imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+//
 		}
 	};
 	
@@ -123,6 +152,10 @@ public class Discuss extends Activity {
 		sand = _sand;
 		Log.i("Discuss", "setSand()");
 	}
+	
+//	public void setTB(TabbedBindle _tb){
+//		tabbedBindle = _tb;
+//	}
 	
 	private void appendTextAndScroll(String text)
 	{
