@@ -39,6 +39,10 @@ import android.view.ViewGroup;
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
 	
+	public static void locationUpdate() {
+        Log.i("Swarm.cpp", "locationUdate()");
+    }
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -78,7 +82,8 @@ public class Swarm extends Cocos2dxActivity{
 			setContentView(framelayout);
 		}
 		else {
-			Log.d("activity", "don't support gles2.0");
+			// include message for user
+			Log.d("activity", "doesn't support gles2.0");
 			finish();
 		}	
 	}

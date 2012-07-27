@@ -1,7 +1,15 @@
 #include "Swarm.h"
 
+// setup JNI for native -> Java
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#define CLASS_OPEN_NAME "com/nomads/Swarm"
+#endif
+
 USING_NS_CC;
 using namespace CocosDenshion;
+
 
 CCScene* Swarm::scene()
 {
@@ -34,6 +42,12 @@ bool Swarm::init()
     {
         return false;
     }
+
+    //===============================JNI Setup for Java method calls
+    // Get JNI Environment
+
+    //test
+    this->sendData();
 
     // load audio files
     this->loadAudio();
@@ -88,9 +102,9 @@ void Swarm::menuCloseCallback(CCObject* pSender)
 {
     CCDirector::sharedDirector()->end();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    exit(0);
+//#endif
 }
 
 bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
@@ -148,3 +162,104 @@ void Swarm::touchDelegateRelease()
 {
     this->release();
 }
+
+void Swarm::sendData()
+{
+	// change to init
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo methodInfo;
+    if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "locationUpdate", "()V"))
+    {
+        CCLog("Can't not find static method locationUpdate");
+        return;
+    }
+
+    // keep
+    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID);
+
+    // change to on exit
+    methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    #else
+    CCLog("Swarm.cpp->Platform is not Android");
+    #endif
+}
+
+//extern "C"{
+//	void SendData (const char * pszMsg){
+//		// test for null data
+////		if (! <data>)
+////		{
+////			return;
+////		}
+//
+//		JniMethodInfo t;
+//
+//		if (JniHelper::getStaticMethodInfo(t, SEND_DATA_CLASS, "locationUpdate","(Ljava/lang/String;Ljava/lang/String;)V"))
+//		{
+//			CCLog("JniMethodInfo getStaticMethodInfo got data");
+//			t.env->callStaticVoidMethod()
+////			jstring stringArg1;
+////
+////			if (! pszTitle)
+////			{
+////				stringArg1 = t.env->NewStringUTF("");
+////			}
+////			else
+////			{
+////				stringArg1 = t.env->NewStringUTF(pszTitle);
+////			}
+////
+////			jstring stringArg2 = t.env->NewStringUTF(pszMsg);
+////			t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1, stringArg2);
+////
+////			t.env->DeleteLocalRef(stringArg1);
+////			t.env->DeleteLocalRef(stringArg2);
+////			t.env->DeleteLocalRef(t.classID);
+//		}
+//	}
+//}
+
+//
+//JNIEnv* getJNIEnv(void)
+//{
+//
+//	JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
+//	if (NULL == jvm) {
+////            LOGD("Failed to get JNIEnv. JniHelper::getJavaVM() is NULL");
+//		return NULL;
+//	}
+//
+//	JNIEnv* env = NULL;
+//	// get jni environment
+//	jint ret = jvm->GetEnv((void**)&env, JNI_VERSION_1_4);
+//
+//	switch (ret) {
+//		case JNI_OK :
+//			// Success!
+//			return env;
+//
+//		case JNI_EDETACHED :
+//			// Thread not attached
+//
+//			// TODO : If calling AttachCurrentThread() on a native thread
+//			// must call DetachCurrentThread() in future.
+//			// see: http://developer.android.com/guide/practices/design/jni.html
+//
+//			if (jvm->AttachCurrentThread(&env, NULL) < 0)
+//			{
+////                    LOGD("Failed to get the environment using AttachCurrentThread()");
+//				return NULL;
+//			} else {
+//				// Success : Attached and obtained JNIEnv!
+//				return env;
+//			}
+//
+//		case JNI_EVERSION :
+//			// Cannot recover from this error
+////                LOGD("JNI interface version 1.4 not supported");
+//		default :
+////                LOGD("Failed to get the environment using GetEnv()");
+//			return NULL;
+//	}
+//}
+//
