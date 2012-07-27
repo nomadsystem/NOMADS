@@ -19,6 +19,7 @@ using namespace CocosDenshion;
 class Swarm : public cocos2d::CCLayer
 {
 	CCPoint touchPoint;
+	uint touchPos[2];
 	SimpleAudioEngine* soundEngine;
 
 //	JNIEnv* env;
