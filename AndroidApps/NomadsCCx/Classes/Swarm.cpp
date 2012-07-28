@@ -27,7 +27,8 @@ CCScene* Swarm::scene()
 }
 
 // Load audio
-void Swarm::loadAudio () {
+void Swarm::loadAudio ()
+{
 //	CDSoundEngine::setMixerSampleRate(CD_SAMPLE_RATE_MID);
 	soundEngine = SimpleAudioEngine::sharedEngine();
 	soundEngine->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(TEST_SOUND));
@@ -105,17 +106,6 @@ bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
 
-//	touchPos = touchPoint;
-
-//	touchPos[0] = (int)touchPoint.x;
-//	touchPos[1] = (int)touchPoint.y;
-//
-//	CCLog("This is the touchPos: " + touchPos[0] + " " + touchPos[1]);
-
-//	int test = (int)touchPoint.x;
-//
-//	touchPos[1] = 112;
-
 	// send touch location to Swarm.java via JNI
 	this->sendData();
 
@@ -131,9 +121,6 @@ void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 	touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
-
-//	touchPos[0] = (int)touchPoint.x;
-//	touchPos[1] = (int)touchPoint.y;
 
 	// send touch location to Swarm.java via JNI
 	this->sendData();
@@ -174,7 +161,6 @@ void Swarm::touchDelegateRelease()
 
 void Swarm::sendData()
 {
-	touchPos[1] = 111;
 	// change to init
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     JniMethodInfo methodInfo;
@@ -186,13 +172,17 @@ void Swarm::sendData()
     // F = float
     // [I = int[], etc.
 
-    if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "locationUpdate", "(I)V"))
+    if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "touchPos", "(II)V"))
     {
         CCLog("Can't not find static method locationUpdate");
         return;
     }
 
-    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, (int)touchPoint.x);
+//    touchPos[0] = touchPoint.x;
+//    touchPos[1] = touchPoint.y;
+//    CCLog("[0]: %i [1]: %i", touchPos[0], touchPos[1]);
+
+    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, (int)touchPoint.x, (int)touchPoint.y);
 
     // change to on exit
     methodInfo.env->DeleteLocalRef(methodInfo.classID);

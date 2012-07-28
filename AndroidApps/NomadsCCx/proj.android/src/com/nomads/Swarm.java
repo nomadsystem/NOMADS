@@ -39,12 +39,12 @@ import android.view.ViewGroup;
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
 	
-	public static void locationUpdate(int touchPos) {
+	public static void touchPos(int tX, int tY) {
 		// for below, use (int[] touchPos)
 //		int x = touchPos[0];
 //		int y = touchPos[1];
-//        Log.i("Swarm.java", "x: " + x + " y: " + y);
-		Log.i("Swarm.java", "x: " + touchPos);
+		Log.i("Swarm.java", "x: " + tX + " y: " + tY);
+//		Log.i("Swarm.java", "x: " + touchPos);
         
     }
 	

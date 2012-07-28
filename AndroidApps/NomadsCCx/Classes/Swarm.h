@@ -4,27 +4,14 @@
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "Cursor.h"
-//#include "JNIHelper.h"
-//#include "platform/android/jni/JniHelper.h"
-//#include "jni.h"
-//#include "BindleJNI.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
-//extern "C"{
-//	extern void SendData (const char * pszMsg);
-//}
-
 class Swarm : public cocos2d::CCLayer
 {
 	CCPoint touchPoint;
-	uint touchPos[2];
 	SimpleAudioEngine* soundEngine;
-
-//	JNIEnv* env;
-
-//	JNIEnv* getJNIEnv();
 
 	void sendData();
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
