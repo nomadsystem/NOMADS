@@ -39,6 +39,15 @@ import android.view.ViewGroup;
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
 	
+	public static void touchPos(int tX, int tY) {
+		// for below, use (int[] touchPos)
+//		int x = touchPos[0];
+//		int y = touchPos[1];
+		Log.i("Swarm.java", "x: " + tX + " y: " + tY);
+//		Log.i("Swarm.java", "x: " + touchPos);
+        
+    }
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -78,7 +87,8 @@ public class Swarm extends Cocos2dxActivity{
 			setContentView(framelayout);
 		}
 		else {
-			Log.d("activity", "don't support gles2.0");
+			// include message for user
+			Log.d("activity", "doesn't support gles2.0");
 			finish();
 		}	
 	}

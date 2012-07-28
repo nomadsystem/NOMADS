@@ -94,8 +94,10 @@ public class Join extends Activity {
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
+			
+			// should be Bindle, register, uint8, 1, 1
 
-			sand.sendGrain((byte)NAppID.LOGIN, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			sand.sendGrain(NAppID.BINDLE, NCommand.LOGIN, NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 

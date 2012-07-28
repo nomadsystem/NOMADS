@@ -1,7 +1,15 @@
 #include "Swarm.h"
 
+// setup JNI for native -> Java
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#define CLASS_OPEN_NAME "com/nomads/Swarm"
+#endif
+
 USING_NS_CC;
 using namespace CocosDenshion;
+
 
 CCScene* Swarm::scene()
 {
@@ -19,7 +27,8 @@ CCScene* Swarm::scene()
 }
 
 // Load audio
-void Swarm::loadAudio () {
+void Swarm::loadAudio ()
+{
 //	CDSoundEngine::setMixerSampleRate(CD_SAMPLE_RATE_MID);
 	soundEngine = SimpleAudioEngine::sharedEngine();
 	soundEngine->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(TEST_SOUND));
@@ -39,8 +48,6 @@ bool Swarm::init()
     this->loadAudio();
 
     Swarm::setTouchEnabled(true);
-
-    // set size of Java display
 
     //	get window size
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -70,11 +77,8 @@ bool Swarm::init()
     CCSpriteBatchNode* sceneSpriteBatchNode = CCSpriteBatchNode::create("ring.pvr.ccz", 12);
 
     cursorSprite = new Cursor();
-
     cursorSprite->initSprite();
-
 	cursorSprite->initWithSpriteFrameName("untitled_1.png");
-
 	cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
 	sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
@@ -88,9 +92,9 @@ void Swarm::menuCloseCallback(CCObject* pSender)
 {
     CCDirector::sharedDirector()->end();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    exit(0);
+//#endif
 }
 
 bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
@@ -101,6 +105,9 @@ bool Swarm::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
+
+	// send touch location to Swarm.java via JNI
+	this->sendData();
 
 	// play audio file
 	soundEngine->playBackgroundMusic(TEST_SOUND, true);
@@ -114,6 +121,9 @@ void Swarm::ccTouchMoved(CCTouch* touch, CCEvent* event)
 	touchPoint = touch->locationInView();
 	touchPoint = CCDirector::sharedDirector()->convertToGL( touchPoint );
 	cursorSprite->setPosition( CCPointMake(touchPoint.x, touchPoint.y) );
+
+	// send touch location to Swarm.java via JNI
+	this->sendData();
 }
 
 void Swarm::ccTouchEnded(CCTouch* touch, CCEvent* event)
@@ -147,4 +157,36 @@ void Swarm::touchDelegateRetain()
 void Swarm::touchDelegateRelease()
 {
     this->release();
+}
+
+void Swarm::sendData()
+{
+	// change to init
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo methodInfo;
+
+    // JNI parameters. (*)V, where * is:
+    // B = byte
+    // C = char
+    // I = int
+    // F = float
+    // [I = int[], etc.
+
+    if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "touchPos", "(II)V"))
+    {
+        CCLog("Can't not find static method locationUpdate");
+        return;
+    }
+
+//    touchPos[0] = touchPoint.x;
+//    touchPos[1] = touchPoint.y;
+//    CCLog("[0]: %i [1]: %i", touchPos[0], touchPos[1]);
+
+    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, (int)touchPoint.x, (int)touchPoint.y);
+
+    // change to on exit
+    methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    #else
+    CCLog("Swarm.cpp->Platform is not Android");
+    #endif
 }
