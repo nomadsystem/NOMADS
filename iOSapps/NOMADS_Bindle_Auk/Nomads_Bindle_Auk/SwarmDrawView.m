@@ -23,7 +23,7 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+        [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -119,39 +119,47 @@
     CGFloat viewHeight = viewRect.size.height;
     CGFloat viewWidth = viewRect.size.width;
     
-    CGContextSelectFont (context, 
-                         "Helvetica-Bold",
-                         viewHeight/20,
-                         kCGEncodingMacRoman);
-    CGContextSetCharacterSpacing (context, 5);
-    CGContextSetTextDrawingMode (context, kCGTextFillStroke);
-    CGContextSetRGBFillColor (context, 0, 1, 0, .5);
-    CGContextSetRGBStrokeColor (context, 0, 0, 1, 1); 
-    CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
     
+    CGContextSelectFont (context, 
+                         "Papyrus",
+                         30,
+                         kCGEncodingMacRoman);
+    CGContextSetCharacterSpacing (context, 1);
+    CGContextSetTextDrawingMode (context, kCGTextFillStroke);
+    CGContextSetRGBFillColor (context, 1, 1, 1, 1);
+    CGContextSetRGBStrokeColor (context, 1, 1, 1, 1); 
+    CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
+
+    CGContextSetAllowsAntialiasing(context, YES);
+    CGContextSetShouldAntialias(context, YES); 
+    CGContextSetShouldSmoothFonts(context, YES);
+
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
     
     
     // Display discussion text
     
-//    CGContextSelectFont (context, 
-//                         "Helvetica",
-//                         viewHeight/40,
-//                         kCGEncodingMacRoman);
-//    CGFloat tH = (int)(viewHeight);
-//    CGFloat chatSpace = (tH/numChatLines) * 0.4;
-//    CGFloat chatYLoc = (viewHeight-chatSpace);
-//    CGFloat chatXLoc = 20;
-//    
-//    for (int i=0;i<[chatLines count];i++) {
-//        
-//        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
-//        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
-//        int len = strlen(str);
-//        printf("My String %s\n", str);
-//        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
-//        chatYLoc -= chatSpace;
-//    }
+    CGContextSelectFont (context, 
+                         "Helvetica-Light",
+                         10,
+                         kCGEncodingMacRoman);
+    CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
+    CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1); 
+
+    CGFloat tH = (int)(viewHeight);
+    CGFloat chatSpace = (tH/numChatLines) * 0.4;
+    CGFloat chatYLoc = (viewHeight-chatSpace);
+    CGFloat chatXLoc = 20;
+    
+    for (int i=0;i<[chatLines count];i++) {
+        
+        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
+        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+        int len = strlen(str);
+        printf("My String %s\n", str);
+        CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+        chatYLoc -= chatSpace;
+    }
     // The Dot ======================================================
     
     for(int i=maxTrails;i>0;i--) {
@@ -163,15 +171,30 @@
     yTrail[0] = myFingerPoint.y;
     
     decayColor = 1.0;
+    float size = 20;
+
     for (int i=0; i<maxTrails; i++) {   
-        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
-        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));        
-        CGContextDrawPath(context, kCGPathFill);
-        //     CGContextFillPath(context);
-        CGContextStrokePath(context);
-        decayColor = (decayColor - decayColorChangeDelta);        
-    }
-    
+        if (i<(maxTrails-1)) {
+            int xDiff = xTrail[i]-xTrail[i+1];
+            int yDiff = yTrail[i]-yTrail[i+1];
+            if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
+                CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, size, size)));        
+                CGContextDrawPath(context, kCGPathFill);
+                //     CGContextFillPath(context);
+                CGContextStrokePath(context);
+                decayColor = (decayColor - decayColorChangeDelta);        
+            }
+            
+            CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+            CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], size, size)));        
+            CGContextDrawPath(context, kCGPathFill);
+            //     CGContextFillPath(context);
+            CGContextStrokePath(context);
+            decayColor = (decayColor - decayColorChangeDelta);        
+            size *= 0.9;
+        }
+    }        
     //Sounds ======================================================
     
 
@@ -204,6 +227,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    maxTrails = 2;
     for (UITouch *t in touches) {
         NSLog(@" Touches Began");
         //Is this a double tap?
@@ -228,7 +252,9 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+
+    maxTrails = 10;
+
     //This loop is for display purposes
     dispatch_async(dispatch_get_main_queue(), ^(void) {
 
@@ -294,6 +320,7 @@
 
 - (void)endTouches:(NSSet *)touches
 {
+    maxTrails = 2;
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
         touchColor = 0.6;
