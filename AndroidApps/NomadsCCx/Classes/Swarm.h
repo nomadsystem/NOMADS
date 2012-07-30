@@ -25,7 +25,6 @@ class Swarm : public cocos2d::CCLayer
 	virtual bool init();
 	void loadAudio();
 public:
-//	void Java_com_nomads_Join_setObj(JNIEnv *env, jobject _join);
 	Cursor* cursorSprite;
 
     // there's no 'id' in cpp, so return the class pointer
