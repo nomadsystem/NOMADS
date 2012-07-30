@@ -112,7 +112,7 @@
 {
     CLog(@"AVC: Data Ready Handle\n");
     if (nil != inGrain) {
-      //  CLog(@"AVC: Data Ready Handle\n");
+        //  CLog(@"AVC: Data Ready Handle\n");
     }
 }
 
@@ -187,49 +187,64 @@
     [self.view bringSubviewToFront:settingsView];
 }
 
+-(IBAction) backgroundTapDiscuss:(id)sender{
+    [self.inputDiscussField resignFirstResponder];
+}
+-(IBAction) backgroundTapCloud:(id)sender{
+    [self.inputCloudField resignFirstResponder];
+}
+
 
 //Text Field Handler ===============================================
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
 {   
     
     // Text field from settings screen 
-    if (textField == joinTextField) 
-        [self joinNomadsButton:(id)self];
+    //    if (textField == joinTextField) 
+    //        [self joinNomadsButton:(id)self];
     
     //---------------------------------------------------
     
     // Text field from Discuss Button 
     if (textField == inputDiscussField) {
         CLog(@"Entered sendDiscuss");
-        
-        //AppID
-        Byte myAppID = OC_DISCUSS;
-        NSLog(@"myAppID =  %i\n", myAppID);
-        
-        //COMMAND
-        Byte myCommand = SEND_MESSAGE;
-        NSLog(@"myCommand =  %i\n", myCommand);
-        
-        //DATA TYPE
-        Byte myDataType = CHAR;
-        NSLog(@"myDataType =  %i\n", myDataType);
-        
-        //DATA LENGTH
-        //****STK Currently set directly in sendWithGrainElts
-        
-        //DATA ARRAY (String from inputDiscussField)
-        //****STK Currently set directly in sendWithGrainElts
-        
-        [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
-                                              Command:myCommand 
-                                             DataType:myDataType 
-                                              DataLen:[inputDiscussField.text length] 
-                                               String:inputDiscussField.text];
-        
-        inputDiscussField.text = @"";
-        [inputDiscussField setHidden:YES];
-        [inputDiscussField resignFirstResponder];
-        [aukView sendSubviewToBack:inputDiscussField];
+        if([inputDiscussField.text length]>0) { //Prevents null strings from being sent
+            
+            //AppID
+            Byte myAppID = OC_DISCUSS;
+            NSLog(@"myAppID =  %i\n", myAppID);
+            
+            //COMMAND
+            Byte myCommand = SEND_MESSAGE;
+            NSLog(@"myCommand =  %i\n", myCommand);
+            
+            //DATA TYPE
+            Byte myDataType = CHAR;
+            NSLog(@"myDataType =  %i\n", myDataType);
+            
+            //DATA LENGTH
+            //****STK Currently set directly in sendWithGrainElts
+            
+            //DATA ARRAY (String from inputDiscussField)
+            //****STK Currently set directly in sendWithGrainElts
+            
+            [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
+                                                  Command:myCommand 
+                                                 DataType:myDataType 
+                                                  DataLen:[inputDiscussField.text length] 
+                                                   String:inputDiscussField.text];
+            
+            inputDiscussField.text = @"";
+            [inputDiscussField setHidden:YES];
+            [inputDiscussField resignFirstResponder];
+            [aukView sendSubviewToBack:inputDiscussField];
+        }
+        else {
+            inputDiscussField.text = @"";
+            [inputDiscussField setHidden:YES];
+            [inputDiscussField resignFirstResponder];
+            [aukView sendSubviewToBack:inputDiscussField];
+        }
     }
     
     //---------------------------------------------------
@@ -237,35 +252,43 @@
     // Text field from Cloud Button 
     if (textField == inputCloudField) {
         NSLog(@"Entered sendCloud");
-        
-        //AppID
-        Byte myAppID = OC_CLOUD;
-        NSLog(@"myAppID =  %i\n", myAppID);
-        
-        //COMMAND
-        Byte myCommand = SEND_MESSAGE;
-        NSLog(@"myCommand =  %i\n", myCommand);
-        
-        //DATA TYPE
-        Byte myDataType = CHAR;
-        NSLog(@"myDataType =  %i\n", myDataType);
-        
-        //DATA LENGTH
-        //****STK Currently set directly in sendWithGrainElts
-        
-        //DATA ARRAY (String from inputDiscussField)
-        //****STK Currently set directly in sendWithGrainElts
-        
-        [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
-                                              Command:myCommand 
-                                             DataType:myDataType 
-                                              DataLen:[inputCloudField.text length] 
-                                               String:inputCloudField.text];
-        
-        inputCloudField.text = @"";
-        [inputCloudField setHidden:YES];
-        [inputCloudField resignFirstResponder];
-        [aukView sendSubviewToBack:inputCloudField];
+        if([inputCloudField.text length]>0) { //Prevents null strings from being sent
+            
+            //AppID
+            Byte myAppID = OC_CLOUD;
+            NSLog(@"myAppID =  %i\n", myAppID);
+            
+            //COMMAND
+            Byte myCommand = SEND_MESSAGE;
+            NSLog(@"myCommand =  %i\n", myCommand);
+            
+            //DATA TYPE
+            Byte myDataType = CHAR;
+            NSLog(@"myDataType =  %i\n", myDataType);
+            
+            //DATA LENGTH
+            //****STK Currently set directly in sendWithGrainElts
+            
+            //DATA ARRAY (String from inputDiscussField)
+            //****STK Currently set directly in sendWithGrainElts
+            
+            [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
+                                                  Command:myCommand 
+                                                 DataType:myDataType 
+                                                  DataLen:[inputCloudField.text length] 
+                                                   String:inputCloudField.text];
+            
+            inputCloudField.text = @"";
+            [inputCloudField setHidden:YES];
+            [inputCloudField resignFirstResponder];
+            [aukView sendSubviewToBack:inputCloudField];
+        }
+        else {
+            inputCloudField.text = @"";
+            [inputCloudField setHidden:YES];
+            [inputCloudField resignFirstResponder];
+            [aukView sendSubviewToBack:inputCloudField];  
+        }
     }
     
     //---------------------------------------------------
@@ -281,7 +304,7 @@
 
 - (void)viewDidUnload
 {
-
+    
     [self setConnectionLabel:nil];
     connectionLabel = nil;
     [self setJoinNomadsButton:nil];
