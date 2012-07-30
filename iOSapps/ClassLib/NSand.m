@@ -477,7 +477,7 @@
                                 remBufRead--;
                                 cachedNextReadMode = 2;    // store the next read mode
                                 readMode = 0;        // if the following isn't true, it means we need to read in another buffer
-                                if (remBufRead > 1) {   // if there's more in the readBuffer, continue to the next mode (cmd)
+                                if (remBufRead > 0) {   // if there's more in the readBuffer, continue to the next mode (cmd)
                                     readMode = 2;
                                 }
                                 break;
@@ -491,7 +491,7 @@
                                 remBufRead--;
                                 cachedNextReadMode = 3;    // store the next read mode
                                 readMode = 0;        // if the following isn't true, it means we need to read in another buffer
-                                if (remBufRead > 1) {
+                                if (remBufRead > 0) {
                                     readMode = 3;
                                 }
                                 break;
@@ -505,7 +505,7 @@
                                 remBufRead--;
                                 cachedNextReadMode = 4;    // store the next read mode
                                 readMode = 0;        // if the following isn't true, it means we need to read in another buffer
-                                if (remBufRead > 1) {
+                                if (remBufRead > 0) {
                                     readMode = 4;
                                 }
                                 break;
@@ -524,7 +524,7 @@
                                 remBufRead -= 4;
                                 cachedNextReadMode = 5;    // store the current read mode
                                 readMode = 0;        // if the following isn't true, it means we need to read in another buffer
-                                if (remBufRead > 1) {
+                                if (remBufRead > 0) {
                                     readMode = 5;
                                 }
                                 break;

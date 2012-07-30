@@ -19,12 +19,12 @@
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
 
-@synthesize loginNavBackButton;
+@synthesize settingsNavBackButton;
 @synthesize joinNomadsButton;
 @synthesize leaveNomadsButton;
-@synthesize loginNavTitle;
-@synthesize loginNavBar;
-@synthesize loginView;
+@synthesize settingsNavTitle;
+@synthesize settingsNavBar;
+@synthesize settingsView;
 @synthesize aukView;
 @synthesize connectionLabel;
 @synthesize joinTextField;
@@ -45,7 +45,7 @@
         
         [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
         
-        [self.view bringSubviewToFront:loginView]; //Load the login view
+        [self.view bringSubviewToFront:aukView]; //Load the aukView
     }
     return self;
 }
@@ -58,16 +58,16 @@
     inputDiscussField.hidden = YES; 
     inputCloudField.hidden = YES;
     
-    //Initially hides the navigation bar in the login view
-    loginNavBar.hidden = YES;
+    //Inits settingsNavBar
+    settingsNavBar.hidden = NO;
     
-    //hides the button in the login screen that will disconnect, and the connection status label
-    [leaveNomadsButton setHidden:YES];
-    connectionLabel.text = @"";
+    //Init loginScreen
+    [leaveNomadsButton setHidden:NO];
+    connectionLabel.text = @"Connected to NOMADS!";
     
     //Initialize backgrounds 
-    [[self loginView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
-    [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+    [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     
     [[self swarmView] setBackgroundColor:[UIColor whiteColor]];
     
@@ -93,7 +93,16 @@
     
     //Initialize toolbar in Auk view
     [[self aukToolbar] setTranslucent:YES];
+    [appDelegate->appSand connect];  
     
+    Byte c[1];
+    c[0] = 1;
+    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                          Command:REGISTER 
+                                         DataType:UINT8 
+                                          DataLen:1 
+                                            Uint8:c];
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -107,48 +116,48 @@
     }
 }
 
-// Login view items ===============================================
+// Login button, currently disabled ****STK 7/30/12 ===============================================
 
-- (IBAction)joinNomadsButton:(id)sender {
-    [joinTextField resignFirstResponder];
-    [appDelegate->appSand connect];  
-    
-    Byte c[1];
-    c[0] = 1;
-    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-                                                   Command:REGISTER 
-                                                  DataType:UINT8 
-                                                   DataLen:1 
-                                                    Uint8:c];
-    
-    if ([joinTextField.text length] > 0){
-        
-        //****STK 7/25/12 Not currently checking login, to be implemented
-//        [appDelegate->appSand sendWithGrainElts_AppID:OC_LOGIN  
-//                                              Command:SEND_MESSAGE 
-//                                             DataType:CHAR 
-//                                              DataLen:[joinTextField.text length] 
-//                                               String:joinTextField.text];
-        joinTextField.text = @"";
-        [joinTextField setHidden:YES];
-        [joinNomadsButton setHidden:YES];
-        [leaveNomadsButton setHidden:NO];
-        
-        connectionLabel.text = @"Connected to NOMADS!";
-        
-        [self.view bringSubviewToFront:aukView];
-        
-        loginNavBar.hidden = NO;
-    }
-    //If there's no text, connect with a "space" for now 
-    //We want to revise this to generate a warning message to the user
-    else {
-        connectionLabel.text = @"Error connecting: Please enter username!";
-    }
-}
+//- (IBAction)joinNomadsButton:(id)sender {
+//    [joinTextField resignFirstResponder];
+//    [appDelegate->appSand connect];  
+//    
+//    Byte c[1];
+//    c[0] = 1;
+//    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+//    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+//                                                   Command:REGISTER 
+//                                                  DataType:UINT8 
+//                                                   DataLen:1 
+//                                                    Uint8:c];
+//    
+//    if ([joinTextField.text length] > 0){
+//        
+//        //****STK 7/25/12 Not currently checking settings, to be implemented
+////        [appDelegate->appSand sendWithGrainElts_AppID:OC_LOGIN  
+////                                              Command:SEND_MESSAGE 
+////                                             DataType:CHAR 
+////                                              DataLen:[joinTextField.text length] 
+////                                               String:joinTextField.text];
+//        joinTextField.text = @"";
+//        [joinTextField setHidden:YES];
+//        [joinNomadsButton setHidden:YES];
+//        [leaveNomadsButton setHidden:NO];
+//        
+//        connectionLabel.text = @"Connected to NOMADS!";
+//        
+//        [self.view bringSubviewToFront:aukView];
+//        
+//        settingsNavBar.hidden = NO;
+//    }
+//    //If there's no text, connect with a "space" for now 
+//    //We want to revise this to generate a warning message to the user
+//    else {
+//        connectionLabel.text = @"Error connecting: Please enter username!";
+//    }
+//}
 
-- (IBAction)loginNavBackButton:(id)sender {
+- (IBAction)settingsNavBackButton:(id)sender {
     [self.view bringSubviewToFront:aukView];
 }
 
@@ -175,7 +184,7 @@
 }
 
 - (IBAction)settingsButton:(id)sender {
-    [self.view bringSubviewToFront:loginView];
+    [self.view bringSubviewToFront:settingsView];
 }
 
 
@@ -183,7 +192,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
 {   
     
-    // Text field from Login screen 
+    // Text field from settings screen 
     if (textField == joinTextField) 
         [self joinNomadsButton:(id)self];
     
@@ -265,6 +274,9 @@
     
     return YES;   
 }
+
+
+
 //iOS Stuff ==============================================================
 
 - (void)viewDidUnload
@@ -274,7 +286,7 @@
     connectionLabel = nil;
     [self setJoinNomadsButton:nil];
     [self setJoinTextField:nil];
-    [self setLoginView:nil];
+    [self setSettingsView:nil];
     [self setAukView:nil];
     [self setAukToolbar:nil];
     [self setAukBarButtonDiscuss:nil];
@@ -284,10 +296,9 @@
     [self setLeaveNomadsButton:nil];
     [self setInputDiscussField:nil];
     [self setInputCloudField:nil];
-    [self setLoginNavBar:nil];
-    [self setLoginNavTitle:nil];
-    [self setLoginNavBackButton:nil];
-    [self setLoginNavBackButton:nil];
+    [self setSettingsNavBar:nil];
+    [self setSettingsNavTitle:nil];
+    [self setSettingsNavBackButton:nil];
     [self setSwarmView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
