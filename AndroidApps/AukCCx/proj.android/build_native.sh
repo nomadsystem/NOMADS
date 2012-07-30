@@ -1,7 +1,7 @@
 # set params
 NDK_ROOT=/Users/TRock/Documents/android-ndk-r8
 COCOS2DX_ROOT=$(pwd)/../..
-GAME_ROOT=$COCOS2DX_ROOT/NomadsCCx
+GAME_ROOT=$COCOS2DX_ROOT/AukCCx
 GAME_ANDROID_ROOT=$GAME_ROOT/proj.android
 RESOURCE_ROOT=$GAME_ROOT/Resources
 
