@@ -20,27 +20,27 @@
     BindleAppDelegate *appDelegate;
     
     __weak UILabel *connectionLabel;
-    UIView *loginView;
+    UIView *settingsView;
     UIView *aukView;
     UIView *swarmView;
     __weak UITextField *inputDiscussField;
     __weak UITextField *inputCloudField;
-    __weak UIBarButtonItem *loginNavBackButton;
-    __weak UINavigationItem *loginNavTitle;
-    __weak UINavigationBar *loginNavBar;
+    __weak UIBarButtonItem *settingsNavBackButton;
+    __weak UINavigationItem *settingsNavTitle;
+    __weak UINavigationBar *settingsNavBar;
     __weak UIToolbar *aukToolbar;
 }
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *loginNavBackButton;
-@property (weak, nonatomic) IBOutlet UINavigationItem *loginNavTitle;
-@property (weak, nonatomic) IBOutlet UINavigationBar *loginNavBar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsNavBackButton;
+@property (weak, nonatomic) IBOutlet UINavigationItem *settingsNavTitle;
+@property (weak, nonatomic) IBOutlet UINavigationBar *settingsNavBar;
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 
 @property (weak, nonatomic) IBOutlet UIButton *joinNomadsButton;
 @property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
-@property (strong, nonatomic) IBOutlet UIView *loginView;
+@property (strong, nonatomic) IBOutlet UIView *settingsView;
 @property (strong, nonatomic) IBOutlet UIView *aukView;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITextField *joinTextField;
@@ -59,7 +59,7 @@
 - (IBAction)settingsButton:(id)sender;
 - (IBAction)leaveNomadsButton:(id)sender;
 - (IBAction)joinNomadsButton:(id)sender;
-- (IBAction)loginNavBackButton:(id)sender;
+- (IBAction)settingsNavBackButton:(id)sender;
 
 @end
 #endif
