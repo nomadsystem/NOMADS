@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+// modified by Paul Turowski. 2012.07
+
 package com.nomads;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
@@ -29,24 +31,23 @@ import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.cocos2dx.lib.Cocos2dxRenderer;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
 	
-	public static void touchPos(int tX, int tY) {
-		// for below, use (int[] touchPos)
-//		int x = touchPos[0];
-//		int y = touchPos[1];
-		Log.i("Swarm.java", "x: " + tX + " y: " + tY);
-//		Log.i("Swarm.java", "x: " + touchPos);
-        
-    }
+	final Context context = this;
+	AlertDialog.Builder alert;
+	EditText alertInput;
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -85,6 +86,29 @@ public class Swarm extends Cocos2dxActivity{
 
             // Set framelayout as the content view
 			setContentView(framelayout);
+			
+			alert = new AlertDialog.Builder(context);
+			// need to create new input field each time
+			alertInput = new EditText(context);
+			
+			alert.setTitle("Discuss:");
+//						alert.setMessage("Message");
+			alert.setView(alertInput);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  String value = alertInput.getText().toString();
+			  	Log.d("Discuss", value);
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+			
+			alert.show();
 		}
 		else {
 			// include message for user
@@ -92,6 +116,11 @@ public class Swarm extends Cocos2dxActivity{
 			finish();
 		}	
 	}
+	
+//	void goToJoin() {
+//		Intent intent = new Intent(getApplicationContext(), Join.class);
+//		startActivity(intent);
+//	}
 	
 	 @Override
 	 protected void onPause() {

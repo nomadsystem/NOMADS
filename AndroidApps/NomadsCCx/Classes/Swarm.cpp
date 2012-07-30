@@ -3,13 +3,14 @@
 // setup JNI for native -> Java
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "platform/android/jni/JniHelper.h"
-#include <jni.h>
-#define CLASS_OPEN_NAME "com/nomads/Swarm"
+//#include <jni.h>
+#define CLASS_OPEN_NAME "com/nomads/Join"
 #endif
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
+jobject join;
 
 CCScene* Swarm::scene()
 {
@@ -61,6 +62,7 @@ bool Swarm::init()
                                         "CloseNormal.png",
                                         "CloseSelected.png",
                                         this,
+//                                        menu_selector(Swarm::goToJoin) );
                                         menu_selector(Swarm::menuCloseCallback) );
     pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
 
@@ -87,6 +89,26 @@ bool Swarm::init()
 
     return true;
 }
+
+//void goToJoin ()
+//{
+//	#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	JniMethodInfo methodInfo;
+//
+//	if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "goToJoin", "()V"))
+//	{
+//		CCLog("Unable to find static method goToJoin");
+//		return;
+//	}
+//
+//	methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID);
+//
+//	// change to on exit
+//	methodInfo.env->DeleteLocalRef(methodInfo.classID);
+//	#else
+//	CCLog("Swarm.cpp->goToJoin->Platform is not Android");
+//	#endif
+//}
 
 void Swarm::menuCloseCallback(CCObject* pSender)
 {
@@ -161,32 +183,41 @@ void Swarm::touchDelegateRelease()
 
 void Swarm::sendData()
 {
-	// change to init
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    JniMethodInfo methodInfo;
-
-    // JNI parameters. (*)V, where * is:
-    // B = byte
-    // C = char
-    // I = int
-    // F = float
-    // [I = int[], etc.
-
-    if (! JniHelper::getStaticMethodInfo(methodInfo, CLASS_OPEN_NAME, "touchPos", "(II)V"))
-    {
-        CCLog("Can't not find static method locationUpdate");
-        return;
-    }
-
-//    touchPos[0] = touchPoint.x;
-//    touchPos[1] = touchPoint.y;
-//    CCLog("[0]: %i [1]: %i", touchPos[0], touchPos[1]);
-
-    methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, (int)touchPoint.x, (int)touchPoint.y);
-
-    // change to on exit
-    methodInfo.env->DeleteLocalRef(methodInfo.classID);
-    #else
-    CCLog("Swarm.cpp->Platform is not Android");
-    #endif
+//	// change to init
+//    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//    JniMethodInfo methodInfo;
+//
+//    // JNI parameters. (*)V, where * is:
+//    // B = byte
+//    // C = char
+//    // I = int
+//    // F = float
+//    // [I = int[], etc.
+//
+////    if (! JniHelper::getMethodInfo(methodInfo, CLASS_OPEN_NAME, "touchPos", "(II)V"))
+////    {
+////        CCLog("Unable to find static method touchPos");
+////        return;
+////    }
+//
+//    if (join != NULL){
+////	    touchPos[0] = touchPoint.x;
+////	    touchPos[1] = touchPoint.y;
+////	    CCLog("[0]: %i [1]: %i", touchPos[0], touchPos[1]);
+//    	CCLog("Swarm.cpp -> sendData() -> join is !null");
+//
+////		methodInfo.env->CallVoidMethod(join, methodInfo.methodID, (int)touchPoint.x, (int)touchPoint.y);
+////
+////		// change to on exit
+////		methodInfo.env->DeleteLocalRef(methodInfo.classID);
+//    }
+//    #else
+//    CCLog("Swarm.cpp->Platform is not Android");
+//    #endif
 }
+
+JNIEXPORT void JNICALL Java_com_nomads_Join_setObj(JNIEnv *env, jobject _join)
+{
+	join = _join;
+}
+

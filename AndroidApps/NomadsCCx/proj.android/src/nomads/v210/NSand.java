@@ -263,14 +263,15 @@ public class NSand
 	}
 
 	//Connect, opens the socket, creates the streams
-	public void connect() {
-		connectSocket();
-		openSocketStreams();
-		//client.start();
+	// Altered by PT 2012.07.29
+	public boolean connect() {
+		boolean connectStatus = connectSocket();
+		if (connectStatus) openSocketStreams();
+		return connectStatus;
 	}
 
 
-	public void connectSocket()
+	public boolean connectSocket()
 	{  
 		System.out.println("Establishing connection. Please wait ...");
 		try {  
@@ -280,6 +281,10 @@ public class NSand
 		catch(IOException ioe) {  
 			System.out.println("socket connect exception: ");
 		}
+		
+		if (socket != null) return true;
+		
+		return false;
 	}
 
 	public void openSocketStreams()

@@ -121,10 +121,10 @@ public class TabbedBindle extends TabActivity {
         public void onTabChanged(String tabId) {
             currentActivity = getCurrentActivity();
             if (currentActivity instanceof Join) {
-                ((Join) currentActivity).setSand(sand);
-                
-                // this should go above (see line 73)
-                ((Join) currentActivity).setTB(TabbedBindle.this);
+//                ((Join) currentActivity).setSand(sand);
+//                
+//                // this should go above (see line 73)
+//                ((Join) currentActivity).setTB(TabbedBindle.this);
             }
             else if (currentActivity instanceof Discuss) {
                 ((Discuss) currentActivity).setSand(sand);

@@ -4,9 +4,14 @@
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "Cursor.h"
+#include "jni.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
+
+extern "C"{
+JNIEXPORT void JNICALL Java_com_nomads_Join_setObj(JNIEnv *env, jobject _join);
+}
 
 class Swarm : public cocos2d::CCLayer
 {
