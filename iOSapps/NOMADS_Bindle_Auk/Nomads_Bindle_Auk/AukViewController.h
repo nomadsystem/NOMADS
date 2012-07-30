@@ -18,7 +18,7 @@
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
-    
+        
     __weak UILabel *connectionLabel;
     UIView *settingsView;
     UIView *aukView;
@@ -60,6 +60,9 @@
 - (IBAction)leaveNomadsButton:(id)sender;
 - (IBAction)joinNomadsButton:(id)sender;
 - (IBAction)settingsNavBackButton:(id)sender;
+
+- (IBAction)backgroundTapDiscuss:(id)sender; //Tap to resign text entry
+- (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
 
 @end
 #endif

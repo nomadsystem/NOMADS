@@ -11,15 +11,15 @@
 			<string key="NS.object.0">1181</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
+			<string>IBUIView</string>
 			<string>IBProxyObject</string>
-			<string>IBUIBarButtonItem</string>
-			<string>IBUIButton</string>
-			<string>IBUIToolbar</string>
 			<string>IBUILabel</string>
+			<string>IBUIBarButtonItem</string>
+			<string>IBUIToolbar</string>
 			<string>IBUITextField</string>
 			<string>IBUINavigationBar</string>
 			<string>IBUINavigationItem</string>
-			<string>IBUIView</string>
+			<string>IBUIButton</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -147,6 +147,7 @@
 								<string key="NSFrame">{{17, 160}, {287, 21}}</string>
 								<reference key="NSSuperview" ref="409234056"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -403,70 +404,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">aukView</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="744525750"/>
-					</object>
-					<int key="connectionID">67</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">aukBarButtonCloud</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="89338721"/>
-					</object>
-					<int key="connectionID">37</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">aukBarButtonSettings</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="325899233"/>
-					</object>
-					<int key="connectionID">38</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">aukToolbar</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="338960657"/>
-					</object>
-					<int key="connectionID">35</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">inputDiscussField</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="191272429"/>
-					</object>
-					<int key="connectionID">71</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">inputCloudField</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="697411779"/>
-					</object>
-					<int key="connectionID">74</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">aukBarButtonDiscuss</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="552911420"/>
-					</object>
-					<int key="connectionID">36</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">swarmView</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="470664225"/>
-					</object>
-					<int key="connectionID">98</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">connectionLabel</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="808194320"/>
@@ -528,6 +465,70 @@
 						<reference key="destination" ref="409234056"/>
 					</object>
 					<int key="connectionID">137</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">inputDiscussField</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="191272429"/>
+					</object>
+					<int key="connectionID">71</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">aukBarButtonCloud</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="89338721"/>
+					</object>
+					<int key="connectionID">37</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">swarmView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="470664225"/>
+					</object>
+					<int key="connectionID">98</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">aukBarButtonSettings</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="325899233"/>
+					</object>
+					<int key="connectionID">38</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">aukToolbar</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="338960657"/>
+					</object>
+					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">inputCloudField</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="697411779"/>
+					</object>
+					<int key="connectionID">74</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">aukBarButtonDiscuss</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="552911420"/>
+					</object>
+					<int key="connectionID">36</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">aukView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="744525750"/>
+					</object>
+					<int key="connectionID">67</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -616,8 +617,8 @@
 						<int key="objectID">1</int>
 						<reference key="object" ref="191373211"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="744525750"/>
 							<reference ref="409234056"/>
+							<reference ref="744525750"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Main View</string>
@@ -632,79 +633,6 @@
 						<int key="objectID">-2</int>
 						<reference key="object" ref="975951072"/>
 						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">32</int>
-						<reference key="object" ref="744525750"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="338960657"/>
-							<reference ref="697411779"/>
-							<reference ref="191272429"/>
-							<reference ref="470664225"/>
-						</array>
-						<reference key="parent" ref="191373211"/>
-						<string key="objectName">Auk</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">6</int>
-						<reference key="object" ref="338960657"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="325899233"/>
-							<reference ref="89338721"/>
-							<reference ref="552911420"/>
-							<reference ref="699344186"/>
-							<reference ref="659217815"/>
-							<reference ref="319112324"/>
-						</array>
-						<reference key="parent" ref="744525750"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">73</int>
-						<reference key="object" ref="697411779"/>
-						<reference key="parent" ref="744525750"/>
-						<string key="objectName">CloudTextField</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">70</int>
-						<reference key="object" ref="191272429"/>
-						<reference key="parent" ref="744525750"/>
-						<string key="objectName">DiscussTextField</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">9</int>
-						<reference key="object" ref="325899233"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">8</int>
-						<reference key="object" ref="89338721"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">7</int>
-						<reference key="object" ref="552911420"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">112</int>
-						<reference key="object" ref="699344186"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">113</int>
-						<reference key="object" ref="659217815"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">132</int>
-						<reference key="object" ref="319112324"/>
-						<reference key="parent" ref="338960657"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">97</int>
-						<reference key="object" ref="470664225"/>
-						<reference key="parent" ref="744525750"/>
-						<string key="objectName">ViewForSwarm</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
@@ -760,6 +688,79 @@
 						<reference key="object" ref="246726192"/>
 						<reference key="parent" ref="948089652"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">32</int>
+						<reference key="object" ref="744525750"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="470664225"/>
+							<reference ref="191272429"/>
+							<reference ref="697411779"/>
+							<reference ref="338960657"/>
+						</array>
+						<reference key="parent" ref="191373211"/>
+						<string key="objectName">Auk</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">97</int>
+						<reference key="object" ref="470664225"/>
+						<reference key="parent" ref="744525750"/>
+						<string key="objectName">ViewForSwarm</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">70</int>
+						<reference key="object" ref="191272429"/>
+						<reference key="parent" ref="744525750"/>
+						<string key="objectName">DiscussTextField</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">73</int>
+						<reference key="object" ref="697411779"/>
+						<reference key="parent" ref="744525750"/>
+						<string key="objectName">CloudTextField</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">6</int>
+						<reference key="object" ref="338960657"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="319112324"/>
+							<reference ref="659217815"/>
+							<reference ref="699344186"/>
+							<reference ref="552911420"/>
+							<reference ref="89338721"/>
+							<reference ref="325899233"/>
+						</array>
+						<reference key="parent" ref="744525750"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">132</int>
+						<reference key="object" ref="319112324"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">113</int>
+						<reference key="object" ref="659217815"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">112</int>
+						<reference key="object" ref="699344186"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">7</int>
+						<reference key="object" ref="552911420"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">8</int>
+						<reference key="object" ref="89338721"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">9</int>
+						<reference key="object" ref="325899233"/>
+						<reference key="parent" ref="338960657"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -794,7 +795,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">137</int>
+			<int key="maxID">143</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -802,6 +803,8 @@
 					<string key="className">AukViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="backgroundTapCloud:">id</string>
+						<string key="backgroundTapDiscuss:">id</string>
 						<string key="cloudButton:">id</string>
 						<string key="discussButton:">id</string>
 						<string key="joinNomadsButton:">id</string>
@@ -810,6 +813,14 @@
 						<string key="settingsNavBackButton:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="backgroundTapCloud:">
+							<string key="name">backgroundTapCloud:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="backgroundTapDiscuss:">
+							<string key="name">backgroundTapDiscuss:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="cloudButton:">
 							<string key="name">cloudButton:</string>
 							<string key="candidateClassName">id</string>

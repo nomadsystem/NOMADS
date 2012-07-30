@@ -55,16 +55,33 @@
         }
         decayColor = 1.0;
         decayColorChangeDelta = (decayColor/(float)maxTrails);
-        //    NSLog(@" brightness = %f ", brightness);
-        //    NSLog(@" brightDelta = %f ", brightDelta);
+        dropFlash = NO;
         
-        //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
+        dotSizeScaler = 1;
         
+        //    CLog(@" brightness = %f ", brightness);
+        //    CLog(@" brightDelta = %f ", brightDelta);
+        
+        //     CLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
+        
+        
+        //Set up our Audio Session
+        NSError *activationError = nil;
+        session = [AVAudioSession sharedInstance];
+        [session setActive:YES error:&activationError];
+        NSError *setCategoryError = nil;
+        //This category should prevent our audio from being interrupted by incoming calls, etc.
+        [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+        if (setCategoryError) { 
+            CLog("Error initializing Audio Session Category");
+        }
         
         currentTimerVal = 4.0;
         lastTimerVal = 4.0;
         fileNum = 1;
         dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
+        
+        
     }
     return self;
 }
@@ -85,9 +102,9 @@
             
             if ([chatLines count] > numChatLines) {
                 [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
-                                                   //remove the first item
+                //remove the first item
             }
-                        
+            
             CLog(@"chatLines = %@", chatLines);
             [self setNeedsDisplay];
             
@@ -129,11 +146,11 @@
     CGContextSetRGBFillColor (context, 1, 1, 1, 1);
     CGContextSetRGBStrokeColor (context, 1, 1, 1, 1); 
     CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
-
+    
     CGContextSetAllowsAntialiasing(context, YES);
     CGContextSetShouldAntialias(context, YES); 
     CGContextSetShouldSmoothFonts(context, YES);
-
+    
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
     
     
@@ -145,7 +162,7 @@
                          kCGEncodingMacRoman);
     CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
     CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1); 
-
+    
     CGFloat tH = (int)(viewHeight);
     CGFloat chatSpace = (tH/numChatLines) * 0.4;
     CGFloat chatYLoc = (viewHeight-chatSpace);
@@ -171,33 +188,59 @@
     yTrail[0] = myFingerPoint.y;
     
     decayColor = 1.0;
+    
     float size = 20;
-
+    
     for (int i=0; i<maxTrails; i++) {   
         if (i<(maxTrails-1)) {
+//            ellipseR = decayColor;
+//            ellipseG = touchColor;
+//            ellipseB = 1.0;
+//            ellipseA = decayColor;
             int xDiff = xTrail[i]-xTrail[i+1];
             int yDiff = yTrail[i]-yTrail[i+1];
+            
+            if (i==0) {
+                if (dropFlash) {
+                    CLog("dropFlash!");
+                    CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);      
+                    CLog("R = %f G = %f B = %f A = %F", ellipseR, ellipseG, ellipseB, ellipseA);
+                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (size*dotSizeScaler), (size*dotSizeScaler))));        
+                    CGContextDrawPath(context, kCGPathFill);
+                    //     CGContextFillPath(context);
+                    CGContextStrokePath(context);
+                }
+            }
+            
             if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
-                CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+                CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
+                
                 CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, size, size)));        
                 CGContextDrawPath(context, kCGPathFill);
                 //     CGContextFillPath(context);
                 CGContextStrokePath(context);
-                decayColor = (decayColor - decayColorChangeDelta);        
+                decayColor = (decayColor - decayColorChangeDelta);
+                ellipseR = decayColor;
+                ellipseG = touchColor;
+                ellipseA = decayColor;
             }
             
-            CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+            
+            CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
             CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], size, size)));        
             CGContextDrawPath(context, kCGPathFill);
             //     CGContextFillPath(context);
             CGContextStrokePath(context);
             decayColor = (decayColor - decayColorChangeDelta);        
             size *= 0.9;
+            ellipseR = decayColor;
+            ellipseG = touchColor;
+            ellipseA = decayColor;
         }
     }        
     //Sounds ======================================================
     
-
+    
     
     int numOfDroplets = 203;
     float viewXGrid  = (viewWidth / 5);
@@ -229,7 +272,7 @@
 {
     maxTrails = 2;
     for (UITouch *t in touches) {
-        NSLog(@" Touches Began");
+        CLog(@" Touches Began");
         //Is this a double tap?
         if ([t tapCount] > 1) {
             [self clearAll];
@@ -239,8 +282,8 @@
         //Create a point for the value
         touchColor = 0.0;
         CGPoint loc = [t locationInView:self];
-        NSLog(@"SWARM_X loc = %f", loc.x);
-        NSLog(@"SWARM_Y loc = %f", loc.y);
+        CLog(@"SWARM_X loc = %f", loc.x);
+        CLog(@"SWARM_Y loc = %f", loc.y);
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
         
@@ -252,37 +295,37 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-
+    
     maxTrails = 10;
-
+    
     //This loop is for display purposes
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-
-    int xy[2];
-    //Update linesInProcess with moved touches
-    for (UITouch *t in touches) {
         
-        //Find the line for this touch
-        //   myLine = [linesInProcess objectForKey:key];
-        
-        //Update the point
-        CGPoint loc = [t locationInView:self];
-        myFingerPoint.x = loc.x;
-        myFingerPoint.y = loc.y;
-        NSLog(@"SWARM_X loc = %f", loc.x);
-        NSLog(@"SWARM_Y loc = %f", loc.y);
-        
-        
-        
-        xy[0] = (int) loc.x;
-        xy[1] = (int) loc.y;
-        
-        
-
-    }
-    [self setNeedsDisplay];
+        int xy[2];
+        //Update linesInProcess with moved touches
+        for (UITouch *t in touches) {
+            
+            //Find the line for this touch
+            //   myLine = [linesInProcess objectForKey:key];
+            
+            //Update the point
+            CGPoint loc = [t locationInView:self];
+            myFingerPoint.x = loc.x;
+            myFingerPoint.y = loc.y;
+            CLog(@"SWARM_X loc = %f", loc.x);
+            CLog(@"SWARM_Y loc = %f", loc.y);
+            
+            
+            
+            xy[0] = (int) loc.x;
+            xy[1] = (int) loc.y;
+            
+            
+            
+        }
+        [self setNeedsDisplay];
     });
-
+    
     //This one sends the data
     int xy[2];
     //Update linesInProcess with moved touches
@@ -295,8 +338,8 @@
         CGPoint loc = [t locationInView:self];
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
-        NSLog(@"SWARM_X loc = %f", loc.x);
-        NSLog(@"SWARM_Y loc = %f", loc.y);
+        CLog(@"SWARM_X loc = %f", loc.x);
+        CLog(@"SWARM_Y loc = %f", loc.y);
         
         float screenScaleX = 5.9;
         float screenScaleY = 3.33;
@@ -314,7 +357,7 @@
     
     [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
     
-
+    
     
 }
 
@@ -323,11 +366,11 @@
     maxTrails = 2;
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
-        touchColor = 0.6;
+        //      touchColor = 0.6;
         
     }
     //Redraw
-    [self setNeedsDisplay];
+    //   [self setNeedsDisplay];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -340,11 +383,24 @@
     [self endTouches:touches];
 }
 
+- (void)flashDot
+{
+    ellipseR = 1.0;
+    ellipseG = 0.1;
+    ellipseB = 0.1;
+    ellipseA = 1.0;
+    dotSizeScaler = 1.0;
+    [self setNeedsDisplay];
+    dropFlash = NO;
+    CLog("flashDot");
+    
+}
+
 - (void)playDroplet
 {
     
     NSString *soundFile;
-     
+    
     soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNum];
     
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
@@ -355,10 +411,19 @@
 	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
 	audioPlayer.numberOfLoops = 0;
     
+    dropFlash = YES;
+    ellipseR = 1.0;
+    ellipseG = 1.0;
+    ellipseB = 1.0;
+    ellipseA = 1.0;
+    dotSizeScaler = 5.0;
+    [self setNeedsDisplay];
+    
+    dotFlashTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(flashDot) userInfo:nil repeats:NO];
     
     //****STK Other useful control parameters 
     //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
-    //    NSLog(@"%f seconds played so far", audioPlayer.currentTime);
+    //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
     //    audioPlayer.currentTime = 10; // jump to the 10 second mark
     //    [audioPlayer pause]; 
     //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes

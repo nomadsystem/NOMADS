@@ -31,9 +31,16 @@
     int numChatLines;
     AVAudioPlayer *audioPlayer;
     NSTimer *dropletTimer;
+    NSTimer *dotFlashTimer;
     int fileNum;
     float currentTimerVal;
     float lastTimerVal;
+    AVAudioSession *session;
+    float ellipseR, ellipseG, ellipseB, ellipseA;
+    Boolean dropFlash;
+    float dotSizeScaler;
+    
+
 
     
 }
