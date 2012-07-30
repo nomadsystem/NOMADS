@@ -4,14 +4,16 @@
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "Cursor.h"
-#include "jni.h"
+
+// setup JNI for native -> Java
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+#define CLASS_OPEN_NAME "com/nomads/Join"
+#endif
 
 USING_NS_CC;
 using namespace CocosDenshion;
-
-extern "C"{
-JNIEXPORT void JNICALL Java_com_nomads_Join_setObj(JNIEnv *env, jobject _join);
-}
 
 class Swarm : public cocos2d::CCLayer
 {
@@ -23,6 +25,7 @@ class Swarm : public cocos2d::CCLayer
 	virtual bool init();
 	void loadAudio();
 public:
+//	void Java_com_nomads_Join_setObj(JNIEnv *env, jobject _join);
 	Cursor* cursorSprite;
 
     // there's no 'id' in cpp, so return the class pointer

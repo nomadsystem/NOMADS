@@ -141,8 +141,9 @@ public class Swarm extends Cocos2dxActivity{
 	     ConfigurationInfo info = am.getDeviceConfigurationInfo();
 	     return (info.reqGlEsVersion >= 0x20000);
 	 }
-	
-     static {
-         System.loadLibrary("game");
-     }
+	 
+	 // moved to Join.java
+//     static {
+//         System.loadLibrary("game");
+//     }
 }

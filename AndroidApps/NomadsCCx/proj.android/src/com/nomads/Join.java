@@ -30,19 +30,19 @@ public class Join extends Activity {
 	
 	// native (c++) method; sets object reference
 	public native void setObj ();
+	
 	static{
-		System.loadLibrary("Join");
+		System.loadLibrary("game");
 	}
 	
-	
-//	public void touchPos(int tX, int tY) {
-//		// for below, use (int[] touchPos)
-////		int x = touchPos[0];
-////		int y = touchPos[1];
-//		Log.i("Join.java", "x: " + tX + " y: " + tY);
-////		Log.i("Swarm.java", "x: " + touchPos);
-//        
-//    }
+	public void touchPos(int tX, int tY) {
+		// for below, use (int[] touchPos)
+//		int x = touchPos[0];
+//		int y = touchPos[1];
+		Log.i("Join.java", "x: " + tX + " y: " + tY);
+//		Log.i("Swarm.java", "x: " + touchPos);
+        
+    }
 	
 //	public static void goToJoin() {
 //		backToJoin();
@@ -101,9 +101,8 @@ public class Join extends Activity {
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
-		
 		//send reference to this object instance to Swarm.cpp
-		new Join().setObj();
+		setObj();
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
