@@ -44,6 +44,7 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
+
     CLog(@"App Delegate dataReadyHandle");
 }
 

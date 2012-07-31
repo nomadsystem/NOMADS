@@ -591,6 +591,14 @@
                                                           DataLen:(int)dLen
                                                            String:(NSString *)output];
                                         [grain print];
+                                        
+                                        // send out to all our delgates
+                                        for (int x=0;x<numDelegates;x++) {
+                                            if (self->delegate[x] != nil) {
+                                                [self->delegate[x] dataReadyHandle:grain];
+                                            }
+                                        }
+
                                         cBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -608,6 +616,10 @@
                                         //     set read mode to appID and read in the rest
                                         else {
                                             readMode = 1;
+                                            //  Send out notifications to all our delegates =============================================================
+                                            
+
+                                            
                                         }
                                         
                                     }
@@ -669,6 +681,14 @@
                                                           DataLen:(int)dLen
                                                             Uint8:(uint8_t *)uBuffer];
                                         [grain print];
+
+                                        // send out to all our delgates
+                                        for (int x=0;x<numDelegates;x++) {
+                                            if (self->delegate[x] != nil) {
+                                                [self->delegate[x] dataReadyHandle:grain];
+                                            }
+                                        }
+
                                         uBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -685,6 +705,8 @@
                                         // We've reached the end of our data for this SAND grain, but there's more in the buffer
                                         //     set read mode to appID and read in the rest
                                         else {
+
+                                            
                                             readMode = 1;
                                         }
                                         
@@ -760,6 +782,14 @@
                                                           DataLen:(int)dLen
                                                             Int32:(int *)iBuffer];
                                         [grain print];
+
+                                        // send out to all our delgates
+                                        for (int x=0;x<numDelegates;x++) {
+                                            if (self->delegate[x] != nil) {
+                                                [self->delegate[x] dataReadyHandle:grain];
+                                            }
+                                        }
+
                                         iBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -851,6 +881,14 @@
                                                           DataLen:(int)dLen
                                                           Float32:(int *)fBuffer];
                                         [grain print];
+
+                                        // send out to all our delgates
+                                        for (int x=0;x<numDelegates;x++) {
+                                            if (self->delegate[x] != nil) {
+                                                [self->delegate[x] dataReadyHandle:grain];
+                                            }
+                                        }
+
                                         fBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -885,11 +923,11 @@
 
                     //  Send out notifications to all our delegates =============================================================
                     
-                    for (int x=0;x<numDelegates;x++) {
-                        if (self->delegate[x] != nil) {
-                            [self->delegate[x] dataReadyHandle:grain];
-                        }
-                    }
+//                    for (int x=0;x<numDelegates;x++) {
+//                        if (self->delegate[x] != nil) {
+//                            [self->delegate[x] dataReadyHandle:grain];
+//                        }
+//                    }
 
                 } // if [streamIn hasBytesAvailable]
             } 
