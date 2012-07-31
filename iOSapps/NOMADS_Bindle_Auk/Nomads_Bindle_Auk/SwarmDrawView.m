@@ -57,6 +57,11 @@
         decayColorChangeDelta = (decayColor/(float)maxTrails);
         dropFlash = NO;
         
+        ellipseR = decayColor;
+        ellipseG = touchColor;
+        ellipseB = 1.0;
+        ellipseA = decayColor;
+        
         dotSizeScaler = 1;
         
         //    CLog(@" brightness = %f ", brightness);
@@ -383,16 +388,31 @@
     [self endTouches:touches];
 }
 
-- (void)flashDot
+//Method called from dotFlashTimer--resets dot size/color
+- (void)flashDotIn
 {
-    ellipseR = 1.0;
-    ellipseG = 0.1;
-    ellipseB = 0.1;
-    ellipseA = 1.0;
+    CLog("flashDot");
+    ellipseR = decayColor;
+    ellipseG = touchColor;
+    ellipseB = 1.0;
+    ellipseA = decayColor;
     dotSizeScaler = 1.0;
     [self setNeedsDisplay];
     dropFlash = NO;
+    
+}
+
+//Method called from dotFlashTimer--resets dot size/color
+- (void)flashDotOut
+{
     CLog("flashDot");
+    ellipseR = decayColor;
+    ellipseG = touchColor;
+    ellipseB = 1.0;
+    ellipseA = decayColor;
+    dotSizeScaler = 1.0;
+    [self setNeedsDisplay];
+    dropFlash = NO;
     
 }
 
@@ -416,7 +436,7 @@
     ellipseG = 1.0;
     ellipseB = 1.0;
     ellipseA = 1.0;
-    dotSizeScaler = 5.0;
+    dotSizeScaler = 1.5;
     [self setNeedsDisplay];
     
     dotFlashTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(flashDot) userInfo:nil repeats:NO];
