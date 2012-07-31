@@ -389,21 +389,7 @@
 }
 
 //Method called from dotFlashTimer--resets dot size/color
-- (void)flashDotIn
-{
-    CLog("flashDot");
-    ellipseR = decayColor;
-    ellipseG = touchColor;
-    ellipseB = 1.0;
-    ellipseA = decayColor;
-    dotSizeScaler = 1.0;
-    [self setNeedsDisplay];
-    dropFlash = NO;
-    
-}
-
-//Method called from dotFlashTimer--resets dot size/color
-- (void)flashDotOut
+- (void)flashDot
 {
     CLog("flashDot");
     ellipseR = decayColor;
