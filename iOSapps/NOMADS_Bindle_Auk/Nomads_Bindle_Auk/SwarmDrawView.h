@@ -32,6 +32,12 @@
     AVAudioPlayer *audioPlayer;
     NSTimer *dropletTimer;
     NSTimer *dotFlashTimer;
+    
+    NSTimer *promptFadeInTimer;
+    NSTimer *promptFadeOutTimer;
+    NSTimer *promptWaitTimer;
+
+    
     int fileNum;
     float currentTimerVal;
     float lastTimerVal;
@@ -39,21 +45,30 @@
     float ellipseR, ellipseG, ellipseB, ellipseA;
     Boolean dropFlash;
     float dotSizeScaler;
-    
 
+    NSString *prompt;
+    float promptAlpha;
+    float promptFadeInVal;
+    float promptWaitTick;
+    float promptFadeOutTick;
 
+    CGRect viewRect;
+    CGFloat viewHeight;
+    CGFloat viewWidth;
     
 }
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 @property (nonatomic) CGPoint myFingerPoint;
+@property (strong, nonatomic) NSString *prompt;
 
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
-
-
 - (void)clearAll;
 - (void)endTouches:(NSSet *)touches;
 - (void)playDroplet;
+- (void)fadeInPrompt;
+- (void)fadeOutPromt;
+- (void)promptZeroTimer;
 
 @end
 
