@@ -37,7 +37,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+//import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,12 +55,12 @@ public class Swarm extends Cocos2dxActivity{
 	EditText alertInput;
 	
 	public void parseGrain(NGrain _grain) {
-		grain = _grain;
-
-		Log.i("Join", "parseGrain()");
-		String msg = new String(grain.bArray);
-		Log.i("Join", msg);
-
+//		grain = _grain;
+//
+		Log.i("Swarm", "parseGrain()");
+//		String msg = new String(grain.bArray);
+//		Log.i("Swarm", msg);
+//
 		if (grain != null)
 			grain = null;
 	}
