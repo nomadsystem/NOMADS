@@ -59,12 +59,4 @@
 	    
 	</LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitEnd"
-        android:src="@drawable/nomadslogo_tr"
-        android:contentDescription="@string/welcome" />
-
 </LinearLayout>

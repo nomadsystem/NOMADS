@@ -16,19 +16,20 @@ public final class R {
         public static final int ic_tab_test_white=0x7f020002;
         public static final int icon=0x7f020003;
         public static final int nomadslogo=0x7f020004;
-        public static final int nomadslogo_tr=0x7f020005;
-        public static final int sanddunes1_960x640=0x7f020006;
+        public static final int nomadslogo_512=0x7f020005;
+        public static final int nomadslogo_splash=0x7f020006;
+        public static final int nomadslogo_tr=0x7f020007;
+        public static final int sanddunes1_960x640=0x7f020008;
     }
     public static final class id {
         public static final int connectedMsg=0x7f050006;
         public static final int disconnect=0x7f050007;
-        public static final int imageView1=0x7f050008;
         public static final int loginPrompt=0x7f050004;
-        public static final int max=0x7f05000a;
+        public static final int max=0x7f050009;
         public static final int messageViewer=0x7f050003;
-        public static final int min=0x7f050009;
-        public static final int pbValue=0x7f05000c;
-        public static final int pollBar=0x7f05000b;
+        public static final int min=0x7f050008;
+        public static final int pbValue=0x7f05000b;
+        public static final int pollBar=0x7f05000a;
         public static final int promptIn=0x7f050000;
         public static final int send=0x7f050002;
         public static final int sendUser=0x7f050005;

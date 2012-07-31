@@ -17,7 +17,8 @@ import android.widget.TextView;
 import android.os.Handler;
 
 public class Join extends Activity {
-	Join join;
+	Activity currentTarget;
+//	Join join;
 	NSand sand;
 	private NGrain grain;
 	private NomadsAppThread nThread;
@@ -28,6 +29,10 @@ public class Join extends Activity {
 	Button buttonConnect, buttonDisconnect;
 	String tempString = "";
 	
+	//========================================================
+	// JNI methods
+	//========================================================
+	
 	// native (c++) method; sets object reference
 	public native void setObj ();
 	
@@ -36,12 +41,7 @@ public class Join extends Activity {
 	}
 	
 	public void touchPos(int tX, int tY) {
-		// for below, use (int[] touchPos)
-//		int x = touchPos[0];
-//		int y = touchPos[1];
-		Log.i("Join.java", "x: " + tX + " y: " + tY);
-//		Log.i("Swarm.java", "x: " + touchPos);
-        
+		Log.i("Join.java", "x: " + tX + " y: " + tY);    
     }
 	
 //	public static void goToJoin() {
@@ -53,6 +53,9 @@ public class Join extends Activity {
 //		startActivity(intent);
 //	}
 	
+	//========================================================
+	// Network methods
+	//========================================================
 	
 	boolean tryConnect (){
 		sand = new NSand();
@@ -94,13 +97,69 @@ public class Join extends Activity {
 		final Runnable updateUI = new Runnable() {
 	    	@Override
 	        public void run() {
-				client.parseGrain(grain);
+				client.sendGrain();
 	        }
 	    };
 	}
 	
+	public synchronized void startThread() {
+		if(nThread == null){
+			nThread = new NomadsAppThread(this);
+			nThread.start();
+			Log.i("Join", "Thread started.");
+		}
+		else{
+			Log.i("Join", "startThread: thread != null.");
+		}
+	}
+
+	public synchronized void stopThread() {
+		if(nThread != null){
+			nThread.kill();
+			Thread moribund = nThread;
+			nThread = null;
+			moribund.interrupt();
+			Log.i("Join", "NomadsAppThread stopped.");
+			sand.close();
+			Log.i("Join", "sand.close()");
+		}
+	}
+	
+	private void sendGrain() {
+		if (currentTarget == this) {
+			Log.i("Join", "parseGrain()");
+			String msg = new String(grain.bArray);
+			Log.i("Join", msg);
+
+			if (grain != null)
+				grain = null;
+        }
+		else if (currentTarget instanceof Discuss) {
+            ((Discuss) currentTarget).parseGrain(grain);
+        }
+        else if (currentTarget instanceof Cloud) { 
+            ((Cloud) currentTarget).parseGrain(grain);
+        }
+        else if (currentTarget instanceof Swarm) {
+        	((Swarm) currentTarget).parseGrain(grain);
+        }
+        else {
+        	Log.i("Join", "sendGrain() error: not a valid NSand target");
+        }
+	}
+	
+	public void setSandTarget(Activity _target) {
+		currentTarget = _target;
+		Log.i("Join", "setSandTarget()");
+	}
+	
+	//========================================================
+	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
+		// set NSand target to this
+		currentTarget = this;
+		
 		//send reference to this object instance to Swarm.cpp
 		setObj();
 		
@@ -115,39 +174,9 @@ public class Join extends Activity {
 		buttonDisconnect.setOnClickListener(buttonDisconnectOnClickListener);
 	}
 	
-	public void parseGrain(NGrain _grain) {
-		grain = _grain;
-
-		Log.i("Join", "parseGrain()");
-		String msg = new String(grain.bArray);
-		Log.i("Join", msg);
-
-//		if (grain.appID == NAppID.DISCUSS_PROMPT) {
-//			topic.setText(msg);
-//			tempString = new String(msg);
-//		}
-//		// Disable discuss when the student panel button is off
-//		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-//			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
-//				speak.setEnabled(false);
-//				topic.setText("Discuss Disabled");
-//				chatWindow.setText("");
-//			}
-//			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
-//				speak.setEnabled(true);
-//				topic.setText(tempString);
-//			}			
-//		}
-//		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
-//			chatWindow.append(msg + "\n");
-//			input.requestFocus();
-//		}
-//		else {
-//			grain = null;
-//		}
-		if (grain != null)
-			grain = null;
-	}
+	//========================================================
+	// Buttons
+	//========================================================
 	
 	Button.OnClickListener buttonSendOnClickListener = new Button.OnClickListener(){
 		@Override
@@ -187,6 +216,7 @@ public class Join extends Activity {
 				buttonDisconnect.setVisibility(View.VISIBLE);
 	//			tabbedBindle.setTabs(1);
 				
+				// Switch to Swarm activity
 				Intent intent = new Intent(getApplicationContext(), Swarm.class);
 				startActivity(intent);
 			}
@@ -216,14 +246,7 @@ public class Join extends Activity {
 		}
 	};
 	
-//	public void setSand(NSand _sand) {
-//		sand = _sand;
-//		Log.i("Join", "setSand()");
-//	}
-//	
-//	public void setTB(TabbedBindle _tb){
-//		tabbedBindle = _tb;
-//	}
+	//========================================================
 	
 	@Override
 	public void onResume(){
@@ -236,28 +259,5 @@ public class Join extends Activity {
 		super.onPause();
 		Log.i("Join", "is paused");
 //		stopThread();
-	}
-	
-	public synchronized void startThread() {
-		if(nThread == null){
-			nThread = new NomadsAppThread(this);
-			nThread.start();
-			Log.i("Join", "Thread started.");
-		}
-		else{
-			Log.i("Join", "startThread: thread != null.");
-		}
-	}
-
-	public synchronized void stopThread() {
-		if(nThread != null){
-			nThread.kill();
-			Thread moribund = nThread;
-			nThread = null;
-			moribund.interrupt();
-			Log.i("Join", "NomadsAppThread stopped.");
-			sand.close();
-			Log.i("Join", "sand.close()");
-		}
 	}
 }

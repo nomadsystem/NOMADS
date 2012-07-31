@@ -25,6 +25,9 @@ THE SOFTWARE.
 
 package com.nomads;
 
+import nomads.v210.NGrain;
+import nomads.v210.NSand;
+
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
@@ -44,10 +47,23 @@ import android.widget.FrameLayout;
 
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
+	NSand sand;
+	NGrain grain;
 	
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
+	
+	public void parseGrain(NGrain _grain) {
+		grain = _grain;
+
+		Log.i("Join", "parseGrain()");
+		String msg = new String(grain.bArray);
+		Log.i("Join", msg);
+
+		if (grain != null)
+			grain = null;
+	}
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -130,6 +146,7 @@ public class Swarm extends Cocos2dxActivity{
 
 	 @Override
 	 protected void onResume() {
+		 
 	     super.onResume();
 	     mGLView.onResume();
 	 }
