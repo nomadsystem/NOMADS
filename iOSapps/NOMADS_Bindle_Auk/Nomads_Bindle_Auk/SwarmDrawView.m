@@ -28,23 +28,26 @@
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
+
+        // Graphics setup
+        viewRect = [self bounds];
+        viewHeight = viewRect.size.height;
+        viewWidth = viewRect.size.width;
+
+        // Prompt text
+        prompt = [NSString stringWithFormat:@"NOMADS Bindle"];
+        promptAlpha = 0;
         
+        // chat lines
         numChatLines = 15; //Initialize number of chat lines to display
         
-        chatLines = [[NSMutableArray alloc] initWithCapacity:numChatLines];
-        
-        
+        //Code to get the point to start at the center of the screen
         [self setMultipleTouchEnabled:YES];
         
-        //Code to get the point to start at the center of the screen
-        CGRect viewRect = [self bounds];
-        CGFloat viewWidth = viewRect.size.width;
-        CGFloat viewHeight = viewRect.size.height;
         myFingerPoint.x = (viewWidth * 0.5);
         myFingerPoint.y = (viewHeight * 0.5);
         
         maxTrails = 10;
-        // earlier on in your code put this (below)
         
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
         yTrail = (int *)malloc(sizeof(int)*maxTrails);
@@ -71,10 +74,12 @@
         
         
         //Set up our Audio Session
+
         NSError *activationError = nil;
         session = [AVAudioSession sharedInstance];
         [session setActive:YES error:&activationError];
         NSError *setCategoryError = nil;
+
         //This category should prevent our audio from being interrupted by incoming calls, etc.
         [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
         if (setCategoryError) { 
@@ -84,7 +89,11 @@
         currentTimerVal = 4.0;
         lastTimerVal = 4.0;
         fileNum = 1;
-        dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
+        // dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
+
+        promptWaitTick = 0;
+        promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
+
         
         
     }
@@ -99,6 +108,17 @@
     CLog(@"SwarmDrawView: Data Ready Handle\n");
     
     if (nil != inGrain) { 
+        if(inGrain->appID == CONDUCTOR_PANEL) {
+            if(inGrain->command == SEND_PROMPT) {
+                // xxx
+                prompt = inGrain->str;
+                promptFadeInVal = 0.05;
+                promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
+                                    @selector(fadeInPrompt) userInfo:nil repeats:YES];
+
+            }
+        }
+        
         if(inGrain->appID == OC_DISCUSS) //Text from Student Discuss
         { 
             
@@ -128,36 +148,27 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    // The Text =====================================================
-    
-    // Prompt text
-    
-    NSString *nsstr = @"NOMADS Bindle"; //Incoming NSString 
-    const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
-    
-    int len = strlen(str); //get length of string
-    
-    CGRect viewRect = [self bounds];
-    CGFloat viewHeight = viewRect.size.height;
-    CGFloat viewWidth = viewRect.size.width;
-    
-    
-    CGContextSelectFont (context, 
-                         "Papyrus",
-                         30,
-                         kCGEncodingMacRoman);
     CGContextSetCharacterSpacing (context, 1);
     CGContextSetTextDrawingMode (context, kCGTextFillStroke);
-    CGContextSetRGBFillColor (context, 1, 1, 1, 1);
-    CGContextSetRGBStrokeColor (context, 1, 1, 1, 1); 
+    CGContextSetRGBFillColor (context, 1, 1, 1, promptAlpha);
+    CGContextSetRGBStrokeColor (context, 1, 1, 1, promptAlpha); 
     CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
     
     CGContextSetAllowsAntialiasing(context, YES);
     CGContextSetShouldAntialias(context, YES); 
     CGContextSetShouldSmoothFonts(context, YES);
+
     
+    // Display Prompt Text
+    const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
+    int len = strlen(str); //get length of string
+
+    CGContextSelectFont (context, 
+                         "Papyrus",
+                         30,
+                         kCGEncodingMacRoman);
+
     CGContextShowTextAtPoint (context, 40, 40, str, len); 
-    
     
     // Display discussion text
     
@@ -182,8 +193,8 @@
         CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
         chatYLoc -= chatSpace;
     }
-    // The Dot ======================================================
     
+    // The Dot ======================================================
     for(int i=maxTrails;i>0;i--) {
         xTrail[i] = xTrail[i-1];
         yTrail[i] = yTrail[i-1];
@@ -399,8 +410,73 @@
     dotSizeScaler = 1.0;
     [self setNeedsDisplay];
     dropFlash = NO;
-    
 }
+
+
+- (void)zeroPrompt {
+    
+    CLog("zeroPrompt %2.2f\n",promptWaitTick);
+
+    promptWaitTick += 1;
+    if (promptWaitTick > 1) {
+        [promptWaitTimer invalidate];
+        CLog("deleting promptWaitTimer\n");
+        promptFadeInVal = 0.05;
+        promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
+                            @selector(fadeInPrompt) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)fadeInPrompt
+{       
+    CLog("fadeIntPrompt %2.2f\n",promptAlpha);
+
+    if (promptAlpha == 0) {
+        promptAlpha = 0.05;
+    }
+    promptAlpha *= 1.1;
+    if (promptAlpha > 0.95) {
+        if (promptFadeInTimer) {
+            [promptFadeInTimer invalidate];
+            CLog("deleting promptFadeInTimer\n");
+            
+        }
+        CLog("fadeInPrompt calling -> fadeOutPrompt %2.2f\n",promptFadeOutTick);
+        
+        promptFadeOutTick = 1;
+        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
+        promptAlpha = 1;
+    }
+    [self setNeedsDisplay];
+}
+
+
+
+- (void)fadeOutPrompt
+{       
+    CLog("fadeOutPrompt %2.2f\n",promptFadeOutTick);
+
+    if (promptAlpha > 0.95) {
+        if (promptFadeOutTimer) {
+            CLog("restarting promptFadeOutTimer\n");
+            [promptFadeOutTimer invalidate];
+        }
+        promptFadeOutTick = 0.05;
+        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
+    }
+    promptAlpha *= 0.9;
+    if (promptAlpha < 0.05) {
+        CLog("deleting promptFadeOutTimer\n");
+
+        [promptFadeOutTimer invalidate];
+        promptAlpha = 0;
+    }
+    [self setNeedsDisplay];
+}
+
+
+
+// Play the sound
 
 - (void)playDroplet
 {
