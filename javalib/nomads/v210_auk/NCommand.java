@@ -26,5 +26,7 @@ public class NCommand {
     public static byte SEND_SPRITE_THREAD_XY = 20;  // SoundSwarm
     public static byte SEND_SPRITE_XY = 21;  // SoundSwarm
     
+    public static byte SEND_PROMPT = 30;
+    
 
 }
