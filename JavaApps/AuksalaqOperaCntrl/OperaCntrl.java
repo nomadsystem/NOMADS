@@ -221,6 +221,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		JPanel promptTextAndButton = new JPanel();
 		promptTextAndButton.setLayout(new GridLayout(1,2));
 		promptTextField = new JTextField("",40);
+		promptTextField.addKeyListener(this);
 		promptButton = new JButton("Prompt");
 		promptButton.setMaximumSize(new Dimension(20,10));
 		promptButton.addActionListener(checkListener);
@@ -611,48 +612,57 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		int v,t,k;
 		k = e.getKeyCode();
-		NGlobals.cPrint("ACP: key: " + k);
-		if (k == 103) { 
-			v = discussAlpha.getValue();
-			discussAlpha.setValue(v+3);
+	//	NGlobals.cPrint("ACP: key: " + k);
+		if (k == 10) {
+			String tString = promptTextField.getText();
+			byte[] tStringAsBytes = tString.getBytes();
+			int tLen = tString.length();
+			operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SEND_PROMPT, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+			NGlobals.cPrint("ACP: Prompt " + tString + " sent"); 
+			promptTextField.setText("");
 		}
-		else if (k == 100) { 
-			v = discussAlpha.getValue();
-			discussAlpha.setValue(v-3);
-		}
-		else if (k == 97) { 				
-			discussCntrl.getModel().setArmed(true);
-			discussCntrl.getModel().setSelected(true);
-			discussCntrl.getModel().setPressed(true);
-		}
-
-		else if (k == 104) { 
-			v = cloudAlpha.getValue();
-			cloudAlpha.setValue(v+3);
-		}
-		else if (k == 101) { 
-			v = cloudAlpha.getValue();
-			cloudAlpha.setValue(v-3);
-		}
-		else if (k == 98) { 
-			cloudCntrl.getModel().setPressed(true);
-			cloudCntrl.getModel().setSelected(true);
-			cloudCntrl.getModel().setPressed(true);
-		}
-
-		else if (k == 105) { 
-			v = pointerAlpha.getValue();
-			pointerAlpha.setValue(v+3);
-		}
-		else if (k == 102) { 
-			v = pointerAlpha.getValue();
-			pointerAlpha.setValue(v-3);
-		}
-		else if (k == 99) { 
-			pointerCntrl.getModel().setPressed(true);
-			pointerCntrl.getModel().setSelected(true);
-			pointerCntrl.getModel().setPressed(true);
-		}
+		//****STK 7/31/12 Disabled other key commands, as they could be triggered from text entered in text field
+//		if (k == 103) { 
+//			v = discussAlpha.getValue();
+//			discussAlpha.setValue(v+3);
+//		}
+//		else if (k == 100) { 
+//			v = discussAlpha.getValue();
+//			discussAlpha.setValue(v-3);
+//		}
+//		else if (k == 97) { 				
+//			discussCntrl.getModel().setArmed(true);
+//			discussCntrl.getModel().setSelected(true);
+//			discussCntrl.getModel().setPressed(true);
+//		}
+//
+//		else if (k == 104) { 
+//			v = cloudAlpha.getValue();
+//			cloudAlpha.setValue(v+3);
+//		}
+//		else if (k == 101) { 
+//			v = cloudAlpha.getValue();
+//			cloudAlpha.setValue(v-3);
+//		}
+//		else if (k == 98) { 
+//			cloudCntrl.getModel().setPressed(true);
+//			cloudCntrl.getModel().setSelected(true);
+//			cloudCntrl.getModel().setPressed(true);
+//		}
+//
+//		else if (k == 105) { 
+//			v = pointerAlpha.getValue();
+//			pointerAlpha.setValue(v+3);
+//		}
+//		else if (k == 102) { 
+//			v = pointerAlpha.getValue();
+//			pointerAlpha.setValue(v-3);
+//		}
+//		else if (k == 99) { 
+//			pointerCntrl.getModel().setPressed(true);
+//			pointerCntrl.getModel().setSelected(true);
+//			pointerCntrl.getModel().setPressed(true);
+//		}
 	}
 
 	public void keyReleased(KeyEvent e){
