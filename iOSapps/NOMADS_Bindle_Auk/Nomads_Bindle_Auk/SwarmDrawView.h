@@ -52,11 +52,16 @@
     float promptWaitTick;
     float promptFadeOutTick;
 
+    Boolean discussStatus;
+    Boolean cloudStatus;
+    Boolean pointerStatus;
+    
     CGRect viewRect;
     CGFloat viewHeight;
     CGFloat viewWidth;
     
 }
+
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 @property (nonatomic) CGPoint myFingerPoint;
