@@ -28,6 +28,8 @@ public class NomadServer implements Runnable {
     private static byte _POINTER_STATUS = 0;
     private static byte _DROPLET_STATUS = 0;
     private static int _DROPLET_VOLUME = 0;
+    private static byte _NOTE_STATUS = 0;
+    private static int _NOTE_VOLUME = 0;
     private static int _SYNTH_VOLUME = 0;
 
 
@@ -270,6 +272,14 @@ public class NomadServer implements Runnable {
 	    ix[0] = _DROPLET_VOLUME;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
 	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
+	    
+	    d[0] = _NOTE_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_NOTE_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_NOTE_STATUS:  " + d[0]);
+	    
+	    ix[0] = _NOTE_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_NOTE_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_NOTE_VOLUME:  " + ix[0]);
 
 	    ix[0] = _SYNTH_VOLUME;
 	    currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
@@ -308,6 +318,14 @@ public class NomadServer implements Runnable {
 	    ix[0] = _DROPLET_VOLUME;
 	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_DROPLET_VOLUME, NDataType.INT32, 1, ix);
 	    NGlobals.lPrint("_DROPLET_VOLUME:  " + ix[0]);
+	    
+	    d[0] = _NOTE_STATUS;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_NOTE_STATUS, NDataType.UINT8, 1, d);
+	    NGlobals.lPrint("_NOTE_STATUS:  " + d[0]);
+	    
+	    ix[0] = _NOTE_VOLUME;
+	    currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_NOTE_VOLUME, NDataType.INT32, 1, ix);
+	    NGlobals.lPrint("_NOTE_VOLUME:  " + ix[0]);
 
 	    currentClient.setButtonInitStatus((byte)1);
 	}
@@ -368,6 +386,14 @@ public class NomadServer implements Runnable {
 		    
 		else if (incAppCmd == NCommand.SET_DROPLET_VOLUME) {
 		    _DROPLET_VOLUME = myGrain.iArray[0];
+		}
+		
+		else if (incAppCmd == NCommand.SET_NOTE_STATUS) {
+		    _NOTE_STATUS = myGrain.bArray[0];
+		}
+		    
+		else if (incAppCmd == NCommand.SET_NOTE_VOLUME) {
+		    _NOTE_VOLUME = myGrain.iArray[0];
 		}
 		
 		else if (incAppCmd == NCommand.SET_SYNTH_VOLUME) {
