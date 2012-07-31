@@ -97,6 +97,10 @@
     
     Byte c[1];
     c[0] = 1;
+
+    [aukBarButtonDiscuss setEnabled:false];
+    [aukBarButtonCloud setEnabled:false];
+
     //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
     [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
                                           Command:REGISTER 
@@ -110,12 +114,24 @@
 // input data function ============================================
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    CLog(@"AVC: Data Ready Handle\n");
+    CLog(@"AVC: Data Ready Handle:  appID = %d  command = %d\n",inGrain->appID, inGrain->command);
     if (nil != inGrain) {
-        //  CLog(@"AVC: Data Ready Handle\n");
+        if(inGrain->appID == CONDUCTOR_PANEL) {
+            
+            if(inGrain->command == SET_DISCUSS_STATUS) {
+                CLog("SET_DISCUSS_STATUS:  %d\n",(int)inGrain->bArray[0]);
+                [aukBarButtonDiscuss setEnabled:(Boolean)inGrain->bArray[0]];
+            }
+            else if(inGrain->command == SET_CLOUD_STATUS) {
+                [aukBarButtonCloud setEnabled:(Boolean)inGrain->bArray[0]];
+                CLog("SET_CLOUD_STATUS:  %d\n",(int)inGrain->bArray[0]);
+
+            }
+            
+            //  CLog(@"AVC: Data Ready Handle\n");
+        }
     }
 }
-
 // Login button, currently disabled ****STK 7/30/12 ===============================================
 
 //- (IBAction)joinNomadsButton:(id)sender {
