@@ -33,6 +33,7 @@
     AVAudioPlayer *audioPlayer;
     AVAudioSession *session;
     int fileNum;
+    float noteVolume;
     Boolean noteIsEnabled;
 }
 

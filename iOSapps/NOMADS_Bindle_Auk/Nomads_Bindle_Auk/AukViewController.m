@@ -150,15 +150,12 @@
                     fileNum = 1;
                 }   
                 
-                
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
            
             else if (inGrain->command == SET_NOTE_VOLUME) {
             //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
-                float noteVolume =  (1 - pow(0.01,(double)((inGrain->iArray[0] * 0.01))));
-                                     
-                CLog("AVC: noteVolume = %f", noteVolume);
+                noteVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
                 audioPlayer.volume = noteVolume;
             }
         }
@@ -253,14 +250,18 @@
     CLog("URL: %@", url);
     
     NSError *error;
-    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    [audioPlayer setDelegate:self];
-    audioPlayer.numberOfLoops = 0;
     if (audioPlayer == nil) {
-        CLog("AVC: Playback error: %@",[error description]);
-    }
-    else {
-        [audioPlayer play];
+        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayer setDelegate:self];
+        audioPlayer.numberOfLoops = 0;
+        if (audioPlayer == nil) {
+            CLog("Playback error: %@",[error description]);
+        }
+        else {
+            audioPlayer.volume = noteVolume;
+            CLog("dropletVolume = %f", noteVolume);
+            [audioPlayer play];
+        }
     }
     
     //****STK Other useful control parameters 
@@ -279,6 +280,7 @@
     else {
         fileNum++;
     }
+    audioPlayer = nil;
 }
 
 //Text Field Handler ===============================================

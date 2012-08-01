@@ -82,6 +82,8 @@
         if (setCategoryError) { 
             CLog("Error initializing Audio Session Category");
         }
+        dropletVolume = 1.0;
+        
         
         promptWaitTick = 0;
         promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
@@ -125,6 +127,11 @@
                 }
                 
             }
+            else if (inGrain->command == SET_DROPLET_VOLUME) {
+                //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
+                dropletVolume =  (inGrain->iArray[0]*0.01);
+                
+            }
             else if(inGrain->command == SET_DISCUSS_STATUS) {
                 discussStatus = (Boolean)inGrain->bArray[0];
             }
@@ -135,6 +142,7 @@
                 pointerStatus = (Boolean)inGrain->bArray[0];
                 [self setNeedsDisplay];
             }
+            
             
             else if(inGrain->command == SEND_PROMPT) {
                 // xxx
@@ -512,7 +520,10 @@
     [self setNeedsDisplay];
 }
 
-
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    CLog("SDV: Audio finished playing");
+    audioPlayer = nil;
+}
 
 // Play the sound
 
@@ -528,14 +539,19 @@
     CLog("URL: %@", url);
 	
 	NSError *error;
-	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-	audioPlayer.numberOfLoops = 0;
-    
     if (audioPlayer == nil) {
-		CLog("SVC: Playback error: %@",[error description]);
+        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayer setDelegate:self];
+        audioPlayer.numberOfLoops = 0;
+        if (audioPlayer == nil) {
+            CLog("SDV: Playback error: %@",[error description]);
+        }
+        else {
+            audioPlayer.volume = dropletVolume;
+            CLog("SDV: dropletVolume = %f", dropletVolume);
+            [audioPlayer play];
+        }
     }
-	else 
-		[audioPlayer play];
     
     //****STK Other useful control parameters 
     //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
