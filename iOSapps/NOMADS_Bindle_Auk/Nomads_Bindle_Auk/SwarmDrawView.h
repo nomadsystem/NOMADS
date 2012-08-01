@@ -14,7 +14,7 @@
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
 
-@interface SwarmDrawView : UIView <SandDelegate>
+@interface SwarmDrawView : UIView <SandDelegate, AVAudioPlayerDelegate>
 {
 
     NSand   *appSand;
@@ -30,6 +30,8 @@
     NSMutableArray  *chatLines;
     int numChatLines;
     AVAudioPlayer *audioPlayer;
+    float dropletVolume;
+    
     NSTimer *dropletTimer;
     NSTimer *dotFlashTimer;
     
