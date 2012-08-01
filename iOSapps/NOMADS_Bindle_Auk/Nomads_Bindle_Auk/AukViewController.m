@@ -97,10 +97,10 @@
     
     Byte c[1];
     c[0] = 1;
-
+    
     [aukBarButtonDiscuss setEnabled:false];
     [aukBarButtonCloud setEnabled:false];
-
+    
     //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
     [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
                                           Command:REGISTER 
@@ -108,6 +108,19 @@
                                           DataLen:1 
                                             Uint8:c];
     
+    //Set up our Audio Session
+    NSError *activationError = nil;
+    session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:&activationError];
+    NSError *setCategoryError = nil;
+    
+    //This category should prevent our audio from being interrupted by incoming calls, etc.
+    [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (setCategoryError) { 
+        CLog("Error initializing Audio Session Category");
+    }
+    fileNum = 1; //Selects AukNote file number
+    noteIsEnabled = NO;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -125,10 +138,29 @@
             else if(inGrain->command == SET_CLOUD_STATUS) {
                 [aukBarButtonCloud setEnabled:(Boolean)inGrain->bArray[0]];
                 CLog("SET_CLOUD_STATUS:  %d\n",(int)inGrain->bArray[0]);
-
+                
             }
             
-            //  CLog(@"AVC: Data Ready Handle\n");
+            else if(inGrain->command == SET_NOTE_STATUS) {
+                if (inGrain->bArray[0] == 1) {
+                    noteIsEnabled = YES;
+                }
+                else if (inGrain->bArray[0] == 0) {
+                    noteIsEnabled = NO;
+                    fileNum = 1;
+                }   
+                
+                
+                //  CLog(@"AVC: Data Ready Handle\n");
+            }
+           
+            else if (inGrain->command == SET_NOTE_VOLUME) {
+            //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
+                float noteVolume =  (1 - pow(0.01,(double)((inGrain->iArray[0] * 0.01))));
+                                     
+                CLog("AVC: noteVolume = %f", noteVolume);
+                audioPlayer.volume = noteVolume;
+            }
         }
     }
 }
@@ -210,6 +242,44 @@
     [self.inputCloudField resignFirstResponder];
 }
 
+-(void)playNote {
+    
+    NSString *soundFile;
+    
+    soundFile = [NSString stringWithFormat:@"sounds/AukNotes/AuksalaqNomadsNote%d.mp3",fileNum];
+    
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
+    
+    CLog("URL: %@", url);
+    
+    NSError *error;
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    [audioPlayer setDelegate:self];
+    audioPlayer.numberOfLoops = 0;
+    if (audioPlayer == nil) {
+        CLog("AVC: Playback error: %@",[error description]);
+    }
+    else {
+        [audioPlayer play];
+    }
+    
+    //****STK Other useful control parameters 
+    //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
+    //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
+    //    audioPlayer.currentTime = 10; // jump to the 10 second mark
+    //    [audioPlayer pause]; 
+    //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
+}
+
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    CLog("AVC: Audio finished playing");
+    if (fileNum == 17) {
+        fileNum = 0;
+    }
+    else {
+        fileNum++;
+    }
+}
 
 //Text Field Handler ===============================================
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
@@ -298,6 +368,16 @@
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
             [aukView sendSubviewToBack:inputCloudField];
+            
+            //Note playback
+            if (noteIsEnabled) { //Only play back if note is enabled
+                if (![audioPlayer isPlaying]) {
+                    [self playNote];
+                }
+                else {
+                    CLog("AVC: Note is already playing");
+                }
+            }
         }
         else {
             inputCloudField.text = @"";
