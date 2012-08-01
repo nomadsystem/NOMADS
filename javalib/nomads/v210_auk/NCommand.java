@@ -29,7 +29,8 @@ public class NCommand {
 
 
     
-    public static byte SEND_PROMPT = 30;
+    public static byte SEND_PROMPT_ON = 30;
+    public static byte SEND_PROMPT_OFF = 31;
     
 
 }
