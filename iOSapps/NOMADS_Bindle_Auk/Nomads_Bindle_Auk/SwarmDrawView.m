@@ -531,6 +531,19 @@
 	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
 	audioPlayer.numberOfLoops = 0;
     
+    if (audioPlayer == nil) {
+		CLog("SVC: Playback error: %@",[error description]);
+    }
+	else 
+		[audioPlayer play];
+    
+    //****STK Other useful control parameters 
+    //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
+    //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
+    //    audioPlayer.currentTime = 10; // jump to the 10 second mark
+    //    [audioPlayer pause]; 
+    //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
+    
     dropFlash = YES;
     ellipseR = 1.0;
     ellipseG = 1.0;
@@ -540,18 +553,8 @@
     [self setNeedsDisplay];
     
     dotFlashTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(flashDot) userInfo:nil repeats:NO];
-    
-    //****STK Other useful control parameters 
-    //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
-    //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
-    //    audioPlayer.currentTime = 10; // jump to the 10 second mark
-    //    [audioPlayer pause]; 
-    //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
 	
-	if (audioPlayer == nil)
-		NSLog([error description]);				
-	else 
-		[audioPlayer play];
+	
     if(currentTimerVal != lastTimerVal) {
         [dropletTimer invalidate];
         dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
