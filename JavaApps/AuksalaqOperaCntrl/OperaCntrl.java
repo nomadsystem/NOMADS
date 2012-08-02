@@ -539,9 +539,15 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 					String tString = promptTextField.getText();
 					byte[] tStringAsBytes = tString.getBytes();
 					int tLen = tString.length();
-					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
-					NGlobals.cPrint("ACP: Prompt " + tString + " sent"); 
-					promptTextField.setEnabled(false);
+					if (tLen < 1) {
+						NGlobals.cPrint("ACP: Prompt trying to send Null string (BAD!)");
+						promptButton.setSelected(false);
+					}
+					else {
+						operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+						NGlobals.cPrint("ACP: Prompt " + tString + " sent"); 
+						promptTextField.setEnabled(false);
+					}
 				}
 				else {
 					d[0] = 0;
@@ -676,7 +682,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		int v,t,k;
 		k = e.getKeyCode();
 		//	NGlobals.cPrint("ACP: key: " + k);
-		
+
 		//****STK 7/31/12 Disabled other key commands, as they could be triggered from text entered in text field
 		//		if (k == 103) { 
 		//			v = discussAlpha.getValue();
