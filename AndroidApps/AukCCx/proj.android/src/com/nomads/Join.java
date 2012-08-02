@@ -82,15 +82,15 @@ public class Join extends Activity {
 		
 		public void run() {			
 //			NGlobals.lPrint("NomadsAppThread -> run()");
-			while (active) {
-				try{
+			while (true) {
+//				try{
 					grain = sand.getGrain();
 					grain.print(); //prints grain data to console
 					handle.post(updateUI);
-				}
-				catch (NullPointerException npe) {
-					Log.i("Join > NomadsAppThread", "NullPointerException");
-				}
+//				}
+//				catch (NullPointerException npe) {
+//					Log.i("Join > NomadsAppThread", "NullPointerException");
+//				}
 			}
 		}
 		
