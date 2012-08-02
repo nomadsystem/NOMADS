@@ -82,7 +82,7 @@ public class Join extends Activity {
 		
 		public void run() {			
 //			NGlobals.lPrint("NomadsAppThread -> run()");
-			while (true) {
+			while (active) {
 //				try{
 					grain = sand.getGrain();
 					grain.print(); //prints grain data to console
