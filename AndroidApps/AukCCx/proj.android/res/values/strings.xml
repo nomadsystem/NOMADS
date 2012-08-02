@@ -12,4 +12,5 @@
     <string name="hint">Enter a message.</string>
     <string name="sendButton">Send</string>
     <string name="sendToCloudButton">Send to Cloud</string>
+    <string name="test">test</string>
 </resources>
