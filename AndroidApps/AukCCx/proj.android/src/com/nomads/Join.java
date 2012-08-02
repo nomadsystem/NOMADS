@@ -24,6 +24,8 @@ public class Join extends Activity {
 	String tempString = "";
 	Button buttonTest;
 	
+	int[] xy = new int[2];
+	
 	//========================================================
 	// JNI methods
 	//========================================================
@@ -36,7 +38,11 @@ public class Join extends Activity {
 	}
 	
 	public void touchPos(int tX, int tY) {
-		Log.i("Join.java", "x: " + tX + " y: " + tY);    
+//		Log.i("Join.java", "x: " + tX + " y: " + tY);
+		xy[0] = tX;
+		xy[1] = tY;
+		
+		sand.sendGrain( NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY, NDataType.INT32, 2, xy );
     }
 	
 	//========================================================
@@ -53,7 +59,7 @@ public class Join extends Activity {
 		
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
-		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
+		sand.sendGrain( NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
 		
 		
 		// Switch to Swarm activity

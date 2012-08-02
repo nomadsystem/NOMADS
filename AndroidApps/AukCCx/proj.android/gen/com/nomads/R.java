@@ -23,8 +23,8 @@ public final class R {
         public static final int sanddunes1_960x640=0x7f020009;
     }
     public static final class id {
-        public static final int button1=0x7f050010;
-        public static final int button2=0x7f050011;
+        public static final int buttonCloud=0x7f050011;
+        public static final int buttonDiscuss=0x7f050010;
         public static final int connectedMsg=0x7f05000d;
         public static final int disconnect=0x7f05000e;
         public static final int imageView1=0x7f050004;

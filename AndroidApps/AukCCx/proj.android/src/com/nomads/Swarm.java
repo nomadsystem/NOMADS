@@ -25,6 +25,9 @@ THE SOFTWARE.
 
 package com.nomads;
 
+import nomads.v210.NAppIDAuk;
+import nomads.v210.NCommandAuk;
+import nomads.v210.NDataType;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 
@@ -41,6 +44,7 @@ import android.content.DialogInterface;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,13 +57,14 @@ public class Swarm extends Cocos2dxActivity{
 	NSand sand;
 	NGrain grain;
 	
-	Button buttonTest;
+	Button buttonTest, buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton imgButton;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
 	
-	public void parseGrain(NGrain _grain) {
+	public void parseGrain(NGrain _grain)
+	{
 //		grain = _grain;
 //
 		Log.i("Swarm", "parseGrain() invoked");
@@ -70,7 +75,8 @@ public class Swarm extends Cocos2dxActivity{
 			grain = null;
 	}
 	
-	protected void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		// get NSand instance from Join
@@ -79,18 +85,27 @@ public class Swarm extends Cocos2dxActivity{
 		// set sandTarget to Swarm activity instance
 		Join.join.setSandTarget(this);
 		
-		if (detectOpenGLES20()) {
+		setContentView(R.layout.swarm);
+		
+		// set button onClickListeners
+		buttonDiscuss = (Button)findViewById(R.id.buttonDiscuss);
+		buttonDiscuss.setOnClickListener(discussListener);
+		buttonCloud = (Button)findViewById(R.id.buttonCloud);
+		buttonCloud.setOnClickListener(cloudListener);
+		
+		if (detectOpenGLES20())
+		{
 			// get the packageName,it's used to set the resource path
 			String packageName = getApplication().getPackageName();
 			super.setPackageName(packageName);
 			
-            // RelativeLayout
-            ViewGroup.LayoutParams framelayout_params =
-                new ViewGroup.LayoutParams(
-                		ViewGroup.LayoutParams.FILL_PARENT,
-                		ViewGroup.LayoutParams.FILL_PARENT);
+            // Create RelativeLayout
+//            ViewGroup.LayoutParams framelayout_params = new ViewGroup.LayoutParams(
+//            		ViewGroup.LayoutParams.FILL_PARENT, 
+//            		ViewGroup.LayoutParams.FILL_PARENT);            
 //            RelativeLayout relativeLayout = new RelativeLayout(this);
-            setContentView(R.layout.swarm);
+            
+            
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout);
 //            relativeLayout.setLayoutParams(framelayout_params);
 //
@@ -116,16 +131,13 @@ public class Swarm extends Cocos2dxActivity{
 //            mGLView.setTextField(edittext);
             
             // TEST BUTTON
-            ViewGroup.LayoutParams discuss_layout_params =
-                    new ViewGroup.LayoutParams(
-                    		ViewGroup.LayoutParams.WRAP_CONTENT,
-                    		ViewGroup.LayoutParams.WRAP_CONTENT);
-            buttonTest = new Button(this);
-            buttonTest.setText("DISCUSS");
-//            buttonTest = (Button)findViewById(R.id.button1);
-//            buttonTest.setLayoutParams(discuss_layout_params);
-            relativeLayout.addView(buttonTest, discuss_layout_params);
-//            relativeLayout.addView(buttonTest);
+//            ViewGroup.LayoutParams discuss_layout_params =
+//                    new ViewGroup.LayoutParams(
+//                    		ViewGroup.LayoutParams.WRAP_CONTENT,
+//                    		ViewGroup.LayoutParams.WRAP_CONTENT);
+//            buttonTest = new Button(this);
+//            buttonTest.setText("DISCUSS");
+//            relativeLayout.addView(buttonTest, discuss_layout_params);
             
             // TEST IMAGE BUTTON
 //            ViewGroup.LayoutParams discuss2_layout_params =
@@ -139,31 +151,9 @@ public class Swarm extends Cocos2dxActivity{
 
             // Set framelayout as the content view
 //			setContentView(relativeLayout);
-			
-//			alert = new AlertDialog.Builder(context);
-//			// need to create new input field each time
-//			alertInput = new EditText(context);
-//			
-//			alert.setTitle("Discuss:");
-////			alert.setMessage("Message");
-//			alert.setView(alertInput);
-//
-//			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int whichButton) {
-//			  String value = alertInput.getText().toString();
-//			  	Log.d("Discuss", value);
-//			  }
-//			});
-//
-//			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//			  public void onClick(DialogInterface dialog, int whichButton) {
-//			    // Canceled.
-//			  }
-//			});
-//			
-//			alert.show();
 		}
-		else {
+		else
+		{
 			// include message for user
 			Log.d("activity", "doesn't support gles2.0");
 			finish();
@@ -175,15 +165,94 @@ public class Swarm extends Cocos2dxActivity{
 //		startActivity(intent);
 //	}
 	
+	//========================================================
+	// Buttons
+	//========================================================
+	
+	Button.OnClickListener discussListener = new Button.OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			discussAlert();
+		}
+	};
+	
+	Button.OnClickListener cloudListener = new Button.OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			cloudAlert();
+		}
+	};
+	
+	//========================================================
+	
+	protected void discussAlert ()
+	{
+		alert = new AlertDialog.Builder(context);
+		// need to create new input field each time
+		alertInput = new EditText(context);
+		
+		alert.setTitle("Discuss:");
+//		alert.setMessage("Message");
+		alert.setView(alertInput);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String value = alertInput.getText().toString();
+				Log.d("Swarm->Discuss", value);
+				byte[] discussMsg = value.getBytes();
+				// eventually use this:
+				// char[] discussMsg = value.toCharArray();
+				sand.sendGrain(NAppIDAuk.OC_DISCUSS, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, discussMsg.length, discussMsg );
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				// Canceled.
+		  }
+		});
+		
+		alert.show();
+	}
+	
+	protected void cloudAlert ()
+	{
+		alert = new AlertDialog.Builder(context);
+		// need to create new input field each time
+		alertInput = new EditText(context);
+		
+		alert.setTitle("Cloud:");
+//		alert.setMessage("Message");
+		alert.setView(alertInput);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String value = alertInput.getText().toString();
+				Log.d("Swarm->Discuss", value);
+				byte[] cloudMsg = value.getBytes();
+				sand.sendGrain(NAppIDAuk.OC_CLOUD, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, cloudMsg.length, cloudMsg );
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				// Canceled.
+		  }
+		});
+		
+		alert.show();
+	}
+	
 	 @Override
-	 protected void onPause() {
+	 protected void onPause()
+	 {
 	     super.onPause();
 	     mGLView.onPause();
 	 }
 
 	 @Override
-	 protected void onResume() {
-		 
+	 protected void onResume()
+	 {
 	     super.onResume();
 	     mGLView.onResume();
 	 }
