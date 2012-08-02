@@ -144,13 +144,18 @@
             }
             
             
-            else if(inGrain->command == SEND_PROMPT) {
+            else if(inGrain->command == SEND_PROMPT_ON) {
                 // xxx
                 prompt = inGrain->str;
                 promptFadeInVal = 0.05;
                 promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
                                     @selector(fadeInPrompt) userInfo:nil repeats:YES];
                 
+            }
+            else if(inGrain->command == SEND_PROMPT_OFF) {
+                // xxx
+                promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
+
             }
             
             
@@ -487,10 +492,10 @@
             CLog("deleting promptFadeInTimer\n");
             
         }
-        CLog("fadeInPrompt calling -> fadeOutPrompt %2.2f\n",promptFadeOutTick);
+    //    CLog("fadeInPrompt calling -> fadeOutPrompt %2.2f\n",promptFadeOutTick);
         
         promptFadeOutTick = 1;
-        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
+//        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
         promptAlpha = 1;
     }
     [self setNeedsDisplay];

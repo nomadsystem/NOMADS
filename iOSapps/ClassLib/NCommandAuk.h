@@ -38,7 +38,8 @@ typedef enum {
     SET_NOTE_STATUS = 23,
     SET_NOTE_VOLUME = 24,
     
-    SEND_PROMPT = 30,
+    SEND_PROMPT_ON = 30,
+    SEND_PROMPT_OFF = 31,
     
     
     
