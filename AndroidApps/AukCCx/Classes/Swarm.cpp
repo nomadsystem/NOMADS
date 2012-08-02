@@ -65,12 +65,12 @@ bool Swarm::init()
                                         this,
 //                                        menu_selector(Swarm::goToJoin) );
                                         menu_selector(Swarm::menuCloseCallback) );
-    pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
+    pCloseItem->setPosition( ccp(size.width - 20, 20) );
 
     // create menu, it's an autorelease object
     CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
     pMenu->setPosition( CCPointZero );
-    this->addChild(pMenu, 1);
+    this->addChild(pMenu, 2);
 
     // Load sprite images
     CCTexture2D::PVRImagesHavePremultipliedAlpha(true);
@@ -85,7 +85,19 @@ bool Swarm::init()
 	cursorSprite->setPosition( ccp(size.width/2, size.height/2) );
 
 	sceneSpriteBatchNode->addChild(cursorSprite, kCursorSpriteZValue, kCursorSpriteTagValue);
-	this->addChild(sceneSpriteBatchNode);
+	this->addChild(sceneSpriteBatchNode, 1);
+
+	// Load background image
+	background = CCSprite::spriteWithFile("blue_ice_bg_320_480.png");
+	CCSize backSize = background->getContentSize();
+	background->setScaleX( (float)size.width / (float)backSize.width );
+	background->setScaleY( (float)size.height / (float)backSize.height );
+	background->setAnchorPoint( ccp( 0, 0));
+	background->setPosition( ccp(0, 0));
+	background->setBlendFunc( (ccBlendFunc){GL_ONE, GL_ZERO});
+//    CCLog("Swarm.cpp->backSize.width = %f", backSize.width);
+	this->addChild(background, 0);
+
 //    this->scheduleUpdate();
 
     return true;

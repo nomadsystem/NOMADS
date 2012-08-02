@@ -26,6 +26,7 @@ class Swarm : public cocos2d::CCLayer
 	void loadAudio();
 public:
 	Cursor* cursorSprite;
+	CCSprite* background;
 
     // there's no 'id' in cpp, so return the class pointer
     static cocos2d::CCScene* scene();
