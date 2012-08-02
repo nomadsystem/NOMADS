@@ -9,16 +9,17 @@
 #ifndef AUK_VIEWCONTROLLER
 #define AUK_VIEWCONTROLLER
 
+#import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
 #import "NSand.h"
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
 
-@interface AukViewController : UIViewController <SandDelegate>
+@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate>
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
-    
+        
     __weak UILabel *connectionLabel;
     UIView *settingsView;
     UIView *aukView;
@@ -29,6 +30,11 @@
     __weak UINavigationItem *settingsNavTitle;
     __weak UINavigationBar *settingsNavBar;
     __weak UIToolbar *aukToolbar;
+    AVAudioPlayer *audioPlayer;
+    AVAudioSession *session;
+    int fileNum;
+    float noteVolume;
+    Boolean noteIsEnabled;
 }
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsNavBackButton;
@@ -60,6 +66,11 @@
 - (IBAction)leaveNomadsButton:(id)sender;
 - (IBAction)joinNomadsButton:(id)sender;
 - (IBAction)settingsNavBackButton:(id)sender;
+
+- (IBAction)backgroundTapDiscuss:(id)sender; //Tap to resign text entry
+- (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
+
+- (void)playNote;
 
 @end
 #endif

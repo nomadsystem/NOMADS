@@ -62,12 +62,18 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 	JSlider cloudAlpha;
 	JSlider pointerAlpha;
 	JSlider dropletLevel;
+	JSlider noteLevel;
 	JSlider mainVolLevel;
 
 	JToggleButton discussCntrl;
 	JToggleButton cloudCntrl;
 	JToggleButton pointerCntrl;
 	JToggleButton dropletCntrl;
+	JToggleButton noteCntrl;
+
+	JLabel promptLabel;
+	JToggleButton promptButton;
+	JTextField promptTextField;
 
 
 	JButton discussClear, cloudClear;  //, pointerClear;
@@ -109,6 +115,12 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		dropletWrapper.add(dropletLabel);
 
+		JPanel noteWrapper = new JPanel();
+		noteWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
+		JLabel noteLabel = new JLabel("Note");
+		noteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		noteWrapper.add(noteLabel);
+
 		JPanel mainVolWrapper = new JPanel();
 		mainVolWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
 		JLabel mainVolLabel = new JLabel("MainVol");
@@ -149,10 +161,16 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletCntrl.addItemListener(buttonListener);
 		dropletCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+		noteCntrl = new JToggleButton("Notes");
+		//		dropletCntrl.addChangeListener(buttonListener);
+		noteCntrl.addItemListener(buttonListener);
+		noteCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 		discussWrapper.setLayout(new BoxLayout(discussWrapper, BoxLayout.Y_AXIS));
 		cloudWrapper.setLayout(new BoxLayout(cloudWrapper, BoxLayout.Y_AXIS));
 		pointerWrapper.setLayout(new BoxLayout(pointerWrapper,BoxLayout.Y_AXIS));
 		dropletWrapper.setLayout(new BoxLayout(dropletWrapper,BoxLayout.Y_AXIS));
+		noteWrapper.setLayout(new BoxLayout(noteWrapper,BoxLayout.Y_AXIS));
 		mainVolWrapper.setLayout(new BoxLayout(mainVolWrapper,BoxLayout.Y_AXIS));
 
 		discussAlpha = new JSlider(JSlider.VERTICAL,0,255, 180);
@@ -199,6 +217,16 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletWrapper.add(dropletLevel);
 		dropletWrapper.add(dropletCntrl);
 
+		noteLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
+		noteLevel.addChangeListener(sliderListener);
+
+		noteLevel.setMajorTickSpacing(10);
+		noteLevel.setPaintTicks(true);
+		noteLevel.setPaintLabels(true);
+
+		noteWrapper.add(noteLevel);
+		noteWrapper.add(noteCntrl);
+
 		mainVolLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
 		mainVolLevel.addChangeListener(sliderListener);
 
@@ -207,14 +235,40 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		mainVolLevel.setPaintLabels(true);
 		mainVolWrapper.add(mainVolLevel);
 
+		//Prompt init
+		JPanel promptLabelPanel = new JPanel();
+		promptLabel = new JLabel("NOMADS Prompt", JLabel.CENTER);
+		promptLabelPanel.add(promptLabel);
+		promptLabelPanel.setMaximumSize(new Dimension((int)(width * 0.1), height));
+
+		JPanel promptTextAndButton = new JPanel();
+		promptTextAndButton.setLayout(new GridLayout(1,2));
+		promptTextField = new JTextField("",40);
+		promptTextField.addKeyListener(this);
+		promptButton = new JToggleButton("Prompt");
+		promptButton.setMaximumSize(new Dimension(20,10));
+		promptButton.addItemListener(buttonListener);
+		promptTextAndButton.add(promptTextField);
+		promptTextAndButton.add(promptButton);
+		//	promptTextAndButton.setMaximumSize(new Dimension(width, height));
+
+		JPanel promptWrapper = new JPanel(new GridLayout(2,1));
+		promptWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
+		promptWrapper.setMaximumSize(new Dimension((int)(width * 0.5), height));
+		promptWrapper.add(promptLabelPanel);
+		promptWrapper.add(promptTextAndButton);
+
 		tPane.add(discussWrapper);
 		tPane.add(cloudWrapper);
 		tPane.add(pointerWrapper);
 		tPane.add(dropletWrapper);
+		tPane.add(noteWrapper);
 		tPane.add(mainVolWrapper);
 
 		tPane.setOpaque(false);
+		pane.add(promptWrapper);
 		pane.add(tPane);
+
 
 	}
 
@@ -295,58 +349,78 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		if (incAppID == NAppID.SERVER) {
 
-		    // checked = new JLabel("CHECKED: 0");
-		    // cleaned = new JLabel("CLEANED: 0");
-		    // counted = new JLabel("CLIENTS: 0");
-		    if (incCmd == NCommand.SET_DISCUSS_STATUS) {
-			if (grain.bArray[0] == 0) {
-			    discussCntrl.getModel().setSelected(false);
-			    NGlobals.cPrint("ACP: Discuss disable");
+			// checked = new JLabel("CHECKED: 0");
+			// cleaned = new JLabel("CLEANED: 0");
+			// counted = new JLabel("CLIENTS: 0");
+			if (incCmd == NCommand.SET_DISCUSS_STATUS) {
+				if (grain.bArray[0] == 0) {
+					discussCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: Discuss disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					discussCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: Discuss enable");
+				}
 			}
-			else if (grain.bArray[0] == 1) {
-			    discussCntrl.getModel().setSelected(true);
-			    NGlobals.cPrint("ACP: Discuss enable");
-			}
-		    }
 
-		    if (incCmd == NCommand.SET_CLOUD_STATUS) {
-			if (grain.bArray[0] == 0) {
-			    cloudCntrl.getModel().setSelected(false);
-			    NGlobals.cPrint("ACP: Cloud Disable");
+			if (incCmd == NCommand.SET_CLOUD_STATUS) {
+				if (grain.bArray[0] == 0) {
+					cloudCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: Cloud Disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					cloudCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: Cloud Enable");
+				}
 			}
-			else if (grain.bArray[0] == 1) {
-			    cloudCntrl.getModel().setSelected(true);
-			    NGlobals.cPrint("ACP: Cloud Enable");
-			}
-		    }
 
-		    if (incCmd == NCommand.SET_POINTER_STATUS) {
-			if (grain.bArray[0] == 0) {
-			    pointerCntrl.getModel().setSelected(false);
-			    NGlobals.cPrint("ACP: Pointer Disable");
+			if (incCmd == NCommand.SET_POINTER_STATUS) {
+				if (grain.bArray[0] == 0) {
+					pointerCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: Pointer Disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					pointerCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: Pointer Enable");
+				}
 			}
-			else if (grain.bArray[0] == 1) {
-			    pointerCntrl.getModel().setSelected(true);
-			    NGlobals.cPrint("ACP: Pointer Enable");
-			}
-		    }
 
 
-		    if (incCmd == NCommand.SET_DROPLET_STATUS) {
-			if (grain.bArray[0] == 0) {
-			    dropletCntrl.getModel().setSelected(false);
-			    NGlobals.cPrint("ACP: Pointer disable");
+			if (incCmd == NCommand.SET_DROPLET_STATUS) {
+				if (grain.bArray[0] == 0) {
+					dropletCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: Droplet disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					dropletCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: Droplet enable");
+				}
 			}
-			else if (grain.bArray[0] == 1) {
-			    dropletCntrl.getModel().setSelected(true);
-			    NGlobals.cPrint("ACP: Pointer enable");
+			if (incCmd == NCommand.SET_NOTE_STATUS) {
+				if (grain.bArray[0] == 0) {
+					noteCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: Note disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					noteCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: Note enable");
+				}
 			}
-		    }
 
 		}
 
+		if (incAppID == NAppID.CONDUCTOR_PANEL) {
+			if (incCmd == NCommand.SEND_PROMPT_ON) {
+				String prompt = new String(grain.bArray);
+				promptLabel.setText(prompt);
+			}
+			if (incCmd == NCommand.SEND_PROMPT_OFF) {
+				promptLabel.setText("");
+			}
+		}
+
 		NGlobals.cPrint("-------------------------------------------------[OC]\n");
-		
+
 	}
 
 	// ------------------------------------------------------------------------------------------------
@@ -368,11 +442,12 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 				d[0] = 0; //0 clears display
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 			}
-			if (source == cloudClear) {
+			else if (source == cloudClear) {
 				NGlobals.cPrint("ACP: Action:  cloudClear");
 				d[0] = 0; //0 clears display
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
 			}
+
 			//			if (source == pointerClear) {
 			//				NGlobals.cPrint("Action:  pointerClear");
 			//				String tString = " "; 
@@ -445,11 +520,40 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 					NGlobals.cPrint("ACP: dropletCntrl:  OFF"); 
 				}
 			}
+			else if (abstractButton == noteCntrl) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					d[0] = 1;
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: noteCntrl:  ON"); 
+				} 
+				else {
+					d[0] = 0;
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: noteCntrl:  OFF"); 
+				}
+			}
+			else if (abstractButton == promptButton) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					String tString = promptTextField.getText();
+					byte[] tStringAsBytes = tString.getBytes();
+					int tLen = tString.length();
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+					NGlobals.cPrint("ACP: Prompt " + tString + " sent"); 
+					promptTextField.setEnabled(false);
+				}
+				else {
+					d[0] = 0;
+					promptTextField.setText("");
+					promptTextField.setEnabled(true);
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SEND_PROMPT_OFF, (byte)NDataType.UINT8, 1, d);
+					NGlobals.cPrint("ACP: Prompt OFF");
+				}
+			}
 		}
 	};
 
 	//****STK 7/24/12 Moved buttons to itemlistener, code below to be deleted once everything is tested...
-	
+
 	//ChangeListener buttonListener = new ChangeListener() {
 	//	public void stateChanged(ChangeEvent changeEvent) {
 	//		AbstractButton abstractButton = (AbstractButton) changeEvent.getSource();
@@ -545,7 +649,11 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 				d[0] = (int)source.getValue();
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.INT32, 1, d );
 				NGlobals.cPrint("ACP: dropletLevel:" + d[0]); 
-
+			}
+			if (source == noteLevel) {
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: noteLevel:" + d[0]); 
 			}
 			if (source == mainVolLevel) {
 				d[0] = (int)source.getValue();
@@ -565,48 +673,50 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		int v,t,k;
 		k = e.getKeyCode();
-		NGlobals.cPrint("ACP: key: " + k);
-		if (k == 103) { 
-			v = discussAlpha.getValue();
-			discussAlpha.setValue(v+3);
-		}
-		else if (k == 100) { 
-			v = discussAlpha.getValue();
-			discussAlpha.setValue(v-3);
-		}
-		else if (k == 97) { 				
-			discussCntrl.getModel().setArmed(true);
-			discussCntrl.getModel().setSelected(true);
-			discussCntrl.getModel().setPressed(true);
-		}
-
-		else if (k == 104) { 
-			v = cloudAlpha.getValue();
-			cloudAlpha.setValue(v+3);
-		}
-		else if (k == 101) { 
-			v = cloudAlpha.getValue();
-			cloudAlpha.setValue(v-3);
-		}
-		else if (k == 98) { 
-			cloudCntrl.getModel().setPressed(true);
-			cloudCntrl.getModel().setSelected(true);
-			cloudCntrl.getModel().setPressed(true);
-		}
-
-		else if (k == 105) { 
-			v = pointerAlpha.getValue();
-			pointerAlpha.setValue(v+3);
-		}
-		else if (k == 102) { 
-			v = pointerAlpha.getValue();
-			pointerAlpha.setValue(v-3);
-		}
-		else if (k == 99) { 
-			pointerCntrl.getModel().setPressed(true);
-			pointerCntrl.getModel().setSelected(true);
-			pointerCntrl.getModel().setPressed(true);
-		}
+		//	NGlobals.cPrint("ACP: key: " + k);
+		
+		//****STK 7/31/12 Disabled other key commands, as they could be triggered from text entered in text field
+		//		if (k == 103) { 
+		//			v = discussAlpha.getValue();
+		//			discussAlpha.setValue(v+3);
+		//		}
+		//		else if (k == 100) { 
+		//			v = discussAlpha.getValue();
+		//			discussAlpha.setValue(v-3);
+		//		}
+		//		else if (k == 97) { 				
+		//			discussCntrl.getModel().setArmed(true);
+		//			discussCntrl.getModel().setSelected(true);
+		//			discussCntrl.getModel().setPressed(true);
+		//		}
+		//
+		//		else if (k == 104) { 
+		//			v = cloudAlpha.getValue();
+		//			cloudAlpha.setValue(v+3);
+		//		}
+		//		else if (k == 101) { 
+		//			v = cloudAlpha.getValue();
+		//			cloudAlpha.setValue(v-3);
+		//		}
+		//		else if (k == 98) { 
+		//			cloudCntrl.getModel().setPressed(true);
+		//			cloudCntrl.getModel().setSelected(true);
+		//			cloudCntrl.getModel().setPressed(true);
+		//		}
+		//
+		//		else if (k == 105) { 
+		//			v = pointerAlpha.getValue();
+		//			pointerAlpha.setValue(v+3);
+		//		}
+		//		else if (k == 102) { 
+		//			v = pointerAlpha.getValue();
+		//			pointerAlpha.setValue(v-3);
+		//		}
+		//		else if (k == 99) { 
+		//			pointerCntrl.getModel().setPressed(true);
+		//			pointerCntrl.getModel().setSelected(true);
+		//			pointerCntrl.getModel().setPressed(true);
+		//		}
 	}
 
 	public void keyReleased(KeyEvent e){
