@@ -411,11 +411,13 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		if (incAppID == NAppID.CONDUCTOR_PANEL) {
 			if (incCmd == NCommand.SEND_PROMPT_ON) {
+				NGlobals.cPrint("ACP: SEND_PROMPT_ON");
 				String prompt = new String(grain.bArray);
 				promptLabel.setText(prompt);
 			}
 			if (incCmd == NCommand.SEND_PROMPT_OFF) {
 				promptLabel.setText("");
+				NGlobals.cPrint("ACP: SEND_PROMPT_OFF");
 			}
 		}
 
