@@ -42,14 +42,19 @@ import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 public class Swarm extends Cocos2dxActivity{
 	private Cocos2dxGLSurfaceView mGLView;
 	NSand sand;
 	NGrain grain;
 	
+	Button buttonTest;
+	ImageButton imgButton;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
@@ -57,7 +62,7 @@ public class Swarm extends Cocos2dxActivity{
 	public void parseGrain(NGrain _grain) {
 //		grain = _grain;
 //
-		Log.i("Swarm", "parseGrain()");
+		Log.i("Swarm", "parseGrain() invoked");
 //		String msg = new String(grain.bArray);
 //		Log.i("Swarm", msg);
 //
@@ -68,63 +73,95 @@ public class Swarm extends Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
+		// get NSand instance from Join
+		sand = Join.join.sand;
+		
+		// set sandTarget to Swarm activity instance
+		Join.join.setSandTarget(this);
+		
 		if (detectOpenGLES20()) {
 			// get the packageName,it's used to set the resource path
 			String packageName = getApplication().getPackageName();
 			super.setPackageName(packageName);
 			
-            // FrameLayout
+            // RelativeLayout
             ViewGroup.LayoutParams framelayout_params =
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                           ViewGroup.LayoutParams.FILL_PARENT);
-            FrameLayout framelayout = new FrameLayout(this);
-            framelayout.setLayoutParams(framelayout_params);
-
-            // Cocos2dxEditText layout
-            ViewGroup.LayoutParams edittext_layout_params =
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                           ViewGroup.LayoutParams.WRAP_CONTENT);
-            Cocos2dxEditText edittext = new Cocos2dxEditText(this);
-            edittext.setLayoutParams(edittext_layout_params);
-
-            // ...add to FrameLayout
-            framelayout.addView(edittext);
+                new ViewGroup.LayoutParams(
+                		ViewGroup.LayoutParams.FILL_PARENT,
+                		ViewGroup.LayoutParams.FILL_PARENT);
+//            RelativeLayout relativeLayout = new RelativeLayout(this);
+            setContentView(R.layout.swarm);
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout);
+//            relativeLayout.setLayoutParams(framelayout_params);
+//
+//            // Cocos2dxEditText layout
+//            ViewGroup.LayoutParams edittext_layout_params =
+//                new ViewGroup.LayoutParams(
+//                		ViewGroup.LayoutParams.FILL_PARENT, 
+//                		ViewGroup.LayoutParams.WRAP_CONTENT);
+//            Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+//            edittext.setLayoutParams(edittext_layout_params);
+//
+//            // ...add to FrameLayout
+//            relativeLayout.addView(edittext);
 
             // Cocos2dxGLSurfaceView
 	        mGLView = new Cocos2dxGLSurfaceView(this);
 
             // ...add to FrameLayout
-            framelayout.addView(mGLView);
+	        relativeLayout.addView(mGLView, 0);
 
 	        mGLView.setEGLContextClientVersion(2);
 	        mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
-            mGLView.setTextField(edittext);
+//            mGLView.setTextField(edittext);
+            
+            // TEST BUTTON
+            ViewGroup.LayoutParams discuss_layout_params =
+                    new ViewGroup.LayoutParams(
+                    		ViewGroup.LayoutParams.WRAP_CONTENT,
+                    		ViewGroup.LayoutParams.WRAP_CONTENT);
+            buttonTest = new Button(this);
+            buttonTest.setText("DISCUSS");
+//            buttonTest = (Button)findViewById(R.id.button1);
+//            buttonTest.setLayoutParams(discuss_layout_params);
+            relativeLayout.addView(buttonTest, discuss_layout_params);
+//            relativeLayout.addView(buttonTest);
+            
+            // TEST IMAGE BUTTON
+//            ViewGroup.LayoutParams discuss2_layout_params =
+//                    new ViewGroup.LayoutParams(
+//                    		ViewGroup.LayoutParams.WRAP_CONTENT,
+//                    		ViewGroup.LayoutParams.WRAP_CONTENT);
+//            imgButton = new ImageButton(this);
+//            imgButton.setBackgroundResource(R.drawable.ic_tab_test_grey);
+//            imgButton.setLayoutParams(discuss2_layout_params);
+//            relativeLayout.addView(imgButton);
 
             // Set framelayout as the content view
-			setContentView(framelayout);
+//			setContentView(relativeLayout);
 			
-			alert = new AlertDialog.Builder(context);
-			// need to create new input field each time
-			alertInput = new EditText(context);
-			
-			alert.setTitle("Discuss:");
-//						alert.setMessage("Message");
-			alert.setView(alertInput);
-
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-			  String value = alertInput.getText().toString();
-			  	Log.d("Discuss", value);
-			  }
-			});
-
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			  public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
-			  }
-			});
-			
-			alert.show();
+//			alert = new AlertDialog.Builder(context);
+//			// need to create new input field each time
+//			alertInput = new EditText(context);
+//			
+//			alert.setTitle("Discuss:");
+////			alert.setMessage("Message");
+//			alert.setView(alertInput);
+//
+//			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int whichButton) {
+//			  String value = alertInput.getText().toString();
+//			  	Log.d("Discuss", value);
+//			  }
+//			});
+//
+//			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//			  public void onClick(DialogInterface dialog, int whichButton) {
+//			    // Canceled.
+//			  }
+//			});
+//			
+//			alert.show();
 		}
 		else {
 			// include message for user

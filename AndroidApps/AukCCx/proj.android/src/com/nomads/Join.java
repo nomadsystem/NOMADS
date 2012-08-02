@@ -1,7 +1,5 @@
 package com.nomads;
 
-//import com.nomads.TabbedBindle.NomadsAppThread;
-
 import nomads.v210.*;
 
 import android.app.Activity;
@@ -14,11 +12,12 @@ import android.widget.TextView;
 import android.widget.Button;
 
 public class Join extends Activity {
+	public static Join join;
 	Activity currentTarget;
-//	Join join;
+	
 	NSand sand;
 	private NGrain grain;
-//	private NomadsAppThread nThread;
+	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	
 	TextView joinStatus;
@@ -56,101 +55,104 @@ public class Join extends Activity {
 		registerByte[0] = 1;
 		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
 		
+		
 		// Switch to Swarm activity
 		Intent intent = new Intent(getApplicationContext(), Swarm.class);
 		startActivity(intent);
 	}
 	
-//	private class NomadsAppThread extends Thread {
-//		Join client; //Replace with current class name
-//		boolean active = true;
-//
-//		public NomadsAppThread(Join _client) {
-//			client = _client;
-//		}
-//		
-//		public void kill() {
-//			active = false;
-//			Log.i("Join > NomadsAppThread", "active = false");
-//		}
-//		
-//		public void run() {			
-////			NGlobals.lPrint("NomadsAppThread -> run()");
-//			while (active) {
-//				try{
-//					grain = sand.getGrain();
-//					grain.print(); //prints grain data to console
-//					handle.post(updateUI);
-//				}
-//				catch (NullPointerException npe) {
-//					Log.i("Join > NomadsAppThread", "NullPointerException");
-//				}
-//			}
-//		}
-//		
-//		final Runnable updateUI = new Runnable() {
-//	    	@Override
-//	        public void run() {
-////				client.passGrain();
-//	        }
-//	    };
-//	}
-//	
-//	public synchronized void startThread() {
-//		if(nThread == null){
-//			nThread = new NomadsAppThread(this);
-//			nThread.start();
-//			Log.i("Join", "Thread started.");
-//		}
-//		else{
-//			Log.i("Join", "startThread: thread != null.");
-//		}
-//	}
-//
-//	public synchronized void stopThread() {
-//		if(nThread != null){
-//			nThread.kill();
-//			Thread moribund = nThread;
-//			nThread = null;
-//			moribund.interrupt();
-//			Log.i("Join", "NomadsAppThread stopped.");
-//			sand.close();
-//			Log.i("Join", "sand.close()");
-//		}
-//	}
-//	
-//	private void passGrain() {
-//		if (currentTarget == this) {
-//			Log.i("Join", "parseGrain()");
-////			String msg = new String(grain.bArray);
-////			Log.i("Join", msg);
-//
-//			if (grain != null)
-//				grain = null;
+	private class NomadsAppThread extends Thread {
+		Join client; //Replace with current class name
+		boolean active = true;
+
+		public NomadsAppThread(Join _client) {
+			client = _client;
+		}
+		
+		public void kill() {
+			active = false;
+			Log.i("Join > NomadsAppThread", "active = false");
+		}
+		
+		public void run() {			
+//			NGlobals.lPrint("NomadsAppThread -> run()");
+			while (active) {
+				try{
+					grain = sand.getGrain();
+					grain.print(); //prints grain data to console
+					handle.post(updateUI);
+				}
+				catch (NullPointerException npe) {
+					Log.i("Join > NomadsAppThread", "NullPointerException");
+				}
+			}
+		}
+		
+		final Runnable updateUI = new Runnable() {
+	    	@Override
+	        public void run() {
+				client.passGrain();
+	        }
+	    };
+	}
+	
+	public synchronized void startThread() {
+		if(nThread == null){
+			nThread = new NomadsAppThread(this);
+			nThread.start();
+			Log.i("Join", "Thread started.");
+		}
+		else{
+			Log.i("Join", "startThread: thread != null.");
+		}
+	}
+
+	public synchronized void stopThread() {
+		if(nThread != null){
+			nThread.kill();
+			Thread moribund = nThread;
+			nThread = null;
+			moribund.interrupt();
+			Log.i("Join", "NomadsAppThread stopped.");
+			sand.close();
+			Log.i("Join", "sand.close()");
+		}
+	}
+	
+	private void passGrain() {
+		if (currentTarget == this) {
+			Log.i("Join", "parseGrain()");
+//			String msg = new String(grain.bArray);
+//			Log.i("Join", msg);
+
+			if (grain != null)
+				grain = null;
+        }
+//		else if (currentTarget instanceof Discuss) {
+//            ((Discuss) currentTarget).parseGrain(grain);
 //        }
-////		else if (currentTarget instanceof Discuss) {
-////            ((Discuss) currentTarget).parseGrain(grain);
-////        }
-////        else if (currentTarget instanceof Cloud) { 
-////            ((Cloud) currentTarget).parseGrain(grain);
-////        }
-//        else if (currentTarget instanceof Swarm) {
-//        	((Swarm) currentTarget).parseGrain(grain);
+//        else if (currentTarget instanceof Cloud) { 
+//            ((Cloud) currentTarget).parseGrain(grain);
 //        }
-//        else {
-//        	Log.i("Join", "sendGrain() error: not a valid NSand target");
-//        }
-//	}
-//	
-//	public void setSandTarget(Activity _target) {
-//		currentTarget = _target;
-//		Log.i("Join", "setSandTarget()");
-//	}
+        else if (currentTarget instanceof Swarm) {
+        	((Swarm) currentTarget).parseGrain(grain);
+        }
+        else {
+        	Log.i("Join", "sendGrain() error: not a valid NSand target");
+        }
+	}
+	
+	public void setSandTarget(Activity _target) {
+		currentTarget = _target;
+		Log.i("Join", "setSandTarget()");
+	}
 	
 	//========================================================
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
+		// set static join
+		join = this;
 		// set NSand target to this
 		currentTarget = this;
 		
@@ -175,9 +177,9 @@ public class Join extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-//			byte[] registerByte = new byte[1];
-//			registerByte[0] = 1;
-//			sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
+			String test = "HI";
+			byte[] testMessage = test.getBytes();
+			sand.sendGrain(NAppIDAuk.OC_DISCUSS, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, 2, testMessage );
 		}
 	};
 	
