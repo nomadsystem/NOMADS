@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "Reachability.h"
 #import "AukViewController.h"
 #import "SwarmDrawView.h"
 #import "NSand.h"
@@ -19,7 +20,9 @@
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
 
+@synthesize infoViewNOMADS;
 @synthesize settingsNavBackButton;
+@synthesize settingsNavBarMoreInfoButton;
 @synthesize joinNomadsButton;
 @synthesize leaveNomadsButton;
 @synthesize settingsNavTitle;
@@ -44,7 +47,6 @@
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; //Sets as delegate to BindleAppDelegate
         
         [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
-        
         [self.view bringSubviewToFront:aukView]; //Load the aukView
     }
     return self;
@@ -61,15 +63,32 @@
     //Inits settingsNavBar
     settingsNavBar.hidden = NO;
     
+    
     //Init loginScreen
     [leaveNomadsButton setHidden:NO];
-    connectionLabel.text = @"Connected to NOMADS!";
+    connectionLabel.text = @"Not Connected!";
+    [joinTextField setHidden:YES];
     
     //Initialize backgrounds 
     [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-    
+    [[self aukToolbar] setTranslucent:YES];
+    [aukBarButtonDiscuss setEnabled:false];
+    [aukBarButtonCloud setEnabled:false];
     [[self swarmView] setBackgroundColor:[UIColor whiteColor]];
+    
+    //Set up our Audio Session
+    NSError *activationError = nil;
+    session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:&activationError];
+    NSError *setCategoryError = nil;
+    //This category should prevent our audio from being interrupted by incoming calls, etc.
+    [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (setCategoryError) { 
+        CLog("Error initializing Audio Session Category");
+    }
+    fileNum = 1; //Selects AukNote file number
+    noteIsEnabled = NO;
     
     //Initialization for size of SwarmDraw View
     CGRect screenRect = [swarmView bounds];
@@ -90,38 +109,59 @@
     
     [swarmView addSubview:[[SwarmDrawView alloc] initWithFrame:myCGRect]];    
     
+    [self.view bringSubviewToFront:settingsView];
+
     
-    //Initialize toolbar in Auk view
-    [[self aukToolbar] setTranslucent:YES];
-    [appDelegate->appSand connect];  
-    
-    Byte c[1];
-    c[0] = 1;
-    
-    [aukBarButtonDiscuss setEnabled:false];
-    [aukBarButtonCloud setEnabled:false];
-    
-    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-                                          Command:REGISTER 
-                                         DataType:UINT8 
-                                          DataLen:1 
-                                            Uint8:c];
-    
-    //Set up our Audio Session
-    NSError *activationError = nil;
-    session = [AVAudioSession sharedInstance];
-    [session setActive:YES error:&activationError];
-    NSError *setCategoryError = nil;
-    
-    //This category should prevent our audio from being interrupted by incoming calls, etc.
-    [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (setCategoryError) { 
-        CLog("Error initializing Audio Session Category");
+    if ([self internetConnectionStatus]) {
+        
+        //Initialize toolbar in Auk view
+        
+        [appDelegate->appSand connect];  
+        connectionLabel.text = @"Connected to NOMADS!";
+        
+        Byte c[1];
+        c[0] = 1;
+        
+        //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+        [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                              Command:REGISTER 
+                                             DataType:UINT8 
+                                              DataLen:1 
+                                                Uint8:c];
+        
     }
-    fileNum = 1; //Selects AukNote file number
-    noteIsEnabled = NO;
+    else {
+        CLog("No internet connection");
+        [joinNomadsButton setHidden:NO];
+        [leaveNomadsButton setHidden:YES];
+        [self.view bringSubviewToFront:settingsView];
+    }
     // Do any additional setup after loading the view from its nib.
+}
+
+-(BOOL)internetConnectionStatus {
+    //  Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus internetStatus = [reachability currentReachabilityStatus];
+    
+    if(internetStatus == NotReachable) {
+        CLog("internet status == NotReachable");
+        UIAlertView *errorView;
+        
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+        return NO;
+
+    }
+    else {
+        return YES;
+    }
+    
 }
 
 // input data function ============================================
@@ -152,9 +192,9 @@
                 
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
-           
+            
             else if (inGrain->command == SET_NOTE_VOLUME) {
-            //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
+                //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
                 noteVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
                 audioPlayer.volume = noteVolume;
             }
@@ -205,6 +245,17 @@
 - (IBAction)settingsNavBackButton:(id)sender {
     [self.view bringSubviewToFront:aukView];
 }
+
+- (IBAction)settingsNavMoreInfoButton:(id)sender {
+    NSString *infoURL = @"http://nomads.music.virginia.edu";
+    NSURL *url = [NSURL URLWithString:infoURL];
+    NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
+    
+   
+    [self.view bringSubviewToFront:infoViewNOMADS];
+    [self.infoViewNOMADS loadRequest:myLoadRequest];
+}
+
 
 - (IBAction)leaveNomadsButton:(id)sender {
     connectionLabel.text = @"Leaving NOMADS (but not really)";
@@ -421,6 +472,9 @@
     [self setSettingsNavTitle:nil];
     [self setSettingsNavBackButton:nil];
     [self setSwarmView:nil];
+    [self setInfoViewNOMADS:nil];
+    settingsNavMoreInfoButton = nil;
+    [self setSettingsNavBarMoreInfoButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

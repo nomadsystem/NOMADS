@@ -38,7 +38,7 @@
 
 //NDataType
 typedef enum {
-    NO_DATA = 0,
+    NODATA = 0,
     CHAR = 1,
     UINT8 = 2,
     INT32 = 3,
