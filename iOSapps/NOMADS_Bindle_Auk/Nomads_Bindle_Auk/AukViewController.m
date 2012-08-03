@@ -57,10 +57,36 @@
 {
     [super viewDidLoad];
 
-    
+    //Handles first check of internet communcation status
     if (![self internetConnectionStatus]) {
             CLog("No internet connection");
     }
+    
+    
+    //Init handling of network communications errors
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+    
+    Reachability * reach = [Reachability reachabilityForInternetConnection];
+    
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says Reachable");
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says UN-Reachable");
+        });
+    };
+    
+    [reach startNotifier];
+    //--END init handle network communcation errors
     
     
     //Hides our "hidden" text fields for discuss and cloud
@@ -140,6 +166,29 @@
     
     
     // Do any additional setup after loading the view from its nib.
+}
+
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    Reachability * reach = [note object];
+    
+    if([reach isReachable])
+    {
+        CLog(@"Notification Says Reachable"); 
+    }
+    else
+    {
+        CLog(@"Notification Says UnReachable");
+        UIAlertView *errorView;
+        
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+    }
 }
 
 -(BOOL)internetConnectionStatus {
