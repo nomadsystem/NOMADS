@@ -230,6 +230,23 @@
     }
 }
 
+- (void)networkConnectionError:(NSString *)ErrStr
+{
+    
+    CLog("internet status == NotReachable");
+    UIAlertView *errorView;
+    
+    errorView = [[UIAlertView alloc]
+                 initWithTitle: NSLocalizedString(ErrStr,ErrStr)
+                 message: NSLocalizedString(ErrStr,ErrStr)
+                 delegate: self
+                 cancelButtonTitle: NSLocalizedString(@"Close", @"SAND Network error") otherButtonTitles: nil];
+    
+    [errorView show];
+
+}
+
+
 // input data function ============================================
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
