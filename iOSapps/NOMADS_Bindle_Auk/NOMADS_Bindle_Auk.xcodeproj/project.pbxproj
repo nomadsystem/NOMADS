@@ -32,7 +32,7 @@
 		F91C781915B72A6A00C71BB1 /* AukViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C781715B72A6A00C71BB1 /* AukViewController.m */; };
 		F91C781A15B72A6A00C71BB1 /* AukViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C781815B72A6A00C71BB1 /* AukViewController.xib */; };
 		F9824CEB15CADD24004E86FD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9824CE815CADD08004E86FD /* SystemConfiguration.framework */; };
-		F9DCBBE515CC6CDC00E32F03 /* auklogo_57.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */; };
+		F9DCBBEF15CC71FD00E32F03 /* auklogo_57.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */; };
 		F9F2526F15CC231400A975FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F2526E15CC231400A975FA /* Reachability.m */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +47,7 @@
 		0BBB630215C4B069006CFEAB /* cloud_30_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud_30_30.png; sourceTree = SOURCE_ROOT; };
 		F9139F1B15C1B5330093FA29 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F9139F1D15C1B5D10093FA29 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = NOMADS_Bindle_Auk/sounds; sourceTree = "<group>"; };
-		F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle_Auk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F91C77B315B70D0200C71BB1 /* Auksalaq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auksalaq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91C77B715B70D0200C71BB1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F91C77B915B70D0200C71BB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -118,7 +118,7 @@
 		F91C77B415B70D0200C71BB1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */,
+				F91C77B315B70D0200C71BB1 /* Auksalaq.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,7 +182,7 @@
 			);
 			name = NOMADS_Bindle_Auk;
 			productName = NOMADS_Bindle_Auk;
-			productReference = F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */;
+			productReference = F91C77B315B70D0200C71BB1 /* Auksalaq.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -229,7 +229,7 @@
 				0BBB630015C4A377006CFEAB /* blue_ice_bg_320_480.png in Resources */,
 				0BBB630315C4B069006CFEAB /* chat_30_30.png in Resources */,
 				0BBB630415C4B069006CFEAB /* cloud_30_30.png in Resources */,
-				F9DCBBE515CC6CDC00E32F03 /* auklogo_57.png in Resources */,
+				F9DCBBEF15CC71FD00E32F03 /* auklogo_57.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,7 +305,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Auksalaq;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -316,7 +316,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Auksalaq;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
