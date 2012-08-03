@@ -64,6 +64,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
 @property (strong, nonatomic) IBOutlet UIView *swarmView;
 
+
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
 
 - (IBAction)discussButton:(id)sender;
@@ -78,6 +79,8 @@
 - (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
 
 - (void)playNote;
+
+-(void)reachabilityChanged:(NSNotification*)note;
 
 @end
 #endif
