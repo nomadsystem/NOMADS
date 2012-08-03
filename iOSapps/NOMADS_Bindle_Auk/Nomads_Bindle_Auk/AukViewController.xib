@@ -17,6 +17,7 @@
 			<string>IBUIBarButtonItem</string>
 			<string>IBUIToolbar</string>
 			<string>IBUITextField</string>
+			<string>IBUIWebView</string>
 			<string>IBUINavigationBar</string>
 			<string>IBUINavigationItem</string>
 			<string>IBUIButton</string>
@@ -41,6 +42,21 @@
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
+					<object class="IBUIWebView" id="479491251">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">274</int>
+						<string key="NSFrame">{{0, 39}, {320, 421}}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="775446752"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MSAxIDEAA</bytes>
+						</object>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<bool key="IBUIScalesPageToFit">YES</bool>
+					</object>
 					<object class="IBUIView" id="409234056">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
@@ -147,7 +163,6 @@
 								<string key="NSFrame">{{17, 160}, {287, 21}}</string>
 								<reference key="NSSuperview" ref="409234056"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -179,7 +194,7 @@
 								<string key="NSFrameSize">{320, 44}</string>
 								<reference key="NSSuperview" ref="409234056"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="775446752"/>
+								<reference key="NSNextKeyView" ref="479491251"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<array key="IBUIItems">
@@ -188,6 +203,12 @@
 										<string key="IBUITitle">NOMADS Bindle</string>
 										<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="246726192">
 											<string key="IBUITitle">Back</string>
+											<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+											<int key="IBUIStyle">1</int>
+											<reference key="IBUINavigationItem" ref="948089652"/>
+										</object>
+										<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="435359924">
+											<string key="IBUITitle">More Info</string>
 											<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 											<int key="IBUIStyle">1</int>
 											<reference key="IBUINavigationItem" ref="948089652"/>
@@ -436,14 +457,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">settingsNavBackButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="246726192"/>
-					</object>
-					<int key="connectionID">134</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">settingsNavTitle</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="948089652"/>
@@ -531,6 +544,38 @@
 					<int key="connectionID">67</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">settingsNavMoreInfoButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="435359924"/>
+					</object>
+					<int key="connectionID">148</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">settingsNavBackButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="435359924"/>
+					</object>
+					<int key="connectionID">149</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">settingsNavBarMoreInfoButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="435359924"/>
+					</object>
+					<int key="connectionID">150</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">infoViewNOMADS</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="479491251"/>
+					</object>
+					<int key="connectionID">152</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">discussButton:</string>
 						<reference key="source" ref="552911420"/>
@@ -604,6 +649,22 @@
 					</object>
 					<int key="connectionID">133</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="479491251"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">153</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">settingsNavMoreInfoButton:</string>
+						<reference key="source" ref="435359924"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">151</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -619,6 +680,7 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="409234056"/>
 							<reference ref="744525750"/>
+							<reference ref="479491251"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Main View</string>
@@ -680,6 +742,7 @@
 						<reference key="object" ref="948089652"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="246726192"/>
+							<reference ref="435359924"/>
 						</array>
 						<reference key="parent" ref="225647217"/>
 					</object>
@@ -703,6 +766,7 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">97</int>
 						<reference key="object" ref="470664225"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="744525750"/>
 						<string key="objectName">ViewForSwarm</string>
 					</object>
@@ -761,6 +825,18 @@
 						<reference key="object" ref="325899233"/>
 						<reference key="parent" ref="338960657"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">147</int>
+						<reference key="object" ref="435359924"/>
+						<reference key="parent" ref="948089652"/>
+						<string key="objectName">Bar Button Item - More Info</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">144</int>
+						<reference key="object" ref="479491251"/>
+						<reference key="parent" ref="191373211"/>
+						<string key="objectName">NOMADS_WebView</string>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -772,6 +848,8 @@
 				<string key="112.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="113.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="132.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="144.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="147.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="17.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="19.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="20.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -795,7 +873,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">143</int>
+			<int key="maxID">153</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -811,6 +889,7 @@
 						<string key="leaveNomadsButton:">id</string>
 						<string key="settingsButton:">id</string>
 						<string key="settingsNavBackButton:">id</string>
+						<string key="settingsNavMoreInfoButton:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="backgroundTapCloud:">
@@ -845,6 +924,10 @@
 							<string key="name">settingsNavBackButton:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="settingsNavMoreInfoButton:">
+							<string key="name">settingsNavMoreInfoButton:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="aukBarButtonCloud">UIBarButtonItem</string>
@@ -853,6 +936,7 @@
 						<string key="aukToolbar">UIToolbar</string>
 						<string key="aukView">UIView</string>
 						<string key="connectionLabel">UILabel</string>
+						<string key="infoViewNOMADS">UIWebView</string>
 						<string key="inputCloudField">UITextField</string>
 						<string key="inputDiscussField">UITextField</string>
 						<string key="joinNomadsButton">UIButton</string>
@@ -860,6 +944,7 @@
 						<string key="leaveNomadsButton">UIButton</string>
 						<string key="settingsNavBackButton">UIBarButtonItem</string>
 						<string key="settingsNavBar">UINavigationBar</string>
+						<string key="settingsNavBarMoreInfoButton">UIBarButtonItem</string>
 						<string key="settingsNavTitle">UINavigationItem</string>
 						<string key="settingsView">UIView</string>
 						<string key="swarmView">UIView</string>
@@ -889,6 +974,10 @@
 							<string key="name">connectionLabel</string>
 							<string key="candidateClassName">UILabel</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="infoViewNOMADS">
+							<string key="name">infoViewNOMADS</string>
+							<string key="candidateClassName">UIWebView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="inputCloudField">
 							<string key="name">inputCloudField</string>
 							<string key="candidateClassName">UITextField</string>
@@ -916,6 +1005,10 @@
 						<object class="IBToOneOutletInfo" key="settingsNavBar">
 							<string key="name">settingsNavBar</string>
 							<string key="candidateClassName">UINavigationBar</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="settingsNavBarMoreInfoButton">
+							<string key="name">settingsNavBarMoreInfoButton</string>
+							<string key="candidateClassName">UIBarButtonItem</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="settingsNavTitle">
 							<string key="name">settingsNavTitle</string>
