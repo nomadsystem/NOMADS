@@ -33,12 +33,10 @@ void Cursor::initAnimations(){
 	char frameName[50] = {0};
 
 	for (int i=1; i<=12; i++) {
-		frameName = {0};
 		sprintf(frameName, "untitled_%d.png", i);
 		CCSpriteFrame* pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
 		swellAnim->addSpriteFrame(pFrame);
 
-		frameName = {0};
 		sprintf(frameName, "untitled_%d.png", 13-i);
 		pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(frameName);
 		shrinkAnim->addSpriteFrame(pFrame);

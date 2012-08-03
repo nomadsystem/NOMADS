@@ -935,6 +935,13 @@
 
         case NSStreamEventErrorOccurred:
             LLog(@"NSAND : ERROR - NSStreamEventError\n");
+            // send out to all our delgates
+            for (int x=0;x<numDelegates;x++) {
+                if (self->delegate[x] != nil) {
+                    [self->delegate[x] networkConnectionError:@"Stream Error"];
+                }
+            }
+
             break;
             
         case NSStreamEventEndEncountered:
