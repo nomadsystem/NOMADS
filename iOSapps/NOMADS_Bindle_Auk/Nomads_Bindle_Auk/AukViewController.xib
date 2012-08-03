@@ -42,10 +42,10 @@
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="IBUIWebView" id="479491251">
+					<object class="IBUIWebView" id="928837754">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{0, 39}, {320, 421}}</string>
+						<string key="NSFrame">{{0, 39}, {320, 377}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="775446752"/>
@@ -194,7 +194,7 @@
 								<string key="NSFrameSize">{320, 44}</string>
 								<reference key="NSSuperview" ref="409234056"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="479491251"/>
+								<reference key="NSNextKeyView" ref="928837754"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<array key="IBUIItems">
@@ -207,7 +207,7 @@
 											<int key="IBUIStyle">1</int>
 											<reference key="IBUINavigationItem" ref="948089652"/>
 										</object>
-										<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="435359924">
+										<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="467291149">
 											<string key="IBUITitle">More Info</string>
 											<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 											<int key="IBUIStyle">1</int>
@@ -547,7 +547,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">settingsNavMoreInfoButton</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="435359924"/>
+						<reference key="destination" ref="467291149"/>
 					</object>
 					<int key="connectionID">148</int>
 				</object>
@@ -555,7 +555,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">settingsNavBackButton</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="435359924"/>
+						<reference key="destination" ref="467291149"/>
 					</object>
 					<int key="connectionID">149</int>
 				</object>
@@ -563,7 +563,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">settingsNavBarMoreInfoButton</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="435359924"/>
+						<reference key="destination" ref="467291149"/>
 					</object>
 					<int key="connectionID">150</int>
 				</object>
@@ -571,7 +571,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">infoViewNOMADS</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="479491251"/>
+						<reference key="destination" ref="928837754"/>
 					</object>
 					<int key="connectionID">152</int>
 				</object>
@@ -652,7 +652,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">delegate</string>
-						<reference key="source" ref="479491251"/>
+						<reference key="source" ref="928837754"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">153</int>
@@ -660,7 +660,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">settingsNavMoreInfoButton:</string>
-						<reference key="source" ref="435359924"/>
+						<reference key="source" ref="467291149"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">151</int>
@@ -680,7 +680,7 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="409234056"/>
 							<reference ref="744525750"/>
-							<reference ref="479491251"/>
+							<reference ref="928837754"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Main View</string>
@@ -742,7 +742,7 @@
 						<reference key="object" ref="948089652"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="246726192"/>
-							<reference ref="435359924"/>
+							<reference ref="467291149"/>
 						</array>
 						<reference key="parent" ref="225647217"/>
 					</object>
@@ -827,13 +827,13 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">147</int>
-						<reference key="object" ref="435359924"/>
+						<reference key="object" ref="467291149"/>
 						<reference key="parent" ref="948089652"/>
 						<string key="objectName">Bar Button Item - More Info</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">144</int>
-						<reference key="object" ref="479491251"/>
+						<reference key="object" ref="928837754"/>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">NOMADS_WebView</string>
 					</object>

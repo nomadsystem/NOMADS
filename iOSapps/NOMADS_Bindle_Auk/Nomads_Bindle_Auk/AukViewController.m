@@ -48,6 +48,7 @@
         
         [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
         [self.view bringSubviewToFront:aukView]; //Load the aukView
+        currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
     return self;
 }
@@ -55,6 +56,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    
+    if (![self internetConnectionStatus]) {
+            CLog("No internet connection");
+    }
+    
     
     //Hides our "hidden" text fields for discuss and cloud
     inputDiscussField.hidden = YES; 
@@ -66,7 +73,6 @@
     
     //Init loginScreen
     [leaveNomadsButton setHidden:NO];
-    connectionLabel.text = @"Not Connected!";
     [joinTextField setHidden:YES];
     
     //Initialize backgrounds 
@@ -89,6 +95,7 @@
     }
     fileNum = 1; //Selects AukNote file number
     noteIsEnabled = NO;
+    noteVolume = 1.0;
     
     //Initialization for size of SwarmDraw View
     CGRect screenRect = [swarmView bounds];
@@ -109,33 +116,29 @@
     
     [swarmView addSubview:[[SwarmDrawView alloc] initWithFrame:myCGRect]];    
     
-    [self.view bringSubviewToFront:settingsView];
-
+    // [self.view bringSubviewToFront:settingsView];
+    // currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     
-    if ([self internetConnectionStatus]) {
-        
-        //Initialize toolbar in Auk view
-        
-        [appDelegate->appSand connect];  
-        connectionLabel.text = @"Connected to NOMADS!";
-        
-        Byte c[1];
-        c[0] = 1;
-        
-        //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-        [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-                                              Command:REGISTER 
-                                             DataType:UINT8 
-                                              DataLen:1 
-                                                Uint8:c];
-        
-    }
-    else {
-        CLog("No internet connection");
-        [joinNomadsButton setHidden:NO];
-        [leaveNomadsButton setHidden:YES];
-        [self.view bringSubviewToFront:settingsView];
-    }
+    
+    
+    
+    //Initialize toolbar in Auk view
+    
+    [appDelegate->appSand connect];  
+    connectionLabel.text = @"Connected to NOMADS!";
+    
+    Byte c[1];
+    c[0] = 1;
+    
+    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                          Command:REGISTER 
+                                         DataType:UINT8 
+                                          DataLen:1 
+                                            Uint8:c];
+    
+    
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -155,13 +158,27 @@
                      cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
         
         [errorView show];
+        
         return NO;
-
+        
     }
     else {
         return YES;
     }
     
+}
+
+-(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
+    if (buttonIndex == 0) {
+        CLog("Alert button %i pressed", buttonIndex);
+        [joinNomadsButton setHidden:NO];
+        [leaveNomadsButton setHidden:YES];
+        connectionLabel.text = @"Not Connected!";
+        [self.view bringSubviewToFront:settingsView];
+        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    }
 }
 
 // input data function ============================================
@@ -243,16 +260,26 @@
 //}
 
 - (IBAction)settingsNavBackButton:(id)sender {
-    [self.view bringSubviewToFront:aukView];
+    if (currentView == 1) {
+        [self.view bringSubviewToFront:aukView];
+        currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    }
+    else if (currentView == 2) {
+        [self.view bringSubviewToFront:settingsView];
+        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+        [settingsNavBarMoreInfoButton setEnabled:YES];
+    }
 }
 
 - (IBAction)settingsNavMoreInfoButton:(id)sender {
+    [settingsNavBarMoreInfoButton setEnabled:NO];
     NSString *infoURL = @"http://nomads.music.virginia.edu";
     NSURL *url = [NSURL URLWithString:infoURL];
     NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
     
-   
     [self.view bringSubviewToFront:infoViewNOMADS];
+    currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
     [self.infoViewNOMADS loadRequest:myLoadRequest];
 }
 
@@ -281,6 +308,8 @@
 
 - (IBAction)settingsButton:(id)sender {
     [self.view bringSubviewToFront:settingsView];
+    currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
 }
 
 -(IBAction) backgroundTapDiscuss:(id)sender{
@@ -310,7 +339,7 @@
         }
         else {
             audioPlayer.volume = noteVolume;
-            CLog("dropletVolume = %f", noteVolume);
+            CLog("noteVolume = %f", noteVolume);
             [audioPlayer play];
         }
     }

@@ -420,8 +420,6 @@
             
             
         }
-        
-        
         [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
         
     }
