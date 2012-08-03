@@ -15,7 +15,7 @@
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
 
-@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate>
+@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate>
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
@@ -37,6 +37,7 @@
     int fileNum;
     float noteVolume;
     Boolean noteIsEnabled;
+    int currentView;
     
 }
 
