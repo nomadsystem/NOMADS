@@ -14,6 +14,8 @@
 @protocol SandDelegate <NSObject>
 @required
 - (void) dataReadyHandle:(NGrain *)grain;  // OUTPUT:  function we'll call from our delegate
+@optional
+- (void) networkConnectionError:(NSString *)ErrStr;  // NETWORK ERRORS
 @end
 
 @interface NSand : NSObject <NSStreamDelegate>
