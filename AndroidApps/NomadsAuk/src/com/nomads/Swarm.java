@@ -25,7 +25,7 @@ public class Swarm extends Activity
 	public static Swarm instance;
 
 	private NSand sand;
-	private NGrain grain;
+//	private NGrain grain;
 	
 	Button buttonTest, buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton imgButton;
@@ -52,12 +52,6 @@ public class Swarm extends Activity
 		
 		// get NSand instance from Join
 		sand = Join.instance.getSand();
-		
-//		float[] xy = new float[2];
-//		xy[0] = 12;
-//		xy[1] = 34;
-//		Log.i("Swarm->xy", xy[0] + " : " + xy[1]);
-//		sand.sendGrain(NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY, NDataType.INT32, 2, xy);
 		
 		setContentView(R.layout.swarm);
 		
