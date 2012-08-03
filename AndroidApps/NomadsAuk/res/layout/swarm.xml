@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <com.nomads.Dot
+	    android:id="@+id/dot"
+	    android:tag="trueDot"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonDiscuss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Discuss" />
+
+    <Button
+        android:id="@+id/buttonCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/buttonDiscuss"
+        android:text="Cloud" />
+
+</RelativeLayout>
