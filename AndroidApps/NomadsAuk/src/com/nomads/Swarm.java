@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,6 +61,8 @@ public class Swarm extends Activity
 		buttonDiscuss.setOnClickListener(discussListener);
 		buttonCloud = (ImageButton)findViewById(R.id.buttonCloud);
 		buttonCloud.setOnClickListener(cloudListener);
+		buttonSettings = (ImageButton)findViewById(R.id.buttonSettings);
+		buttonSettings.setOnClickListener(settingsListener);
 		
 	}
 	
@@ -85,6 +88,15 @@ public class Swarm extends Activity
 		@Override
 		public void onClick(View v) {
 			cloudAlert();
+		}
+	};
+	
+	Button.OnClickListener settingsListener = new Button.OnClickListener()
+	{
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(getApplicationContext(), Settings.class);
+			startActivity(intent);
 		}
 	};
 	
