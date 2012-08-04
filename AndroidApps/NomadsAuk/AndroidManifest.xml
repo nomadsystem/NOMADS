@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.nomads"
-      android:versionCode="1"
-      android:versionName="1.0">
-
-    <uses-sdk android:minSdkVersion="8"/>
+    package="com.nomads"
+	android:versionCode="1"
+	android:versionName="1.0">
+      
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="10"/>
     
     <uses-permission android:name="android.permission.INTERNET"/>
     
-    <supports-screens android:largeScreens="true"
-                      android:smallScreens="true"
-                      android:anyDensity="true"
-                      android:normalScreens="true"/>
+    <supports-screens
+        android:xlargeScreens="true"
+        android:largeScreens="true"
+        android:smallScreens="true"
+        android:anyDensity="true"
+        android:normalScreens="true"/>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -27,6 +31,7 @@
         </activity>
 
     	<activity android:name=".Swarm"></activity>
+    	<activity android:name=".Settings"></activity>
     </application>
 
 </manifest> 

@@ -3,57 +3,26 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/blue_ice_bg_320_480" >
-    
-<!--     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/blue_ice_bg_320_480"
-        android:contentDescription="@string/welcome" /> -->
-
+    android:background="@drawable/background" >
 
 	<TextView
-	    android:id="@+id/loginPrompt"
+	    android:id="@+id/settings"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:text="@string/loginPrompt" />
-
-	<EditText
-	    android:id="@+id/textOut"
-	    android:layout_width="0dip"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/loginPrompt"
-		android:layout_toLeftOf="@+id/sendUser"
-		android:layout_alignParentLeft="true"
-	    android:ems="10"
-	    android:inputType="text" >
-	    <requestFocus />
-	</EditText>
-	
-	<Button
-	    android:id="@+id/sendUser"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/loginPrompt"
-	    android:layout_alignParentRight="true"
-	    android:text="@string/login" />
+	    android:text="@string/settings" />
 	
 	<TextView
-	    android:id="@+id/connectedMsg"
-	    android:layout_width="wrap_content"
+	    android:id="@+id/connectionStatus"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/textOut"
-	    android:text=""
-	    android:visibility="gone" />
+	    android:layout_below="@id/settings"
+	    android:text="@string/connectionStatus" />
 	
-	<Button
-	    android:id="@+id/disconnect"
-	    android:layout_width="wrap_content"
+	<TextView
+	    android:id="@+id/nomadsInfo"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/textOut"
-	    android:text="@string/disconnect"
-	    android:visibility="gone" />
+	    android:layout_below="@id/connectionStatus"
+	    android:text="@string/nomadsInfo" />
 
 </RelativeLayout>
