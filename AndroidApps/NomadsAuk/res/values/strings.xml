@@ -3,7 +3,7 @@
 	<string name="app_name">Nomads</string>
 	<string name="welcome">Welcome to Nomads.</string>
 	<string name="login">Log in</string>
-	<string name="loginPrompt">Enter your ID:</string>
+	<string name="loginPrompt">Connecting to the Nomads Server...</string>
 	<string name="disconnect">Disconnect</string>
 	<string name="quit">Quit</string>
 	<string name="incoming"></string>
@@ -13,4 +13,6 @@
     <string name="sendButton">Send</string>
     <string name="sendToCloudButton">Send to Cloud</string>
     <string name="test">test</string>
+    <string name="discuss">Discuss</string>
+    <string name="cloud">Cloud</string>
 </resources>

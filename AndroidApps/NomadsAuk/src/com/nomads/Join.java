@@ -12,15 +12,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Button;
 
 public class Join extends Activity
 {
 	// setup singleton
 	public static Join instance;
-	
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
 	NSand sand;
@@ -29,11 +26,8 @@ public class Join extends Activity
 	final Handler handle = new Handler();
 	
 	TextView joinStatus;
-	String tempString = "";
-	Button buttonTest;
 	
 	int[] xy = new int[2];
-	
 	
 	//========================================================
 	// Network methods
@@ -175,26 +169,7 @@ public class Join extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
 		joinStatus = (TextView)findViewById(R.id.joinStatus);
-		buttonTest = (Button)findViewById(R.id.test);
-		buttonTest.setOnClickListener(buttonSendOnClickListener);
 	}
-	
-	//========================================================
-	// Buttons
-	//========================================================
-	
-	Button.OnClickListener buttonSendOnClickListener = new Button.OnClickListener()
-	{
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			String test = "HI";
-			byte[] testMessage = test.getBytes();
-			sand.sendGrain(NAppIDAuk.OC_DISCUSS, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, 2, testMessage );
-		}
-	};
-	
-	//========================================================
 	
 	@Override
 	public void onResume()

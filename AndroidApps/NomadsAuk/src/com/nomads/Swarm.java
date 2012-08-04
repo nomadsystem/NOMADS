@@ -25,10 +25,10 @@ public class Swarm extends Activity
 	public static Swarm instance;
 
 	private NSand sand;
-	private NGrain grain;
+//	private NGrain grain;
 	
-	Button buttonTest, buttonDiscuss, buttonCloud, buttonSettings;
-	ImageButton imgButton;
+//	Button buttonDiscuss, buttonCloud, buttonSettings;
+	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
@@ -53,18 +53,12 @@ public class Swarm extends Activity
 		// get NSand instance from Join
 		sand = Join.instance.getSand();
 		
-//		float[] xy = new float[2];
-//		xy[0] = 12;
-//		xy[1] = 34;
-//		Log.i("Swarm->xy", xy[0] + " : " + xy[1]);
-//		sand.sendGrain(NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY, NDataType.INT32, 2, xy);
-		
 		setContentView(R.layout.swarm);
 		
 		// set button onClickListeners
-		buttonDiscuss = (Button)findViewById(R.id.buttonDiscuss);
+		buttonDiscuss = (ImageButton)findViewById(R.id.buttonDiscuss);
 		buttonDiscuss.setOnClickListener(discussListener);
-		buttonCloud = (Button)findViewById(R.id.buttonCloud);
+		buttonCloud = (ImageButton)findViewById(R.id.buttonCloud);
 		buttonCloud.setOnClickListener(cloudListener);
 		
 	}

@@ -17,12 +17,8 @@ import android.view.View;
 class Dot extends View {
 	private static final float RADIUS = 20;
 	private float[] xy = new float[2];
-//	private float initialX;
-//	private float initialY;
-//	private float offsetX;
-//	private float offsetY;
 	private Paint myPaint;
-	private Paint backgroundPaint;
+//	private Paint backgroundPaint;
 
 	private NSand sand;
 //	private NGrain grain;
@@ -37,8 +33,8 @@ class Dot extends View {
 		xy[0] = 30;
 		xy[1] = 30;
 
-		backgroundPaint = new Paint();
-		backgroundPaint.setColor(Color.BLUE);
+//		backgroundPaint = new Paint();
+//		backgroundPaint.setColor(Color.BLUE);
 
 		myPaint = new Paint();
 		myPaint.setColor(Color.WHITE);
@@ -49,16 +45,9 @@ class Dot extends View {
 		int action = event.getAction();
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
-//				initialX = x;
-//				initialY = y;
-//				offsetX = event.getX();
-//				offsetY = event.getY();
-//				break;
 			case MotionEvent.ACTION_MOVE:
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
-//				x = initialX + event.getX() - offsetX;
-//				y = initialY + event.getY() - offsetY;
 				xy[0] = event.getX();
 				xy[1] = event.getY();
 				
@@ -69,12 +58,14 @@ class Dot extends View {
 		return (true);
 	}
 
-	public void draw(Canvas canvas) {	
+	public void draw(Canvas c) {	
 		// draw the dot
-		int width = canvas.getWidth();
-		int height = canvas.getHeight();
-		canvas.drawRect(0, 0, width, height, backgroundPaint);
-		canvas.drawCircle(xy[0], xy[1], RADIUS, myPaint);
+//		int width = canvas.getWidth();
+//		int height = canvas.getHeight();
+//		canvas.drawRect(0, 0, width, height, backgroundPaint);
+		c.drawCircle(xy[0], xy[1], RADIUS, myPaint);
+		
+		// need to invalidate in custom view class only
 		invalidate();
 	}
 }
