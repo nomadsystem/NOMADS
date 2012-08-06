@@ -31,6 +31,10 @@
         viewHeight = viewRect.size.height;
         viewWidth = viewRect.size.width;
         
+        //Scale for pointer output between 0-1000 (To become 0-1)
+        viewHeightScale = (int)(1000/viewHeight);
+        viewWidthScale = (int)(1000/viewWidth);
+        
         // Prompt text
         prompt = [NSString stringWithFormat:@"NOMADS Bindle"];
         promptAlpha = 0;
@@ -408,14 +412,20 @@
             CLog(@"SWARM_X loc = %f", loc.x);
             CLog(@"SWARM_Y loc = %f", loc.y);
             
-            float screenScaleX = 5.9;
-            float screenScaleY = 3.33;
-            int screenMinusX = 1000;
-            int screenMinusY = 800;
+        
+            
+//            float screenScaleX = 5.9;
+//            float screenScaleY = 3.33;
+//            int screenMinusX = 1000;
+//            int screenMinusY = 800;
             
             
-            xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
-            xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
+//            xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
+//            xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
+            
+            //STK Send out scaled values between 0-1000 (to become 0-1)
+            xy[0] = (int) (loc.x * viewWidthScale);
+            xy[1] = (int) (loc.y * viewHeightScale);
             
             
             
