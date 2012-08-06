@@ -29,15 +29,15 @@ public class Join extends Activity
 	private boolean connectionStatus = false;
 	
 	TextView joinStatus;
-	Button test;
+	Button connect;
 	
 	int[] xy = new int[2];
 	
-	// TESTING
-	Button.OnClickListener testListener = new Button.OnClickListener(){
+	// Connect again
+	Button.OnClickListener connectButtonListener = new Button.OnClickListener(){
 		@Override
 		public void onClick(View v) {
-			stopThread();
+			tryConnect();
 		}
 	};
 	
@@ -55,8 +55,8 @@ public class Join extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
 		joinStatus = (TextView)findViewById(R.id.joinStatus);
-		test = (Button)findViewById(R.id.test);
-		test.setOnClickListener(testListener);
+		connect = (Button)findViewById(R.id.connectButton);
+		connect.setOnClickListener(connectButtonListener);
 	}
 	
 	//========================================================

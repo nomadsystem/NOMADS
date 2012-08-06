@@ -3,8 +3,11 @@
 	<string name="app_name">Nomads</string>
 	<string name="welcome">Welcome to Nomads.</string>
 	<string name="login">Log in</string>
-	<string name="loginPrompt">Attempting to connect to Nomads Server&#8230;</string>
-	<string name="disconnect">Disconnect</string>
+	<string name="loginPrompt">
+	    Not able to connect to Nomads server.
+	    \nPlease check network settings and try again.
+	    </string>
+	<string name="connectButton">Refresh</string>
 	<string name="incoming"></string>
     <string name="outgoing"></string>
     <string name="connected">Connected to Nomads server.</string>
