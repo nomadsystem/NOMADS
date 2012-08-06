@@ -49,8 +49,13 @@ public class Join extends Activity
 		// set static reference
 		instance = this;
 		
+		//Create, initialize, load the sound manager
+        SoundManager.getInstance();
+        SoundManager.initSounds(this);
+        SoundManager.loadSounds();
+		
 		// Connect
-		tryConnect();
+		instance.tryConnect();
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
@@ -101,9 +106,9 @@ public class Join extends Activity
 			j = _j;
 		}
 		
-		public void kill()
+		public void runLoop(boolean _active)
 		{
-			active = false;
+			active = _active;
 			Log.i("Join > NomadsAppThread", "active = false");
 		}
 		
@@ -149,7 +154,7 @@ public class Join extends Activity
 	{
 		if(nThread != null)
 		{
-			nThread.kill();
+			nThread.runLoop(false);
 			Thread moribund = nThread;
 			nThread = null;
 			moribund.interrupt();

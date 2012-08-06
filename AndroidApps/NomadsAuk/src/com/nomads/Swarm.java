@@ -30,21 +30,10 @@ public class Swarm extends Activity
 	
 //	Button buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
+	Button buttonAudioTest;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
-	
-	public void parseGrain(NGrain _grain)
-	{
-		grain = _grain;
-
-		Log.i("Swarm", "parseGrain() invoked");
-//		String msg = new String(grain.bArray);
-//		Log.i("Swarm", msg);
-//
-//		if (grain != null)
-//			grain = null;
-	}
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -66,6 +55,8 @@ public class Swarm extends Activity
 		buttonCloud.setOnClickListener(cloudListener);
 		buttonSettings = (ImageButton)findViewById(R.id.buttonSettings);
 		buttonSettings.setOnClickListener(settingsListener);
+		buttonAudioTest = (Button)findViewById(R.id.buttonAudioTest);
+		buttonAudioTest.setOnClickListener(audioTestButtonListener);
 		
 	}
 	
@@ -73,6 +64,22 @@ public class Swarm extends Activity
 //		Intent intent = new Intent(getApplicationContext(), Join.class);
 //		startActivity(intent);
 //	}
+	
+	//========================================================
+	// Network
+	//========================================================
+	
+	public void parseGrain(NGrain _grain)
+	{
+		grain = _grain;
+
+		Log.i("Swarm", "parseGrain() invoked");
+//		String msg = new String(grain.bArray);
+//		Log.i("Swarm", msg);
+//
+		if (grain != null)
+			grain = null;
+	}
 	
 	//========================================================
 	// Buttons
@@ -104,6 +111,16 @@ public class Swarm extends Activity
 		}
 	};
 	
+	Button.OnClickListener audioTestButtonListener = new Button.OnClickListener()
+	{
+		@Override
+		public void onClick(View v) {
+			SoundManager.playSound(1, 1);
+		}
+	};
+	
+	//========================================================
+	// Alerts
 	//========================================================
 	
 	protected void discussAlert ()
@@ -171,6 +188,8 @@ public class Swarm extends Activity
 		
 		alert.show();
 	}
+	
+	//========================================================
 	
 	@Override
 	protected void onPause()

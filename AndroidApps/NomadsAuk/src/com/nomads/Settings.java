@@ -71,6 +71,7 @@ public class Settings extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				Join.instance.stopThread();
+				Join.instance.finish();
 				Swarm.instance.finish();
 				finish();
 			}
