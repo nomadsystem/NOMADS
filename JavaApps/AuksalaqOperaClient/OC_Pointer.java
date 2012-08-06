@@ -103,11 +103,11 @@ public class OC_Pointer extends JPanel implements Runnable
 		x = width / 2 - 20;
 		y = height / 2 - 20;
 
-		NGlobals.cPrint( "width =" + width + " height" + height);
-		NGlobals.cPrint( "x =" + x + " y =" + y);
+		NGlobals.cPrint( "OCP: width =" + width + " height" + height);
+		NGlobals.cPrint( "OCP: x =" + x + " y =" + y);
 
-		NGlobals.cPrint( "width =" + width + " height" + height);
-		NGlobals.cPrint( "x =" + x + " y =" + y);
+		NGlobals.cPrint( "OCP: width =" + width + " height" + height);
+		NGlobals.cPrint( "OCP: x =" + x + " y =" + y);
 
 		origX = x;
 		origY = y;

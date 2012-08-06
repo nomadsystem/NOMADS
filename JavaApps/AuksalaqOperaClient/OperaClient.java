@@ -542,6 +542,8 @@ public class OperaClient extends JApplet implements Runnable
 				// get the latest mouse position
 				int new_mx = e.getX();
 				int new_my = e.getY();
+				
+		//		NGlobals.cPrint("OCP: new_mx" + new_mx + " new_my" + new_my);
 
 				// displace the box by the distance the mouse moved since the last
 				// event
@@ -565,15 +567,17 @@ public class OperaClient extends JApplet implements Runnable
 
 				myOC_Pointer.posX = myOC_Pointer.mx;
 				myOC_Pointer.posY = (myOC_Pointer.height - myOC_Pointer.my);
-				//	NGlobals.cPrint( "posX " + myOC_Pointer.posX + "posY  " + myOC_Pointer.posY );
+					// NGlobals.cPrint( "posX " + myOC_Pointer.posX + "posY  " + myOC_Pointer.posY );
 				if (myOC_Pointer.isMouseDraggingBox) {
 					double myx = (myOC_Pointer.mx - (myOC_Pointer.width / 2)) / ((double) myOC_Pointer.width * 3); 
 					double myy = (myOC_Pointer.my - (myOC_Pointer.height / 2)) / ((double) myOC_Pointer.height * 3);
+					NGlobals.cPrint("OCP: myx =" + myx + " myy" + myy);
+					
 					NumberFormat formatter = new DecimalFormat("#0.0000");
 					float fx = (float)(new_mx-ocpCentX)/(float)ocpCentX;
-					int offsetNew_mx = (int)(fx*1000); // STK scales dot movement to size of Opera Main
+					int offsetNew_mx = (int)(((fx + 1)/2) * 1000); // STK scales dot movement from 0-1000--TO CHANGE to floats...
 					float fy = (float)(new_my-ocpCentY)/(float)ocpCentX;
-					int offsetNew_my = (int)(fy*1000);
+					int offsetNew_my = (int)(((fy + 1)/2) * 1000);
 
 					NGlobals.cPrint("OCP: width =" + offsetNew_mx + " height" + offsetNew_my + " fx:" + fx);
 
