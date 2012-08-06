@@ -1,252 +1,92 @@
 package com.nomads;
 
-//import com.nomads.TabbedBindle.NomadsAppThread;
-
-import nomads.v210.*;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.os.Handler;
 
-public class Settings extends Activity {
+public class Settings extends Activity {	
 	Activity currentTarget;
-//	Join join;
-//	NSand sand;
-//	private NGrain grain;
-//	private NomadsAppThread nThread;
-//	final Handler handle = new Handler();
 	
-	EditText loginID;
-	TextView loginPrompt, connectedMsg;
-	Button buttonConnect, buttonDisconnect;
-	String tempString = "";
-	
-	//========================================================
-	// JNI methods
-	//========================================================
-	
-	// native (c++) method; sets object reference
-//	public native void setObj ();
-//	
-//	static{
-//		System.loadLibrary("game");
-//	}
-//	
-//	public void touchPos(int tX, int tY) {
-//		Log.i("Join.java", "x: " + tX + " y: " + tY);    
-//    }
-	
-//	public static void goToJoin() {
-//		backToJoin();
-//	}
-//	
-//	void backToJoin () {
-//		Intent intent = new Intent(getApplicationContext(), Join.class);
-//		startActivity(intent);
-//	}
-	
-//	//========================================================
-//	// Network methods
-//	//========================================================
-//	
-//	boolean tryConnect (){
-//		sand = new NSand();
-//		if (!sand.connect()) {
-//			Log.i("Join", "Connect failed");
-//			return false;
-//		}
-//		startThread();
-//		byte[] registerByte = {1};
-//		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
-//		return true;
-//	}
-//	
-//	private class NomadsAppThread extends Thread {
-//		Settings client; //Replace with current class name
-//		boolean active = true;
-//
-//		public NomadsAppThread(Settings _client) {
-//			client = _client;
-//		}
-//		
-//		public void kill() {
-//			active = false;
-//			Log.i("Join > NomadsAppThread", "active = false");
-//		}
-//		
-//		public void run() {			
-////			NGlobals.lPrint("NomadsAppThread -> run()");
-//			while (active) {
-//				try{
-//					grain = sand.getGrain();
-//					grain.print(); //prints grain data to console
-//					handle.post(updateUI);
-//				}
-//				catch (NullPointerException npe) {
-//					Log.i("Join > NomadsAppThread", "NullPointerException");
-//				}
-//			}
-//		}
-//		
-//		final Runnable updateUI = new Runnable() {
-//	    	@Override
-//	        public void run() {
-//				client.sendGrain();
-//	        }
-//	    };
-//	}
-//	
-//	public synchronized void startThread() {
-//		if(nThread == null){
-//			nThread = new NomadsAppThread(this);
-//			nThread.start();
-//			Log.i("Join", "Thread started.");
-//		}
-//		else{
-//			Log.i("Join", "startThread: thread != null.");
-//		}
-//	}
-//
-//	public synchronized void stopThread() {
-//		if(nThread != null){
-//			nThread.kill();
-//			Thread moribund = nThread;
-//			nThread = null;
-//			moribund.interrupt();
-//			Log.i("Join", "NomadsAppThread stopped.");
-//			sand.close();
-//			Log.i("Join", "sand.close()");
-//		}
-//	}
-//	
-//	private void sendGrain() {
-//		if (currentTarget == this) {
-//			Log.i("Join", "parseGrain()");
-//			String msg = new String(grain.bArray);
-//			Log.i("Join", msg);
-//
-//			if (grain != null)
-//				grain = null;
-//        }
-//		else if (currentTarget instanceof Discuss) {
-//            ((Discuss) currentTarget).parseGrain(grain);
-//        }
-//        else if (currentTarget instanceof Cloud) { 
-//            ((Cloud) currentTarget).parseGrain(grain);
-//        }
-//        else if (currentTarget instanceof Swarm) {
-//        	((Swarm) currentTarget).parseGrain(grain);
-//        }
-//        else {
-//        	Log.i("Join", "sendGrain() error: not a valid NSand target");
-//        }
-//	}
-//	
-//	public void setSandTarget(Activity _target) {
-//		currentTarget = _target;
-//		Log.i("Join", "setSandTarget()");
-//	}
-	
-	//========================================================
+	TextView connectionStatus, nomadsLink;
+	Button quitButton;
+	String connectedMessage;
+	final Context context = this;
+	AlertDialog.Builder alert;
 	
 	@Override
-	 public void onCreate(Bundle savedInstanceState) {
-		// set NSand target to this
-		currentTarget = this;
-		
-		//send reference to this object instance to Swarm.cpp
-//		setObj();
-		
+	 public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-		loginID = (EditText)findViewById(R.id.textOut);
-		loginPrompt = (TextView)findViewById(R.id.loginPrompt);
-		buttonConnect = (Button)findViewById(R.id.sendUser);
-		buttonConnect.setOnClickListener(buttonSendOnClickListener);
-		connectedMsg = (TextView)findViewById(R.id.connectedMsg);
-		buttonDisconnect = (Button)findViewById(R.id.disconnect);
-		buttonDisconnect.setOnClickListener(buttonDisconnectOnClickListener);
+		connectionStatus = (TextView)findViewById(R.id.connectionStatus);
+		nomadsLink = (TextView)findViewById(R.id.nomadsLink);
+		nomadsLink.setMovementMethod(LinkMovementMethod.getInstance());
+		quitButton = (Button)findViewById(R.id.quitButton);
+		quitButton.setOnClickListener(quitListener);
+		
+		setConnectedMessage(Join.instance.isConnected());
+	}
+	
+	public void setConnectedMessage (boolean _connected)
+	{
+		if (_connected)
+		{
+			connectionStatus.setText(
+					" Server: " + Join.instance.sand.getServerName() +
+					"\n Port: " + Join.instance.sand.getServerPort() );
+		}
+		else
+		{
+			connectionStatus.setText("Not currently connected to the server.");
+		}
 	}
 	
 	//========================================================
 	// Buttons
 	//========================================================
 	
-	Button.OnClickListener buttonSendOnClickListener = new Button.OnClickListener(){
+	Button.OnClickListener quitListener = new Button.OnClickListener(){
 		@Override
 		public void onClick(View v) {
-			// test connection
-//			if (tryConnect()){
-//				// Hide EditText and Connect Button
-//				loginPrompt.setVisibility(View.GONE);
-//				loginID.setVisibility(View.GONE);
-//				buttonConnect.setVisibility(View.GONE);
-//				
-//				String tString = loginID.getText().toString();
-//				int tLen = tString.length();
-//				//    char[] tStringAsChars = tString.toCharArray();
-//				byte[] tStringAsBytes = tString.getBytes();
-//	
-//				sand.sendGrain(NAppIDAuk.BINDLE, NCommandAuk.LOGIN, NDataType.CHAR, tLen, tStringAsBytes );
-//	
-//				// The data 
-//				Log.i("Join", "sending:  (" + tLen + ") of this data type");
-//	
-////	                for (int i=0; i<tLen; i++) {
-////	                Log.i("Join", "sending:  " + tString.charAt(i));
-////	                streamOut.writeByte(tString.charAt(i));
-////	                }
-//	
-//				Log.i("Join", "sending: (" + tString + ")");
-//				loginID.setText("");
-//				
-//				// hide soft keyboard
-//				InputMethodManager imm = (InputMethodManager)getSystemService(
-//					      Context.INPUT_METHOD_SERVICE);
-//				imm.hideSoftInputFromWindow(loginID.getWindowToken(), 0);
-//	
-//				connectedMsg.setText(tString + " is now connected!");
-//				connectedMsg.setVisibility(View.VISIBLE);
-//				buttonDisconnect.setVisibility(View.VISIBLE);
-//	//			tabbedBindle.setTabs(1);
-//				
-//				// Switch to Swarm activity
-//				Intent intent = new Intent(getApplicationContext(), Swarm.class);
-//				startActivity(intent);
-//			}
+			quitAlert();
 		}
 	};
 	
-	Button.OnClickListener buttonDisconnectOnClickListener = new Button.OnClickListener(){
-		@Override
-		public void onClick(View v) {
-			Log.i("Join", "Disconnected");
-//			stopThread();
-//			
-//			connectedMsg.setVisibility(View.GONE);
-//			buttonDisconnect.setVisibility(View.GONE);
-//			
-//			loginID.setText("");
-//			loginPrompt.setVisibility(View.VISIBLE);
-//			loginID.setVisibility(View.VISIBLE);
-//			buttonConnect.setVisibility(View.VISIBLE);
-			
-			// hide soft keyboard
-//			InputMethodManager imm = (InputMethodManager)getSystemService(
-//				      Context.INPUT_METHOD_SERVICE);
-//			imm.hideSoftInputFromWindow(loginID.getWindowToken(), 0);
-			
-//			tabbedBindle.setTabs(0);
-		}
-	};
+	protected void quitAlert ()
+	{
+		alert = new AlertDialog.Builder(context);
+		// need to create new input field each time
+		
+		alert.setTitle("Really quit?");
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				Join.instance.stopThread();
+				Join.instance.finish();
+				Swarm.instance.finish();
+				finish();
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// Canceled.
+			}
+		});
+		
+		alert.show();
+	}
 	
 	//========================================================
 	
@@ -254,6 +94,7 @@ public class Settings extends Activity {
 	public void onResume(){
 		super.onResume();
 		Log.i("Join", "is resumed");
+		setConnectedMessage(Join.instance.isConnected());
 	}
 	
 	@Override

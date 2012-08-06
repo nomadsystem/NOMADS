@@ -11,20 +11,38 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content" />
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonDiscuss"
+        android:src="@drawable/discuss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Discuss" />
+        android:contentDescription="@string/discuss"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonCloud"
+        android:src="@drawable/cloud"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonDiscuss"
-        android:text="Cloud" />
+        android:layout_toRightOf="@id/buttonDiscuss"
+        android:contentDescription="@string/cloud" />
+    
+    <Button
+        android:id="@+id/buttonAudioTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonCloud"
+        android:text="@string/test" />
+    
+    <ImageButton
+        android:id="@+id/buttonSettings"
+        android:src="@drawable/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonAudioTest"
+        android:contentDescription="@string/settings" />
 
 </RelativeLayout>
