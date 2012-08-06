@@ -12,26 +12,66 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class Join extends Activity
 {
-	// setup singleton
+	// setup static instance reference
 	public static Join instance;
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
 	NSand sand;
-	private NGrain grain;
+	NGrain grain;
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
+	private boolean connectionStatus = false;
 	
 	TextView joinStatus;
+	Button connect;
 	
 	int[] xy = new int[2];
+	
+	// Connect again
+	Button.OnClickListener connectButtonListener = new Button.OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			tryConnect();
+		}
+	};
+	
+	@Override
+	 public void onCreate(Bundle savedInstanceState)
+	{
+		Log.i("Join", "onCreate()");
+		
+		// set static reference
+		instance = this;
+		
+		//Create, initialize, load the sound manager
+        SoundManager.getInstance();
+        SoundManager.initSounds(this);
+        SoundManager.loadSounds();
+		
+		// Connect
+		instance.tryConnect();
+		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.join);
+		joinStatus = (TextView)findViewById(R.id.joinStatus);
+		connect = (Button)findViewById(R.id.connectButton);
+		connect.setOnClickListener(connectButtonListener);
+	}
 	
 	//========================================================
 	// Network methods
 	//========================================================
+	
+	public boolean isConnected ()
+	{
+		return connectionStatus;
+	}
 	
 	void tryConnect ()
 	{
@@ -39,18 +79,21 @@ public class Join extends Activity
 		if (!sand.connect())
 		{
 			Log.i("Join", "Connect failed");
+			connectionStatus = false;
 			return;
 		}
-//		startThread();
+		startThread();
+		
+		connectionStatus = true;
 		
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
 		sand.sendGrain( NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
 		
-		
 		// Switch to Swarm activity
 		Intent intent = new Intent(getApplicationContext(), Swarm.class);
 		startActivity(intent);
+		finish();
 	}
 	
 	private class NomadsAppThread extends Thread
@@ -63,15 +106,14 @@ public class Join extends Activity
 			j = _j;
 		}
 		
-		public void kill()
+		public void runLoop(boolean _active)
 		{
-			active = false;
+			active = _active;
 			Log.i("Join > NomadsAppThread", "active = false");
 		}
 		
 		public void run()
 		{			
-//			NGlobals.lPrint("NomadsAppThread -> run()");
 			while (active)
 			{
 				try{
@@ -90,7 +132,6 @@ public class Join extends Activity
 	        public void run()
 	    	{
 				j.routeGrain(gT);
-//				Swarm.swarm.parseGrain(grain);
 	        }
 	    };
 	}
@@ -113,7 +154,7 @@ public class Join extends Activity
 	{
 		if(nThread != null)
 		{
-			nThread.kill();
+			nThread.runLoop(false);
 			Thread moribund = nThread;
 			nThread = null;
 			moribund.interrupt();
@@ -121,11 +162,15 @@ public class Join extends Activity
 			sand.close();
 			Log.i("Join", "sand.close()");
 		}
+		else
+		{
+			Log.i("Join", "stopThread: thread == null.");
+		}
 	}
 	
 	private void routeGrain(GrainTarget _target)
 	{
-		Log.i("Join", "routeGrain()");
+		Log.i("Join", "routeGrain(): Current target: " + _target);
 		
 		if (_target == GrainTarget.JOIN) parseGrain(grain);
 		
@@ -154,22 +199,6 @@ public class Join extends Activity
 	}
 	
 	//========================================================
-	
-	@Override
-	 public void onCreate(Bundle savedInstanceState)
-	{
-		Log.i("Join", "onCreate()");
-		
-		// set static reference
-		instance = this;
-		
-		// Connect
-		tryConnect();
-		
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.join);
-		joinStatus = (TextView)findViewById(R.id.joinStatus);
-	}
 	
 	@Override
 	public void onResume()

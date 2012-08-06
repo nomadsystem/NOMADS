@@ -22,34 +22,26 @@ import android.widget.ImageButton;
 
 public class Swarm extends Activity
 {
-	// setup singleton
+	// setup static instance reference
 	public static Swarm instance;
 
 	private NSand sand;
-//	private NGrain grain;
+	NGrain grain;
 	
 //	Button buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
+	Button buttonAudioTest;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
-	
-	public void parseGrain(NGrain _grain)
-	{
-//		grain = _grain;
-//
-		Log.i("Swarm", "parseGrain() invoked");
-//		String msg = new String(grain.bArray);
-//		Log.i("Swarm", msg);
-//
-//		if (grain != null)
-//			grain = null;
-	}
 	
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Log.i("Swarm", "onCreate()");
 		super.onCreate(savedInstanceState);
+		
+		// set static instance of swarm
+		instance = this;
 		
 		// get NSand instance from Join
 		sand = Join.instance.getSand();
@@ -63,6 +55,8 @@ public class Swarm extends Activity
 		buttonCloud.setOnClickListener(cloudListener);
 		buttonSettings = (ImageButton)findViewById(R.id.buttonSettings);
 		buttonSettings.setOnClickListener(settingsListener);
+		buttonAudioTest = (Button)findViewById(R.id.buttonAudioTest);
+		buttonAudioTest.setOnClickListener(audioTestButtonListener);
 		
 	}
 	
@@ -70,6 +64,22 @@ public class Swarm extends Activity
 //		Intent intent = new Intent(getApplicationContext(), Join.class);
 //		startActivity(intent);
 //	}
+	
+	//========================================================
+	// Network
+	//========================================================
+	
+	public void parseGrain(NGrain _grain)
+	{
+		grain = _grain;
+
+		Log.i("Swarm", "parseGrain() invoked");
+//		String msg = new String(grain.bArray);
+//		Log.i("Swarm", msg);
+//
+		if (grain != null)
+			grain = null;
+	}
 	
 	//========================================================
 	// Buttons
@@ -96,10 +106,21 @@ public class Swarm extends Activity
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(getApplicationContext(), Settings.class);
+//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(intent);
 		}
 	};
 	
+	Button.OnClickListener audioTestButtonListener = new Button.OnClickListener()
+	{
+		@Override
+		public void onClick(View v) {
+			SoundManager.playSound(1, 1);
+		}
+	};
+	
+	//========================================================
+	// Alerts
 	//========================================================
 	
 	protected void discussAlert ()
@@ -167,6 +188,8 @@ public class Swarm extends Activity
 		
 		alert.show();
 	}
+	
+	//========================================================
 	
 	@Override
 	protected void onPause()

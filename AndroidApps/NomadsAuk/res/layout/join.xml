@@ -6,17 +6,35 @@
     android:background="#FFFFFF" >
     
 	<ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/auklogo"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        android:src="@drawable/nomadslogo_512"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/auklogo_128tr"
         android:contentDescription="@string/welcome" />
 
 	<TextView
 	    android:id="@+id/joinStatus"
+	    style="@style/infoBlack"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:layout_below="@id/auklogo"
 	    android:text="@string/loginPrompt" />
+	
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:layout_below="@id/joinStatus">
+		<Button
+		    android:id="@+id/connectButton"
+		    android:gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/connectButton" />
+	</LinearLayout>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -7,22 +8,69 @@
 
 	<TextView
 	    android:id="@+id/settings"
+	    style="@style/h1"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="25dp"
 	    android:text="@string/settings" />
 	
 	<TextView
-	    android:id="@+id/connectionStatus"
-	    android:layout_width="fill_parent"
+	    android:id="@+id/connectionStatusPre"
+	    style="@style/h2"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/settings"
+	    android:layout_marginBottom="15dp"
 	    android:text="@string/connectionStatus" />
 	
 	<TextView
-	    android:id="@+id/nomadsInfo"
+	    android:id="@+id/connectionStatus"
+	    style="@style/def"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="50dp"
+	    android:layout_below="@id/connectionStatusPre"
+	    android:text="" />
+	
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:layout_below="@id/connectionStatus">
+		<Button
+		    android:id="@+id/quitButton"
+		    android:gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/quitButton" />
+	</LinearLayout>
+	
+	<TextView
+	    android:id="@+id/nomadsInfo2"
+	    style="@style/info"
+	    android:gravity="center"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/connectionStatus"
+	    android:layout_alignParentBottom="true"
+	    android:text="@string/nomadsInfo2" />
+	
+	<TextView 
+	    android:id="@+id/nomadsLink"
+	    style="@style/h2"
+	    android:gravity="center"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/nomadsInfo2"
+	    android:text="@string/nomadsLink" />
+	
+	<TextView
+	    android:id="@+id/nomadsInfo"
+	    style="@style/info"
+	    android:gravity="center"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/nomadsLink"
 	    android:text="@string/nomadsInfo" />
 
 </RelativeLayout>
