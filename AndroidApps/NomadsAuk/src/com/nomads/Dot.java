@@ -14,37 +14,34 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-class Dot extends View
-{
+class Dot extends View {
 	private static final float RADIUS = 20;
 	private float[] xy = new float[2];
 	private Paint myPaint;
-	private Paint backgroundPaint;
+//	private Paint backgroundPaint;
 
 	private NSand sand;
 //	private NGrain grain;
 
-	public Dot(Context context, AttributeSet attrs)
-	{
+	public Dot(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		// get NSand instance from Join
 		sand = Join.instance.getSand();
 		
-		// starting position of dot; should eventually be a normalized float
+		// starting position of dot; should be a normalized float
 		xy[0] = 30;
 		xy[1] = 30;
 
-		backgroundPaint = new Paint();
-		backgroundPaint.setColor(Color.BLUE);
+//		backgroundPaint = new Paint();
+//		backgroundPaint.setColor(Color.BLUE);
 
 		myPaint = new Paint();
 		myPaint.setColor(Color.WHITE);
 		myPaint.setAntiAlias(true);
 	}
 
-	public boolean onTouchEvent(MotionEvent event)
-	{
+	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
@@ -61,15 +58,14 @@ class Dot extends View
 		return (true);
 	}
 
-	public void onDraw(Canvas c)
-	{	
-		// only draw if touch position changes?
-		
+	public void draw(Canvas c) {	
 		// draw the dot
 //		int width = canvas.getWidth();
 //		int height = canvas.getHeight();
 //		canvas.drawRect(0, 0, width, height, backgroundPaint);
 		c.drawCircle(xy[0], xy[1], RADIUS, myPaint);
+		
+		// need to invalidate in custom view class only
 		invalidate();
 	}
 }

@@ -3,14 +3,23 @@
 	<string name="app_name">Nomads</string>
 	<string name="welcome">Welcome to Nomads.</string>
 	<string name="login">Log in</string>
-	<string name="loginPrompt">Enter your ID:</string>
-	<string name="disconnect">Disconnect</string>
-	<string name="quit">Quit</string>
+	<string name="loginPrompt">
+	    Not able to connect to Nomads server.
+	    \nPlease check network settings and try again.
+	    </string>
+	<string name="connectButton">Refresh</string>
 	<string name="incoming"></string>
     <string name="outgoing"></string>
     <string name="connected">Connected to Nomads server.</string>
     <string name="hint">Enter a message.</string>
     <string name="sendButton">Send</string>
-    <string name="sendToCloudButton">Send to Cloud</string>
     <string name="test">test</string>
+    <string name="discuss">Discuss</string>
+    <string name="cloud">Cloud</string>
+    <string name="settings">Settings</string>
+    <string name="connectionStatus">Connection status:</string>
+    <string name="nomadsInfo">This app was created by the</string>
+	<string name="nomadsInfo2">University of Virginia, 2012</string>
+	<string name="nomadsLink"><a href="http://nomads.music.virginia.edu"><b>Nomads</b> Team</a></string>
+	<string name="quitButton">Close connection and quit</string>
 </resources>
