@@ -61,6 +61,8 @@
     CGRect viewRect;
     CGFloat viewHeight;
     CGFloat viewWidth;
+    int viewWidthScale; //STK: scales between 0-1000 (eventually between 0-1)
+    int viewHeightScale;
     
 }
 
