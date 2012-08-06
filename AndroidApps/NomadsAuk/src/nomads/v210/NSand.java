@@ -467,6 +467,17 @@ public class NSand
     public void stop() {
 	System.out.println("NSand stop() called, not implemented...");
     }
+    
+    // added by PAT, 2012.08.05; for Settings.java
+    public String getServerName ()
+    {
+    	return serverName;
+    }
+    
+    public int getServerPort ()
+    {
+    	return serverPort;
+    }
 
 
 }

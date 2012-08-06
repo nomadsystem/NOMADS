@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class Join extends Activity
 {
-	// setup singleton
+	// setup static instance reference
 	public static Join instance;
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
@@ -24,14 +24,36 @@ public class Join extends Activity
 	private NGrain grain;
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
+	private boolean connectionStatus = false;
 	
 	TextView joinStatus;
 	
 	int[] xy = new int[2];
 	
+	@Override
+	 public void onCreate(Bundle savedInstanceState)
+	{
+		Log.i("Join", "onCreate()");
+		
+		// set static reference
+		instance = this;
+		
+		// Connect
+		tryConnect();
+		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.join);
+		joinStatus = (TextView)findViewById(R.id.joinStatus);
+	}
+	
 	//========================================================
 	// Network methods
 	//========================================================
+	
+	public boolean isConnected ()
+	{
+		return connectionStatus;
+	}
 	
 	void tryConnect ()
 	{
@@ -39,18 +61,21 @@ public class Join extends Activity
 		if (!sand.connect())
 		{
 			Log.i("Join", "Connect failed");
+			connectionStatus = false;
 			return;
 		}
 //		startThread();
+		
+		connectionStatus = true;
 		
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
 		sand.sendGrain( NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
 		
-		
 		// Switch to Swarm activity
 		Intent intent = new Intent(getApplicationContext(), Swarm.class);
 		startActivity(intent);
+		finish();
 	}
 	
 	private class NomadsAppThread extends Thread
@@ -154,22 +179,6 @@ public class Join extends Activity
 	}
 	
 	//========================================================
-	
-	@Override
-	 public void onCreate(Bundle savedInstanceState)
-	{
-		Log.i("Join", "onCreate()");
-		
-		// set static reference
-		instance = this;
-		
-		// Connect
-		tryConnect();
-		
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.join);
-		joinStatus = (TextView)findViewById(R.id.joinStatus);
-	}
 	
 	@Override
 	public void onResume()

@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 
 public class Swarm extends Activity
 {
-	// setup singleton
+	// setup static instance reference
 	public static Swarm instance;
 
 	private NSand sand;
@@ -96,6 +96,7 @@ public class Swarm extends Activity
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(getApplicationContext(), Settings.class);
+//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(intent);
 		}
 	};
