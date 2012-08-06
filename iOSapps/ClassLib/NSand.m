@@ -417,7 +417,7 @@
                 int dLenT=0;
                 
 				Boolean doneReading = false;
-                unsigned int len = 0;
+                int len = 0;
                 int readMode = 0;
                 int cachedNextReadMode = 0;
                 int readPtr = 0;
@@ -445,6 +445,19 @@
                             case 0:
                                 len = [streamIn read:readBuf maxLength:sizeof(readBuf)];
                                 LLog(@"NSAND:  streamIn read %d bytes\n",len);
+                                if (len < 0) {
+                                    // send out to all our delgates
+                                    for (int x=0;x<numDelegates;x++) {
+                                        if (self->delegate[x] != nil) {
+                                            SEL methodName = @selector(networkConnectionError:);
+
+                                            if ([self->delegate[x] respondsToSelector:methodName]) {
+                                                [self->delegate[x] networkConnectionError:@"SAND Error"];
+                                            }
+                                        }
+                                    }
+
+                                }
                                 remBufRead = len;
                                 
                                 readMode = 0;
@@ -935,6 +948,17 @@
 
         case NSStreamEventErrorOccurred:
             LLog(@"NSAND : ERROR - NSStreamEventError\n");
+            // send out to all our delgates
+            for (int x=0;x<numDelegates;x++) {
+                if (self->delegate[x] != nil) {
+                    SEL methodName = @selector(networkConnectionError:);
+                    
+                    if ([self->delegate[x] respondsToSelector:methodName]) {
+                        [self->delegate[x] networkConnectionError:@"STREAM Error"];
+                    }
+                }
+            }
+
             break;
             
         case NSStreamEventEndEncountered:

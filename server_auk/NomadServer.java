@@ -453,7 +453,7 @@ public class NomadServer implements Runnable {
 
 			if (incAppID == NAppID.OC_DISCUSS) {
 
-				if (incAppCmd == NCommand.SEND_MESSAGE) {
+			    if (incAppCmd == NCommand.SEND_MESSAGE && (_DISCUSS_STATUS == 1)) {
 					// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
 					for (int c = 0; c < clientCount; c++) {
 						// Get the client off the master list
@@ -481,7 +481,7 @@ public class NomadServer implements Runnable {
 
 			// incoming appID = OC_CLOUD = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-			if (incAppID == NAppID.OC_CLOUD) {
+			if (incAppID == NAppID.OC_CLOUD && (_CLOUD_STATUS == 1)) {
 
 				if (incAppCmd == NCommand.SEND_MESSAGE) {
 					// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
@@ -504,7 +504,7 @@ public class NomadServer implements Runnable {
 
 			// incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-			if (incAppID == NAppID.OC_POINTER) {
+			if (incAppID == NAppID.OC_POINTER && (_POINTER_STATUS == 1)) {
 				if (incAppCmd == NCommand.SEND_SPRITE_XY) {
 
 					for (int c = 0; c < clientCount; c++) {

@@ -15,7 +15,7 @@
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
 
-@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate>
+@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate>
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
@@ -24,9 +24,11 @@
     UIView *settingsView;
     UIView *aukView;
     UIView *swarmView;
+    UIWebView *infoViewNOMADS;
     __weak UITextField *inputDiscussField;
     __weak UITextField *inputCloudField;
     __weak UIBarButtonItem *settingsNavBackButton;
+    UIBarButtonItem *settingsNavMoreInfoButton;
     __weak UINavigationItem *settingsNavTitle;
     __weak UINavigationBar *settingsNavBar;
     __weak UIToolbar *aukToolbar;
@@ -35,9 +37,13 @@
     int fileNum;
     float noteVolume;
     Boolean noteIsEnabled;
+    int currentView;
+    
 }
 
+@property (retain, nonatomic) IBOutlet UIWebView *infoViewNOMADS;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsNavBackButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *settingsNavBarMoreInfoButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *settingsNavTitle;
 @property (weak, nonatomic) IBOutlet UINavigationBar *settingsNavBar;
 
@@ -58,6 +64,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
 @property (strong, nonatomic) IBOutlet UIView *swarmView;
 
+
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
 
 - (IBAction)discussButton:(id)sender;
@@ -66,11 +73,14 @@
 - (IBAction)leaveNomadsButton:(id)sender;
 - (IBAction)joinNomadsButton:(id)sender;
 - (IBAction)settingsNavBackButton:(id)sender;
+- (IBAction)settingsNavMoreInfoButton:(id)sender;
 
 - (IBAction)backgroundTapDiscuss:(id)sender; //Tap to resign text entry
 - (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
 
 - (void)playNote;
+
+-(void)reachabilityChanged:(NSNotification*)note;
 
 @end
 #endif

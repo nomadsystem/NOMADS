@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F91C77B215B70D0200C71BB1"
-               BuildableName = "NOMADS_Bindle_Auk.app"
+               BuildableName = "Auksalaq.app"
                BlueprintName = "NOMADS_Bindle_Auk"
                ReferencedContainer = "container:NOMADS_Bindle_Auk.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F91C77B215B70D0200C71BB1"
-            BuildableName = "NOMADS_Bindle_Auk.app"
+            BuildableName = "Auksalaq.app"
             BlueprintName = "NOMADS_Bindle_Auk"
             ReferencedContainer = "container:NOMADS_Bindle_Auk.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F91C77B215B70D0200C71BB1"
-            BuildableName = "NOMADS_Bindle_Auk.app"
+            BuildableName = "Auksalaq.app"
             BlueprintName = "NOMADS_Bindle_Auk"
             ReferencedContainer = "container:NOMADS_Bindle_Auk.xcodeproj">
          </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F91C77B215B70D0200C71BB1"
-            BuildableName = "NOMADS_Bindle_Auk.app"
+            BuildableName = "Auksalaq.app"
             BlueprintName = "NOMADS_Bindle_Auk"
             ReferencedContainer = "container:NOMADS_Bindle_Auk.xcodeproj">
          </BuildableReference>

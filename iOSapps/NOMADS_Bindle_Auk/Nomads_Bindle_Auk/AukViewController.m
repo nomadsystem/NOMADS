@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "Reachability.h"
 #import "AukViewController.h"
 #import "SwarmDrawView.h"
 #import "NSand.h"
@@ -19,7 +20,9 @@
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
 
+@synthesize infoViewNOMADS;
 @synthesize settingsNavBackButton;
+@synthesize settingsNavBarMoreInfoButton;
 @synthesize joinNomadsButton;
 @synthesize leaveNomadsButton;
 @synthesize settingsNavTitle;
@@ -44,8 +47,8 @@
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; //Sets as delegate to BindleAppDelegate
         
         [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
-        
         [self.view bringSubviewToFront:aukView]; //Load the aukView
+        currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
     return self;
 }
@@ -53,6 +56,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //Handles first check of internet communcation status
+    if (![self internetConnectionStatus]) {
+            CLog("No internet connection");
+    }
+    
+    
+    //Init handling of network communications errors
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+    
+    Reachability * reach = [Reachability reachabilityForInternetConnection];
+    
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says Reachable");
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says UN-Reachable");
+        });
+    };
+    
+    [reach startNotifier];
+    //--END init handle network communcation errors
+    
     
     //Hides our "hidden" text fields for discuss and cloud
     inputDiscussField.hidden = YES; 
@@ -61,15 +96,32 @@
     //Inits settingsNavBar
     settingsNavBar.hidden = NO;
     
+    
     //Init loginScreen
     [leaveNomadsButton setHidden:NO];
-    connectionLabel.text = @"Connected to NOMADS!";
+    [joinTextField setHidden:YES];
     
     //Initialize backgrounds 
     [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-    
+    [[self aukToolbar] setTranslucent:YES];
+    [aukBarButtonDiscuss setEnabled:false];
+    [aukBarButtonCloud setEnabled:false];
     [[self swarmView] setBackgroundColor:[UIColor whiteColor]];
+    
+    //Set up our Audio Session
+    NSError *activationError = nil;
+    session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:&activationError];
+    NSError *setCategoryError = nil;
+    //This category should prevent our audio from being interrupted by incoming calls, etc.
+    [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (setCategoryError) { 
+        CLog("Error initializing Audio Session Category");
+    }
+    fileNum = 1; //Selects AukNote file number
+    noteIsEnabled = NO;
+    noteVolume = 1.0;
     
     //Initialization for size of SwarmDraw View
     CGRect screenRect = [swarmView bounds];
@@ -90,16 +142,19 @@
     
     [swarmView addSubview:[[SwarmDrawView alloc] initWithFrame:myCGRect]];    
     
+    // [self.view bringSubviewToFront:settingsView];
+    // currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
+    
+    
     
     //Initialize toolbar in Auk view
-    [[self aukToolbar] setTranslucent:YES];
+    
     [appDelegate->appSand connect];  
+    connectionLabel.text = @"Connected to NOMADS!";
     
     Byte c[1];
     c[0] = 1;
-    
-    [aukBarButtonDiscuss setEnabled:false];
-    [aukBarButtonCloud setEnabled:false];
     
     //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
     [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
@@ -108,21 +163,89 @@
                                           DataLen:1 
                                             Uint8:c];
     
-    //Set up our Audio Session
-    NSError *activationError = nil;
-    session = [AVAudioSession sharedInstance];
-    [session setActive:YES error:&activationError];
-    NSError *setCategoryError = nil;
     
-    //This category should prevent our audio from being interrupted by incoming calls, etc.
-    [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (setCategoryError) { 
-        CLog("Error initializing Audio Session Category");
-    }
-    fileNum = 1; //Selects AukNote file number
-    noteIsEnabled = NO;
+    
     // Do any additional setup after loading the view from its nib.
 }
+
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    Reachability * reach = [note object];
+    
+    if([reach isReachable])
+    {
+        CLog(@"Notification Says Reachable"); 
+    }
+    else
+    {
+        CLog(@"Notification Says UnReachable");
+        UIAlertView *errorView;
+        
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+    }
+}
+
+-(BOOL)internetConnectionStatus {
+    //  Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus internetStatus = [reachability currentReachabilityStatus];
+    
+    if(internetStatus == NotReachable) {
+        CLog("internet status == NotReachable");
+        UIAlertView *errorView;
+        
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+        
+        return NO;
+        
+    }
+    else {
+        return YES;
+    }
+    
+}
+
+-(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
+    if (buttonIndex == 0) {
+        CLog("Alert button %i pressed", buttonIndex);
+        [joinNomadsButton setHidden:NO];
+        [leaveNomadsButton setHidden:YES];
+        connectionLabel.text = @"Not Connected!";
+        [self.view bringSubviewToFront:settingsView];
+        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    }
+}
+
+- (void)networkConnectionError:(NSString *)ErrStr
+{
+    
+    CLog("internet status == NotReachable");
+    UIAlertView *errorView;
+    
+    errorView = [[UIAlertView alloc]
+                 initWithTitle: NSLocalizedString(ErrStr,ErrStr)
+                 message: NSLocalizedString(ErrStr,ErrStr)
+                 delegate: self
+                 cancelButtonTitle: NSLocalizedString(@"Close", @"SAND Network error") otherButtonTitles: nil];
+    
+    [errorView show];
+
+}
+
 
 // input data function ============================================
 - (void)dataReadyHandle:(NGrain *)inGrain
@@ -152,9 +275,9 @@
                 
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
-           
+            
             else if (inGrain->command == SET_NOTE_VOLUME) {
-            //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
+                //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
                 noteVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
                 audioPlayer.volume = noteVolume;
             }
@@ -203,8 +326,29 @@
 //}
 
 - (IBAction)settingsNavBackButton:(id)sender {
-    [self.view bringSubviewToFront:aukView];
+    if (currentView == 1) {
+        [self.view bringSubviewToFront:aukView];
+        currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    }
+    else if (currentView == 2) {
+        [self.view bringSubviewToFront:settingsView];
+        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+        [settingsNavBarMoreInfoButton setEnabled:YES];
+    }
 }
+
+- (IBAction)settingsNavMoreInfoButton:(id)sender {
+    [settingsNavBarMoreInfoButton setEnabled:NO];
+    NSString *infoURL = @"http://nomads.music.virginia.edu";
+    NSURL *url = [NSURL URLWithString:infoURL];
+    NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
+    
+    [self.view bringSubviewToFront:infoViewNOMADS];
+    currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
+    [self.infoViewNOMADS loadRequest:myLoadRequest];
+}
+
 
 - (IBAction)leaveNomadsButton:(id)sender {
     connectionLabel.text = @"Leaving NOMADS (but not really)";
@@ -230,6 +374,8 @@
 
 - (IBAction)settingsButton:(id)sender {
     [self.view bringSubviewToFront:settingsView];
+    currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
 }
 
 -(IBAction) backgroundTapDiscuss:(id)sender{
@@ -259,7 +405,7 @@
         }
         else {
             audioPlayer.volume = noteVolume;
-            CLog("dropletVolume = %f", noteVolume);
+            CLog("noteVolume = %f", noteVolume);
             [audioPlayer play];
         }
     }
@@ -421,6 +567,9 @@
     [self setSettingsNavTitle:nil];
     [self setSettingsNavBackButton:nil];
     [self setSwarmView:nil];
+    [self setInfoViewNOMADS:nil];
+    settingsNavMoreInfoButton = nil;
+    [self setSettingsNavBarMoreInfoButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

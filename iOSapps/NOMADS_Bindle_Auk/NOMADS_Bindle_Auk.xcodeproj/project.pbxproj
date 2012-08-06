@@ -31,6 +31,9 @@
 		F91C780315B70E3200C71BB1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C780215B70E3200C71BB1 /* main.m */; };
 		F91C781915B72A6A00C71BB1 /* AukViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91C781715B72A6A00C71BB1 /* AukViewController.m */; };
 		F91C781A15B72A6A00C71BB1 /* AukViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F91C781815B72A6A00C71BB1 /* AukViewController.xib */; };
+		F9824CEB15CADD24004E86FD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9824CE815CADD08004E86FD /* SystemConfiguration.framework */; };
+		F9DCBBEF15CC71FD00E32F03 /* auklogo_57.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */; };
+		F9F2526F15CC231400A975FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F2526E15CC231400A975FA /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +47,7 @@
 		0BBB630215C4B069006CFEAB /* cloud_30_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud_30_30.png; sourceTree = SOURCE_ROOT; };
 		F9139F1B15C1B5330093FA29 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F9139F1D15C1B5D10093FA29 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = NOMADS_Bindle_Auk/sounds; sourceTree = "<group>"; };
-		F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle_Auk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F91C77B315B70D0200C71BB1 /* Auksalaq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auksalaq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91C77B715B70D0200C71BB1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F91C77B915B70D0200C71BB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F91C77BB15B70D0200C71BB1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -70,6 +73,10 @@
 		F91C781815B72A6A00C71BB1 /* AukViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AukViewController.xib; sourceTree = "<group>"; };
 		F9616FA315B9C264007BA941 /* NAppIDAuk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppIDAuk.h; path = ../../ClassLib/NAppIDAuk.h; sourceTree = "<group>"; };
 		F9616FA415B9C264007BA941 /* NCommandAuk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommandAuk.h; path = ../../ClassLib/NCommandAuk.h; sourceTree = "<group>"; };
+		F9824CE815CADD08004E86FD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auklogo_57.png; sourceTree = "<group>"; };
+		F9F2526D15CC231400A975FA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F9F2526E15CC231400A975FA /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9824CEB15CADD24004E86FD /* SystemConfiguration.framework in Frameworks */,
 				F9139F1C15C1B5330093FA29 /* AVFoundation.framework in Frameworks */,
 				F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */,
 				F91C77BA15B70D0200C71BB1 /* Foundation.framework in Frameworks */,
@@ -90,6 +98,7 @@
 		F91C77A815B70D0100C71BB1 = {
 			isa = PBXGroup;
 			children = (
+				F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */,
 				0BBB62FF15C4A377006CFEAB /* blue_ice_bg_320_480.png */,
 				F9139F1D15C1B5D10093FA29 /* sounds */,
 				0B990EF315C48EFB0019798A /* misc_discuss.png */,
@@ -109,7 +118,7 @@
 		F91C77B415B70D0200C71BB1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */,
+				F91C77B315B70D0200C71BB1 /* Auksalaq.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +126,7 @@
 		F91C77B615B70D0200C71BB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9824CE815CADD08004E86FD /* SystemConfiguration.framework */,
 				F9139F1B15C1B5330093FA29 /* AVFoundation.framework */,
 				F91C77B715B70D0200C71BB1 /* UIKit.framework */,
 				F91C77B915B70D0200C71BB1 /* Foundation.framework */,
@@ -128,6 +138,8 @@
 		F91C77BD15B70D0200C71BB1 /* NOMADS_Bindle_Auk */ = {
 			isa = PBXGroup;
 			children = (
+				F9F2526D15CC231400A975FA /* Reachability.h */,
+				F9F2526E15CC231400A975FA /* Reachability.m */,
 				F9616FA315B9C264007BA941 /* NAppIDAuk.h */,
 				F9616FA415B9C264007BA941 /* NCommandAuk.h */,
 				F91C780215B70E3200C71BB1 /* main.m */,
@@ -170,7 +182,7 @@
 			);
 			name = NOMADS_Bindle_Auk;
 			productName = NOMADS_Bindle_Auk;
-			productReference = F91C77B315B70D0200C71BB1 /* NOMADS_Bindle_Auk.app */;
+			productReference = F91C77B315B70D0200C71BB1 /* Auksalaq.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -217,6 +229,7 @@
 				0BBB630015C4A377006CFEAB /* blue_ice_bg_320_480.png in Resources */,
 				0BBB630315C4B069006CFEAB /* chat_30_30.png in Resources */,
 				0BBB630415C4B069006CFEAB /* cloud_30_30.png in Resources */,
+				F9DCBBEF15CC71FD00E32F03 /* auklogo_57.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +247,7 @@
 				F91C780115B70E1500C71BB1 /* NSand.m in Sources */,
 				F91C780315B70E3200C71BB1 /* main.m in Sources */,
 				F91C781915B72A6A00C71BB1 /* AukViewController.m in Sources */,
+				F9F2526F15CC231400A975FA /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +305,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Auksalaq;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -302,7 +316,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle_Auk/NOMADS_Bindle_Auk-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Auksalaq;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

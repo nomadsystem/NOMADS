@@ -71,6 +71,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	int pbi;
 
 	int posX, posY, origX, origY; //STK used to get H value for frequency
+	double origXScaler, origYScaler;
 	double hMax, hMaxSqr;
 	int diagonal;
 	double diagonalSQ;
@@ -297,6 +298,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		x = width / 2 - 20;
 		y = height / 2 - 20;
+		origX = x;
+		origY = y;
+		posX = origX;
+		posY = origY;
+		
+		//****STK 8/6/12 TopLeftMin/Max values with origin in top left, from 0-1000 (eventually to be scaled to 0-1 floats)
+		origXScaler = (double)(width/1000.0);
+		origYScaler = (double)(height/1000.0);
+		NGlobals.cPrint("OMP: origXScaler = " + origXScaler + " origYScaler = " + origYScaler);
 
 		diagonalSQ = Math.pow(width, 2) + Math.pow(height, 2);
 		diagonal = (int)(Math.sqrt(diagonalSQ)/2); //figure out 1/2 of diagonal
@@ -315,10 +325,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		freqMultiply = 2.0F;
 		mainVolumeFromSlider = 1.0F;
 
-		origX = x;
-		origY = y;
-		posX = origX;
-		posY = origY;
+		
 
 		hMaxSqr = Math.pow(x, 2) + Math.pow(y, 2); //Pythagoras' Theorem 
 		hMax = (float)Math.sqrt(hMaxSqr); //Maximum distance from center
@@ -640,22 +647,28 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 				freq = (float)x;
 				amp = (float)(y/1000);
 
-				float fx = (float)(x+1000)/(float)2000;
-				float fy = (float)(y+1000)/(float)2000;
-
-				x = (int)(fx*width);
-				y = (int)(fy*height);
+//				float fx = (float)(x+1000)/(float)2000;
+//				float fy = (float)(y+1000)/(float)2000;
+//
+//				x = (int)(fx*width);
+//				y = (int)(fy*height);
+				
+				int scaledX = (int)(x * origXScaler);
+				int scaledY = (int)(y * origYScaler);
+				x = scaledX;
+				y = scaledY;
 
 				NGlobals.cPrint("OMP: x = " + x);
 				//		amp = 1;
 				NGlobals.cPrint("OMP: y = " + y);
-				NGlobals.cPrint("OMP: fx = " + fx);
+				NGlobals.cPrint("OMP: scaledX = " + scaledX);
 				//		amp = 1;
-				NGlobals.cPrint("OMP: fy = " + fy);
+				NGlobals.cPrint("OMP: scaledY = " + scaledY);
 
 				//if (x > 900)
 				//	x = 900;
-				xput = (float)(x/0.5);
+//				xput = (float)(x/0.5);
+				xput = x;
 				if (xput < 50)
 					xput = 50;
 				if (xput > 900)
@@ -664,7 +677,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 				//if (y > 900)
 				//	y = 900;
 
-				yput = (float)((y/0.5));
+	//			yput = (float)((y/0.5));
+				yput = y;
 				if (yput < 0)
 					yput = 0;
 				if (yput > 900)

@@ -14,7 +14,8 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>iPhone_AppIcon_57x57.png</string>
+				<string>ic_launcher.png</string>
+				<string>auklogo_57.png</string>
 			</array>
 		</dict>
 	</dict>
@@ -34,6 +35,8 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIApplicationExitsOnSuspend</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -44,7 +47,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIApplicationExitsOnSuspend</key>
-	<true/>
 </dict>
 </plist>
