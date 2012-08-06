@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class Join extends Activity
@@ -21,14 +23,23 @@ public class Join extends Activity
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
 	NSand sand;
-	private NGrain grain;
+	NGrain grain;
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
 	
 	TextView joinStatus;
+	Button test;
 	
 	int[] xy = new int[2];
+	
+	// TESTING
+	Button.OnClickListener testListener = new Button.OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			stopThread();
+		}
+	};
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState)
@@ -44,6 +55,8 @@ public class Join extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.join);
 		joinStatus = (TextView)findViewById(R.id.joinStatus);
+		test = (Button)findViewById(R.id.test);
+		test.setOnClickListener(testListener);
 	}
 	
 	//========================================================
@@ -64,7 +77,7 @@ public class Join extends Activity
 			connectionStatus = false;
 			return;
 		}
-//		startThread();
+		startThread();
 		
 		connectionStatus = true;
 		
@@ -96,7 +109,6 @@ public class Join extends Activity
 		
 		public void run()
 		{			
-//			NGlobals.lPrint("NomadsAppThread -> run()");
 			while (active)
 			{
 				try{
@@ -115,7 +127,6 @@ public class Join extends Activity
 	        public void run()
 	    	{
 				j.routeGrain(gT);
-//				Swarm.swarm.parseGrain(grain);
 	        }
 	    };
 	}
@@ -146,11 +157,15 @@ public class Join extends Activity
 			sand.close();
 			Log.i("Join", "sand.close()");
 		}
+		else
+		{
+			Log.i("Join", "stopThread: thread == null.");
+		}
 	}
 	
 	private void routeGrain(GrainTarget _target)
 	{
-		Log.i("Join", "routeGrain()");
+		Log.i("Join", "routeGrain(): Current target: " + _target);
 		
 		if (_target == GrainTarget.JOIN) parseGrain(grain);
 		

@@ -26,7 +26,7 @@ public class Swarm extends Activity
 	public static Swarm instance;
 
 	private NSand sand;
-//	private NGrain grain;
+	NGrain grain;
 	
 //	Button buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
@@ -36,8 +36,8 @@ public class Swarm extends Activity
 	
 	public void parseGrain(NGrain _grain)
 	{
-//		grain = _grain;
-//
+		grain = _grain;
+
 		Log.i("Swarm", "parseGrain() invoked");
 //		String msg = new String(grain.bArray);
 //		Log.i("Swarm", msg);
@@ -50,6 +50,9 @@ public class Swarm extends Activity
 	{
 		Log.i("Swarm", "onCreate()");
 		super.onCreate(savedInstanceState);
+		
+		// set static instance of swarm
+		instance = this;
 		
 		// get NSand instance from Join
 		sand = Join.instance.getSand();

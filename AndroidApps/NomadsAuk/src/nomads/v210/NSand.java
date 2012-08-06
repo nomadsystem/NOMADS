@@ -214,10 +214,10 @@ public class NSand
 	    // get data Length
 	    dL = streamIn.readInt();
 
-	    NGlobals.lPrint("appID =" + appID);
-	    NGlobals.lPrint("commd =" + cmd);
-	    NGlobals.lPrint("dataType =" + dT);
-	    NGlobals.lPrint("dLen  =" + dL);
+	    NGlobals.lPrint("getGrain: appID =" + appID);
+	    NGlobals.lPrint("getGrain: commd =" + cmd);
+	    NGlobals.lPrint("getGrain: dataType =" + dT);
+	    NGlobals.lPrint("getGrain: dLen  =" + dL);
 
 	    //Detect array type in Grain
 	    //Byte array
@@ -226,7 +226,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    bA[i] = streamIn.readByte();
-		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		    NGlobals.lPrint("getGrain: BYTE:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
 		System.out.println("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
@@ -239,7 +239,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    bA[i] = streamIn.readByte();
-		    NGlobals.lPrint("UINT8:  " + bA[i]);
+		    NGlobals.lPrint("getGrain: UINT8:  " + bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
 		System.out.println("NSand:getGrain: creating grain with UINT8s");
@@ -251,7 +251,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    iA[i] = streamIn.readInt();
-		    NGlobals.lPrint("INT:  " + iA[i]);
+		    NGlobals.lPrint("getGrain: INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
 		System.out.println("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
@@ -277,7 +277,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    fA[i] = streamIn.readFloat();
-		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		    NGlobals.lPrint("getGrain: FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
 		System.out.println("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
@@ -289,14 +289,14 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    fA[i] = streamIn.readFloat();
-		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		    NGlobals.lPrint("getGrain: FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
 		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 	    else {
-		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
+		NGlobals.lPrint("getGrain: WARNING:  unknown SAND data type\n");
 	    }
 	}
 	catch(IOException ioe) {  
@@ -323,10 +323,10 @@ public class NSand
 	    // get data Length
 	    dL = streamIn.readInt();
 
-	    NGlobals.lPrint("appID =" + appID);
-	    NGlobals.lPrint("commd =" + cmd);
-	    NGlobals.lPrint("dataType =" + dT);
-	    NGlobals.lPrint("dLen  =" + dL);
+	    NGlobals.lPrint("getGrain: appID =" + appID);
+	    NGlobals.lPrint("getGrain: commd =" + cmd);
+	    NGlobals.lPrint("getGrain: dataType =" + dT);
+	    NGlobals.lPrint("getGrain: dLen  =" + dL);
 
 	    //Detect array type in Grain
 	    //Byte array
@@ -335,7 +335,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    bA[i] = streamIn.readByte();
-		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		    NGlobals.lPrint("getGrain: BYTE:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
 		System.out.println("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
@@ -348,7 +348,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    bA[i] = streamIn.readByte();
-		    NGlobals.lPrint("UINT8:  " + (char) bA[i]);
+		    NGlobals.lPrint("getGrain: UINT8:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
 		System.out.println("NSand:getGrain: creating grain with UINT8s");
@@ -360,7 +360,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    iA[i] = streamIn.readInt();
-		    NGlobals.lPrint("INT:  " + iA[i]);
+		    NGlobals.lPrint("getGrain: INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
 		System.out.println("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
@@ -373,7 +373,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    iA[i] = streamIn.readInt();
-		    NGlobals.lPrint("INT32:  " + iA[i]);
+		    NGlobals.lPrint("getGrain: INT32:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
 		System.out.println("NSand:getGrain: creating grain with INT32s");
@@ -385,7 +385,7 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    fA[i] = streamIn.readFloat();
-		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		    NGlobals.lPrint("getGrain: FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
 		System.out.println("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
@@ -397,14 +397,14 @@ public class NSand
 
 		for (int i=0; i< dL; i++) {
 		    fA[i] = streamIn.readFloat();
-		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		    NGlobals.lPrint("getGrain: FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
 		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 	    else {
-		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
+		NGlobals.lPrint("getGrain: WARNING:  unknown SAND data type\n");
 	    }
 
 	}
