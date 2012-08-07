@@ -13,12 +13,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 //import android.content.Intent;
+import android.widget.TextView;
 
 public class Swarm extends Activity
 {
@@ -28,11 +31,13 @@ public class Swarm extends Activity
 	private NGrain grain;
 	
 //	Button buttonDiscuss, buttonCloud, buttonSettings;
+	TextView chatWindow;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
 	Button buttonAudioTest;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	EditText alertInput;
+	String tempString = "";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -50,7 +55,8 @@ public class Swarm extends Activity
 		
 		setContentView(R.layout.swarm);
 		
-		// set button onClickListeners
+		chatWindow = (TextView)findViewById(R.id.chatWindow);
+		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		buttonDiscuss = (ImageButton)findViewById(R.id.buttonDiscuss);
 		buttonDiscuss.setOnClickListener(discussListener);
 		buttonCloud = (ImageButton)findViewById(R.id.buttonCloud);
@@ -75,10 +81,32 @@ public class Swarm extends Activity
 	{
 		grain = _grain;
 
-		Log.i("Swarm", "parseGrain() invoked");
-//		String msg = new String(grain.bArray);
-//		Log.i("Swarm", msg);
-//
+		Log.i("Discuss", "DiscussClient -> handle()");
+		String msg = new String(grain.bArray);
+
+//		if (grain.appID == NAppID.DISCUSS_PROMPT) {
+//			topic.setText(msg);
+//			tempString = new String(msg);
+//		}
+//		// Disable discuss when the student panel button is off
+//		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
+//			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
+//				topic.setText("Discuss Disabled");
+//				chatWindow.setText("");
+//			}
+//			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
+//				topic.setText(tempString);
+//			}			
+//		}
+//		else if (grain.appID == NAppIDAuk.OC_DISCUSS){
+		if (grain.appID == NAppIDAuk.OC_DISCUSS){
+			appendTextAndScroll(msg);
+			Log.i("Discuss", "ChatWindow: " + msg);
+//			input.requestFocus();
+		}
+		else {
+			grain = null;
+		}
 		if (grain != null)
 			grain = null;
 	}
@@ -192,6 +220,20 @@ public class Swarm extends Activity
 	}
 	
 	//========================================================
+	
+	private void appendTextAndScroll(String text)
+	{
+	    if(chatWindow != null){
+	    	chatWindow.append(text + "\n");
+	        final Layout layout = chatWindow.getLayout();
+	        if(layout != null){
+	            int scrollDelta = layout.getLineBottom(chatWindow.getLineCount() - 1) 
+	                - chatWindow.getScrollY() - chatWindow.getHeight();
+	            if(scrollDelta > 0)
+	            	chatWindow.scrollBy(0, scrollDelta);
+	        }
+	    }
+	}
 	
 	@Override
 	protected void onPause()

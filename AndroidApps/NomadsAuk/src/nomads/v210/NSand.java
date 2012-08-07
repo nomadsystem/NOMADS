@@ -431,13 +431,14 @@ public class NSand
   	public boolean connectSocket()
   	{  
   		System.out.println("Establishing connection. Please wait ...");
-  		try {  
+  		try
+  		{  
   			socket = new Socket(serverName, serverPort);
   			System.out.println("Connected");
   		}
   		catch(IOException ioe) {
   			socket = null;
-  			System.out.println("socket connect exception: ");
+  			System.out.println("socket connect exception");
   		}
   		
   		if (socket != null) return true;
@@ -447,31 +448,32 @@ public class NSand
 
     public void openSocketStreams()
     {  
-	try {
-	    streamOut = new DataOutputStream(socket.getOutputStream());
-	    streamIn = new DataInputStream(socket.getInputStream());
-	}
-	catch(IOException ioe) {
-	    System.out.println("Error opening output stream: ");
-	}
+		try
+		{
+		    streamOut = new DataOutputStream(socket.getOutputStream());
+		    streamIn = new DataInputStream(socket.getInputStream());
+		}
+		catch(IOException ioe)
+		{
+		    System.out.println("Error opening output stream");
+		}
     }
 
 
     public void close()
     {  
-	try {
-	    if (streamOut != null)  streamOut.close();
-	    if (socket    != null)  socket.close();
-	}
-	catch(IOException ioe) {
-	    System.out.println("Error closing...");
-	}
-
+		try {
+		    if (streamOut != null)  streamOut.close();
+		    if (socket    != null)  socket.close();
+		}
+		catch(IOException ioe) {
+		    System.out.println("Error closing...");
+		}
     }
 
-
-    public void stop() {
-	System.out.println("NSand stop() called, not implemented...");
+    public void stop()
+    {
+    	System.out.println("NSand stop() called, not implemented...");
     }
     
     // added by PAT, 2012.08.05; for Settings.java

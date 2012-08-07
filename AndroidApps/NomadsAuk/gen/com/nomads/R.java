@@ -22,14 +22,15 @@ public final class R {
     }
     public static final class id {
         public static final int auklogo=0x7f070000;
-        public static final int buttonAudioTest=0x7f07000e;
-        public static final int buttonCloud=0x7f07000d;
-        public static final int buttonDiscuss=0x7f07000c;
-        public static final int buttonSettings=0x7f07000f;
+        public static final int buttonAudioTest=0x7f07000f;
+        public static final int buttonCloud=0x7f07000e;
+        public static final int buttonDiscuss=0x7f07000d;
+        public static final int buttonSettings=0x7f070010;
+        public static final int chatWindow=0x7f07000b;
         public static final int connectButton=0x7f070002;
         public static final int connectionStatus=0x7f070005;
         public static final int connectionStatusPre=0x7f070004;
-        public static final int dot=0x7f07000b;
+        public static final int dot=0x7f07000c;
         public static final int joinStatus=0x7f070001;
         public static final int nomadsInfo=0x7f070009;
         public static final int nomadsInfo2=0x7f070007;
