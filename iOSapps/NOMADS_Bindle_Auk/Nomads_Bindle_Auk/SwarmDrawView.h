@@ -63,7 +63,7 @@
     CGFloat viewWidth;
     int viewWidthScale; //STK: scales between 0-1000 (eventually between 0-1)
     int viewHeightScale;
-    
+        
 }
 
 @property (strong, retain) NSand *appSand;
