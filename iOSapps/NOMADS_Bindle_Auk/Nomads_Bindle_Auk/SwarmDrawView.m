@@ -23,7 +23,7 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    //    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         
         
         // Graphics setup
@@ -41,12 +41,13 @@
         
         // chat lines
         numChatLines = 15; //Initialize number of chat lines to display
+        chatLines = [[NSMutableArray alloc] init];
         
         //Code to get the point to start at the center of the screen
         [self setMultipleTouchEnabled:YES];
         
-        myFingerPoint.x = (viewWidth * 0.5);
-        myFingerPoint.y = (viewHeight * 0.5);
+        myFingerPoint.x = (CGRectGetMidX(viewRect));
+        myFingerPoint.y = (CGRectGetMidY(viewRect));
         
         maxTrails = 10;
         
@@ -171,7 +172,6 @@
             
             [chatLines addObject:inGrain->str]; //Add the new text to the array
             
-            
             if ([chatLines count] > numChatLines) {
                 [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
                 //remove the first item
@@ -192,6 +192,15 @@
 
 -(void)drawRect:(CGRect)rect
 {
+    // Need to recheck bounds in case of device rotation
+    viewRect = [self bounds];
+    viewHeight = viewRect.size.height;
+    viewWidth = viewRect.size.width;
+    
+    
+    //Scale for pointer output between 0-1000 (To become 0-1)
+    viewHeightScale = (int)(1000/viewHeight);
+    viewWidthScale = (int)(1000/viewWidth);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -215,12 +224,11 @@
                          30,
                          kCGEncodingMacRoman);
     
-    CGContextShowTextAtPoint (context, 40, 40, str, len); 
+    CGContextShowTextAtPoint (context, (viewWidth * 0.1), (viewHeight * 0.1), str, len);
     
     // Display discussion text
     
     if (discussStatus) {
-        
         CGContextSelectFont (context, 
                              "Helvetica-Light",
                              10,
@@ -228,10 +236,10 @@
         CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
         CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1); 
         
-        CGFloat tH = (int)(viewHeight);
-        CGFloat chatSpace = (tH/numChatLines) * 0.4;
-        CGFloat chatYLoc = (viewHeight-chatSpace);
-        CGFloat chatXLoc = 20;
+        CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
+        CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
+        CGFloat chatXLoc = (viewWidth * 0.1);
+
         
         for (int i=0;i<[chatLines count];i++) {
             
@@ -240,6 +248,8 @@
             int len = strlen(str);
             printf("My String %s\n", str);
             CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+            CLog("chatXLoc = %f, chatYLoc = %f", chatXLoc, chatYLoc);
+
             chatYLoc -= chatSpace;
         }
     }
@@ -488,7 +498,7 @@
 
 - (void)fadeInPrompt
 {       
-    CLog("fadeIntPrompt %2.2f\n",promptAlpha);
+//    CLog("fadeIntPrompt %2.2f\n",promptAlpha);
     
     if (promptAlpha == 0) {
         promptAlpha = 0.05;
@@ -591,5 +601,8 @@
     }
     
 }
+
+
+
 
 @end
