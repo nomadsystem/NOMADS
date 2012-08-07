@@ -4,6 +4,7 @@ import nomads.v210.*;
 import nomads.v210.NGlobals.GrainTarget;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Handler;
 import android.util.Log;
@@ -52,6 +53,11 @@ public class NomadsApp extends Application
 	// Network methods
 	//========================================================
 	
+	private void setConnectionStatus (boolean _connected)
+	{
+		connectionStatus = _connected;
+	}
+	
 	public boolean isConnected ()
 	{
 		return connectionStatus;
@@ -62,12 +68,12 @@ public class NomadsApp extends Application
 		if (!sand.connect())
 		{
 			Log.i("NomadsApp", "Connect failed");
-			connectionStatus = false;
+			setConnectionStatus(false);
 			return;
 		}
 		startThread();
 		
-		connectionStatus = true;
+		setConnectionStatus(true);
 		
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
@@ -181,13 +187,14 @@ public class NomadsApp extends Application
 		{			
 			while ( getAppState() )
 			{
-				Log.i("NomadsApp->Thread", "getThreadState() = " + getAppState());
+//				Log.i( "NomadsApp->Thread", "getThreadState() = " + getAppState() );
 				try{
 					grain = sand.getGrain();
 					grain.print(); //prints grain data to console
 					handle.post(updateUI);
 				} catch (NullPointerException npe) {
-					Log.i("NomadsApp > NomadsAppThread", "NullPointerException");
+					Log.i("NomadsApp -> Thread", "run() -> socket == null; exiting.");
+					handle.post(exitThread);
 				}
 			}
 		}
@@ -199,6 +206,22 @@ public class NomadsApp extends Application
 	    	{
 //				a.routeGrain(gT);
 	    		routeGrain(gT);
+	        }
+	    };
+	    
+	    final Runnable exitThread = new Runnable()
+		{
+	    	@Override
+	        public void run()
+	    	{
+	    		setConnectionStatus(false);
+	    		Log.i("NomadsApp -> exitThread()", "connectionStatus: " + connectionStatus);
+				stopThread();
+				
+				// Switch to Join activity
+				Intent intent = new Intent(getApplicationContext(), Join.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 	        }
 	    };
 	}

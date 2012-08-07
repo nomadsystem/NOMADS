@@ -53,6 +53,10 @@ public class Join extends Activity
 			Intent intent = new Intent(getApplicationContext(), Swarm.class);
 			startActivity(intent);
 		}
+		else
+		{
+			Log.i("Join", "onCreate() -> NomadsApp is not connected");
+		}
 	}
 	
 	//========================================================

@@ -416,10 +416,14 @@ public class NSand
 
   //Connect, opens the socket, creates the streams
   	// Altered by PT 2012.07.29
-  	public boolean connect() {
+  	public boolean connect()
+  	{
   		boolean connectStatus = connectSocket();
+  		
   		if (connectStatus) openSocketStreams();
+  		
   		System.out.println("NSand.java -> connect() -> connectStatus: " + connectStatus);
+  		
   		return connectStatus;
   	}
 
@@ -431,7 +435,8 @@ public class NSand
   			socket = new Socket(serverName, serverPort);
   			System.out.println("Connected");
   		}
-  		catch(IOException ioe) {  
+  		catch(IOException ioe) {
+  			socket = null;
   			System.out.println("socket connect exception: ");
   		}
   		
