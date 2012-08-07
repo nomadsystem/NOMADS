@@ -14,6 +14,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
+#import "SwarmDrawView.h"
+
 
 @interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate>
 {
@@ -38,6 +40,7 @@
     float noteVolume;
     Boolean noteIsEnabled;
     int currentView;
+    SwarmDrawView *mySwarmDrawView;
     
 }
 
@@ -54,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
 @property (strong, nonatomic) IBOutlet UIView *settingsView;
 @property (strong, nonatomic) IBOutlet UIView *aukView;
+@property (strong, nonatomic) IBOutlet SwarmDrawView *mySwarmDrawView;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITextField *joinTextField;
 @property (weak, nonatomic) IBOutlet UIToolbar *aukToolbar;
