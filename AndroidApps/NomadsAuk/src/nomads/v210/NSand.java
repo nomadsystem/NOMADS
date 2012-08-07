@@ -16,7 +16,7 @@ public class NSand
     private DataInputStream  streamIn   = null;
     private DataOutputStream streamOut = null;    
     private String    serverName = NGlobals.serverName;
-    private int       serverPort = NGlobals.serverPortDT;
+    private int       serverPort = NGlobals.serverPortPT;
 
     // Maybe yes to these
     URL imgWebBase, webBase;
@@ -419,6 +419,7 @@ public class NSand
   	public boolean connect() {
   		boolean connectStatus = connectSocket();
   		if (connectStatus) openSocketStreams();
+  		System.out.println("NSand.java -> connect() -> connectStatus: " + connectStatus);
   		return connectStatus;
   	}
 

@@ -40,7 +40,6 @@ public class NGlobals {
     public enum GrainTarget {
     	JOIN,
     	SWARM,
-    	DISCUSS,
-    	CLOUD
+    	SETTINGS
     }
 }
