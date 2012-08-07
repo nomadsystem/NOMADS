@@ -9,8 +9,8 @@ import nomads.v210.NGlobals.GrainTarget;
 
 import android.app.Activity;
 import android.content.Intent;
+//import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,185 +18,81 @@ import android.widget.TextView;
 
 public class Join extends Activity
 {
-	// setup static instance reference
-	public static Join instance;
+	NomadsApp app;
+	
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
-	NSand sand;
-	NGrain grain;
-	private NomadsAppThread nThread;
-	final Handler handle = new Handler();
-	private boolean connectionStatus = false;
+//	private NSand sand;
+	private NGrain grain;
 	
 	TextView joinStatus;
 	Button connect;
 	
-	int[] xy = new int[2];
-	
-	// Connect again
-	Button.OnClickListener connectButtonListener = new Button.OnClickListener(){
-		@Override
-		public void onClick(View v) {
-			tryConnect();
-		}
-	};
-	
 	@Override
-	 public void onCreate(Bundle savedInstanceState)
+	public void onCreate(Bundle savedInstanceState)
 	{
 		Log.i("Join", "onCreate()");
-		
-		// set static reference
-		instance = this;
-		
-		//Create, initialize, load the sound manager
-        SoundManager.getInstance();
-        SoundManager.initSounds(this);
-        SoundManager.loadSounds();
-		
-		// Connect
-		instance.tryConnect();
-		
 		super.onCreate(savedInstanceState);
+		
+		app = (NomadsApp)this.getApplicationContext();
+		
+		// send reference of Join to NomadsApp
+		app.setJoin(this);
+				
 		setContentView(R.layout.join);
 		joinStatus = (TextView)findViewById(R.id.joinStatus);
 		connect = (Button)findViewById(R.id.connectButton);
 		connect.setOnClickListener(connectButtonListener);
+		
+		// get NSand instance from Join
+//		sand = app.getSand();
+		
+		if( app.isConnected() )
+		{
+			// Switch to Swarm activity
+			Intent intent = new Intent(getApplicationContext(), Swarm.class);
+			startActivity(intent);
+		}
+		else
+		{
+			Log.i("Join", "onCreate() -> NomadsApp is not connected");
+		}
 	}
 	
 	//========================================================
 	// Network methods
 	//========================================================
 	
-	public boolean isConnected ()
+	public void parseGrain(NGrain _grain)
 	{
-		return connectionStatus;
-	}
-	
-	void tryConnect ()
-	{
-		sand = new NSand();
-		if (!sand.connect())
-		{
-			Log.i("Join", "Connect failed");
-			connectionStatus = false;
-			return;
-		}
-		startThread();
+		grain = _grain;
 		
-		connectionStatus = true;
-		
-		byte[] registerByte = new byte[1];
-		registerByte[0] = 1;
-		sand.sendGrain( NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER, NDataType.UINT8, 1, registerByte );
-		
-		// Switch to Swarm activity
-		Intent intent = new Intent(getApplicationContext(), Swarm.class);
-		startActivity(intent);
-		finish();
-	}
-	
-	private class NomadsAppThread extends Thread
-	{
-		Join j;
-		boolean active = true;
-
-		public NomadsAppThread(Join _j)
-		{
-			j = _j;
-		}
-		
-		public void runLoop(boolean _active)
-		{
-			active = _active;
-			Log.i("Join > NomadsAppThread", "active = false");
-		}
-		
-		public void run()
-		{			
-			while (active)
-			{
-				try{
-					grain = sand.getGrain();
-					grain.print(); //prints grain data to console
-					handle.post(updateUI);
-				} catch (NullPointerException npe) {
-					Log.i("Join > NomadsAppThread", "NullPointerException");
-				}
-			}
-		}
-		
-		final Runnable updateUI = new Runnable()
-		{
-	    	@Override
-	        public void run()
-	    	{
-				j.routeGrain(gT);
-	        }
-	    };
-	}
-	
-	public synchronized void startThread()
-	{
-		if(nThread == null)
-		{
-			nThread = new NomadsAppThread(this);
-			nThread.start();
-			Log.i("Join", "Thread started.");
-		}
-		else
-		{
-			Log.i("Join", "startThread: thread != null.");
-		}
-	}
-
-	public synchronized void stopThread()
-	{
-		if(nThread != null)
-		{
-			nThread.runLoop(false);
-			Thread moribund = nThread;
-			nThread = null;
-			moribund.interrupt();
-			Log.i("Join", "NomadsAppThread stopped.");
-			sand.close();
-			Log.i("Join", "sand.close()");
-		}
-		else
-		{
-			Log.i("Join", "stopThread: thread == null.");
-		}
-	}
-	
-	private void routeGrain(GrainTarget _target)
-	{
-		Log.i("Join", "routeGrain(): Current target: " + _target);
-		
-		if (_target == GrainTarget.JOIN) parseGrain(grain);
-		
-		else if (_target == GrainTarget.SWARM) Swarm.instance.parseGrain(grain);
-		
-		else Log.i("Join", "invalid grain target");
-	}
-	
-	// delete?
-	private void parseGrain(NGrain _grain)
-	{
 		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL){
 			Log.i("Join", "addID == NAppIDAuk.CONDUCTOR_PANEL");
 		}
+		
+		if (grain != null)
+			grain = null;
 	}
 	
-	public void setGrainTarget(GrainTarget _target)
+	//========================================================
+	// Refresh connection button
+	//========================================================
+	Button.OnClickListener connectButtonListener = new Button.OnClickListener()
 	{
-		Log.i("Join", "setSandTarget()");
-		gT = _target;
-	}
-	
-	public NSand getSand()
-	{
-		return sand;
-	}
+		@Override
+		public void onClick(View v)
+		{
+			app.tryConnect();
+			
+			if( app.isConnected() )
+			{
+				// Switch to Swarm activity
+				Intent intent = new Intent(getApplicationContext(), Swarm.class);
+				startActivity(intent);
+			}
+		}
+	};
 	
 	//========================================================
 	
