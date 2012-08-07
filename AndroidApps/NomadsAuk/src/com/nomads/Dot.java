@@ -20,14 +20,17 @@ class Dot extends View {
 	private Paint myPaint;
 //	private Paint backgroundPaint;
 
+	private NomadsApp app;
 	private NSand sand;
 //	private NGrain grain;
 
 	public Dot(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
+		app = (NomadsApp)context.getApplicationContext();
+		
 		// get NSand instance from Join
-		sand = Join.instance.getSand();
+		sand = app.getSand();
 		
 		// starting position of dot; should be a normalized float
 		xy[0] = 30;

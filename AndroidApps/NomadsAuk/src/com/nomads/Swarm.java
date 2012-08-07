@@ -22,11 +22,10 @@ import android.widget.ImageButton;
 
 public class Swarm extends Activity
 {
-	// setup static instance reference
-	public static Swarm instance;
+	NomadsApp app;
 
 	private NSand sand;
-	NGrain grain;
+	private NGrain grain;
 	
 //	Button buttonDiscuss, buttonCloud, buttonSettings;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
@@ -35,16 +34,19 @@ public class Swarm extends Activity
 	AlertDialog.Builder alert;
 	EditText alertInput;
 	
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{		
 		Log.i("Swarm", "onCreate()");
 		super.onCreate(savedInstanceState);
 		
-		// set static instance of swarm
-		instance = this;
+		app = (NomadsApp)this.getApplicationContext();
+		
+		// send reference of Swarm to NomadsApp
+		app.setSwarm(this);
 		
 		// get NSand instance from Join
-		sand = Join.instance.getSand();
+		sand = app.getSand();
 		
 		setContentView(R.layout.swarm);
 		
@@ -196,6 +198,8 @@ public class Swarm extends Activity
 	{
 		Log.i("Swarm", "onPause()");
 		super.onPause();
+//		Join.instance.threadRunLoop(false);
+//		app.setAppState(false);
 	}
 
 	@Override
@@ -203,6 +207,8 @@ public class Swarm extends Activity
 	{
 		Log.i("Swarm", "onResume()");
 		super.onResume();
-		Join.instance.setGrainTarget(GrainTarget.SWARM);
+//		Join.instance.threadRunLoop(true);
+//		app.setAppState(true);
+		app.setGrainTarget(GrainTarget.SWARM);
 	}
 }
