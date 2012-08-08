@@ -24,8 +24,10 @@ public class NCommand {
     public static byte SEND_SPRITE_XY = 21;  // SoundSwarm
     public static byte SET_SYNTH_VOLUME = 22;
     
-    public static byte SET_NOTE_STATUS = 23;
-    public static byte SET_NOTE_VOLUME = 24;
+    public static byte SET_CLOUD_SOUND_STATUS = 23;
+    public static byte SET_CLOUD_SOUND_VOLUME = 24;
+    public static byte SET_POINTER_TONE_STATUS = 25;
+    public static byte SET_POINTER_TONE_VOLUME = 26;
 
 
     
