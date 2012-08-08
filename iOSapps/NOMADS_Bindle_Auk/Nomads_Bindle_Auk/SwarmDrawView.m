@@ -137,14 +137,14 @@
                 if (inGrain->bArray[0] == 1) {
                     fileNumTones = 1;
                     toneCntrlOn = YES;
-                    [self playTone];
+   //                 [self playTone];
                     
                 }
                 else if (inGrain->bArray[0] == 0) {
                     toneCntrlOn = NO;
-                    [audioPlayerTone stop];
-                    audioPlayerTone = nil;
+                    [toneTimer invalidate];
                     toneOn = NO;
+
                 }
                 
             }
@@ -349,30 +349,6 @@
     currentTimerVal = (myFingerPoint.x/viewXGrid) + 4.0;
     
     
-    //Pointer Tones
-    int numOfTones = 13;
-    fileNumTonesOld = fileNumTones;
-    viewXGrid  = (viewWidth / 5);
-    viewYGrid  = (viewHeight / numOfTones);
-    if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
-        fileNumTones = 1;
-        if (!toneOn && toneCntrlOn) {
-            [self playTone];
-            toneOn = YES;
-        }
-    }
-    else {
-        fileNumTones = (int)(myFingerPoint.y/viewYGrid);
-        if (!toneOn && toneCntrlOn) {
-            [self playTone];
-            toneOn = YES;
-        }
-    }
-    if (fileNumTones != fileNumTonesOld) {
-        [audioPlayerTone stop];
-        audioPlayerTone = nil;
-        toneOn = NO;
-    }
     
     
 }
@@ -392,6 +368,28 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     maxTrails = 2;
+    
+    //Pointer Tones
+    int numOfTones = 13;
+    fileNumTonesOld = fileNumTones;
+    float viewXGrid  = (viewWidth / 5);
+    float viewYGrid  = (viewHeight / numOfTones);
+    
+    if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
+        fileNumTones = 1;
+        if (!toneOn && toneCntrlOn) {
+            //     [self playTone];
+            toneOn = YES;
+        }
+    }
+    else {
+        fileNumTones = (int)(myFingerPoint.y/viewYGrid);
+        if (!toneOn && toneCntrlOn) {
+            //       [self playTone];
+            toneOn = YES;
+        }
+    }
+    
     if (pointerStatus) {
         for (UITouch *t in touches) {
             CLog(@" Touches Began");
@@ -412,7 +410,13 @@
             //Put pair in dictionary
             //        [linesInProcess setObject:newLine forKey:key];
         }
+        toneTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(playTone) userInfo:nil repeats:YES];
+
         [self setNeedsDisplay];
+
+
+//        [self playTone];
+
     }
 }
 
@@ -448,7 +452,10 @@
                 
             }
             [self setNeedsDisplay];
+
         });
+        
+
         
         //This one sends the data
         int xy[2];
@@ -497,6 +504,10 @@
         //      touchColor = 0.6;
         
     }
+    toneOn = NO;
+
+    [toneTimer invalidate];
+
     //Redraw
     //[self setNeedsDisplay];
 }
@@ -586,12 +597,12 @@
     [self setNeedsDisplay];
 }
 
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    CLog("SDV: Audio finished playing");
-    audioPlayerDroplet = nil;
-    audioPlayerTone = nil;
-    
-}
+//-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+//    CLog("SDV: Audio finished playing");
+//    audioPlayerDroplet = nil;
+//    audioPlayerTone = nil;
+//    
+//}
 
 // Play the sound
 
@@ -605,7 +616,8 @@
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
     
     CLog("URL: %@", url);
-	
+
+    
 	NSError *error;
     if (audioPlayerDroplet == nil) {
         audioPlayerDroplet = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
@@ -656,20 +668,29 @@
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
     
     CLog("URL: %@", url);
-	
+ 
 	NSError *error;
-    if (audioPlayerTone == nil) {
-        audioPlayerTone = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        [audioPlayerTone setDelegate:self];
-        audioPlayerTone.numberOfLoops = -1;
-        if (audioPlayerTone == nil) {
-            CLog("SDV: Playback error: %@",[error description]);
-        }
-        else {
-            audioPlayerTone.volume = toneVolume;
-            CLog("SDV: dropletVolume = %f", toneVolume);
-            [audioPlayerTone play];
-        }
+    if (tonePlayer > 9) {
+        tonePlayer = 0;
+    }
+    else 
+        tonePlayer++;
+    
+    audioPlayerTone[tonePlayer] = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+
+   [audioPlayerTone[tonePlayer] setDelegate:self];
+    
+    audioPlayerTone[tonePlayer].numberOfLoops = 1;
+
+    if (audioPlayerTone[tonePlayer] == nil) {
+        CLog("SDV: Playback error: %@",[error description]);
+    }
+    else {
+        CLog("SDV: tonVolume = %f", toneVolume);
+        audioPlayerTone[tonePlayer].volume = toneVolume;
+
+        [audioPlayerTone[tonePlayer] play];
+
     }
 }
 

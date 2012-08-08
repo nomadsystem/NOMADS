@@ -30,7 +30,7 @@
     NSMutableArray  *chatLines;
     int numChatLines;
     AVAudioPlayer *audioPlayerDroplet;
-    AVAudioPlayer *audioPlayerTone;
+    AVAudioPlayer *audioPlayerTone[20];
     Boolean toneOn;
     Boolean toneCntrlOn;
     
@@ -41,6 +41,8 @@
     NSTimer *dotFlashTimer;
     NSTimer *toneFadeOutTimer;
     NSTimer *toneFadeInTimer;
+
+    NSTimer *toneTimer;
     
     NSTimer *promptFadeInTimer;
     NSTimer *promptFadeOutTimer;
@@ -72,6 +74,8 @@
     CGFloat viewWidth;
     int viewWidthScale; //STK: scales between 0-1000 (eventually between 0-1)
     int viewHeightScale;
+    
+    int tonePlayer;
         
 }
 
