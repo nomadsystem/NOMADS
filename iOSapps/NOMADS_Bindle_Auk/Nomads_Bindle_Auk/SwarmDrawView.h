@@ -29,18 +29,27 @@
     float touchColor;
     NSMutableArray  *chatLines;
     int numChatLines;
-    AVAudioPlayer *audioPlayer;
+    AVAudioPlayer *audioPlayerDroplet;
+    AVAudioPlayer *audioPlayerTone;
+    Boolean toneOn;
+    Boolean toneCntrlOn;
+    
     float dropletVolume;
+    float toneVolume;
     
     NSTimer *dropletTimer;
     NSTimer *dotFlashTimer;
+    NSTimer *toneFadeOutTimer;
+    NSTimer *toneFadeInTimer;
     
     NSTimer *promptFadeInTimer;
     NSTimer *promptFadeOutTimer;
     NSTimer *promptWaitTimer;
 
     
-    int fileNum;
+    int fileNumDroplets;
+    int fileNumTones;
+    int fileNumTonesOld;
     float currentTimerVal;
     float lastTimerVal;
     AVAudioSession *session;
@@ -75,6 +84,7 @@
 - (void)clearAll;
 - (void)endTouches:(NSSet *)touches;
 - (void)playDroplet;
+- (void)playTone;
 - (void)fadeInPrompt;
 - (void)fadeOutPromt;
 - (void)promptZeroTimer;

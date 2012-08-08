@@ -37,8 +37,8 @@
     AVAudioPlayer *audioPlayer;
     AVAudioSession *session;
     int fileNum;
-    float noteVolume;
-    Boolean noteIsEnabled;
+    float cloudSoundVolume;
+    Boolean cloudSoundIsEnabled;
     int currentView;
     SwarmDrawView *mySwarmDrawView;
     
@@ -82,7 +82,7 @@
 - (IBAction)backgroundTapDiscuss:(id)sender; //Tap to resign text entry
 - (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
 
-- (void)playNote;
+- (void)playCloudSound;
 
 -(void)reachabilityChanged:(NSNotification*)note;
 
