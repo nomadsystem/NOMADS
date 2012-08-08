@@ -1,3 +1,7 @@
+// NomadsApp.java
+// Nomads Auksalaq
+// Paul Turowski. 2012.08.08
+
 package com.nomads;
 
 import nomads.v210.*;

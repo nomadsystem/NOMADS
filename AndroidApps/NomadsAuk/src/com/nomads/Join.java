@@ -80,13 +80,12 @@ public class Join extends Activity
 		// Send the register byte to the Nomads server
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
-		sand.new Send(
+		sand.sendGrain(
 				NAppIDAuk.OPERA_CLIENT,
 				NCommandAuk.REGISTER,
-				NDataType.UINT8,
+				NDataType.BYTE,
 				1,
-				registerByte)
-		.execute();
+				registerByte);
 	}
 	
 	public void parseGrain(NGrain _grain)
@@ -94,12 +93,6 @@ public class Join extends Activity
 		Log.i("Join", "parseGrain()");
 		
 		grain = _grain;
-		
-		String msg = "test message";
-		Log.i("Join", "parseGrain() test message = " + msg);
-		
-		msg = new String(grain.bArray.toString());
-		Log.i("Join", "parseGrain() grain message = " + msg);
 		
 		if (grain != null)
 			grain = null;

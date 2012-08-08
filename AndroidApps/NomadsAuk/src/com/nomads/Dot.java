@@ -1,3 +1,7 @@
+// Dot.java
+// Nomads Auksalaq
+// Paul Turowski. 2012.08.08
+
 package com.nomads;
 
 import nomads.v210.NAppIDAuk;
@@ -55,13 +59,12 @@ class Dot extends View {
 				xy[1] = event.getY();
 				
 				// send position of dot to server
-				sand.new Send(
+				sand.sendGrain(
 						NAppIDAuk.OC_POINTER,
 						NCommandAuk.SEND_SPRITE_XY,
-						NDataType.FLOAT,
+						NDataType.FLOAT32,
 						2,
-						xy)
-				.execute();
+						xy);
 				break;
 		}
 		return (true);
