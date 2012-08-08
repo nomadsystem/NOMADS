@@ -120,8 +120,8 @@
         CLog("Error initializing Audio Session Category");
     }
     fileNum = 1; //Selects AukNote file number
-    noteIsEnabled = NO;
-    noteVolume = 1.0;
+    cloudSoundIsEnabled = NO;
+    cloudSoundVolume = 1.0;
     
     //Init for size of SwarmDrawView
     CGRect screenRect = [swarmView bounds];
@@ -267,22 +267,25 @@
                 
             }
             
-            else if(inGrain->command == SET_NOTE_STATUS) {
+            else if(inGrain->command == SET_CLOUD_SOUND_STATUS) {
                 if (inGrain->bArray[0] == 1) {
-                    noteIsEnabled = YES;
+                    cloudSoundIsEnabled = YES;
+                     CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                 }
                 else if (inGrain->bArray[0] == 0) {
-                    noteIsEnabled = NO;
+                    cloudSoundIsEnabled = NO;
+                    CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                     fileNum = 1;
                 }   
                 
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
             
-            else if (inGrain->command == SET_NOTE_VOLUME) {
+            else if (inGrain->command == SET_CLOUD_SOUND_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
-                noteVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
-                audioPlayer.volume = noteVolume;
+                cloudSoundVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
+                CLog("SET_CLOUD_SOUND_VOLUME:  %d\n",(int)inGrain->iArray[0]);
+                audioPlayer.volume = cloudSoundVolume;
             }
         }
     }
@@ -397,12 +400,12 @@
     [self.inputCloudField resignFirstResponder];
 }
 
-//Method to play AukNote (from Cloud entry at end of Opera)
--(void)playNote {
+//Method to play CloudSound (from Cloud entry at end of Opera)
+-(void)playCloudSound {
     
     NSString *soundFile;
     
-    soundFile = [NSString stringWithFormat:@"sounds/AukNotes/AuksalaqNomadsNote%d.mp3",fileNum];
+    soundFile = [NSString stringWithFormat:@"sounds/AuksalaqThoughtCloudSounds/AuksalaqThoughtCloud%d.mp3",fileNum];
     
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
     
@@ -417,8 +420,8 @@
             CLog("Playback error: %@",[error description]);
         }
         else {
-            audioPlayer.volume = noteVolume;
-            CLog("noteVolume = %f", noteVolume);
+            audioPlayer.volume = cloudSoundVolume;
+            CLog("noteVolume = %f", cloudSoundVolume);
             [audioPlayer play];
         }
     }
@@ -434,7 +437,7 @@
 //Method to advance filenumber after playback of AukNote
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     CLog("AVC: Audio finished playing");
-    if (fileNum == 17) {
+    if (fileNum == 18) {
         fileNum = 0;
     }
     else {
@@ -532,12 +535,12 @@
             [aukView sendSubviewToBack:inputCloudField];
             
             //Note playback
-            if (noteIsEnabled) { //Only play back if note is enabled
+            if (cloudSoundIsEnabled) { //Only play back if note is enabled
                 if (![audioPlayer isPlaying]) {
-                    [self playNote];
+                    [self playCloudSound];
                 }
                 else {
-                    CLog("AVC: Note is already playing");
+                    CLog("AVC: cloudSound is already playing");
                 }
             }
         }
