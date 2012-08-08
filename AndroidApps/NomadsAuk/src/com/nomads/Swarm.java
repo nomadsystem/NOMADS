@@ -79,10 +79,10 @@ public class Swarm extends Activity
 	
 	public void parseGrain(NGrain _grain)
 	{
+		Log.i("Swarm", "parseGrain()");
 		grain = _grain;
-
-		Log.i("Discuss", "DiscussClient -> handle()");
-		String msg = new String(grain.bArray);
+//		String msg = new String(grain.bArray.toString());
+//		Log.i("Swarm", msg);
 
 //		if (grain.appID == NAppID.DISCUSS_PROMPT) {
 //			topic.setText(msg);
@@ -99,14 +99,12 @@ public class Swarm extends Activity
 //			}			
 //		}
 //		else if (grain.appID == NAppIDAuk.OC_DISCUSS){
-		if (grain.appID == NAppIDAuk.OC_DISCUSS){
-			appendTextAndScroll(msg);
-			Log.i("Discuss", "ChatWindow: " + msg);
-//			input.requestFocus();
-		}
-		else {
-			grain = null;
-		}
+//		if (grain.appID == NAppIDAuk.OC_DISCUSS){
+//			appendTextAndScroll(msg);
+//			Log.i("Discuss", "ChatWindow: " + msg);
+////			input.requestFocus();
+//		}
+
 		if (grain != null)
 			grain = null;
 	}
@@ -172,7 +170,13 @@ public class Swarm extends Activity
 				byte[] discussMsg = value.getBytes();
 				// eventually use this:
 				// char[] discussMsg = value.toCharArray();
-				sand.sendGrain(NAppIDAuk.OC_DISCUSS, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, discussMsg.length, discussMsg );
+				sand.new Send(
+						NAppIDAuk.OC_DISCUSS,
+						NCommandAuk.SEND_MESSAGE,
+						NDataType.CHAR,
+						discussMsg.length,
+						discussMsg )
+				.execute();
 			}
 		});
 
@@ -204,7 +208,13 @@ public class Swarm extends Activity
 				String value = alertInput.getText().toString();
 				Log.d("Swarm->Discuss", value);
 				byte[] cloudMsg = value.getBytes();
-				sand.sendGrain(NAppIDAuk.OC_CLOUD, NCommandAuk.SEND_MESSAGE, NDataType.CHAR, cloudMsg.length, cloudMsg );
+				sand.new Send(
+						NAppIDAuk.OC_CLOUD,
+						NCommandAuk.SEND_MESSAGE,
+						NDataType.CHAR,
+						cloudMsg.length,
+						cloudMsg)
+				.execute();
 			}
 		});
 

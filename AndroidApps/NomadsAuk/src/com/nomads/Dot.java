@@ -55,7 +55,13 @@ class Dot extends View {
 				xy[1] = event.getY();
 				
 				// send position of dot to server
-				sand.sendGrain(NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY, NDataType.FLOAT, 2, xy);
+				sand.new Send(
+						NAppIDAuk.OC_POINTER,
+						NCommandAuk.SEND_SPRITE_XY,
+						NDataType.FLOAT,
+						2,
+						xy)
+				.execute();
 				break;
 		}
 		return (true);

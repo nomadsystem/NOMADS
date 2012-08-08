@@ -22,7 +22,7 @@ public class Join extends Activity
 	
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
-//	private NSand sand;
+	private NSand sand;
 	private NGrain grain;
 	
 	TextView joinStatus;
@@ -45,7 +45,11 @@ public class Join extends Activity
 		connect.setOnClickListener(connectButtonListener);
 		
 		// get NSand instance from Join
-//		sand = app.getSand();
+		sand = app.getSand();
+		
+		sand.new Connect().execute(this, app);
+		
+		Log.i("Join", "app.isConnected() = " + app.isConnected());
 		
 		if( app.isConnected() )
 		{
@@ -63,13 +67,39 @@ public class Join extends Activity
 	// Network methods
 	//========================================================
 	
+	public void register ()
+	{		
+		Log.i("NomadsApp", "register() -> connectionStatus is: " + app.isConnected());
+		
+		if (!app.isConnected())
+		{
+			Log.i("NomadsApp", "Register failed because connectionStatus is false");
+			return;
+		}
+		
+		// Send the register byte to the Nomads server
+		byte[] registerByte = new byte[1];
+		registerByte[0] = 1;
+		sand.new Send(
+				NAppIDAuk.OPERA_CLIENT,
+				NCommandAuk.REGISTER,
+				NDataType.UINT8,
+				1,
+				registerByte)
+		.execute();
+	}
+	
 	public void parseGrain(NGrain _grain)
 	{
+		Log.i("Join", "parseGrain()");
+		
 		grain = _grain;
 		
-		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL){
-			Log.i("Join", "addID == NAppIDAuk.CONDUCTOR_PANEL");
-		}
+		String msg = "test message";
+		Log.i("Join", "parseGrain() test message = " + msg);
+		
+		msg = new String(grain.bArray.toString());
+		Log.i("Join", "parseGrain() grain message = " + msg);
 		
 		if (grain != null)
 			grain = null;
@@ -83,14 +113,7 @@ public class Join extends Activity
 		@Override
 		public void onClick(View v)
 		{
-			app.tryConnect();
-			
-			if( app.isConnected() )
-			{
-				// Switch to Swarm activity
-				Intent intent = new Intent(getApplicationContext(), Swarm.class);
-				startActivity(intent);
-			}
+			sand.new Connect().execute(this, app);
 		}
 	};
 	
@@ -110,5 +133,11 @@ public class Join extends Activity
 		super.onPause();
 		Log.i("Join", "is paused");
 //		stopThread();
+	}
+	
+	public void goToSwarm () {
+		// Switch to Swarm activity
+		Intent intent = new Intent(getApplicationContext(), Swarm.class);
+		startActivity(intent);
 	}
 }

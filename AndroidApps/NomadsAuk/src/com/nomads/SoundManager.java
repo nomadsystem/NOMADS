@@ -3,6 +3,10 @@
 // http://www.droidnova.com/creating-sound-effects-in-android-part-2,695.html
 // modified by Paul Turowski. 2012.08.06
 
+// ************* This class is now deprecated
+// as it doesn't allow for onCompletionListener
+// but can be used in the future for simultaneous sounds, changing playback speed
+
 package com.nomads;
 
 import java.util.HashMap;
