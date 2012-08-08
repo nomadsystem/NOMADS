@@ -62,14 +62,16 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 	JSlider cloudAlpha;
 	JSlider pointerAlpha;
 	JSlider dropletLevel;
-	JSlider noteLevel;
+	JSlider cloudSoundLevel;
+	JSlider pointerToneLevel;
 	JSlider mainVolLevel;
 
 	JToggleButton discussCntrl;
 	JToggleButton cloudCntrl;
 	JToggleButton pointerCntrl;
 	JToggleButton dropletCntrl;
-	JToggleButton noteCntrl;
+	JToggleButton cloudSoundCntrl;
+	JToggleButton pointerToneCntrl;
 
 	JLabel promptLabel;
 	JToggleButton promptButton;
@@ -115,11 +117,17 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		dropletWrapper.add(dropletLabel);
 
-		JPanel noteWrapper = new JPanel();
-		noteWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
-		JLabel noteLabel = new JLabel("Note");
-		noteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		noteWrapper.add(noteLabel);
+		JPanel cloudSoundWrapper = new JPanel();
+		cloudSoundWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
+		JLabel cloudSoundLabel = new JLabel("Cloud Sound");
+		cloudSoundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		cloudSoundWrapper.add(cloudSoundLabel);
+		
+		JPanel pointerToneWrapper = new JPanel();
+		pointerToneWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
+		JLabel pointerToneLabel = new JLabel("Pointer Tone");
+		pointerToneLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pointerToneWrapper.add(pointerToneLabel);
 
 		JPanel mainVolWrapper = new JPanel();
 		mainVolWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
@@ -161,16 +169,22 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletCntrl.addItemListener(buttonListener);
 		dropletCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		noteCntrl = new JToggleButton("Notes");
+		cloudSoundCntrl = new JToggleButton("Cloud Sound");
 		//		dropletCntrl.addChangeListener(buttonListener);
-		noteCntrl.addItemListener(buttonListener);
-		noteCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
+		cloudSoundCntrl.addItemListener(buttonListener);
+		cloudSoundCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		pointerToneCntrl = new JToggleButton("Pointer Tone");
+		//		dropletCntrl.addChangeListener(buttonListener);
+		pointerToneCntrl.addItemListener(buttonListener);
+		pointerToneCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		discussWrapper.setLayout(new BoxLayout(discussWrapper, BoxLayout.Y_AXIS));
 		cloudWrapper.setLayout(new BoxLayout(cloudWrapper, BoxLayout.Y_AXIS));
 		pointerWrapper.setLayout(new BoxLayout(pointerWrapper,BoxLayout.Y_AXIS));
 		dropletWrapper.setLayout(new BoxLayout(dropletWrapper,BoxLayout.Y_AXIS));
-		noteWrapper.setLayout(new BoxLayout(noteWrapper,BoxLayout.Y_AXIS));
+		cloudSoundWrapper.setLayout(new BoxLayout(cloudSoundWrapper,BoxLayout.Y_AXIS));
+		pointerToneWrapper.setLayout(new BoxLayout(pointerToneWrapper,BoxLayout.Y_AXIS));
 		mainVolWrapper.setLayout(new BoxLayout(mainVolWrapper,BoxLayout.Y_AXIS));
 
 		discussAlpha = new JSlider(JSlider.VERTICAL,0,255, 180);
@@ -217,15 +231,25 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		dropletWrapper.add(dropletLevel);
 		dropletWrapper.add(dropletCntrl);
 
-		noteLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
-		noteLevel.addChangeListener(sliderListener);
+		cloudSoundLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
+		cloudSoundLevel.addChangeListener(sliderListener);
 
-		noteLevel.setMajorTickSpacing(10);
-		noteLevel.setPaintTicks(true);
-		noteLevel.setPaintLabels(true);
+		cloudSoundLevel.setMajorTickSpacing(10);
+		cloudSoundLevel.setPaintTicks(true);
+		cloudSoundLevel.setPaintLabels(true);
 
-		noteWrapper.add(noteLevel);
-		noteWrapper.add(noteCntrl);
+		cloudSoundWrapper.add(cloudSoundLevel);
+		cloudSoundWrapper.add(cloudSoundCntrl);
+		
+		pointerToneLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
+		pointerToneLevel.addChangeListener(sliderListener);
+
+		pointerToneLevel.setMajorTickSpacing(10);
+		pointerToneLevel.setPaintTicks(true);
+		pointerToneLevel.setPaintLabels(true);
+
+		pointerToneWrapper.add(pointerToneLevel);
+		pointerToneWrapper.add(pointerToneCntrl);
 
 		mainVolLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
 		mainVolLevel.addChangeListener(sliderListener);
@@ -262,7 +286,8 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		tPane.add(cloudWrapper);
 		tPane.add(pointerWrapper);
 		tPane.add(dropletWrapper);
-		tPane.add(noteWrapper);
+		tPane.add(cloudSoundWrapper);
+		tPane.add(pointerToneWrapper);
 		tPane.add(mainVolWrapper);
 
 		tPane.setOpaque(false);
@@ -396,14 +421,24 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 					NGlobals.cPrint("ACP: Droplet enable");
 				}
 			}
-			if (incCmd == NCommand.SET_NOTE_STATUS) {
+			if (incCmd == NCommand.SET_CLOUD_SOUND_STATUS) {
 				if (grain.bArray[0] == 0) {
-					noteCntrl.getModel().setSelected(false);
-					NGlobals.cPrint("ACP: Note disable");
+					cloudSoundCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: cloudSound disable");
 				}
 				else if (grain.bArray[0] == 1) {
-					noteCntrl.getModel().setSelected(true);
-					NGlobals.cPrint("ACP: Note enable");
+					cloudSoundCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: cloudSound enable");
+				}
+			}
+			if (incCmd == NCommand.SET_POINTER_TONE_STATUS) {
+				if (grain.bArray[0] == 0) {
+					pointerToneCntrl.getModel().setSelected(false);
+					NGlobals.cPrint("ACP: pointerTone disable");
+				}
+				else if (grain.bArray[0] == 1) {
+					pointerToneCntrl.getModel().setSelected(true);
+					NGlobals.cPrint("ACP: pointerTone enable");
 				}
 			}
 
@@ -522,16 +557,28 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 					NGlobals.cPrint("ACP: dropletCntrl:  OFF"); 
 				}
 			}
-			else if (abstractButton == noteCntrl) {
+			else if (abstractButton == cloudSoundCntrl) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					d[0] = 1;
-					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("ACP: noteCntrl:  ON"); 
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_SOUND_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: cloudSoundCntrl:  ON"); 
 				} 
 				else {
 					d[0] = 0;
-					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_STATUS, (byte)NDataType.UINT8, 1, d );
-					NGlobals.cPrint("ACP: noteCntrl:  OFF"); 
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_SOUND_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: cloudSoundCntrl:  OFF"); 
+				}
+			}
+			else if (abstractButton == pointerToneCntrl) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					d[0] = 1;
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_TONE_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: pointerToneCntrl:  ON"); 
+				} 
+				else {
+					d[0] = 0;
+					operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_TONE_STATUS, (byte)NDataType.UINT8, 1, d );
+					NGlobals.cPrint("ACP: pointerToneCntrl:  OFF"); 
 				}
 			}
 			else if (abstractButton == promptButton) {
@@ -658,10 +705,15 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DROPLET_VOLUME, (byte)NDataType.INT32, 1, d );
 				NGlobals.cPrint("ACP: dropletLevel:" + d[0]); 
 			}
-			if (source == noteLevel) {
+			if (source == cloudSoundLevel) {
 				d[0] = (int)source.getValue();
-				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_NOTE_VOLUME, (byte)NDataType.INT32, 1, d );
-				NGlobals.cPrint("ACP: noteLevel:" + d[0]); 
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_CLOUD_SOUND_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: cloudSoundLevel:" + d[0]); 
+			}
+			if (source == pointerToneLevel) {
+				d[0] = (int)source.getValue();
+				operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_POINTER_TONE_VOLUME, (byte)NDataType.INT32, 1, d );
+				NGlobals.cPrint("ACP: pointerToneLevel:" + d[0]); 
 			}
 			if (source == mainVolLevel) {
 				d[0] = (int)source.getValue();
