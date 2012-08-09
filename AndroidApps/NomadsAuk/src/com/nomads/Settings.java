@@ -80,9 +80,15 @@ public class Settings extends Activity
 	
 	public void parseGrain(NGrain _grain)
 	{
+		Log.d("Settings", "parseGrain(): grain received");
+		
+		if (grain == null)
+		{
+			Log.d("Settings", "parseGrain(): grain is null");
+			return;
+		}
 		grain = _grain;
 
-		Log.i("Settings", "parseGrain() invoked");
 //		String msg = new String(grain.bArray);
 //		Log.i("Swarm", msg);
 //

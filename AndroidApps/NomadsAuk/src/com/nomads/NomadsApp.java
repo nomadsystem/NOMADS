@@ -15,12 +15,12 @@ import android.util.Log;
 public class NomadsApp extends Application
 {
 	private static NomadsApp singleton;
-	private Join join = null;
-	private Swarm swarm = null;
-	private Settings settings = null;
-	public static GrainTarget gT = GrainTarget.JOIN;
+	private Join join;
+	private Swarm swarm;
+	private Settings settings;
+	private static GrainTarget gT = GrainTarget.JOIN;
 	private NSand sand;
-	NGrain grain;
+	private NGrain grain;
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
@@ -38,12 +38,6 @@ public class NomadsApp extends Application
 		super.onCreate();
 		
 		singleton = this;
-		
-		//Create, initialize, load the sound manager
-        SoundManager.getInstance();
-        SoundManager.initSounds(this);
-        SoundManager.loadSounds();
-
 	}
 	
 	//========================================================
@@ -90,7 +84,7 @@ public class NomadsApp extends Application
 	
 	public void setGrainTarget(GrainTarget _target)
 	{
-		Log.i("NomadsApp", "setSandTarget()");
+		Log.i("NomadsApp", "setGrainTarget(): " + _target);
 		gT = _target;
 	}
 	
@@ -115,7 +109,7 @@ public class NomadsApp extends Application
 	
 	private void routeGrain(GrainTarget _target)
 	{
-		Log.d("Join", "routeGrain(): Current target: " + _target);
+		Log.d("NomadsApp", "routeGrain(): Current target: " + _target);
 		
 		if (grain != null)
 		{
@@ -129,10 +123,10 @@ public class NomadsApp extends Application
 				settings.parseGrain(grain);
 			
 			else
-				Log.e("Join", "invalid grain target");
+				Log.e("NomadsApp", "invalid grain target");
 		}
 		else
-			Log.e("Join", "routeGrain(): grain is null");
+			Log.e("NomadsApp", "routeGrain(): grain is null");
 	}
 	
 	//========================================================
@@ -208,8 +202,6 @@ public class NomadsApp extends Application
 	    };
 	}
 	
-	//========================================================
-	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -227,6 +219,7 @@ public class NomadsApp extends Application
 	
 	public void finishAll()
 	{
+		// needed?
 		removeThread();
 		if (settings != null)
 			settings.finish();

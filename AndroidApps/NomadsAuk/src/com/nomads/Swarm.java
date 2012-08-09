@@ -4,6 +4,8 @@
 
 package com.nomads;
 
+import java.io.IOException;
+
 import nomads.v210.*;
 import nomads.v210.NGlobals.GrainTarget;
 
@@ -12,6 +14,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
@@ -25,7 +29,8 @@ import android.widget.TextView;
 
 public class Swarm extends Activity
 {
-	NomadsApp app;
+	private NomadsApp app;
+	private MediaPlayer mPlayer;
 
 	private NSand sand;
 	private NGrain grain;
@@ -53,8 +58,8 @@ public class Swarm extends Activity
 		// get NSand instance from Join
 		sand = app.getSand();
 		
+		// initialize UI
 		setContentView(R.layout.swarm);
-		
 		chatWindow = (TextView)findViewById(R.id.chatWindow);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		buttonDiscuss = (ImageButton)findViewById(R.id.buttonDiscuss);
@@ -79,10 +84,17 @@ public class Swarm extends Activity
 	
 	public void parseGrain(NGrain _grain)
 	{
-		Log.i("Swarm", "parseGrain()");
+		Log.d("Swarm", "parseGrain(): grain received");
+		
+		if (grain == null)
+		{
+			Log.d("Swarm", "parseGrain(): grain is null");
+			return;
+		}
+		
 		grain = _grain;
 		String msg = new String(grain.bArray);
-		Log.i("Swarm", msg);
+		Log.i("Swarm", "message received is: " + msg);
 
 //		if (grain.appID == NAppID.DISCUSS_PROMPT) {
 //			topic.setText(msg);
@@ -143,7 +155,36 @@ public class Swarm extends Activity
 	{
 		@Override
 		public void onClick(View v) {
-			SoundManager.playSound(1, 1);
+			if (mPlayer != null)
+			{
+				try {
+					if (mPlayer.isPlaying())
+						mPlayer.stop();
+
+			    	mPlayer.reset();
+			    	AssetFileDescriptor afd = context.getAssets().openFd("pointer1.mp3");
+			    	mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength() );
+			    	afd.close();
+			        mPlayer.prepare();
+//			        mPlayer.setLooping(true);
+//			        mPlayer.seekTo(0);
+			        mPlayer.start();
+				}
+				catch (IllegalArgumentException e) {
+					Log.e("Swarm", "IllegalArgumentException: " + e.getMessage(), e);
+				} 
+				catch (IllegalStateException e) {
+					Log.e("Swarm", "IllegalStateException: " + e.getMessage(), e);
+				} 
+				catch (IOException e) {
+					Log.e("Swarm", "IOException: " + e.getMessage(), e);
+				} 
+				catch (Exception e){
+					Log.e("Swarm", "Exception: " + e.getMessage(), e);
+				}
+			}
+
+
 		}
 	};
 	
@@ -279,6 +320,12 @@ public class Swarm extends Activity
 		super.onPause();
 //		Join.instance.threadRunLoop(false);
 //		app.setAppState(false);
+		
+		// release the media player
+		if (mPlayer != null) {
+			mPlayer.release();
+			mPlayer = null;
+		}
 	}
 
 	@Override
@@ -289,6 +336,9 @@ public class Swarm extends Activity
 //		Join.instance.threadRunLoop(true);
 //		app.setAppState(true);
 		app.setGrainTarget(GrainTarget.SWARM);
+		
+		// Create new media player
+		mPlayer = new MediaPlayer();
 	}
 	
 	@Override

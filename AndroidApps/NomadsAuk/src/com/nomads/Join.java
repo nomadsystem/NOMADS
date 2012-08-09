@@ -31,7 +31,7 @@ public class Join extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Log.i("Join", "onCreate()");
+		Log.d("Join", "onCreate()");
 		super.onCreate(savedInstanceState);
 		
 		// get reference to NomadsApp singleton
@@ -68,11 +68,11 @@ public class Join extends Activity
 	
 	public void register ()
 	{		
-		Log.i("NomadsApp", "register() -> connectionStatus is: " + app.isConnected());
+		Log.d("NomadsApp", "register() -> connectionStatus is: " + app.isConnected());
 		
 		if (!app.isConnected())
 		{
-			Log.i("NomadsApp", "Register failed because connectionStatus is false");
+			Log.e("NomadsApp", "Register failed because connectionStatus is false");
 			return;
 		}
 		
@@ -89,7 +89,13 @@ public class Join extends Activity
 	
 	public void parseGrain(NGrain _grain)
 	{
-		Log.i("Join", "parseGrain()");
+		Log.d("Join", "parseGrain(): grain received");
+		
+		if (grain == null)
+		{
+			Log.d("Join", "parseGrain(): grain is null");
+			return;
+		}
 		
 		grain = _grain;
 		
@@ -115,7 +121,7 @@ public class Join extends Activity
 	public void onResume()
 	{
 		super.onResume();
-		Log.i("Join", "is resumed");
+		Log.d("Join", "is resumed");
 		gT = GrainTarget.JOIN;
 	}
 	
@@ -123,7 +129,7 @@ public class Join extends Activity
 	public void onPause()
 	{
 		super.onPause();
-		Log.i("Join", "is paused");
+		Log.d("Join", "is paused");
 //		stopThread();
 	}
 	
