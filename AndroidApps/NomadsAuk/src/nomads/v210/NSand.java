@@ -72,62 +72,62 @@ public class NSand
 		    streamOut.writeByte(myGrain.dataType);
 		    // send data Length
 		    streamOut.writeInt(myGrain.dataLen);
-		    Log.d("NSand.java", "appID =" + myGrain.appID);
-		    Log.d("NSand.java", "commd =" + myGrain.command);
-		    Log.d("NSand.java", "dataType =" + myGrain.dataType);
-		    Log.d("NSand.java", "dLen  =" + myGrain.dataLen);
+		    Log.d("NSand.java", "sendGrain: appID =" + myGrain.appID);
+		    Log.d("NSand.java", "sendGrain: commd =" + myGrain.command);
+		    Log.d("NSand.java", "sendGrain: dataType =" + myGrain.dataType);
+		    Log.d("NSand.java", "sendGrain: dLen  =" + myGrain.dataLen);
 	
 	
 		    // send data
 		    if (myGrain.dataType == NDataType.BYTE) {
-				Log.d("NSand.java", "data[] = BYTE (Deprecated, use CHAR or UINT8)");
+				Log.d("NSand.java", "sendGrain: data[] = BYTE (Deprecated, use CHAR or UINT8)");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeByte(myGrain.bArray[i]);
 				}
 		    }
 	
 		    else if (myGrain.dataType == NDataType.UINT8) {
-			Log.d("NSand.java", "data[] = UINT8");
+			Log.d("NSand.java", "sendGrain: data[] = UINT8");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeByte(myGrain.bArray[i]);
 				}
 		    }
 	
 		    else if (myGrain.dataType == NDataType.INT) {
-			Log.d("NSand.java", "data[] = INT (Deprecated, use INT32)");
+			Log.d("NSand.java", "sendGrain: data[] = INT (Deprecated, use INT32)");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeInt(myGrain.iArray[i]);
 				}
 		    }
 	
 		    else if (myGrain.dataType == NDataType.INT32) {
-			Log.d("NSand.java", "data[] = INT32");
+			Log.d("NSand.java", "sendGrain: data[] = INT32");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeInt(myGrain.iArray[i]);
 				}
 		    }
 	
 		    else if (myGrain.dataType == NDataType.FLOAT) {
-			Log.d("NSand.java", "data[] = FLOAT (Deprecated, use FLOAT32)");
+			Log.d("NSand.java", "sendGrain: data[] = FLOAT (Deprecated, use FLOAT32)");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeFloat(myGrain.fArray[i]);
 				}
 		    }
 	
 		    else if (myGrain.dataType == NDataType.FLOAT32) {
-			Log.d("NSand.java", "data[] = FLOAT32");
+			Log.d("NSand.java", "sendGrain: data[] = FLOAT32");
 				for (int i=0; i<myGrain.dataLen; i++) {
 				    streamOut.writeFloat(myGrain.fArray[i]);
 				}
 		    }
 	
 		    else {
-			Log.d("NSand.java", "NSAND: sendGrain(nGrain): WARNING:  Unknown NDataType: " + myGrain.dataType);
+			Log.d("NSand.java", "sendGrain: WARNING:  Unknown NDataType: " + myGrain.dataType);
 		    }
 	
 		}
 		catch(IOException ioe) {  
-		    Log.d("NSand.java", "SAND write error");
+		    Log.d("NSand.java", "sendGrain: SAND write error");
 		}
     }
 
@@ -145,19 +145,19 @@ public class NSand
 		    // send data Length
 		    streamOut.writeInt(dLen);
 	
-		    Log.d("NSand.java", "appID =" + aID);
-		    Log.d("NSand.java", "commd =" + cmd);
-		    Log.d("NSand.java", "dataType =" + dType);
-		    Log.d("NSand.java", "dLen  =" + dLen);
+		    Log.d("NSand.java", "sendGrain: appID =" + aID);
+		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
+		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
+		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
 	
 	
 		    for (int i=0; i<dLen; i++) {
 			streamOut.writeByte(bArray[i]);
-			Log.d("NSand.java", "BYTE:  " + bArray[i]);
+			Log.d("NSand.java", "sendGrain: BYTE:  " + bArray[i]);
 		    }
 		}
 		catch(IOException ioe) {  
-		    Log.d("NSand.java", "SAND write error");
+		    Log.d("NSand.java", "sendGrain: SAND write error");
 		}
     }
 	
@@ -174,17 +174,17 @@ public class NSand
 		    // send data Length
 		    streamOut.writeInt(dLen);
 	
-		    Log.d("NSand.java", "appID =" + aID);
-		    Log.d("NSand.java", "commd =" + cmd);
-		    Log.d("NSand.java", "dataType =" + dType);
-		    Log.d("NSand.java", "dLen  =" + dLen);
+		    Log.d("NSand.java", "sendGrain: appID =" + aID);
+		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
+		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
+		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
 	
 		    for (int i=0; i<dLen; i++) {
 		    	streamOut.writeInt(iArray[i]);
 		    }
 		}
 		catch(IOException ioe) {  
-		    Log.d("NSand.java", "SAND write error");
+		    Log.d("NSand.java", "sendGrain: SAND write error");
 		}
     }
 
@@ -201,17 +201,17 @@ public class NSand
 		    // send data Length
 		    streamOut.writeInt(dLen);
 	
-		    Log.d("NSand.java", "appID =" + aID);
-		    Log.d("NSand.java", "commd =" + cmd);
-		    Log.d("NSand.java", "dataType =" + dType);
-		    Log.d("NSand.java", "dLen  =" + dLen);
+		    Log.d("NSand.java", "sendGrain: appID =" + aID);
+		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
+		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
+		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
 	
 		    for (int i=0; i<dLen; i++) {
 		    	streamOut.writeFloat(fArray[i]);
 		    }
 		}
 		catch(IOException ioe) {  
-		    Log.d("NSand.java", "SAND write error");
+		    Log.d("NSand.java", "sendGrain: SAND write error");
 		}
     }
     
@@ -251,7 +251,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+				Log.d("NSand.java", "getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
 		    }
 	
 		    //Byte array
@@ -263,7 +263,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: UINT8:  " + bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with UINT8s");
+				Log.d("NSand.java", "getGrain: creating grain with UINT8s");
 		    }
 	
 		    //Int Array
@@ -275,7 +275,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
+				Log.d("NSand.java", "getGrain: creating grain with INTs (Deprecated, use INT32)");
 	
 		    }
 	
@@ -289,7 +289,7 @@ public class NSand
 				    Log.d("NSand.java", "INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with INT32s");
+				Log.d("NSand.java", "getGrain: creating grain with INT32s");
 		    }
 	
 		    //Float Array
@@ -301,7 +301,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+				Log.d("NSand.java", "getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
 		    }
 	
 		    //Float Array 32
@@ -313,7 +313,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with FLOAT32s");
+				Log.d("NSand.java", "getGrain: creating grain with FLOAT32s");
 	
 		    }
 		    else {
@@ -321,10 +321,10 @@ public class NSand
 		    }
 		}
 		catch(IOException ioe) {  
-		    Log.e("NSand.java", "SAND write error");
+		    Log.e("NSand.java", "getGrain: SAND write error");
 		}
 		
-		Log.d("NSand.java", "NSand:getGrain: returning grain\n");
+		Log.d("NSand.java", "getGrain: returning grain\n");
 	
 		return grain;
     }
@@ -360,7 +360,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+				Log.d("NSand.java", "getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
 		    }
 	
 		    //Byte array
@@ -372,7 +372,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: UINT8:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with UINT8s");
+				Log.d("NSand.java", "getGrain: creating grain with UINT8s");
 		    }
 	
 		    //Int Array
@@ -384,7 +384,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
+				Log.d("NSand.java", "getGrain: creating grain with INTs (Deprecated, use INT32)");
 		    }
 	
 		    //Int Array 32
@@ -396,7 +396,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: INT32:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with INT32s");
+				Log.d("NSand.java", "getGrain: creating grain with INT32s");
 		    }
 	
 		    //Float Array
@@ -408,7 +408,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+				Log.d("NSand.java", "getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
 		    }
 	
 		    //Float Array 32
@@ -420,7 +420,7 @@ public class NSand
 				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "NSand:getGrain: creating grain with FLOAT32s");
+				Log.d("NSand.java", "getGrain: creating grain with FLOAT32s");
 	
 		    }
 		    else {
@@ -429,7 +429,7 @@ public class NSand
 	
 		}
 		catch(IOException ioe) {  
-		    Log.e("NSand.java", "SAND write error");
+		    Log.e("NSand.java", "getGrain: SAND write error");
 		}
 		return grain;
     }
@@ -516,28 +516,28 @@ public class NSand
   		}
   	}
   
-//==============================================================
-//  Close()
-//==============================================================
-  	
-  	public class Close extends AsyncTask<Void, Void, Void>
-  	{	
-  		@Override
-  		protected Void doInBackground(Void... v)
-  		{
-  			
-  			Log.d("NSand.java", "Attempting to close sand...");
-  			try {
-  			    if (streamOut != null)  streamOut.close();
-  			    if (socket    != null)  socket.close();
-  			}
-  			catch(IOException ioe) {
-  			    Log.e("NSand.java", "Error closing...");
-  			}
-  	  		
-  	  		return null;
-  		}
-  	}
+////==============================================================
+////  Close()
+////==============================================================
+//  	
+//  	public class Close extends AsyncTask<Void, Void, Void>
+//  	{	
+//  		@Override
+//  		protected Void doInBackground(Void... v)
+//  		{
+//  			
+//  			Log.d("NSand.java", "Attempting to close sand...");
+//  			try {
+//  			    if (streamOut != null)  streamOut.close();
+//  			    if (socket    != null)  socket.close();
+//  			}
+//  			catch(IOException ioe) {
+//  			    Log.e("NSand.java", "Error closing...");
+//  			}
+//  	  		
+//  	  		return null;
+//  		}
+//  	}
 
 //=====================================================================
 //    These methods have been replaced by AsyncTask classes above
@@ -588,15 +588,17 @@ public class NSand
 //		}
 //    }
 //
-//    public void close()
-//    {  
-//		try {
-//		    if (streamOut != null)  streamOut.close();
-//		    if (socket    != null)  socket.close();
-//		}
-//		catch(IOException ioe) {
-//		    Log.d("NSand.java", "Error closing...");
-//		}
-//    }
+    public void closeConnection()
+    {  
+		try {
+			// ???
+			//if (streamOut != null)  streamOut.close();
+		    if (streamOut != null)  streamOut.close();
+		    if (socket    != null)  socket.close();
+		}
+		catch(IOException ioe) {
+		    Log.d("NSand.java", "Error closing...");
+		}
+    }
 
 }

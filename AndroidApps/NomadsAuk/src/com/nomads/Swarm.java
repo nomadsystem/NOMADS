@@ -227,6 +227,35 @@ public class Swarm extends Activity
 		alert.show();
 	}
 	
+	protected void quitAlert ()
+	{
+		alert = new AlertDialog.Builder(context);
+		// need to create new input field each time
+		
+		alert.setTitle("Really quit?");
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				app.setAppState(false);
+				app.getSand().closeConnection();
+				sand = null;
+				app.finishAll();
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// Canceled.
+			}
+		});
+		
+		alert.show();
+	}
+	
 	//========================================================
 	
 	private void appendTextAndScroll(String text)
@@ -246,7 +275,7 @@ public class Swarm extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.i("Swarm", "onPause()");
+		Log.d("Swarm", "onPause()");
 		super.onPause();
 //		Join.instance.threadRunLoop(false);
 //		app.setAppState(false);
@@ -255,10 +284,36 @@ public class Swarm extends Activity
 	@Override
 	protected void onResume()
 	{
-		Log.i("Swarm", "onResume()");
+		Log.d("Swarm", "onResume()");
 		super.onResume();
 //		Join.instance.threadRunLoop(true);
 //		app.setAppState(true);
 		app.setGrainTarget(GrainTarget.SWARM);
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		Log.d("Swarm", "onStop()");
+		super.onStop();
+	}
+	
+	@Override
+	protected void onRestart()
+	{
+		Log.d("Swarm", "onRestart()");
+		super.onRestart();
+		
+		app.setAppState(true);
+		
+		Intent intent = new Intent(getApplicationContext(), Join.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		quitAlert();
 	}
 }

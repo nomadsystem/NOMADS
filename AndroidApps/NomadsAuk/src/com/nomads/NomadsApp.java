@@ -8,7 +8,6 @@ import nomads.v210.*;
 import nomads.v210.NGlobals.GrainTarget;
 
 import android.app.Application;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Handler;
 import android.util.Log;
@@ -20,12 +19,12 @@ public class NomadsApp extends Application
 	private Swarm swarm = null;
 	private Settings settings = null;
 	public static GrainTarget gT = GrainTarget.JOIN;
-	NSand sand;
+	private NSand sand;
 	NGrain grain;
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
-	private boolean active = true;
+	private boolean appState = true;
 	
 	public NomadsApp getInstance ()
 	{
@@ -45,23 +44,11 @@ public class NomadsApp extends Application
         SoundManager.initSounds(this);
         SoundManager.loadSounds();
 
-		// create NSand instance
-		sand = new NSand();
 	}
 	
 	//========================================================
 	// Getters / Setters
 	//========================================================
-	
-	public void setConnectionStatus (boolean _connected)
-	{
-		connectionStatus = _connected;
-	}
-	
-	public boolean isConnected ()
-	{
-		return connectionStatus;
-	}
 	
 	public void setJoin(Join _j)
 	{
@@ -78,15 +65,26 @@ public class NomadsApp extends Application
 		settings = _set;
 	}
 	
-	public void setAppState(boolean state)
+	public void setConnectionStatus (boolean _connected)
 	{
-		Log.i("NomadsApp", "Thread state set to: " + state);
-	    active = state;
+		connectionStatus = _connected;
 	}
 	
+	public boolean isConnected ()
+	{
+		return connectionStatus;
+	}
+	
+	public void setAppState(boolean _state)
+	{
+		Log.i("NomadsApp", "Thread state set to: " + _state);
+	    appState = _state;
+	}
+	
+	// checked by NomadsAppThread run loop
 	public boolean getAppState()
 	{
-	    return active;
+	    return appState;
 	}
 	
 	
@@ -96,28 +94,45 @@ public class NomadsApp extends Application
 		gT = _target;
 	}
 	
+	//========================================================
+	
 	public NSand getSand()
 	{
 		return sand;
 	}
 	
-	//========================================================
+	public void newSand()
+	{
+		if (sand != null)
+		{
+			sand.closeConnection();
+			sand = null;
+		}
+		
+		// create NSand instance
+		sand = new NSand();
+	}
 	
 	private void routeGrain(GrainTarget _target)
 	{
-		Log.i("Join", "routeGrain(): Current target: " + _target);
+		Log.d("Join", "routeGrain(): Current target: " + _target);
 		
-		if (_target == GrainTarget.JOIN && join != null)
-			join.parseGrain(grain);
-		
-		else if (_target == GrainTarget.SWARM && swarm != null)
-			swarm.parseGrain(grain);
-		
-		else if (_target == GrainTarget.SETTINGS && settings != null)
-			settings.parseGrain(grain);
-		
+		if (grain != null)
+		{
+			if (_target == GrainTarget.JOIN && join != null)
+				join.parseGrain(grain);
+			
+			else if (_target == GrainTarget.SWARM && swarm != null)
+				swarm.parseGrain(grain);
+			
+			else if (_target == GrainTarget.SETTINGS && settings != null)
+				settings.parseGrain(grain);
+			
+			else
+				Log.e("Join", "invalid grain target");
+		}
 		else
-			Log.i("Join", "invalid grain target");
+			Log.e("Join", "routeGrain(): grain is null");
 	}
 	
 	//========================================================
@@ -138,17 +153,17 @@ public class NomadsApp extends Application
 		}
 	}
 
-	public synchronized void stopThread()
+	private synchronized void removeThread()
 	{
 		if(nThread != null)
 		{
-			setAppState(false);
 			Thread moribund = nThread;
 			nThread = null;
 			moribund.interrupt();
 			Log.i("NomadsApp", "NomadsAppThread stopped.");
-			sand.new Close().execute();
-			Log.i("NomadsApp", "sand.close()");
+//			sand.close();
+//			sand.new Close().execute();
+//			Log.i("NomadsApp", "sand.close()");
 		}
 		else
 		{
@@ -178,7 +193,7 @@ public class NomadsApp extends Application
 					handle.post(updateUI);
 				} catch (NullPointerException npe) {
 					Log.i("NomadsApp -> Thread", "run() -> socket == null; exiting.");
-					handle.post(exitThread);
+					grain = null;
 				}
 			}
 		}
@@ -189,20 +204,6 @@ public class NomadsApp extends Application
 	        public void run()
 	    	{
 	    		routeGrain(gT);
-	        }
-	    };
-	    
-	    final Runnable exitThread = new Runnable()
-		{
-	    	@Override
-	        public void run()
-	    	{
-				stopThread();
-				
-				// Switch to Join activity
-				Intent intent = new Intent(getApplicationContext(), Join.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
 	        }
 	    };
 	}
@@ -222,5 +223,16 @@ public class NomadsApp extends Application
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
+	}
+	
+	public void finishAll()
+	{
+		removeThread();
+		if (settings != null)
+			settings.finish();
+		if (swarm != null)
+			swarm.finish();
+		if (join != null)
+			join.finish();
 	}
 }

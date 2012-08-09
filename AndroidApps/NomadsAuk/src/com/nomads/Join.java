@@ -34,33 +34,32 @@ public class Join extends Activity
 		Log.i("Join", "onCreate()");
 		super.onCreate(savedInstanceState);
 		
+		// get reference to NomadsApp singleton
 		app = (NomadsApp)this.getApplicationContext();
 		
 		// send reference of Join to NomadsApp
 		app.setJoin(this);
-				
-		setContentView(R.layout.join);
-		joinStatus = (TextView)findViewById(R.id.joinStatus);
-		connect = (Button)findViewById(R.id.connectButton);
-		connect.setOnClickListener(connectButtonListener);
+		
+		// create new sand object in NomadsApp
+		app.newSand();
 		
 		// get NSand instance from Join
 		sand = app.getSand();
 		
+		// connect via asynctask--if successful:
+		//		NomadsApp.connectStatus is set to true; else false
+		//		register byte is sent to Nomads server from Join
+		//		startThread() is called in NomadsApp
+		//		goToSwarm() is called in Join
 		sand.new Connect().execute(this, app);
 		
-		Log.i("Join", "app.isConnected() = " + app.isConnected());
+		Log.d("Join", "app.isConnected() = " + app.isConnected());
 		
-		if( app.isConnected() )
-		{
-			// Switch to Swarm activity
-			Intent intent = new Intent(getApplicationContext(), Swarm.class);
-			startActivity(intent);
-		}
-		else
-		{
-			Log.i("Join", "onCreate() -> NomadsApp is not connected");
-		}
+		// Setup UI
+		setContentView(R.layout.join);
+		joinStatus = (TextView)findViewById(R.id.joinStatus);
+		connect = (Button)findViewById(R.id.connectButton);
+		connect.setOnClickListener(connectButtonListener);
 	}
 	
 	//========================================================

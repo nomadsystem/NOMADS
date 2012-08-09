@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Nomads</string>
+	<string name="app_name">Auksalaq</string>
 	<string name="welcome">Welcome to Nomads.</string>
 	<string name="login">Log in</string>
 	<string name="loginPrompt">
