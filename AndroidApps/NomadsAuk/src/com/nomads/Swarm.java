@@ -16,7 +16,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -34,7 +36,9 @@ import android.widget.TextView;
 public class Swarm extends Activity
 {
 	private NomadsApp app;
-	private MediaPlayer mPlayer;
+	private MediaPlayer[] mPlayer;
+//	private MediaPlayer currentPlayer;
+	private boolean mPPlaying[];
 
 	private NSand sand;
 	private NGrain grain;
@@ -47,6 +51,10 @@ public class Swarm extends Activity
 	AlertDialog.Builder alert;
 	EditText alertInput;
 	String tempString = "";
+	
+	private int glacierInterval = 20;
+	private Handler glacierHandler;
+	private boolean glacierToggle = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -61,6 +69,20 @@ public class Swarm extends Activity
 		
 		// get NSand instance from Join
 		sand = app.getSand();
+		
+		// initialize MediaPlayer array and boolean array
+		mPlayer = new MediaPlayer[20];
+		mPPlaying = new boolean[20];
+		
+		// set all media players to ready
+		for (int i=0; i<mPPlaying.length; i++){
+			Log.d("Swarm", "setting mPPlaying[i] to false...");
+			mPPlaying[i] = false;
+			Log.d("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
+		}
+		
+		// initialize handler for timed sound playback
+		glacierHandler = new Handler();
 		
 		// initialize UI
 		setContentView(R.layout.swarm);
@@ -126,7 +148,7 @@ public class Swarm extends Activity
 	}
 	
 	//========================================================
-	// Buttons
+	// Listeners
 	//========================================================
 	
 	Button.OnClickListener discussListener = new Button.OnClickListener()
@@ -159,36 +181,7 @@ public class Swarm extends Activity
 	{
 		@Override
 		public void onClick(View v) {
-			if (mPlayer != null)
-			{
-				try {
-					if (mPlayer.isPlaying())
-						mPlayer.stop();
-
-			    	mPlayer.reset();
-			    	AssetFileDescriptor afd = context.getAssets().openFd("pointer1.mp3");
-			    	mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength() );
-			    	afd.close();
-			        mPlayer.prepare();
-//			        mPlayer.setLooping(true);
-//			        mPlayer.seekTo(0);
-			        mPlayer.start();
-				}
-				catch (IllegalArgumentException e) {
-					Log.e("Swarm", "IllegalArgumentException: " + e.getMessage(), e);
-				} 
-				catch (IllegalStateException e) {
-					Log.e("Swarm", "IllegalStateException: " + e.getMessage(), e);
-				} 
-				catch (IOException e) {
-					Log.e("Swarm", "IOException: " + e.getMessage(), e);
-				} 
-				catch (Exception e){
-					Log.e("Swarm", "Exception: " + e.getMessage(), e);
-				}
-			}
-
-
+			playSound ("pointer1.mp3");
 		}
 	};
 	
@@ -251,6 +244,7 @@ public class Swarm extends Activity
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		WindowManager.LayoutParams WMLP = dialog.getWindow().getAttributes();
 
+		// need to scale this to the window
 		WMLP.x = 100;   //x position
 		WMLP.y = 100;   //y position
 
@@ -325,6 +319,108 @@ public class Swarm extends Activity
 	}
 	
 	//========================================================
+	// Audio Methods
+	//========================================================
+	
+	public void playSound (String soundFile)
+	{
+		Log.d("Swarm", "playSound() started");
+		
+		for (int i=0; i<mPlayer.length; i++) {
+			if (!mPPlaying[i] && mPlayer[i] != null) {
+				Log.d("Swarm", "mPPlaying[" + i + "] = " + mPPlaying[i]);
+				mPPlaying[i] = true;
+				
+				try {
+					if (mPlayer[i].isPlaying())
+						mPlayer[i].stop();
+
+					mPlayer[i].reset();
+			    	AssetFileDescriptor afd = context.getAssets().openFd(soundFile);
+			    	mPlayer[i].setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength() );
+			    	afd.close();
+			    	mPlayer[i].prepare();
+//			        currentPlayer.setLooping(true);
+//			        currentPlayer.seekTo(0);
+			    	Log.d("Swarm", "playing MediaPlayer instance #: " + i);
+			    	mPlayer[i].start();
+			    	mPlayer[i].setOnCompletionListener(new OnCompletionListener() 
+			        {
+			    		@Override
+			    		public void onCompletion(MediaPlayer mp) {
+			    			for (int i=0; i<mPlayer.length; i++) {
+			    				if (mPlayer[i] == mp) {
+			    					Log.d("Swarm", "mPlayer["+i+"] completed... setting mPPlaying[i] to false");
+			    					mPPlaying[i] = false;
+			    				}
+			    			}
+			    		}
+			        });
+
+				}
+				catch (IllegalArgumentException e) {
+					Log.e("Swarm", "IllegalArgumentException: " + e.getMessage(), e);
+				} 
+				catch (IllegalStateException e) {
+					Log.e("Swarm", "IllegalStateException: " + e.getMessage(), e);
+				} 
+				catch (IOException e) {
+					Log.e("Swarm", "IOException: " + e.getMessage(), e);
+				} 
+				catch (Exception e){
+					Log.e("Swarm", "Exception: " + e.getMessage(), e);
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	Runnable glacierRunnable = new Runnable()
+	{
+	     @Override 
+	     public void run() {
+//	    	 Log.d("Swarm", "glacierRunnable: run loop");
+	    	 if (glacierToggle) {
+//	    		 Log.d("Swarm", "glacierToggle is true");
+	    		 playSound ("1.mp3");
+//	    		 updateStatus(); //this function can change value of m_interval.
+	    		 glacierHandler.postDelayed(glacierRunnable, glacierInterval);
+	    	 }
+	     }
+	};
+
+	void startGlacierSounds()
+	{
+		glacierToggle = true;
+		glacierRunnable.run(); 
+	}
+
+	void stopGlacierSounds()
+	{
+		glacierHandler.removeCallbacks(glacierRunnable);
+	}
+	
+	void initializeMediaPlayers ()
+	{
+		// Create array of new media players
+		for (int i=0; i<mPlayer.length; i++) {
+			mPlayer[i] = new MediaPlayer();
+		}
+	}
+	
+	void releaseMediaPlayers ()
+	{
+		// release the media players
+		for (int i=0; i<mPlayer.length; i++) {
+			if (mPlayer[i] != null) {
+				mPlayer[i].release();
+				mPlayer[i] = null;
+			}
+		}
+	}
+	
+	//========================================================
 	
 	private void appendTextAndScroll(String text)
 	{
@@ -348,11 +444,9 @@ public class Swarm extends Activity
 //		Join.instance.threadRunLoop(false);
 //		app.setAppState(false);
 		
-		// release the media player
-		if (mPlayer != null) {
-			mPlayer.release();
-			mPlayer = null;
-		}
+		releaseMediaPlayers();
+		
+		glacierToggle = false;
 		
 		// turn on ringer (?)
 //		app.phoneRingerState(true);
@@ -367,8 +461,10 @@ public class Swarm extends Activity
 //		app.setAppState(true);
 		app.setGrainTarget(GrainTarget.SWARM);
 		
-		// Create new media player
-		mPlayer = new MediaPlayer();
+		initializeMediaPlayers();
+		
+		// start timed glacier sound playback
+		startGlacierSounds();
 		
 		// turn off ringer
 		app.phoneRingerState(false);
