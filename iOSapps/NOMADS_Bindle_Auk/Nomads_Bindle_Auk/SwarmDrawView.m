@@ -89,7 +89,8 @@
         }
         dropletVolume = 1.0;
         toneVolume = 1.0;
-        toneOn = NO;
+        toneCntrlOn = NO;
+        maxNumOfTonePlayers = 9;
         
         promptWaitTick = 0;
         promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
@@ -124,12 +125,14 @@
                     lastTimerVal = 4.0;
                     fileNumDroplets = 1;
                     dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
+                    CLog("SET_DROPLET_STATUS = ON");
                     
                 }
                 else if (inGrain->bArray[0] == 0) {
                     if (dropletTimer) {
                         [dropletTimer invalidate];
                     }
+                    CLog("SET_DROPLET_STATUS = OFF");
                 }
                 
             }
@@ -138,24 +141,28 @@
                     fileNumTones = 1;
                     toneCntrlOn = YES;
    //                 [self playTone];
+                    CLog("SET_POINTER_TONE_STATUS = ON");
                     
                 }
                 else if (inGrain->bArray[0] == 0) {
                     toneCntrlOn = NO;
+                    if (toneTimer)
                     [toneTimer invalidate];
-                    toneOn = NO;
-
+                    CLog("SET_DROPLET_STATUS = OFF");
                 }
+                
                 
             }
             else if (inGrain->command == SET_DROPLET_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
                 dropletVolume =  (inGrain->iArray[0]*0.01);
+                CLog("inGrain setting dropletVolume = %f", dropletVolume);
                 
             }
             else if (inGrain->command == SET_POINTER_TONE_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
                 toneVolume =  (inGrain->iArray[0]*0.01);
+                CLog("inGrain setting pointerTone volume = %f", toneVolume);
                 
             }
             else if(inGrain->command == SET_DISCUSS_STATUS) {
@@ -369,26 +376,7 @@
 {
     maxTrails = 2;
     
-    //Pointer Tones
-    int numOfTones = 13;
-    fileNumTonesOld = fileNumTones;
-    float viewXGrid  = (viewWidth / 5);
-    float viewYGrid  = (viewHeight / numOfTones);
     
-    if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
-        fileNumTones = 1;
-        if (!toneOn && toneCntrlOn) {
-            //     [self playTone];
-            toneOn = YES;
-        }
-    }
-    else {
-        fileNumTones = (int)(myFingerPoint.y/viewYGrid);
-        if (!toneOn && toneCntrlOn) {
-            //       [self playTone];
-            toneOn = YES;
-        }
-    }
     
     if (pointerStatus) {
         for (UITouch *t in touches) {
@@ -410,8 +398,12 @@
             //Put pair in dictionary
             //        [linesInProcess setObject:newLine forKey:key];
         }
-        toneTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(playTone) userInfo:nil repeats:YES];
-
+        
+        if (toneCntrlOn) {
+            
+            toneTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(playTone) userInfo:nil repeats:YES];
+        }
+        
         [self setNeedsDisplay];
 
 
@@ -422,6 +414,20 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
+    
+    //Pointer Tones
+    if (toneCntrlOn) {
+        int numOfTones = 13;
+        float viewYGrid  = (viewHeight / numOfTones);
+        
+        if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
+            fileNumTones = 1;
+        }
+        else {
+            fileNumTones = (int)(myFingerPoint.y/viewYGrid);
+        }
+    }
     
     if (pointerStatus) {
         maxTrails = 10;
@@ -504,10 +510,8 @@
         //      touchColor = 0.6;
         
     }
-    toneOn = NO;
 
     [toneTimer invalidate];
-
     //Redraw
     //[self setNeedsDisplay];
 }
@@ -597,12 +601,11 @@
     [self setNeedsDisplay];
 }
 
-//-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-//    CLog("SDV: Audio finished playing");
-//    audioPlayerDroplet = nil;
-//    audioPlayerTone = nil;
-//    
-//}
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    CLog("SDV: Audio finished playing");
+    audioPlayerDroplet = nil;
+ //   audioPlayerTone[tonePlayer] = nil;
+}
 
 // Play the sound
 
@@ -670,7 +673,7 @@
     CLog("URL: %@", url);
  
 	NSError *error;
-    if (tonePlayer > 9) {
+    if (tonePlayer > maxNumOfTonePlayers) {
         tonePlayer = 0;
     }
     else 
