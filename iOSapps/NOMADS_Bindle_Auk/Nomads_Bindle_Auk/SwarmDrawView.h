@@ -30,7 +30,7 @@
     NSMutableArray  *chatLines;
     int numChatLines;
     AVAudioPlayer *audioPlayerDroplet;
-    AVAudioPlayer *audioPlayerTone[20];
+    AVAudioPlayer *audioPlayerTone[21];
     int maxNumOfTonePlayers;
     Boolean toneCntrlOn;
     float toneVolScaler;
@@ -80,7 +80,9 @@
     float viewHeightScale;
     
     int tonePlayer;
-        
+    Boolean toneVolDone;
+    int numRunTonePlayers;
+    
 }
 
 @property (strong, retain) NSand *appSand;
