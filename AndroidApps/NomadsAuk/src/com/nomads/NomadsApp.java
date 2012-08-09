@@ -8,13 +8,16 @@ import nomads.v210.*;
 import nomads.v210.NGlobals.GrainTarget;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.util.Log;
 
 public class NomadsApp extends Application
 {
 	private static NomadsApp singleton;
+	AudioManager am;
 	private Join join;
 	private Swarm swarm;
 	private Settings settings;
@@ -38,6 +41,8 @@ public class NomadsApp extends Application
 		super.onCreate();
 		
 		singleton = this;
+
+		am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 	}
 	
 	//========================================================
@@ -86,6 +91,21 @@ public class NomadsApp extends Application
 	{
 		Log.i("NomadsApp", "setGrainTarget(): " + _target);
 		gT = _target;
+	}
+	
+	public void phoneRingerState (boolean on)
+	{
+		if (on) {
+			// set device ringer to normal mode
+			am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+		}
+		else
+		{
+			// set device ringer to silent mode
+			am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+		}
+		
+		Log.d("NomadsApp", "ringer state was set to: " + on);
 	}
 	
 	//========================================================
@@ -219,8 +239,11 @@ public class NomadsApp extends Application
 	
 	public void finishAll()
 	{
-		// needed?
 		removeThread();
+		
+		// return phone ringer to normal
+		phoneRingerState(true);
+		
 		if (settings != null)
 			settings.finish();
 		if (swarm != null)

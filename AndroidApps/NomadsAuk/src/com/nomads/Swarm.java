@@ -326,6 +326,9 @@ public class Swarm extends Activity
 			mPlayer.release();
 			mPlayer = null;
 		}
+		
+		// turn on ringer (?)
+//		app.phoneRingerState(true);
 	}
 
 	@Override
@@ -339,6 +342,9 @@ public class Swarm extends Activity
 		
 		// Create new media player
 		mPlayer = new MediaPlayer();
+		
+		// turn off ringer
+		app.phoneRingerState(false);
 	}
 	
 	@Override
