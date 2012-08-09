@@ -27,12 +27,12 @@ public class NomadServer implements Runnable {
 	private static byte _CLOUD_STATUS = 0;
 	private static byte _POINTER_STATUS = 0;
 	private static byte _DROPLET_STATUS = 0;
-	private static int _DROPLET_VOLUME = 0;
+	private static int _DROPLET_VOLUME = 100;
 	private static byte _CLOUD_SOUND_STATUS = 0;
-	private static int _CLOUD_SOUND_VOLUME = 0;
+	private static int _CLOUD_SOUND_VOLUME = 100;
 	private static byte _POINTER_TONE_STATUS = 0;
-	private static int _POINTER_TONE_VOLUME = 0;
-	private static int _SYNTH_VOLUME = 0;
+	private static int _POINTER_TONE_VOLUME = 100;
+	private static int _SYNTH_VOLUME = 100;
 
 
 
