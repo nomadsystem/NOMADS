@@ -94,7 +94,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		//tPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JPanel discussWrapper = new JPanel();
-		discussWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
+		discussWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));  
 		JLabel discussLabel = new JLabel("Discuss");
 		discussLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		discussWrapper.add(discussLabel);
