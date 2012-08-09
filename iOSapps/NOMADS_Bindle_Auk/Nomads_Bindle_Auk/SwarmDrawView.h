@@ -20,6 +20,7 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     CGPoint myFingerPoint;
+    float dotSize;
     int maxTrails;
     int *xTrail;
     int *yTrail;
@@ -60,10 +61,13 @@
     float dotSizeScaler;
 
     NSString *prompt;
+    int promptTextSize;
     float promptAlpha;
     float promptFadeInVal;
     float promptWaitTick;
     float promptFadeOutTick;
+    
+    int discussTextSize;
 
     Boolean discussStatus;
     Boolean cloudStatus;
