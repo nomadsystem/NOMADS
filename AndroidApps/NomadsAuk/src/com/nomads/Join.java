@@ -22,7 +22,7 @@ public class Join extends Activity
 	
 	public static GrainTarget gT = GrainTarget.JOIN;
 	
-//	private NSand sand;
+	private NSand sand;
 	private NGrain grain;
 	
 	TextView joinStatus;
@@ -31,45 +31,73 @@ public class Join extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Log.i("Join", "onCreate()");
+		Log.d("Join", "onCreate()");
 		super.onCreate(savedInstanceState);
 		
+		// get reference to NomadsApp singleton
 		app = (NomadsApp)this.getApplicationContext();
 		
 		// send reference of Join to NomadsApp
 		app.setJoin(this);
-				
+		
+		// create new sand object in NomadsApp
+		app.newSand();
+		
+		// get NSand instance from Join
+		sand = app.getSand();
+		
+		// connect via asynctask--if successful:
+		//		NomadsApp.connectStatus is set to true; else false
+		//		register byte is sent to Nomads server from Join
+		//		startThread() is called in NomadsApp
+		//		goToSwarm() is called in Join
+		sand.new Connect().execute(this, app);
+		
+		Log.d("Join", "app.isConnected() = " + app.isConnected());
+		
+		// Setup UI
 		setContentView(R.layout.join);
 		joinStatus = (TextView)findViewById(R.id.joinStatus);
 		connect = (Button)findViewById(R.id.connectButton);
 		connect.setOnClickListener(connectButtonListener);
-		
-		// get NSand instance from Join
-//		sand = app.getSand();
-		
-		if( app.isConnected() )
-		{
-			// Switch to Swarm activity
-			Intent intent = new Intent(getApplicationContext(), Swarm.class);
-			startActivity(intent);
-		}
-		else
-		{
-			Log.i("Join", "onCreate() -> NomadsApp is not connected");
-		}
 	}
 	
 	//========================================================
 	// Network methods
 	//========================================================
 	
+	public void register ()
+	{		
+		Log.d("NomadsApp", "register() -> connectionStatus is: " + app.isConnected());
+		
+		if (!app.isConnected())
+		{
+			Log.e("NomadsApp", "Register failed because connectionStatus is false");
+			return;
+		}
+		
+		// Send the register byte to the Nomads server
+		byte[] registerByte = new byte[1];
+		registerByte[0] = 1;
+		sand.sendGrain(
+				NAppIDAuk.OPERA_CLIENT,
+				NCommandAuk.REGISTER,
+				NDataType.BYTE,
+				1,
+				registerByte);
+	}
+	
 	public void parseGrain(NGrain _grain)
 	{
-		grain = _grain;
+		Log.d("Join", "parseGrain(): grain received");
 		
-		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL){
-			Log.i("Join", "addID == NAppIDAuk.CONDUCTOR_PANEL");
+		if (grain == null)
+		{
+			Log.d("Join", "parseGrain(): grain is null");
+			return;
 		}
+		
+		grain = _grain;
 		
 		if (grain != null)
 			grain = null;
@@ -83,14 +111,7 @@ public class Join extends Activity
 		@Override
 		public void onClick(View v)
 		{
-			app.tryConnect();
-			
-			if( app.isConnected() )
-			{
-				// Switch to Swarm activity
-				Intent intent = new Intent(getApplicationContext(), Swarm.class);
-				startActivity(intent);
-			}
+			sand.new Connect().execute(this, app);
 		}
 	};
 	
@@ -100,7 +121,7 @@ public class Join extends Activity
 	public void onResume()
 	{
 		super.onResume();
-		Log.i("Join", "is resumed");
+		Log.d("Join", "is resumed");
 		gT = GrainTarget.JOIN;
 	}
 	
@@ -108,7 +129,13 @@ public class Join extends Activity
 	public void onPause()
 	{
 		super.onPause();
-		Log.i("Join", "is paused");
+		Log.d("Join", "is paused");
 //		stopThread();
+	}
+	
+	public void goToSwarm () {
+		// Switch to Swarm activity
+		Intent intent = new Intent(getApplicationContext(), Swarm.class);
+		startActivity(intent);
 	}
 }

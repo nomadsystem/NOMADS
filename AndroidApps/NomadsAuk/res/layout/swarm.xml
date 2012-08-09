@@ -3,7 +3,14 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    android:keepScreenOn="true">
+    
+    <TextView
+        android:id="@+id/chatWindow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
     
     <com.nomads.Dot
 	    android:id="@+id/dot"
@@ -42,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/buttonAudioTest"
+        android:layout_alignParentRight="true"
         android:contentDescription="@string/settings" />
 
 </RelativeLayout>
