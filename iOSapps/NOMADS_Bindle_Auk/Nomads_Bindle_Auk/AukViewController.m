@@ -91,7 +91,8 @@
     inputCloudField.hidden = YES;
     
     //Init settingsScreen
-    [leaveNomadsButton setHidden:NO];
+    [joinNomadsButton setHidden:YES];
+    [leaveNomadsButton setHidden:YES];
     [joinTextField setHidden:YES];
     //Init connection label
     [connectionLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
@@ -99,9 +100,19 @@
     //Inits settingsNavBar
     settingsNavBar.hidden = NO;
     
-    //Init backgrounds 
-    [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-    [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    //Init backgrounds
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+    }
+    else {
+        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    }
+
+    
+    
     
     //Init aukToolbar and buttons
     [[self aukToolbar] setTranslucent:YES];
@@ -142,7 +153,13 @@
     
     //Init SwarmDrawView
     mySwarmDrawView = [[SwarmDrawView alloc]initWithFrame:myCGRect];
-    [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+    }
+    else {
+        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    }
     
     //Add our instance of SwarmDrawView to swarmView
     [swarmView addSubview:mySwarmDrawView];
@@ -316,7 +333,7 @@
 //        joinTextField.text = @"";
 //        [joinTextField setHidden:YES];
         [joinNomadsButton setHidden:YES];
-        [leaveNomadsButton setHidden:NO];
+        [leaveNomadsButton setHidden:YES];
         
         connectionLabel.text = @"Connected to NOMADS!";
 //        
@@ -563,6 +580,67 @@
 
 //iOS Stuff ==============================================================
 
+//Method to determine current rotation status
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)x
+{
+    return (x == UIInterfaceOrientationPortrait) || UIInterfaceOrientationIsLandscape(x);
+}
+
+//Method to animate transitions between different rotation states
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+        {
+            //Load images for landscape view
+            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
+            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
+            
+            //Reset screen size of SwarmDrawView for landscape view
+            CGRect screenRect = [mySwarmDrawView bounds];
+            [mySwarmDrawView setFrame:screenRect];
+            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
+        }
+        else {
+            
+            //Load images for landscape view
+            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+            
+            //Reset screen size of SwarmDrawView for landscape view
+            CGRect screenRect = [mySwarmDrawView bounds];
+            [mySwarmDrawView setFrame:screenRect];
+            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+        }
+        
+    }
+    else
+    {
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+        {
+            //Load images for portrait view
+            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+            
+            //Reset screen size of SwarmDrawView for portrait view
+            CGRect screenRect = [mySwarmDrawView bounds];
+            [mySwarmDrawView setFrame:screenRect];
+            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+        }
+        else {
+            //Load images for portrait view
+            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+            
+            //Reset screen size of SwarmDrawView for portrait view
+            CGRect screenRect = [mySwarmDrawView bounds];
+            [mySwarmDrawView setFrame:screenRect];
+            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        }
+    }
+}
+
 - (void)viewDidUnload
 {
     
@@ -592,40 +670,7 @@
     // e.g. self.myOutlet = nil;
 }
 
-//Method to determine current rotation status
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)x
-{
-    return (x == UIInterfaceOrientationPortrait) || UIInterfaceOrientationIsLandscape(x);
-}
 
-//Method to animate transitions between different rotation states
-- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        //Load images for landscape view
-        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
-        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
-        
-        //Reset screen size of SwarmDrawView for landscape view
-        CGRect screenRect = [mySwarmDrawView bounds];
-        [mySwarmDrawView setFrame:screenRect];
-        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
-        
-    }
-    else
-    {
-        //Load images for portrait view
-        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-        
-        //Reset screen size of SwarmDrawView for portrait view
-        CGRect screenRect = [mySwarmDrawView bounds];
-        [mySwarmDrawView setFrame:screenRect];
-        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-
-    }
-}
 
 
 

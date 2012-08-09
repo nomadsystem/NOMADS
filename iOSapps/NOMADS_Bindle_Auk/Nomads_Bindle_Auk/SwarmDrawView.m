@@ -23,8 +23,6 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        //    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
-        
         
         // Graphics setup
         viewRect = [self bounds];
@@ -36,8 +34,20 @@
         viewWidthScale = (int)(1000/viewWidth);
         
         // Prompt text
-        prompt = [NSString stringWithFormat:@"NOMADS Bindle"];
+        prompt = [NSString stringWithFormat:@"Auksalaq NOMADS"];
         promptAlpha = 0;
+        
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+        {
+            promptTextSize = 50;
+            discussTextSize = 18;
+            dotSize = 35;
+        }
+        else {
+            promptTextSize = 30;
+            discussTextSize = 10;
+            dotSize = 20;
+        }
         
         // chat lines
         numChatLines = 15; //Initialize number of chat lines to display
@@ -249,7 +259,7 @@
     
     CGContextSelectFont (context,
                          "Papyrus",
-                         30,
+                         promptTextSize,
                          kCGEncodingMacRoman);
     
     CGContextShowTextAtPoint (context, (viewWidth * 0.1), (viewHeight * 0.1), str, len);
@@ -259,7 +269,7 @@
     if (discussStatus) {
         CGContextSelectFont (context,
                              "Helvetica-Light",
-                             10,
+                             discussTextSize,
                              kCGEncodingMacRoman);
         CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
         CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1);
@@ -294,9 +304,7 @@
         yTrail[0] = myFingerPoint.y;
         
         decayColor = 1.0;
-        
-        float size = 20;
-        
+                
         for (int i=0; i<maxTrails; i++) {
             if (i<(maxTrails-1)) {
                 //            ellipseR = decayColor;
@@ -311,7 +319,7 @@
                         CLog("dropFlash!");
                         CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                         CLog("R = %f G = %f B = %f A = %F", ellipseR, ellipseG, ellipseB, ellipseA);
-                        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (size*dotSizeScaler), (size*dotSizeScaler))));
+                        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (dotSize*dotSizeScaler), (dotSize*dotSizeScaler))));
                         CGContextDrawPath(context, kCGPathFill);
                         //     CGContextFillPath(context);
                         CGContextStrokePath(context);
@@ -321,7 +329,7 @@
                 if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
                     CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                     
-                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, size, size)));
+                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, dotSize, dotSize)));
                     CGContextDrawPath(context, kCGPathFill);
                     //     CGContextFillPath(context);
                     CGContextStrokePath(context);
@@ -333,12 +341,12 @@
                 
                 
                 CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
-                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], size, size)));
+                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], dotSize, dotSize)));
                 CGContextDrawPath(context, kCGPathFill);
                 //     CGContextFillPath(context);
                 CGContextStrokePath(context);
                 decayColor = (decayColor - decayColorChangeDelta);
-                size *= 0.9;
+                dotSize *= 0.9;
                 ellipseR = decayColor;
                 ellipseG = touchColor;
                 ellipseA = decayColor;

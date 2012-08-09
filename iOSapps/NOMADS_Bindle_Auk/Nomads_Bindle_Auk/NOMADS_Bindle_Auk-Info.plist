@@ -16,6 +16,9 @@
 			<array>
 				<string>ic_launcher.png</string>
 				<string>auklogo_57.png</string>
+				<string>auklogo_72_iPad.png</string>
+				<string>auklogo_114_iPhoneRetina.png</string>
+				<string>auklogo_144_iPadRetina.png</string>
 			</array>
 		</dict>
 	</dict>
