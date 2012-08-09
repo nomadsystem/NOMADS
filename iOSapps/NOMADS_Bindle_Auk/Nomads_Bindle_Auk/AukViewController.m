@@ -44,9 +44,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; //Sets as delegate to BindleAppDelegate
-        
-        [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
         [self.view bringSubviewToFront:aukView]; //Load the aukView
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
@@ -84,6 +81,10 @@
     };
     [reach startNotifier];
     //--END init handle network communcation errors
+
+    appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; //Sets as delegate to BindleAppDelegate
+    
+    [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
     
     
     //Hides our "hidden" text fields for discuss and cloud

@@ -23,6 +23,10 @@
     self = [super initWithFrame:r];
     if (self) {
         
+        toneVolScaler = 1.0;
+        tonePlayer = 0;
+        toneVolDone = false;
+        numRunTonePlayers = 0;
         
         // Graphics setup
         viewRect = [self bounds];
@@ -103,9 +107,8 @@
         }
         dropletVolume = 1.0;
         toneVolume = 1.0;
-        toneVolScaler = 1.0;
         toneCntrlOn = NO;
-        maxNumOfTonePlayers = 9;
+        maxNumOfTonePlayers = 19;
         
         promptWaitTick = 0;
         promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
@@ -534,7 +537,9 @@
         //      touchColor = 0.6;
         
     }
-
+    numRunTonePlayers = 0;
+    toneVolScaler = 1;
+    toneVolDone = false;
     [toneTimer invalidate];
     //Redraw
     //[self setNeedsDisplay];
@@ -696,18 +701,29 @@
     
     CLog("URL: %@", url);
  
+    CLog("SDV: toneVolScaler = %f", toneVolScaler);
+
 	NSError *error;
+    numRunTonePlayers++;
+    if (numRunTonePlayers > 10) {
+        toneVolDone = true;
+    }
+    
     if (tonePlayer > maxNumOfTonePlayers) {
         tonePlayer = 0;
+        
     }
     else 
         tonePlayer++;
     
-    if (toneVolScaler > 0.1)
-    toneVolScaler = 1/tonePlayer;
-    else
-        toneVolScaler = 0.1;
-    
+    if (!toneVolDone && (toneVolScaler > 0.25)) 
+        toneVolScaler = (float)(1.0/(tonePlayer + 1.0));
+    else 
+        toneVolScaler = 0.25;
+
+    CLog("SDV: toneVolScaler = %f", toneVolScaler);
+    CLog("SDV: tonePlayer = %d", tonePlayer);
+
     
     audioPlayerTone[tonePlayer] = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
 
@@ -719,8 +735,8 @@
         CLog("SDV: Playback error: %@",[error description]);
     }
     else {
-        CLog("SDV: tonVolume = %f", toneVolume);
-        audioPlayerTone[tonePlayer].volume = toneVolume * toneVolScaler;
+        CLog("SDV: tonVolume = %f", (toneVolume * toneVolScaler * 3));
+        audioPlayerTone[tonePlayer].volume = toneVolume * toneVolScaler * 3;
 
         [audioPlayerTone[tonePlayer] play];
 
