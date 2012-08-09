@@ -20,10 +20,14 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 //import android.content.Intent;
 import android.widget.TextView;
 
@@ -192,15 +196,30 @@ public class Swarm extends Activity
 	// Alerts
 	//========================================================
 	
+	public class CustomDialogView extends RelativeLayout {
+		public CustomDialogView (Context context) {
+			super(context);
+			LayoutInflater.from(context).inflate(R.layout.customdialog, this, true);
+		}
+	}
+	
 	protected void discussAlert ()
 	{
 		alert = new AlertDialog.Builder(context);
 		// need to create new input field each time
-		alertInput = new EditText(context);
+		alertInput = (EditText)findViewById(R.id.message);
+		CustomDialogView mView = new CustomDialogView(context);
 		
+		alert.setView(mView);
 		alert.setTitle("Discuss:");
 //		alert.setMessage("Message");
-		alert.setView(alertInput);
+//		alert.setView(alertInput);
+		
+		// set custom messages, e.g.
+//		TextView text = (TextView) dialog.findViewById(R.id.text);
+//		text.setText("Hello, this is a custom dialog!");
+//		ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//		image.setImageResource(R.drawable.android);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
@@ -228,7 +247,15 @@ public class Swarm extends Activity
 			}
 		});
 		
-		alert.show();
+		AlertDialog dialog = alert.create();
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		WindowManager.LayoutParams WMLP = dialog.getWindow().getAttributes();
+
+		WMLP.x = 100;   //x position
+		WMLP.y = 100;   //y position
+
+		dialog.getWindow().setAttributes(WMLP);
+		dialog.show();
 	}
 	
 	protected void cloudAlert ()
