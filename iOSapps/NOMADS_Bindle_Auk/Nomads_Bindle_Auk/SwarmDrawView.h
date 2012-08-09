@@ -31,7 +31,7 @@
     int numChatLines;
     AVAudioPlayer *audioPlayerDroplet;
     AVAudioPlayer *audioPlayerTone[20];
-    Boolean toneOn;
+    int maxNumOfTonePlayers;
     Boolean toneCntrlOn;
     
     float dropletVolume;
@@ -51,7 +51,7 @@
     
     int fileNumDroplets;
     int fileNumTones;
-    int fileNumTonesOld;
+    
     float currentTimerVal;
     float lastTimerVal;
     AVAudioSession *session;
