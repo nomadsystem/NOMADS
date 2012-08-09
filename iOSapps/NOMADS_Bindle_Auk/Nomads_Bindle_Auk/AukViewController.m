@@ -8,7 +8,6 @@
 
 #import "Reachability.h"
 #import "AukViewController.h"
-#import "SwarmDrawView.h"
 #import "NSand.h"
 #import "NGrain.h"
 #import "NGlobals.h"
@@ -38,6 +37,7 @@
 @synthesize inputDiscussField;
 @synthesize inputCloudField;
 @synthesize swarmView;
+@synthesize mySwarmDrawView;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,21 +70,18 @@
                                                object:nil];
     
     Reachability * reach = [Reachability reachabilityForInternetConnection];
-    
     reach.reachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             CLog("Block Says Reachable");
         });
     };
-    
     reach.unreachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             CLog("Block Says UN-Reachable");
         });
     };
-    
     [reach startNotifier];
     //--END init handle network communcation errors
     
@@ -93,21 +90,24 @@
     inputDiscussField.hidden = YES; 
     inputCloudField.hidden = YES;
     
+    //Init settingsScreen
+    [leaveNomadsButton setHidden:NO];
+    [joinTextField setHidden:YES];
+    //Init connection label
+    [connectionLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
+    [connectionLabel setTextColor:[UIColor whiteColor]];
     //Inits settingsNavBar
     settingsNavBar.hidden = NO;
     
-    
-    //Init loginScreen
-    [leaveNomadsButton setHidden:NO];
-    [joinTextField setHidden:YES];
-    
-    //Initialize backgrounds 
+    //Init backgrounds 
     [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+    
+    //Init aukToolbar and buttons
     [[self aukToolbar] setTranslucent:YES];
     [aukBarButtonDiscuss setEnabled:false];
     [aukBarButtonCloud setEnabled:false];
-    [[self swarmView] setBackgroundColor:[UIColor whiteColor]];
+    
     
     //Set up our Audio Session
     NSError *activationError = nil;
@@ -120,10 +120,10 @@
         CLog("Error initializing Audio Session Category");
     }
     fileNum = 1; //Selects AukNote file number
-    noteIsEnabled = NO;
-    noteVolume = 1.0;
+    cloudSoundIsEnabled = NO;
+    cloudSoundVolume = 1.0;
     
-    //Initialization for size of SwarmDraw View
+    //Init for size of SwarmDrawView
     CGRect screenRect = [swarmView bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
@@ -140,62 +140,39 @@
     myCGRect.origin = myCGPoint;
     myCGRect.size = myCGSize;
     
-    [swarmView addSubview:[[SwarmDrawView alloc] initWithFrame:myCGRect]];    
+    //Init SwarmDrawView
+    mySwarmDrawView = [[SwarmDrawView alloc]initWithFrame:myCGRect];
+    [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     
-    // [self.view bringSubviewToFront:settingsView];
-    // currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    //Add our instance of SwarmDrawView to swarmView
+    [swarmView addSubview:mySwarmDrawView];
+    //Set auto-resize parameters for SwarmDrawView
+    [mySwarmDrawView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        
+    //Connect to NOMADS via SAND
+    [appDelegate->appSand connect];
     
-    
-    
-    
-    //Initialize toolbar in Auk view
-    
-    [appDelegate->appSand connect];  
     connectionLabel.text = @"Connected to NOMADS!";
     
+    //Send REGISTER command 
     Byte c[1];
     c[0] = 1;
-    
-    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
     [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
                                           Command:REGISTER 
                                          DataType:UINT8 
                                           DataLen:1 
                                             Uint8:c];
-    
-    
-    
-    // Do any additional setup after loading the view from its nib.
 }
 
--(void)reachabilityChanged:(NSNotification*)note
-{
-    Reachability * reach = [note object];
-    
-    if([reach isReachable])
-    {
-        CLog(@"Notification Says Reachable"); 
-    }
-    else
-    {
-        CLog(@"Notification Says UnReachable");
-        UIAlertView *errorView;
-        
-        errorView = [[UIAlertView alloc]
-                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
-                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
-                     delegate: self
-                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
-        
-        [errorView show];
-    }
-}
+// BEGIN Network Error Handling ==============================================
 
+//Method to determine internet reachability (general network connections)
+//Only called once on init
 -(BOOL)internetConnectionStatus {
-    //  Reachability *reachability = [Reachability reachabilityForInternetConnection];
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus internetStatus = [reachability currentReachabilityStatus];
     
+    //If network is NOT reachable
     if(internetStatus == NotReachable) {
         CLog("internet status == NotReachable");
         UIAlertView *errorView;
@@ -207,9 +184,8 @@
                      cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
         
         [errorView show];
-        
+        //Calls alertView didDismissWithButtonIndex: on button press
         return NO;
-        
     }
     else {
         return YES;
@@ -217,22 +193,35 @@
     
 }
 
--(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+//Method to determine change in network reachability (general network connections)
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    Reachability * reach = [note object];
     
-    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
-    if (buttonIndex == 0) {
-        CLog("Alert button %i pressed", buttonIndex);
-        [joinNomadsButton setHidden:NO];
-        [leaveNomadsButton setHidden:YES];
-        connectionLabel.text = @"Not Connected!";
-        [self.view bringSubviewToFront:settingsView];
-        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
+    if([reach isReachable]) //If network is reachable
+    {
+        CLog(@"Notification Says Reachable"); 
+    }
+    else //if Network is unreachable
+    {
+        CLog(@"Notification Says UnReachable");
+        UIAlertView *errorView;
+        //Create error view (pop up window) for error message
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+        //Calls alertView didDismissWithButtonIndex: on button press
     }
 }
 
+//Method to handle networkConnectionError from NSand (delegate of NSand)
 - (void)networkConnectionError:(NSString *)ErrStr
 {
-    
     CLog("internet status == NotReachable");
     UIAlertView *errorView;
     
@@ -243,15 +232,29 @@
                  cancelButtonTitle: NSLocalizedString(@"Close", @"SAND Network error") otherButtonTitles: nil];
     
     [errorView show];
-
 }
+
+//Method handles what to do when network errors are dismissed with the button
+-(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
+    if (buttonIndex == 0) {
+        CLog("Alert button %i pressed", buttonIndex);
+        [leaveNomadsButton setHidden:YES]; //Hide the Leave button
+        [joinNomadsButton setHidden:NO]; //Show the Join Button
+        connectionLabel.text = @"Not Connected!";
+        [self.view bringSubviewToFront:settingsView];
+        currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    }
+}
+// END Network Error Handling ==============================================
+
 
 
 // input data function ============================================
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
     CLog(@"AVC: Data Ready Handle:  appID = %d  command = %d\n",inGrain->appID, inGrain->command);
-    if (nil != inGrain) {
+    if (nil != inGrain) { //if we're getting a grain
         if(inGrain->appID == CONDUCTOR_PANEL) {
             
             if(inGrain->command == SET_DISCUSS_STATUS) {
@@ -264,29 +267,32 @@
                 
             }
             
-            else if(inGrain->command == SET_NOTE_STATUS) {
+            else if(inGrain->command == SET_CLOUD_SOUND_STATUS) {
                 if (inGrain->bArray[0] == 1) {
-                    noteIsEnabled = YES;
+                    cloudSoundIsEnabled = YES;
+                     CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                 }
                 else if (inGrain->bArray[0] == 0) {
-                    noteIsEnabled = NO;
+                    cloudSoundIsEnabled = NO;
+                    CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                     fileNum = 1;
                 }   
                 
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
             
-            else if (inGrain->command == SET_NOTE_VOLUME) {
+            else if (inGrain->command == SET_CLOUD_SOUND_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
-                noteVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
-                audioPlayer.volume = noteVolume;
+                cloudSoundVolume =  (pow(10,(double)(inGrain->iArray[0])/20)/100000);
+                CLog("SET_CLOUD_SOUND_VOLUME:  %d\n",(int)inGrain->iArray[0]);
+                audioPlayer.volume = cloudSoundVolume;
             }
         }
     }
 }
 // Login button, currently disabled ****STK 7/30/12 ===============================================
 
-//- (IBAction)joinNomadsButton:(id)sender {
+- (IBAction)joinNomadsButton:(id)sender {
 //    [joinTextField resignFirstResponder];
 //    [appDelegate->appSand connect];  
 //    
@@ -309,12 +315,12 @@
 ////                                               String:joinTextField.text];
 //        joinTextField.text = @"";
 //        [joinTextField setHidden:YES];
-//        [joinNomadsButton setHidden:YES];
-//        [leaveNomadsButton setHidden:NO];
+        [joinNomadsButton setHidden:YES];
+        [leaveNomadsButton setHidden:NO];
+        
+        connectionLabel.text = @"Connected to NOMADS!";
 //        
-//        connectionLabel.text = @"Connected to NOMADS!";
-//        
-//        [self.view bringSubviewToFront:aukView];
+        [self.view bringSubviewToFront:aukView];
 //        
 //        settingsNavBar.hidden = NO;
 //    }
@@ -323,13 +329,16 @@
 //    else {
 //        connectionLabel.text = @"Error connecting: Please enter username!";
 //    }
-//}
+}
 
+// Back button in Settings display
 - (IBAction)settingsNavBackButton:(id)sender {
+    //If we're in settings view and need to go back to aukView
     if (currentView == 1) {
         [self.view bringSubviewToFront:aukView];
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
+    //If we're in infoView and need to go back to settings view
     else if (currentView == 2) {
         [self.view bringSubviewToFront:settingsView];
         currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
@@ -337,6 +346,7 @@
     }
 }
 
+// Takes us to infoView (web page about NOMADS)
 - (IBAction)settingsNavMoreInfoButton:(id)sender {
     [settingsNavBarMoreInfoButton setEnabled:NO];
     NSString *infoURL = @"http://nomads.music.virginia.edu";
@@ -344,52 +354,58 @@
     NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
     
     [self.view bringSubviewToFront:infoViewNOMADS];
+  //  [infoViewNOMADS setUserInteractionEnabled:NO];
     currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     
     [self.infoViewNOMADS loadRequest:myLoadRequest];
 }
 
-
+// Button to leave NOMADS ***STK 8/7/12 NOT IMPLEMENTED
 - (IBAction)leaveNomadsButton:(id)sender {
-    connectionLabel.text = @"Leaving NOMADS (but not really)";
+    connectionLabel.text = @"Leaving NOMADS";
     [leaveNomadsButton setHidden:YES];
-    [joinTextField setHidden:NO];
+    [joinTextField setHidden:YES];
     [joinNomadsButton setHidden:NO];
 }
 
 // Auk view items ===============================================
 
+//Button for discuss entry
 - (IBAction)discussButton:(id)sender {
     [aukView bringSubviewToFront:inputDiscussField];
     [inputDiscussField setHidden:NO];
     [inputDiscussField becomeFirstResponder];
     
 }
-
+//Button for cloud entry
 - (IBAction)cloudButton:(id)sender {
     [aukView bringSubviewToFront:inputCloudField];
     [inputCloudField setHidden:NO];
     [inputCloudField becomeFirstResponder];
 }
 
+//Settings button
 - (IBAction)settingsButton:(id)sender {
     [self.view bringSubviewToFront:settingsView];
     currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     
 }
 
+//***STK 8/7/12 NOT IMPLEMENTED
 -(IBAction) backgroundTapDiscuss:(id)sender{
     [self.inputDiscussField resignFirstResponder];
 }
+//***STK 8/7/12 NOT IMPLEMENTED
 -(IBAction) backgroundTapCloud:(id)sender{
     [self.inputCloudField resignFirstResponder];
 }
 
--(void)playNote {
+//Method to play CloudSound (from Cloud entry at end of Opera)
+-(void)playCloudSound {
     
     NSString *soundFile;
     
-    soundFile = [NSString stringWithFormat:@"sounds/AukNotes/AuksalaqNomadsNote%d.mp3",fileNum];
+    soundFile = [NSString stringWithFormat:@"sounds/AuksalaqThoughtCloudSounds/AuksalaqThoughtCloud%d.mp3",fileNum];
     
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
     
@@ -404,8 +420,8 @@
             CLog("Playback error: %@",[error description]);
         }
         else {
-            audioPlayer.volume = noteVolume;
-            CLog("noteVolume = %f", noteVolume);
+            audioPlayer.volume = cloudSoundVolume;
+            CLog("noteVolume = %f", cloudSoundVolume);
             [audioPlayer play];
         }
     }
@@ -418,9 +434,10 @@
     //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
 }
 
+//Method to advance filenumber after playback of AukNote
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     CLog("AVC: Audio finished playing");
-    if (fileNum == 17) {
+    if (fileNum == 18) {
         fileNum = 0;
     }
     else {
@@ -473,7 +490,7 @@
             [inputDiscussField resignFirstResponder];
             [aukView sendSubviewToBack:inputDiscussField];
         }
-        else {
+        else { //Dismisses keyboard if no text is entered but send button is pressed 
             inputDiscussField.text = @"";
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
@@ -518,16 +535,16 @@
             [aukView sendSubviewToBack:inputCloudField];
             
             //Note playback
-            if (noteIsEnabled) { //Only play back if note is enabled
+            if (cloudSoundIsEnabled) { //Only play back if note is enabled
                 if (![audioPlayer isPlaying]) {
-                    [self playNote];
+                    [self playCloudSound];
                 }
                 else {
-                    CLog("AVC: Note is already playing");
+                    CLog("AVC: cloudSound is already playing");
                 }
             }
         }
-        else {
+        else { //Dismisses keyboard if no text is entered but send button is pressed
             inputCloudField.text = @"";
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
@@ -574,10 +591,42 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+
+//Method to determine current rotation status
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)x
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (x == UIInterfaceOrientationPortrait) || UIInterfaceOrientationIsLandscape(x);
 }
+
+//Method to animate transitions between different rotation states
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        //Load images for landscape view
+        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+        
+        //Reset screen size of SwarmDrawView for landscape view
+        CGRect screenRect = [mySwarmDrawView bounds];
+        [mySwarmDrawView setFrame:screenRect];
+        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+        
+    }
+    else
+    {
+        //Load images for portrait view
+        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        
+        //Reset screen size of SwarmDrawView for portrait view
+        CGRect screenRect = [mySwarmDrawView bounds];
+        [mySwarmDrawView setFrame:screenRect];
+        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+
+    }
+}
+
 
 
 @end

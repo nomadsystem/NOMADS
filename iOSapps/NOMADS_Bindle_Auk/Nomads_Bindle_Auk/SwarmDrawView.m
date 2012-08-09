@@ -23,7 +23,7 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        //    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         
         
         // Graphics setup
@@ -41,12 +41,13 @@
         
         // chat lines
         numChatLines = 15; //Initialize number of chat lines to display
+        chatLines = [[NSMutableArray alloc] init];
         
         //Code to get the point to start at the center of the screen
         [self setMultipleTouchEnabled:YES];
         
-        myFingerPoint.x = (viewWidth * 0.5);
-        myFingerPoint.y = (viewHeight * 0.5);
+        myFingerPoint.x = (CGRectGetMidX(viewRect));
+        myFingerPoint.y = (CGRectGetMidY(viewRect));
         
         maxTrails = 10;
         
@@ -83,11 +84,12 @@
         
         //This category should prevent our audio from being interrupted by incoming calls, etc.
         [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-        if (setCategoryError) { 
+        if (setCategoryError) {
             CLog("Error initializing Audio Session Category");
         }
         dropletVolume = 1.0;
-        
+        toneVolume = 1.0;
+        toneOn = NO;
         
         promptWaitTick = 0;
         promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
@@ -108,10 +110,10 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    //This delegate not being 
+    //This delegate not being
     CLog(@"SwarmDrawView: Data Ready Handle\n");
     
-    if (nil != inGrain) { 
+    if (nil != inGrain) {
         
         // Set respective STATUS of various app components
         
@@ -120,20 +122,40 @@
                 if (inGrain->bArray[0] == 1) {
                     currentTimerVal = 4.0;
                     lastTimerVal = 4.0;
-                    fileNum = 1;
+                    fileNumDroplets = 1;
                     dropletTimer = [NSTimer scheduledTimerWithTimeInterval:currentTimerVal target:self selector:@selector(playDroplet) userInfo:nil repeats:YES];
                     
                 }
                 else if (inGrain->bArray[0] == 0) {
                     if (dropletTimer) {
                         [dropletTimer invalidate];
-                    }   
+                    }
+                }
+                
+            }
+            else if(inGrain->command == SET_POINTER_TONE_STATUS) {
+                if (inGrain->bArray[0] == 1) {
+                    fileNumTones = 1;
+                    toneCntrlOn = YES;
+   //                 [self playTone];
+                    
+                }
+                else if (inGrain->bArray[0] == 0) {
+                    toneCntrlOn = NO;
+                    [toneTimer invalidate];
+                    toneOn = NO;
+
                 }
                 
             }
             else if (inGrain->command == SET_DROPLET_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
                 dropletVolume =  (inGrain->iArray[0]*0.01);
+                
+            }
+            else if (inGrain->command == SET_POINTER_TONE_VOLUME) {
+                //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
+                toneVolume =  (inGrain->iArray[0]*0.01);
                 
             }
             else if(inGrain->command == SET_DISCUSS_STATUS) {
@@ -159,7 +181,7 @@
             else if(inGrain->command == SEND_PROMPT_OFF) {
                 // xxx
                 promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
-
+                
             }
             
             
@@ -167,10 +189,9 @@
         
         
         if(inGrain->appID == OC_DISCUSS) //Text from Student Discuss
-        { 
+        {
             
             [chatLines addObject:inGrain->str]; //Add the new text to the array
-            
             
             if ([chatLines count] > numChatLines) {
                 [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
@@ -180,7 +201,7 @@
             CLog(@"chatLines = %@", chatLines);
             [self setNeedsDisplay];
             
-        } 
+        }
         
     }
     
@@ -192,54 +213,64 @@
 
 -(void)drawRect:(CGRect)rect
 {
+    // Need to recheck bounds in case of device rotation
+    viewRect = [self bounds];
+    viewHeight = viewRect.size.height;
+    viewWidth = viewRect.size.width;
+    
+    
+    //Scale for pointer output between 0-1000 (To become 0-1)
+    viewHeightScale = (int)(1000/viewHeight);
+    viewWidthScale = (int)(1000/viewWidth);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetCharacterSpacing (context, 1);
     CGContextSetTextDrawingMode (context, kCGTextFillStroke);
     CGContextSetRGBFillColor (context, 1, 1, 1, promptAlpha);
-    CGContextSetRGBStrokeColor (context, 1, 1, 1, promptAlpha); 
+    CGContextSetRGBStrokeColor (context, 1, 1, 1, promptAlpha);
     CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
     
     CGContextSetAllowsAntialiasing(context, YES);
-    CGContextSetShouldAntialias(context, YES); 
+    CGContextSetShouldAntialias(context, YES);
     CGContextSetShouldSmoothFonts(context, YES);
     
     
     // Display Prompt Text
-    const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string 
+    const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
     int len = strlen(str); //get length of string
     
-    CGContextSelectFont (context, 
+    CGContextSelectFont (context,
                          "Papyrus",
                          30,
                          kCGEncodingMacRoman);
     
-    CGContextShowTextAtPoint (context, 40, 40, str, len); 
+    CGContextShowTextAtPoint (context, (viewWidth * 0.1), (viewHeight * 0.1), str, len);
     
     // Display discussion text
     
     if (discussStatus) {
-        
-        CGContextSelectFont (context, 
+        CGContextSelectFont (context,
                              "Helvetica-Light",
                              10,
                              kCGEncodingMacRoman);
         CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
-        CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1); 
+        CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1);
         
-        CGFloat tH = (int)(viewHeight);
-        CGFloat chatSpace = (tH/numChatLines) * 0.4;
-        CGFloat chatYLoc = (viewHeight-chatSpace);
-        CGFloat chatXLoc = 20;
+        CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
+        CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
+        CGFloat chatXLoc = (viewWidth * 0.1);
+        
         
         for (int i=0;i<[chatLines count];i++) {
             
-            NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString 
+            NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
             const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
             int len = strlen(str);
             printf("My String %s\n", str);
             CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
+            CLog("chatXLoc = %f, chatYLoc = %f", chatXLoc, chatYLoc);
+            
             chatYLoc -= chatSpace;
         }
     }
@@ -259,7 +290,7 @@
         
         float size = 20;
         
-        for (int i=0; i<maxTrails; i++) {   
+        for (int i=0; i<maxTrails; i++) {
             if (i<(maxTrails-1)) {
                 //            ellipseR = decayColor;
                 //            ellipseG = touchColor;
@@ -271,9 +302,9 @@
                 if (i==0) {
                     if (dropFlash) {
                         CLog("dropFlash!");
-                        CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);      
+                        CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                         CLog("R = %f G = %f B = %f A = %F", ellipseR, ellipseG, ellipseB, ellipseA);
-                        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (size*dotSizeScaler), (size*dotSizeScaler))));        
+                        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (size*dotSizeScaler), (size*dotSizeScaler))));
                         CGContextDrawPath(context, kCGPathFill);
                         //     CGContextFillPath(context);
                         CGContextStrokePath(context);
@@ -283,7 +314,7 @@
                 if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
                     CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                     
-                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, size, size)));        
+                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, size, size)));
                     CGContextDrawPath(context, kCGPathFill);
                     //     CGContextFillPath(context);
                     CGContextStrokePath(context);
@@ -295,30 +326,28 @@
                 
                 
                 CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
-                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], size, size)));        
+                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], size, size)));
                 CGContextDrawPath(context, kCGPathFill);
                 //     CGContextFillPath(context);
                 CGContextStrokePath(context);
-                decayColor = (decayColor - decayColorChangeDelta);        
+                decayColor = (decayColor - decayColorChangeDelta);
                 size *= 0.9;
                 ellipseR = decayColor;
                 ellipseG = touchColor;
                 ellipseA = decayColor;
             }
-        }        
+        }
     }
     
     //Sounds ======================================================
     
+    //Droplets
     int numOfDroplets = 203;
     float viewXGrid  = (viewWidth / 5);
     float viewYGrid  = (viewHeight / numOfDroplets);
-    
-    
-    int soundFileNum = (int)(myFingerPoint.y/viewYGrid);
-    
-    fileNum = soundFileNum;
+    fileNumDroplets = (int)(myFingerPoint.y/viewYGrid);
     currentTimerVal = (myFingerPoint.x/viewXGrid) + 4.0;
+    
     
     
     
@@ -339,6 +368,28 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     maxTrails = 2;
+    
+    //Pointer Tones
+    int numOfTones = 13;
+    fileNumTonesOld = fileNumTones;
+    float viewXGrid  = (viewWidth / 5);
+    float viewYGrid  = (viewHeight / numOfTones);
+    
+    if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
+        fileNumTones = 1;
+        if (!toneOn && toneCntrlOn) {
+            //     [self playTone];
+            toneOn = YES;
+        }
+    }
+    else {
+        fileNumTones = (int)(myFingerPoint.y/viewYGrid);
+        if (!toneOn && toneCntrlOn) {
+            //       [self playTone];
+            toneOn = YES;
+        }
+    }
+    
     if (pointerStatus) {
         for (UITouch *t in touches) {
             CLog(@" Touches Began");
@@ -359,7 +410,13 @@
             //Put pair in dictionary
             //        [linesInProcess setObject:newLine forKey:key];
         }
+        toneTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(playTone) userInfo:nil repeats:YES];
+
         [self setNeedsDisplay];
+
+
+//        [self playTone];
+
     }
 }
 
@@ -395,7 +452,10 @@
                 
             }
             [self setNeedsDisplay];
+
         });
+        
+
         
         //This one sends the data
         int xy[2];
@@ -412,16 +472,16 @@
             CLog(@"SWARM_X loc = %f", loc.x);
             CLog(@"SWARM_Y loc = %f", loc.y);
             
-        
-            
-//            float screenScaleX = 5.9;
-//            float screenScaleY = 3.33;
-//            int screenMinusX = 1000;
-//            int screenMinusY = 800;
             
             
-//            xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
-//            xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
+            //            float screenScaleX = 5.9;
+            //            float screenScaleY = 3.33;
+            //            int screenMinusX = 1000;
+            //            int screenMinusY = 800;
+            
+            
+            //            xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
+            //            xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
             
             //STK Send out scaled values between 0-1000 (to become 0-1)
             xy[0] = (int) (loc.x * viewWidthScale);
@@ -444,6 +504,10 @@
         //      touchColor = 0.6;
         
     }
+    toneOn = NO;
+
+    [toneTimer invalidate];
+
     //Redraw
     //[self setNeedsDisplay];
 }
@@ -487,8 +551,8 @@
 }
 
 - (void)fadeInPrompt
-{       
-    CLog("fadeIntPrompt %2.2f\n",promptAlpha);
+{
+    //    CLog("fadeIntPrompt %2.2f\n",promptAlpha);
     
     if (promptAlpha == 0) {
         promptAlpha = 0.05;
@@ -500,10 +564,10 @@
             CLog("deleting promptFadeInTimer\n");
             
         }
-    //    CLog("fadeInPrompt calling -> fadeOutPrompt %2.2f\n",promptFadeOutTick);
+        //    CLog("fadeInPrompt calling -> fadeOutPrompt %2.2f\n",promptFadeOutTick);
         
         promptFadeOutTick = 1;
-//        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
+        //        promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
         promptAlpha = 1;
     }
     [self setNeedsDisplay];
@@ -512,7 +576,7 @@
 
 
 - (void)fadeOutPrompt
-{       
+{
     CLog("fadeOutPrompt %2.2f\n",promptFadeOutTick);
     
     if (promptAlpha > 0.95) {
@@ -533,10 +597,12 @@
     [self setNeedsDisplay];
 }
 
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    CLog("SDV: Audio finished playing");
-    audioPlayer = nil;
-}
+//-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+//    CLog("SDV: Audio finished playing");
+//    audioPlayerDroplet = nil;
+//    audioPlayerTone = nil;
+//    
+//}
 
 // Play the sound
 
@@ -545,32 +611,33 @@
     
     NSString *soundFile;
     
-    soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNum];
+    soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNumDroplets];
     
     NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
     
     CLog("URL: %@", url);
-	
+
+    
 	NSError *error;
-    if (audioPlayer == nil) {
-        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        [audioPlayer setDelegate:self];
-        audioPlayer.numberOfLoops = 0;
-        if (audioPlayer == nil) {
+    if (audioPlayerDroplet == nil) {
+        audioPlayerDroplet = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayerDroplet setDelegate:self];
+        audioPlayerDroplet.numberOfLoops = 0;
+        if (audioPlayerDroplet == nil) {
             CLog("SDV: Playback error: %@",[error description]);
         }
         else {
-            audioPlayer.volume = dropletVolume;
+            audioPlayerDroplet.volume = dropletVolume;
             CLog("SDV: dropletVolume = %f", dropletVolume);
-            [audioPlayer play];
+            [audioPlayerDroplet play];
         }
     }
     
-    //****STK Other useful control parameters 
+    //****STK Other useful control parameters
     //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
     //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
     //    audioPlayer.currentTime = 10; // jump to the 10 second mark
-    //    [audioPlayer pause]; 
+    //    [audioPlayer pause];
     //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
     
     dropFlash = YES;
@@ -591,5 +658,43 @@
     }
     
 }
+
+-(void)playTone
+{
+    NSString *soundFile;
+    
+    soundFile = [NSString stringWithFormat:@"sounds/AuksalaqSandPointerTones/tones%d.mp3",fileNumTones];
+    
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
+    
+    CLog("URL: %@", url);
+ 
+	NSError *error;
+    if (tonePlayer > 9) {
+        tonePlayer = 0;
+    }
+    else 
+        tonePlayer++;
+    
+    audioPlayerTone[tonePlayer] = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+
+   [audioPlayerTone[tonePlayer] setDelegate:self];
+    
+    audioPlayerTone[tonePlayer].numberOfLoops = 1;
+
+    if (audioPlayerTone[tonePlayer] == nil) {
+        CLog("SDV: Playback error: %@",[error description]);
+    }
+    else {
+        CLog("SDV: tonVolume = %f", toneVolume);
+        audioPlayerTone[tonePlayer].volume = toneVolume;
+
+        [audioPlayerTone[tonePlayer] play];
+
+    }
+}
+
+
+
 
 @end

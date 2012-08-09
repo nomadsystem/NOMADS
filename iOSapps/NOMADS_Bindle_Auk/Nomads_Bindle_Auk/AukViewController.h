@@ -14,6 +14,8 @@
 #import "NSand.h"
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
+#import "SwarmDrawView.h"
+
 
 @interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate>
 {
@@ -35,9 +37,10 @@
     AVAudioPlayer *audioPlayer;
     AVAudioSession *session;
     int fileNum;
-    float noteVolume;
-    Boolean noteIsEnabled;
+    float cloudSoundVolume;
+    Boolean cloudSoundIsEnabled;
     int currentView;
+    SwarmDrawView *mySwarmDrawView;
     
 }
 
@@ -54,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
 @property (strong, nonatomic) IBOutlet UIView *settingsView;
 @property (strong, nonatomic) IBOutlet UIView *aukView;
+@property (strong, nonatomic) IBOutlet SwarmDrawView *mySwarmDrawView;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITextField *joinTextField;
 @property (weak, nonatomic) IBOutlet UIToolbar *aukToolbar;
@@ -78,7 +82,7 @@
 - (IBAction)backgroundTapDiscuss:(id)sender; //Tap to resign text entry
 - (IBAction)backgroundTapCloud:(id)sender; //Tap to resign text entry
 
-- (void)playNote;
+- (void)playCloudSound;
 
 -(void)reachabilityChanged:(NSNotification*)note;
 
