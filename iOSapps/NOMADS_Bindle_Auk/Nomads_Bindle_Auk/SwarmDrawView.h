@@ -20,7 +20,6 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     CGPoint myFingerPoint;
-    float dotSize;
     int maxTrails;
     int *xTrail;
     int *yTrail;
@@ -31,9 +30,10 @@
     NSMutableArray  *chatLines;
     int numChatLines;
     AVAudioPlayer *audioPlayerDroplet;
-    AVAudioPlayer *audioPlayerTone[20];
+    AVAudioPlayer *audioPlayerTone[21];
     int maxNumOfTonePlayers;
     Boolean toneCntrlOn;
+    float toneVolScaler;
     
     float dropletVolume;
     float toneVolume;
@@ -76,11 +76,13 @@
     CGRect viewRect;
     CGFloat viewHeight;
     CGFloat viewWidth;
-    int viewWidthScale; //STK: scales between 0-1000 (eventually between 0-1)
-    int viewHeightScale;
+    float viewWidthScale; //STK: scales between 0-1000 (eventually between 0-1)
+    float viewHeightScale;
     
     int tonePlayer;
-        
+    Boolean toneVolDone;
+    int numRunTonePlayers;
+    
 }
 
 @property (strong, retain) NSand *appSand;
