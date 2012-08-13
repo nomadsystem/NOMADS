@@ -49,16 +49,16 @@ public class Swarm extends Activity {
 
 	TextView chatWindow, prompt;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
-	Button buttonAudioTest, buttonSendDiscuss, buttonSendCloud, buttonCancel;
+	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
 	EditText message;
 	final Context context = this;
 	AlertDialog.Builder alert;
 	
 	String tempString = "";
 
-	private int glacierInterval = 100;
-	private Handler glacierHandler;
-	private boolean glacierToggle = true;
+	private int tonesInterval = 200;
+	private int dropletsInterval = 1000;
+	private Handler tonesHandler, dropletsHandler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,8 @@ public class Swarm extends Activity {
 		}
 
 		// initialize handler for timed sound playback
-		glacierHandler = new Handler();
+		tonesHandler = new Handler();
+		dropletsHandler = new Handler();
 
 		// initialize UI
 		setContentView(R.layout.swarm);
@@ -97,8 +98,10 @@ public class Swarm extends Activity {
 		buttonCloud.setOnClickListener(cloudListener);
 		buttonSettings = (ImageButton) findViewById(R.id.buttonSettings);
 		buttonSettings.setOnClickListener(settingsListener);
-		buttonAudioTest = (Button) findViewById(R.id.buttonAudioTest);
-		buttonAudioTest.setOnClickListener(audioTestButtonListener);
+		buttonAudioTest1 = (Button) findViewById(R.id.buttonAudioTest1);
+		buttonAudioTest1.setOnClickListener(tonesTestButtonListener);
+		buttonAudioTest2 = (Button) findViewById(R.id.buttonAudioTest2);
+		buttonAudioTest2.setOnClickListener(dropletsTestButtonListener);
 		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
 		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
 		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
@@ -108,7 +111,6 @@ public class Swarm extends Activity {
 		message = (EditText) findViewById(R.id.message);
 		message.setOnFocusChangeListener(messageListener);
 		prompt = (TextView) findViewById(R.id.prompt);
-
 	}
 
 	public void cancelAllTextInput() {
@@ -141,39 +143,86 @@ public class Swarm extends Activity {
 
 	public void parseGrain(NGrain _grain) {
 		Log.d("Swarm", "parseGrain(): grain received");
-
-		if (grain == null) {
-			Log.d("Swarm", "parseGrain(): grain is null");
-			return;
-		}
-
 		grain = _grain;
-		String msg = new String(grain.bArray);
-		Log.i("Swarm", "message received is: " + msg);
 
-		// if (grain.appID == NAppID.DISCUSS_PROMPT) {
-		// topic.setText(msg);
-		// tempString = new String(msg);
-		// }
-		// // Disable discuss when the student panel button is off
-		// else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-		// if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
-		// topic.setText("Discuss Disabled");
-		// chatWindow.setText("");
-		// }
-		// else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
-		// topic.setText(tempString);
-		// }
-		// }
-		// else if (grain.appID == NAppIDAuk.OC_DISCUSS){
-		if (grain.appID == NAppIDAuk.OC_DISCUSS) {
-			appendTextAndScroll(msg);
-			Log.i("Discuss", "ChatWindow: " + msg);
-			// input.requestFocus();
+//		if (grain == null) {
+//			Log.d("Swarm", "parseGrain(): grain is null");
+//			return;
+//		}
+		
+		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL) {
+			Log.d("Swarm", "from Conductor Panel: ");
+
+
+			if (grain.command == NCommandAuk.SET_DROPLET_STATUS) {
+				if (grain.bArray[0] == 0) {
+					dropletsToggle = false;
+					Log.d("Swarm", "Setting Droplets to OFF");
+				} else if (grain.bArray[0] == 1) {
+					dropletsToggle = true;
+					Log.d("Swarm", "Setting Droplets to ON");
+				}
+			}
+
+			else if (grain.command == NCommandAuk.SET_DISCUSS_STATUS) {
+				if (grain.bArray[0] == 0) {
+					discussToggle = false;
+					Log.d("Swarm", "DISCUSS_STATUS false");
+				} else if (grain.bArray[0] == 1) {
+					discussToggle = true;
+					Log.d("Swarm", "DISCUSS_STATUS true");
+				}
+			}
+
+			else if (grain.command == NCommandAuk.SET_CLOUD_STATUS) {
+				if (grain.bArray[0] == 0) {
+					cloudToggle = false;
+					Log.d("Swarm", "CLOUD_STATUS false");
+				} else if (grain.bArray[0] == 1) {
+					cloudToggle = true;
+					Log.d("Swarm", "CLOUD_STATUS true");
+				}
+			}
+
+			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
+//				double tDropVal = (double) grain.iArray[0]; // Using text from
+//															// NGrain byte
+//															// array--Should
+//															// change to int
+//															// array ***STK
+//															// 6/20/12
+//				float tDropVolume = (float) (Math.pow(tDropVal, 2) / 10000.0);
+//
+//				Log.d("Swarm", "tDropVolume = " + tDropVolume);
+//				// TO DO: Make this a log function. . .
+//				myOC_Pointer.myBusReader.amplitude.set(tDropVolume);
+
+			}
+		} else if (grain.appID == NAppIDAuk.OC_DISCUSS) {
+			if (grain.command == NCommandAuk.SEND_MESSAGE) {
+				String msg = new String(grain.bArray);
+				Log.d("Swarm", "Discuss message received: " + msg);
+				appendTextAndScroll(msg);
+				Log.d("Discuss", "ChatWindow: " + msg);
+			}
 		}
 
-		if (grain != null)
-			grain = null;
+		else if (grain.appID == NAppIDAuk.OC_CLOUD) {
+			if (grain.command == NCommandAuk.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				Log.d("Swarm", "Cloud message received: " + text);
+			}
+		}
+
+		else if (grain.appID == NAppIDAuk.DISCUSS_TOPIC)
+			if (grain.command == NCommandAuk.SEND_MESSAGE) {
+				String text = new String(grain.bArray);
+				Log.d("Swarm", "Setting Discuss Topic");
+				prompt.setText(text);
+			}
+
+//		if (grain != null)
+//			grain = null;
 	}
 
 	// ========================================================
@@ -183,26 +232,30 @@ public class Swarm extends Activity {
 	Button.OnClickListener discussListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			buttonSendCloud.setVisibility(View.GONE);
-			buttonSendDiscuss.setVisibility(View.VISIBLE);
-			buttonCancel.setVisibility(View.VISIBLE);
-			message.setVisibility(View.VISIBLE);
-//			prompt.setVisibility(View.VISIBLE);
-			message.setText("");
-			setMessageFocus(true);
+			if (discussToggle) {
+				buttonSendCloud.setVisibility(View.GONE);
+				buttonSendDiscuss.setVisibility(View.VISIBLE);
+				buttonCancel.setVisibility(View.VISIBLE);
+				message.setVisibility(View.VISIBLE);
+				prompt.setVisibility(View.VISIBLE);
+				message.setText("");
+				setMessageFocus(true);
+			}
 		}
 	};
 
 	Button.OnClickListener cloudListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			buttonSendDiscuss.setVisibility(View.GONE);
-			buttonSendCloud.setVisibility(View.VISIBLE);
-			buttonCancel.setVisibility(View.VISIBLE);
-			message.setVisibility(View.VISIBLE);
-//			prompt.setVisibility(View.VISIBLE);
-			message.setText("");
-			setMessageFocus(true);
+			if (cloudToggle) {
+				buttonSendDiscuss.setVisibility(View.GONE);
+				buttonSendCloud.setVisibility(View.VISIBLE);
+				buttonCancel.setVisibility(View.VISIBLE);
+				message.setVisibility(View.VISIBLE);
+				prompt.setVisibility(View.VISIBLE);
+				message.setText("");
+				setMessageFocus(true);
+			}
 		}
 	};
 
@@ -216,16 +269,26 @@ public class Swarm extends Activity {
 		}
 	};
 
-	Button.OnClickListener audioTestButtonListener = new Button.OnClickListener() {
+	Button.OnClickListener tonesTestButtonListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			if (tonesToggle) {
-				// start timed glacier sound playback
-				startGlacierSounds();
-				tonesToggle = !tonesToggle;
+			if (!tonesToggle) {
+				Log.d("Swarm", "Starting tones...");
+				startTones();
 			} else {
-				stopGlacierSounds();
-				tonesToggle = !tonesToggle;
+				stopTones();
+			}
+		}
+	};
+	
+	Button.OnClickListener dropletsTestButtonListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if (!dropletsToggle) {
+				Log.d("Swarm", "Starting droplets...");
+				startDroplets();
+			} else {
+				stopDroplets();
 			}
 		}
 	};
@@ -384,30 +447,63 @@ public class Swarm extends Activity {
 		}
 	}
 
-	Runnable glacierRunnable = new Runnable() {
+	Runnable tonesRunnable = new Runnable() {
 		@Override
 		public void run() {
-			// Log.d("Swarm", "glacierRunnable: run loop");
-			if (glacierToggle) {
-				// Log.d("Swarm", "glacierToggle is true");
-				playSound("tones1.mp3");
-				// updateStatus(); //this function can change value of
-				// m_interval.
-				glacierHandler.postDelayed(glacierRunnable, glacierInterval);
+			if (tonesToggle) {
+				 Log.d("Swarm", "tonesToggle is true");
+				String soundfile = getSoundFileTones(app.getXY());
+				playSound(soundfile);
+				// updateStatus(); // change value of interval
+				tonesHandler.postDelayed(tonesRunnable, tonesInterval);
 			}
 		}
 	};
-
-	void startGlacierSounds() {
-		glacierToggle = true;
-		glacierRunnable.run();
+	
+	Runnable dropletsRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (dropletsToggle) {
+				 Log.d("Swarm", "dropletsToggle is true");
+				String soundfile = getSoundFileDroplets(app.getXY());
+				playSound(soundfile);
+				// updateStatus(); // change value of interval
+				dropletsHandler.postDelayed(dropletsRunnable, dropletsInterval);
+			}
+		}
+	};
+	
+	private String getSoundFileTones (float[] _xy) {
+		String soundfile = "tones1.mp3";
+		return soundfile;
+	}
+	
+	private String getSoundFileDroplets (float[] _xy) {
+		String soundfile = "1.mp3";
+		return soundfile;
 	}
 
-	void stopGlacierSounds() {
-		glacierHandler.removeCallbacks(glacierRunnable);
+	private void startTones() {
+		tonesToggle = true;
+		tonesRunnable.run();
 	}
 
-	void initializeMediaPlayers() {
+	private void stopTones() {
+		tonesToggle = false;
+		tonesHandler.removeCallbacks(tonesRunnable);
+	}
+	
+	private void startDroplets() {
+		dropletsToggle = true;
+		dropletsRunnable.run();
+	}
+
+	private void stopDroplets() {
+		dropletsToggle = false;
+		dropletsHandler.removeCallbacks(tonesRunnable);
+	}
+
+	private void initializeMediaPlayers() {
 		// Create array of new media players
 		for (int i = 0; i < mPlayer.length; i++) {
 			mPlayer[i] = new MediaPlayer();
@@ -449,8 +545,9 @@ public class Swarm extends Activity {
 		// destroy all media player instances
 		releaseMediaPlayers();
 
-		// turn off glacier playback
-		glacierToggle = false;
+		// turn off all audio playback
+		tonesToggle = false;
+		dropletsToggle = false;
 
 		// turn on ringer (?)
 		// app.phoneRingerState(true);

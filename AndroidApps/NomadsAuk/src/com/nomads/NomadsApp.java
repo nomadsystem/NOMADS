@@ -26,6 +26,7 @@ public class NomadsApp extends Application {
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
+	private float[] xy;
 
 	public NomadsApp getInstance() {
 		return singleton;
@@ -92,6 +93,14 @@ public class NomadsApp extends Application {
 		}
 
 		Log.d("NomadsApp", "ringer state was set to: " + on);
+	}
+	
+	public void setXY(float[] _xy) {
+		xy = _xy;
+	}
+	
+	public float[] getXY() {
+		return xy;
 	}
 
 	// ========================================================
