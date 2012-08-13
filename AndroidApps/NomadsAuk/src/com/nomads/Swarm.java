@@ -6,12 +6,14 @@ package com.nomads;
 
 import java.io.IOException;
 
-import nomads.v210.*;
+import nomads.v210.NAppIDAuk;
+import nomads.v210.NCommandAuk;
+import nomads.v210.NDataType;
 import nomads.v210.NGlobals.GrainTarget;
-
+import nomads.v210.NGrain;
+import nomads.v210.NSand;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,36 +25,34 @@ import android.os.Handler;
 import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-//import android.content.Intent;
 import android.widget.TextView;
+//import android.content.Intent;
 
 public class Swarm extends Activity {
 	private NomadsApp app;
 	private MediaPlayer[] mPlayer;
 	// private MediaPlayer currentPlayer;
 	private boolean mPPlaying[];
+	private boolean dropletsToggle = false;
 	private boolean tonesToggle = false;
+	private boolean discussToggle = false;
+	private boolean cloudToggle = false;
 
 	private NSand sand;
 	private NGrain grain;
 
-	// Button buttonDiscuss, buttonCloud, buttonSettings;
-	TextView chatWindow;
+	TextView chatWindow, prompt;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
-	Button buttonAudioTest;
+	Button buttonAudioTest, buttonSendDiscuss, buttonSendCloud, buttonCancel;
+	EditText message;
 	final Context context = this;
 	AlertDialog.Builder alert;
-//	EditText alertInput;
+	
 	String tempString = "";
 
 	private int glacierInterval = 100;
@@ -98,13 +98,27 @@ public class Swarm extends Activity {
 		buttonSettings.setOnClickListener(settingsListener);
 		buttonAudioTest = (Button) findViewById(R.id.buttonAudioTest);
 		buttonAudioTest.setOnClickListener(audioTestButtonListener);
+		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
+		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
+		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
+		buttonSendCloud.setOnClickListener(sendDiscussListener);
+		buttonCancel = (Button) findViewById(R.id.cancel);
+		buttonCancel.setOnClickListener(cancelListener);
+		message = (EditText) findViewById(R.id.message);
+		prompt = (TextView) findViewById(R.id.prompt);
 
 	}
 
-	// void goToJoin() {
-	// Intent intent = new Intent(getApplicationContext(), Join.class);
-	// startActivity(intent);
-	// }
+	public void cancelAllTextInput() {
+		buttonSendDiscuss.setVisibility(View.GONE);
+		buttonSendCloud.setVisibility(View.GONE);
+		buttonCancel.setVisibility(View.GONE);
+		message.setVisibility(View.GONE);
+//		prompt.setVisibility(View.GONE);
+		InputMethodManager imm = (InputMethodManager)getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
+	}
 
 	// ========================================================
 	// Network
@@ -154,14 +168,24 @@ public class Swarm extends Activity {
 	Button.OnClickListener discussListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			discussAlert();
+			buttonSendCloud.setVisibility(View.GONE);
+			buttonSendDiscuss.setVisibility(View.VISIBLE);
+			buttonCancel.setVisibility(View.VISIBLE);
+			message.setVisibility(View.VISIBLE);
+//			prompt.setVisibility(View.VISIBLE);
+			message.setText("");
 		}
 	};
 
 	Button.OnClickListener cloudListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			cloudAlert();
+			buttonSendDiscuss.setVisibility(View.GONE);
+			buttonSendCloud.setVisibility(View.VISIBLE);
+			buttonCancel.setVisibility(View.VISIBLE);
+			message.setVisibility(View.VISIBLE);
+//			prompt.setVisibility(View.VISIBLE);
+			message.setText("");
 		}
 	};
 
@@ -188,120 +212,51 @@ public class Swarm extends Activity {
 			}
 		}
 	};
+	
+	Button.OnClickListener sendDiscussListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			String value = message.getText().toString();
+			Log.d("Swarm->Discuss", "value = " + value);
+			byte[] discussMsg = value.getBytes();
+			// eventually use this:
+			// char[] discussMsg = value.toCharArray();
+			sand.sendGrain(
+					NAppIDAuk.OC_DISCUSS,
+					NCommandAuk.SEND_MESSAGE,
+					NDataType.CHAR,
+					discussMsg.length,
+					discussMsg);
+			cancelAllTextInput();
+		}
+	};
+	
+	Button.OnClickListener sendCloudListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			String value = message.getText().toString();
+			Log.d("Swarm", "Cloud sent: " + value);
+			byte[] cloudMsg = value.getBytes();
+			sand.sendGrain(
+					NAppIDAuk.OC_CLOUD,
+					NCommandAuk.SEND_MESSAGE,
+					NDataType.CHAR,
+					cloudMsg.length,
+					cloudMsg);
+			cancelAllTextInput();
+		}
+	};
+	
+	Button.OnClickListener cancelListener = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			cancelAllTextInput();
+		}
+	};
 
 	// ========================================================
 	// Alerts
 	// ========================================================
-
-	public class CustomDialogView extends RelativeLayout {
-		public CustomDialogView(Context context) {
-			super(context);
-			LayoutInflater.from(context).inflate(R.layout.customdialog, this, true);
-		}
-	}
-
-	protected void discussAlert() {
-		Log.d("Swarm->Discuss", "discussAlert()");
-//		CustomDialogView mView = new CustomDialogView(context);
-		final Dialog dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);
-//		dialog.setCanceledOnTouchOutside(true);
-		dialog.setContentView(R.layout.customdialog);
-//		dialog.setTitle("Title");
-		
-		View mView = findViewById(R.layout.customdialog);
-//		dialog.setContentView(mView);
-		
-		mView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Log.d("Swarm->Discuss", "discussAlert(): VIEW TOUCHED");
-//		    	dialog.dismiss();
-				return false;
-			}
-		});
-
-		Button button = (Button) dialog.findViewById(R.id.ok);
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-		            EditText edit=(EditText)dialog.findViewById(R.id.message);
-		            String value = edit.getText().toString();
-		            Log.d("Swarm->Discuss", "value = " + value);
-//		            dialog.dismiss();
-		     }
-		 });   
-
-//		CustomDialogView mView = new CustomDialogView(context);
-//		
-//		alert = new AlertDialog.Builder(context)
-//			.setView(mView)
-//			.setTitle("Discuss:")
-//			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//				public void onClick(DialogInterface dialog, int whichButton) {
-//					EditText alertInput = (EditText) findViewById(R.id.message);
-//					if (alertInput == null) {
-//						Log.e("Swarm", "alertInput is NULL!!!!!!");
-//					}
-//					String value = alertInput.getText().toString();
-//					// Log.d("Swarm->Discuss", "test");
-//					Log.d("Swarm->Discuss", "value = " + value);
-////					byte[] discussMsg = value.getBytes();
-//					// eventually use this:
-//					// char[] discussMsg = value.toCharArray();
-////						sand.sendGrain(
-////								NAppIDAuk.OC_DISCUSS,
-////								NCommandAuk.SEND_MESSAGE,
-////								NDataType.CHAR,
-////								discussMsg.length,
-////								discussMsg);
-//				}
-//			})
-//			.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int whichButton) {
-//						// Canceled.
-//					}
-//				});
-//
-//		AlertDialog dialog = alert.create();
-//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		WindowManager.LayoutParams WMLP = dialog.getWindow().getAttributes();
-//
-//		// need to scale this to the window
-//		WMLP.x = 0; // x position
-//		WMLP.y = 100; // y position
-//
-//		dialog.getWindow().setAttributes(WMLP);
-		dialog.show();
-	}
-
-	protected void cloudAlert() {
-		alert = new AlertDialog.Builder(context);
-		// need to create new input field each time
-
-		alert.setTitle("Cloud:");
-		// alert.setMessage("Message");
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				EditText alertInput = (EditText) findViewById(R.id.message);
-				String value = alertInput.getText().toString();
-				Log.d("Swarm->Discuss", value);
-				byte[] cloudMsg = value.getBytes();
-				sand.sendGrain(NAppIDAuk.OC_CLOUD, NCommandAuk.SEND_MESSAGE,
-						NDataType.CHAR, cloudMsg.length, cloudMsg);
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
-
-		alert.show();
-	}
 
 	protected void quitAlert() {
 		alert = new AlertDialog.Builder(context);
@@ -449,11 +404,11 @@ public class Swarm extends Activity {
 	protected void onPause() {
 		Log.d("Swarm", "onPause()");
 		super.onPause();
-		// Join.instance.threadRunLoop(false);
-		// app.setAppState(false);
 
+		// destroy all media player instances
 		releaseMediaPlayers();
 
+		// turn off glacier playback
 		glacierToggle = false;
 
 		// turn on ringer (?)
@@ -464,10 +419,9 @@ public class Swarm extends Activity {
 	protected void onResume() {
 		Log.d("Swarm", "onResume()");
 		super.onResume();
-		// Join.instance.threadRunLoop(true);
-		// app.setAppState(true);
 		app.setGrainTarget(GrainTarget.SWARM);
 
+		// create array of media players
 		initializeMediaPlayers();
 
 		// turn off ringer
@@ -484,8 +438,6 @@ public class Swarm extends Activity {
 	protected void onRestart() {
 		Log.d("Swarm", "onRestart()");
 		super.onRestart();
-
-//		app.setAppState(true);
 
 		Intent intent = new Intent(getApplicationContext(), Join.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

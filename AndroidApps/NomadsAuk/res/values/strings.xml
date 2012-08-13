@@ -8,8 +8,6 @@
 	    \nPlease check network settings and try again.
 	    </string>
 	<string name="connectButton">Refresh</string>
-	<string name="OK">OK</string>
-	<string name="cancel">cancel</string>
 	<string name="incoming"></string>
     <string name="outgoing"></string>
     <string name="connected">Connected to Nomads server.</string>
@@ -17,7 +15,8 @@
     <string name="sendButton">Send</string>
     <string name="test">test</string>
     <string name="discuss">Discuss</string>
-    <string name="cloud">Cloud</string>
+    <string name="cloud">Send to Cloud</string>
+    <string name="cancel">Cancel</string>
     <string name="settings">Settings</string>
     <string name="connectionStatus">Connection status:</string>
     <string name="nomadsInfo">This app was created by the</string>

@@ -4,9 +4,9 @@
 
 package com.nomads;
 
-import nomads.v210.*;
 import nomads.v210.NGlobals.GrainTarget;
-
+import nomads.v210.NGrain;
+import nomads.v210.NSand;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -26,7 +26,6 @@ public class NomadsApp extends Application {
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
-	private boolean appState = true;
 
 	public NomadsApp getInstance() {
 		return singleton;
@@ -96,6 +95,12 @@ public class NomadsApp extends Application {
 	}
 
 	// ========================================================
+	
+	public void cancelAllTextInput() {
+		if (swarm != null) {
+			swarm.cancelAllTextInput();
+		}
+	}
 
 	public NSand getSand() {
 		return sand;

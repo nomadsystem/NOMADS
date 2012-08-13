@@ -53,6 +53,7 @@ class Dot extends View {
 		int action = event.getAction();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
+			app.cancelAllTextInput();
 		case MotionEvent.ACTION_MOVE:
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_CANCEL:
