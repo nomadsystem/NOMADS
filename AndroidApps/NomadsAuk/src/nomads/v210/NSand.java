@@ -15,590 +15,574 @@ import com.nomads.NomadsApp;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class NSand
-{
-    // Not sure which of these need to be public_private
-    //(Fields)
-    private Socket socket              = null;
-    private DataInputStream  streamIn  = null;
-    private DataOutputStream streamOut = null;    
-    private String    serverName = NGlobals.serverName;
-    private int       serverPort = NGlobals.serverPortPT;
+public class NSand {
+	// Not sure which of these need to be public_private
+	// (Fields)
+	private Socket socket = null;
+	private DataInputStream streamIn = null;
+	private DataOutputStream streamOut = null;
+	private String serverName = NGlobals.serverName;
+	private int serverPort = NGlobals.serverPortPT;
 
-    // Maybe yes to these
-    URL imgWebBase, webBase;
+	// Maybe yes to these
+	URL imgWebBase, webBase;
 
-    public NSand () {
-    }
+	public NSand() {
+	}
 
-    public NSand (Socket serverSock) {
-	socket = serverSock;
-    }
+	public NSand(Socket serverSock) {
+		socket = serverSock;
+	}
 
-    public DataInputStream getInStream() {
-	return streamIn;
-    }
+	public DataInputStream getInStream() {
+		return streamIn;
+	}
 
-    public DataOutputStream getOutStream() {
-	return streamOut;
-    }
+	public DataOutputStream getOutStream() {
+		return streamOut;
+	}
 
-    public void setSock (Socket serverSock) {
-	socket = serverSock;
-    }
-    
- // for Settings.java
-    public String getServerName () {
-    	return serverName;
-    }
-    
-    public int getServerPort () {
-    	return serverPort;
-    }
-    
-//==============================================================
-//  sendGrain()
-//==============================================================
+	public void setSock(Socket serverSock) {
+		socket = serverSock;
+	}
 
-    // SendGrain with Byte Array
-    public void sendGrain (NGrain myGrain) {
+	// for Settings.java
+	public String getServerName() {
+		return serverName;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	// ==============================================================
+	// sendGrain()
+	// ==============================================================
+
+	// SendGrain with Byte Array
+	public void sendGrain(NGrain myGrain) {
 		Log.d("NSand.java", "sendGrain: (NGrain) ");
-		try {  
-		    // send app id
-		    streamOut.writeByte(myGrain.appID);
-		    // send command
-		    streamOut.writeByte(myGrain.command);
-		    // send data Type
-		    streamOut.writeByte(myGrain.dataType);
-		    // send data Length
-		    streamOut.writeInt(myGrain.dataLen);
-		    Log.d("NSand.java", "sendGrain: appID =" + myGrain.appID);
-		    Log.d("NSand.java", "sendGrain: commd =" + myGrain.command);
-		    Log.d("NSand.java", "sendGrain: dataType =" + myGrain.dataType);
-		    Log.d("NSand.java", "sendGrain: dLen  =" + myGrain.dataLen);
-	
-	
-		    // send data
-		    if (myGrain.dataType == NDataType.BYTE) {
-				Log.d("NSand.java", "sendGrain: data[] = BYTE (Deprecated, use CHAR or UINT8)");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeByte(myGrain.bArray[i]);
-				}
-		    }
-	
-		    else if (myGrain.dataType == NDataType.UINT8) {
-			Log.d("NSand.java", "sendGrain: data[] = UINT8");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeByte(myGrain.bArray[i]);
-				}
-		    }
-	
-		    else if (myGrain.dataType == NDataType.INT) {
-			Log.d("NSand.java", "sendGrain: data[] = INT (Deprecated, use INT32)");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeInt(myGrain.iArray[i]);
-				}
-		    }
-	
-		    else if (myGrain.dataType == NDataType.INT32) {
-			Log.d("NSand.java", "sendGrain: data[] = INT32");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeInt(myGrain.iArray[i]);
-				}
-		    }
-	
-		    else if (myGrain.dataType == NDataType.FLOAT) {
-			Log.d("NSand.java", "sendGrain: data[] = FLOAT (Deprecated, use FLOAT32)");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeFloat(myGrain.fArray[i]);
-				}
-		    }
-	
-		    else if (myGrain.dataType == NDataType.FLOAT32) {
-			Log.d("NSand.java", "sendGrain: data[] = FLOAT32");
-				for (int i=0; i<myGrain.dataLen; i++) {
-				    streamOut.writeFloat(myGrain.fArray[i]);
-				}
-		    }
-	
-		    else {
-			Log.d("NSand.java", "sendGrain: WARNING:  Unknown NDataType: " + myGrain.dataType);
-		    }
-	
-		}
-		catch(IOException ioe) {  
-		    Log.d("NSand.java", "sendGrain: SAND write error");
-		}
-    }
+		try {
+			// send app id
+			streamOut.writeByte(myGrain.appID);
+			// send command
+			streamOut.writeByte(myGrain.command);
+			// send data Type
+			streamOut.writeByte(myGrain.dataType);
+			// send data Length
+			streamOut.writeInt(myGrain.dataLen);
+			Log.d("NSand.java", "sendGrain: appID =" + myGrain.appID);
+			Log.d("NSand.java", "sendGrain: commd =" + myGrain.command);
+			Log.d("NSand.java", "sendGrain: dataType =" + myGrain.dataType);
+			Log.d("NSand.java", "sendGrain: dLen  =" + myGrain.dataLen);
 
+			// send data
+			if (myGrain.dataType == NDataType.BYTE) {
+				Log.d("NSand.java",
+						"sendGrain: data[] = BYTE (Deprecated, use CHAR or UINT8)");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeByte(myGrain.bArray[i]);
+				}
+			}
 
-    // SendGrain with Byte Array
-    public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
+			else if (myGrain.dataType == NDataType.UINT8) {
+				Log.d("NSand.java", "sendGrain: data[] = UINT8");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeByte(myGrain.bArray[i]);
+				}
+			}
+
+			else if (myGrain.dataType == NDataType.INT) {
+				Log.d("NSand.java",
+						"sendGrain: data[] = INT (Deprecated, use INT32)");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeInt(myGrain.iArray[i]);
+				}
+			}
+
+			else if (myGrain.dataType == NDataType.INT32) {
+				Log.d("NSand.java", "sendGrain: data[] = INT32");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeInt(myGrain.iArray[i]);
+				}
+			}
+
+			else if (myGrain.dataType == NDataType.FLOAT) {
+				Log.d("NSand.java",
+						"sendGrain: data[] = FLOAT (Deprecated, use FLOAT32)");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeFloat(myGrain.fArray[i]);
+				}
+			}
+
+			else if (myGrain.dataType == NDataType.FLOAT32) {
+				Log.d("NSand.java", "sendGrain: data[] = FLOAT32");
+				for (int i = 0; i < myGrain.dataLen; i++) {
+					streamOut.writeFloat(myGrain.fArray[i]);
+				}
+			}
+
+			else {
+				Log.d("NSand.java", "sendGrain: WARNING:  Unknown NDataType: "
+						+ myGrain.dataType);
+			}
+
+		} catch (IOException ioe) {
+			Log.d("NSand.java", "sendGrain: SAND write error");
+		}
+	}
+
+	// SendGrain with Byte Array
+	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
+			byte[] bArray) {
 		Log.d("NSand.java", "sendGrain: ... args ... bArray[]");
-		try {  
-		    // send app id
-		    streamOut.writeByte(aID);
-		    // send command
-		    streamOut.writeByte(cmd);
-		    // send data Type
-		    streamOut.writeByte(dType);
-		    // send data Length
-		    streamOut.writeInt(dLen);
-	
-		    Log.d("NSand.java", "sendGrain: appID =" + aID);
-		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
-		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
-		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
-	
-	
-		    for (int i=0; i<dLen; i++) {
-			streamOut.writeByte(bArray[i]);
-			Log.d("NSand.java", "sendGrain: BYTE:  " + bArray[i]);
-		    }
+		try {
+			// send app id
+			streamOut.writeByte(aID);
+			// send command
+			streamOut.writeByte(cmd);
+			// send data Type
+			streamOut.writeByte(dType);
+			// send data Length
+			streamOut.writeInt(dLen);
+
+			Log.d("NSand.java", "sendGrain: appID =" + aID);
+			Log.d("NSand.java", "sendGrain: commd =" + cmd);
+			Log.d("NSand.java", "sendGrain: dataType =" + dType);
+			Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
+
+			for (int i = 0; i < dLen; i++) {
+				streamOut.writeByte(bArray[i]);
+				Log.d("NSand.java", "sendGrain: BYTE:  " + bArray[i]);
+			}
+		} catch (IOException ioe) {
+			Log.d("NSand.java", "sendGrain: SAND write error");
 		}
-		catch(IOException ioe) {  
-		    Log.d("NSand.java", "sendGrain: SAND write error");
-		}
-    }
-	
-	    // SendGrain with Int Array
-    public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+	}
+
+	// SendGrain with Int Array
+	public void sendGrain(byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
 		Log.d("NSand.java", "sendGrain: ... args ... iArray[]");
-		try {  
-		    // send app id
-		    streamOut.writeByte(aID);
-		    // send command
-		    streamOut.writeByte(cmd);
-		    // send data Type
-		    streamOut.writeByte(dType);
-		    // send data Length
-		    streamOut.writeInt(dLen);
-	
-		    Log.d("NSand.java", "sendGrain: appID =" + aID);
-		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
-		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
-		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
-	
-		    for (int i=0; i<dLen; i++) {
-		    	streamOut.writeInt(iArray[i]);
-		    }
-		}
-		catch(IOException ioe) {  
-		    Log.d("NSand.java", "sendGrain: SAND write error");
-		}
-    }
+		try {
+			// send app id
+			streamOut.writeByte(aID);
+			// send command
+			streamOut.writeByte(cmd);
+			// send data Type
+			streamOut.writeByte(dType);
+			// send data Length
+			streamOut.writeInt(dLen);
 
-    // SendGrain with Float Array
-    public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
+			Log.d("NSand.java", "sendGrain: appID =" + aID);
+			Log.d("NSand.java", "sendGrain: commd =" + cmd);
+			Log.d("NSand.java", "sendGrain: dataType =" + dType);
+			Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
+
+			for (int i = 0; i < dLen; i++) {
+				streamOut.writeInt(iArray[i]);
+			}
+		} catch (IOException ioe) {
+			Log.d("NSand.java", "sendGrain: SAND write error");
+		}
+	}
+
+	// SendGrain with Float Array
+	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
+			float[] fArray) {
 		Log.d("NSand.java", "sendGrain: ... args ... fArray[]");
-		try {  
-		    // send app id
-		    streamOut.writeByte(aID);
-		    // send command
-		    streamOut.writeByte(cmd);
-		    // send data Type
-		    streamOut.writeByte(dType);
-		    // send data Length
-		    streamOut.writeInt(dLen);
-	
-		    Log.d("NSand.java", "sendGrain: appID =" + aID);
-		    Log.d("NSand.java", "sendGrain: commd =" + cmd);
-		    Log.d("NSand.java", "sendGrain: dataType =" + dType);
-		    Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
-	
-		    for (int i=0; i<dLen; i++) {
-		    	streamOut.writeFloat(fArray[i]);
-		    }
-		}
-		catch(IOException ioe) {  
-		    Log.d("NSand.java", "sendGrain: SAND write error");
-		}
-    }
-    
-//==============================================================
-//    getGrain()
-//==============================================================
+		try {
+			// send app id
+			streamOut.writeByte(aID);
+			// send command
+			streamOut.writeByte(cmd);
+			// send data Type
+			streamOut.writeByte(dType);
+			// send data Length
+			streamOut.writeInt(dLen);
 
-    //Returns Grain appID, cmd, dT, dLen, bA
-    public  NGrain getGrain (byte aID) {
+			Log.d("NSand.java", "sendGrain: appID =" + aID);
+			Log.d("NSand.java", "sendGrain: commd =" + cmd);
+			Log.d("NSand.java", "sendGrain: dataType =" + dType);
+			Log.d("NSand.java", "sendGrain: dLen  =" + dLen);
+
+			for (int i = 0; i < dLen; i++) {
+				streamOut.writeFloat(fArray[i]);
+			}
+		} catch (IOException ioe) {
+			Log.d("NSand.java", "sendGrain: SAND write error");
+		}
+	}
+
+	// ==============================================================
+	// getGrain()
+	// ==============================================================
+
+	// Returns Grain appID, cmd, dT, dLen, bA
+	public NGrain getGrain(byte aID) {
 		Log.d("NSand.java", " getGrain: aID: ");
 		byte cmd, dT, appID;
 		int dLen;
 		NGrain grain = null;
-		try {  
-		    // get appID
-		    appID = aID;
-	
-		    // get command
-		    cmd = streamIn.readByte();
-		    // get data Type
-		    dT = streamIn.readByte();
-		    // get data Length
-		    dLen = streamIn.readInt();
-	
-		    Log.d("NSand.java", "getGrain: appID =" + appID);
-		    Log.d("NSand.java", "getGrain: commd =" + cmd);
-		    Log.d("NSand.java", "getGrain: dataType =" + dT);
-		    Log.d("NSand.java", "getGrain: dLen  =" + dLen);
-	
-		    //Detect array type in Grain
-		    //Byte array
-		    if (dT == NDataType.BYTE) {
+		try {
+			// get appID
+			appID = aID;
+
+			// get command
+			cmd = streamIn.readByte();
+			// get data Type
+			dT = streamIn.readByte();
+			// get data Length
+			dLen = streamIn.readInt();
+
+			Log.d("NSand.java", "getGrain: appID =" + appID);
+			Log.d("NSand.java", "getGrain: commd =" + cmd);
+			Log.d("NSand.java", "getGrain: dataType =" + dT);
+			Log.d("NSand.java", "getGrain: dLen  =" + dLen);
+
+			// Detect array type in Grain
+			// Byte array
+			if (dT == NDataType.BYTE) {
 				byte[] bA = new byte[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    bA[i] = streamIn.readByte();
-				    Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					bA[i] = streamIn.readByte();
+					Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
-		    }
-	
-		    //Byte array
-		    else if (dT == NDataType.UINT8) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+			}
+
+			// Byte array
+			else if (dT == NDataType.UINT8) {
 				byte[] bA = new byte[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    bA[i] = streamIn.readByte();
-				    Log.d("NSand.java", "getGrain: UINT8:  " + bA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					bA[i] = streamIn.readByte();
+					Log.d("NSand.java", "getGrain: UINT8:  " + bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
 				Log.d("NSand.java", "getGrain: creating grain with UINT8s");
-		    }
-	
-		    //Int Array
-		    else if (dT == NDataType.INT) {
+			}
+
+			// Int Array
+			else if (dT == NDataType.INT) {
 				int[] iA = new int[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    iA[i] = streamIn.readInt();
-				    Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					iA[i] = streamIn.readInt();
+					Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "getGrain: creating grain with INTs (Deprecated, use INT32)");
-	
-		    }
-	
-	
-		    //Int Array 32
-		    else if (dT == NDataType.INT32) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with INTs (Deprecated, use INT32)");
+
+			}
+
+			// Int Array 32
+			else if (dT == NDataType.INT32) {
 				int[] iA = new int[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    iA[i] = streamIn.readInt();
-				    Log.d("NSand.java", "INT:  " + iA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					iA[i] = streamIn.readInt();
+					Log.d("NSand.java", "INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
 				Log.d("NSand.java", "getGrain: creating grain with INT32s");
-		    }
-	
-		    //Float Array
-		    else if (dT == NDataType.FLOAT) {
+			}
+
+			// Float Array
+			else if (dT == NDataType.FLOAT) {
 				float[] fA = new float[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    fA[i] = streamIn.readFloat();
-				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					fA[i] = streamIn.readFloat();
+					Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
-		    }
-	
-		    //Float Array 32
-		    else if (dT == NDataType.FLOAT32) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+			}
+
+			// Float Array 32
+			else if (dT == NDataType.FLOAT32) {
 				float[] fA = new float[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    fA[i] = streamIn.readFloat();
-				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					fA[i] = streamIn.readFloat();
+					Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
 				Log.d("NSand.java", "getGrain: creating grain with FLOAT32s");
-	
-		    }
-		    else {
-		    	Log.w("NSand.java", "getGrain: WARNING:  unknown SAND data type\n");
-		    }
-		}
-		catch(IOException ioe) {  
-		    Log.e("NSand.java", "getGrain: SAND write error");
-		}
-		
-		Log.d("NSand.java", "getGrain: returning grain\n");
-	
-		return grain;
-    }
 
-    //Returns Grain appID, cmd, dT, dLen, bA
-    public  NGrain getGrain () {
+			} else {
+				Log.w("NSand.java",
+						"getGrain: WARNING:  unknown SAND data type\n");
+			}
+		} catch (IOException ioe) {
+			Log.e("NSand.java", "getGrain: SAND write error");
+		}
+
+		Log.d("NSand.java", "getGrain: returning grain\n");
+
+		return grain;
+	}
+
+	// Returns Grain appID, cmd, dT, dLen, bA
+	public NGrain getGrain() {
 		Log.d("NSand.java", "getGrain");
 		byte appID, cmd, dT;
 		int dLen;
 		NGrain grain = null;
-		try {  
-		    // get app id
-		    appID = streamIn.readByte();
-		    // get command
-		    cmd = streamIn.readByte();
-		    // get data Type
-		    dT = streamIn.readByte();
-		    // get data Length
-		    dLen = streamIn.readInt();
-	
-		    Log.d("NSand.java", "getGrain: appID =" + appID);
-		    Log.d("NSand.java", "getGrain: commd =" + cmd);
-		    Log.d("NSand.java", "getGrain: dataType =" + dT);
-		    Log.d("NSand.java", "getGrain: dLen  =" + dLen);
-	
-		    //Detect array type in Grain
-		    //Byte array
-		    if (dT == NDataType.BYTE) {
+		try {
+			// get app id
+			appID = streamIn.readByte();
+			// get command
+			cmd = streamIn.readByte();
+			// get data Type
+			dT = streamIn.readByte();
+			// get data Length
+			dLen = streamIn.readInt();
+
+			Log.d("NSand.java", "getGrain: appID =" + appID);
+			Log.d("NSand.java", "getGrain: commd =" + cmd);
+			Log.d("NSand.java", "getGrain: dataType =" + dT);
+			Log.d("NSand.java", "getGrain: dLen  =" + dLen);
+
+			// Detect array type in Grain
+			// Byte array
+			if (dT == NDataType.BYTE) {
 				byte[] bA = new byte[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    bA[i] = streamIn.readByte();
-				    Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					bA[i] = streamIn.readByte();
+					Log.d("NSand.java", "getGrain: BYTE:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
-				Log.d("NSand.java", "getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
-		    }
-	
-		    //Byte array
-		    else if (dT == NDataType.UINT8) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+			}
+
+			// Byte array
+			else if (dT == NDataType.UINT8) {
 				byte[] bA = new byte[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    bA[i] = streamIn.readByte();
-				    Log.d("NSand.java", "getGrain: UINT8:  " + (char) bA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					bA[i] = streamIn.readByte();
+					Log.d("NSand.java", "getGrain: UINT8:  " + (char) bA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, bA);
 				Log.d("NSand.java", "getGrain: creating grain with UINT8s");
-		    }
-	
-		    //Int Array
-		    else if (dT == NDataType.INT) {
+			}
+
+			// Int Array
+			else if (dT == NDataType.INT) {
 				int[] iA = new int[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    iA[i] = streamIn.readInt();
-				    Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					iA[i] = streamIn.readInt();
+					Log.d("NSand.java", "getGrain: INT:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
-				Log.d("NSand.java", "getGrain: creating grain with INTs (Deprecated, use INT32)");
-		    }
-	
-		    //Int Array 32
-		    else if (dT == NDataType.INT32) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with INTs (Deprecated, use INT32)");
+			}
+
+			// Int Array 32
+			else if (dT == NDataType.INT32) {
 				int[] iA = new int[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    iA[i] = streamIn.readInt();
-				    Log.d("NSand.java", "getGrain: INT32:  " + iA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					iA[i] = streamIn.readInt();
+					Log.d("NSand.java", "getGrain: INT32:  " + iA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, iA);
 				Log.d("NSand.java", "getGrain: creating grain with INT32s");
-		    }
-	
-		    //Float Array
-		    else if (dT == NDataType.FLOAT) {
+			}
+
+			// Float Array
+			else if (dT == NDataType.FLOAT) {
 				float[] fA = new float[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    fA[i] = streamIn.readFloat();
-				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					fA[i] = streamIn.readFloat();
+					Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
-				Log.d("NSand.java", "getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
-		    }
-	
-		    //Float Array 32
-		    else if (dT == NDataType.FLOAT32) {
+				Log.d("NSand.java",
+						"getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+			}
+
+			// Float Array 32
+			else if (dT == NDataType.FLOAT32) {
 				float[] fA = new float[dLen];
-		
-				for (int i=0; i< dLen; i++) {
-				    fA[i] = streamIn.readFloat();
-				    Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
+
+				for (int i = 0; i < dLen; i++) {
+					fA[i] = streamIn.readFloat();
+					Log.d("NSand.java", "getGrain: FLOAT:  " + fA[i]);
 				}
 				grain = new NGrain(appID, cmd, dT, dLen, fA);
 				Log.d("NSand.java", "getGrain: creating grain with FLOAT32s");
-	
-		    }
-		    else {
-		    	Log.w("NSand.java", "getGrain: WARNING:  unknown SAND data type\n");
-		    }
-	
-		}
-		catch(IOException ioe) {  
-		    Log.e("NSand.java", "getGrain: SAND write error");
+
+			} else {
+				Log.w("NSand.java",
+						"getGrain: WARNING:  unknown SAND data type\n");
+			}
+
+		} catch (IOException ioe) {
+			Log.e("NSand.java", "getGrain: SAND write error");
 		}
 		return grain;
-    }
-    
-    public void stop()
-    {
-    	Log.w("NSand.java", "NSand stop() called, not implemented...");
-    }
- 
-    
-//==============================================================
-//----------------------------------------------
-//  ASyncTask classes added by PAT. 2012.08.07
-//----------------------------------------------   
-//==============================================================
-//  Connect()
-//==============================================================
+	}
 
-  	public class Connect extends AsyncTask<Object, Void, Boolean>
-  	{
-  		Join j;
-  		NomadsApp app;
-  		boolean connectStatus = false;
-  		
-  		@Override
-  		protected void onPreExecute()
-  		{
-  			// setup progress bar here
-  		}
-  		
-  		@Override
-  		protected Boolean doInBackground(Object... params)
-  		{
-  			// set caller variable to the object that called ConnectAsync
-  			j = (Join) params[0];
-  			app = (NomadsApp) params[1];
-  			
-  			Log.d("NSand.java", "Establishing connection. Please wait ...");
-  	  		try
-  	  		{  
-  	  			socket = new Socket(serverName, serverPort);
-  	  			Log.d("NSand.java", "Connected");
-  	  		}
-  	  		catch(IOException ioe)
-  	  		{
-  	  			socket = null;
-  	  			Log.e("NSand.java", "socket connect IOException");
-  	  		}
-  	  		
-  	  		if (socket != null)
-  	  		{
-	  	  		try
-				{
-				    streamOut = new DataOutputStream(socket.getOutputStream());
-				    streamIn = new DataInputStream(socket.getInputStream());
-				    connectStatus = true;
-				}
-				catch(IOException ioe)
-				{
-				    Log.d("NSand.java", "Error opening output stream");
-				}
-  	  		}
-  	  		
-  	  		return connectStatus;
-  		}
-  		
-//  		@Override
-//  		protected void onProgressUpdate(Void v)
-//  		{
-//  			
-//  		}
-  		
-  		@Override
-  		protected void onPostExecute(Boolean connected)
-  		{
-  			app.setConnectionStatus(connected);
-  			
-  			if (connected)
-  			{
-  				j.register();
-  				app.startThread();
-  				j.goToSwarm();
-  			}
-  		}
-  	}
-  
-////==============================================================
-////  Close()
-////==============================================================
-//  	
-//  	public class Close extends AsyncTask<Void, Void, Void>
-//  	{	
-//  		@Override
-//  		protected Void doInBackground(Void... v)
-//  		{
-//  			
-//  			Log.d("NSand.java", "Attempting to close sand...");
-//  			try {
-//  			    if (streamOut != null)  streamOut.close();
-//  			    if (socket    != null)  socket.close();
-//  			}
-//  			catch(IOException ioe) {
-//  			    Log.e("NSand.java", "Error closing...");
-//  			}
-//  	  		
-//  	  		return null;
-//  		}
-//  	}
+	public void stop() {
+		Log.w("NSand.java", "NSand stop() called, not implemented...");
+	}
 
-//=====================================================================
-//    These methods have been replaced by AsyncTask classes above
-//    in compliance with Android v.3.x+
-//=====================================================================
-    
-//    //Connect, opens the socket, creates the streams
-//  	// Altered by PT 2012.07.29
-//  	public boolean connect()
-//  	{
-//  		boolean connectStatus = connectSocket();
-//  		
-//  		if (connectStatus) openSocketStreams();
-//  		
-//  		Log.d("NSand.java", "NSand.java -> connect() -> connectStatus: " + connectStatus);
-//  		
-//  		return connectStatus;
-//  	}
-//  	
-//  	public boolean connectSocket()
-//  	{  
-//  		Log.d("NSand.java", "Establishing connection. Please wait ...");
-//  		try
-//  		{  
-//  			socket = new Socket(serverName, serverPort);
-//  			Log.d("NSand.java", "Connected");
-//  		}
-//  		catch(IOException ioe) {
-//  			socket = null;
-//  			Log.d("NSand.java", "socket connect exception");
-//  		}
-//  		
-//  		if (socket != null) return true;
-//  		
-//  		return false;
-//  	}
-//
-//    public void openSocketStreams()
-//    {  
-//		try
-//		{
-//		    streamOut = new DataOutputStream(socket.getOutputStream());
-//		    streamIn = new DataInputStream(socket.getInputStream());
-//		}
-//		catch(IOException ioe)
-//		{
-//		    Log.d("NSand.java", "Error opening output stream");
-//		}
-//    }
-//
-    public void closeConnection()
-    {  
+	// ==============================================================
+	// ----------------------------------------------
+	// ASyncTask classes added by PAT. 2012.08.07
+	// ----------------------------------------------
+	// ==============================================================
+	// Connect()
+	// ==============================================================
+
+	public class Connect extends AsyncTask<Object, Void, Boolean> {
+		Join j;
+		NomadsApp app;
+		boolean connectStatus = false;
+
+		@Override
+		protected void onPreExecute() {
+			// setup progress bar here
+		}
+
+		@Override
+		protected Boolean doInBackground(Object... params) {
+			// set caller variable to the object that called ConnectAsync
+			j = (Join) params[0];
+			app = (NomadsApp) params[1];
+
+			Log.d("NSand.java", "Establishing connection. Please wait ...");
+			try {
+				socket = new Socket(serverName, serverPort);
+				Log.d("NSand.java", "Connected");
+				if (socket.isConnected()) {
+					streamOut = new DataOutputStream(socket.getOutputStream());
+					streamIn = new DataInputStream(socket.getInputStream());
+					connectStatus = true;
+					Log.d("NSand.java", "Streams opened");
+				}
+			} catch (IOException ioe) {
+//				socket = null;
+				Log.e("NSand.java", "Connect.doInBackground(): IOException");
+				Log.e("NSand.java", ioe.toString());
+			}
+			return connectStatus;
+		}
+
+		// @Override
+		// protected void onProgressUpdate(Void v)
+		// {
+		//
+		// }
+
+		@Override
+		protected void onPostExecute(Boolean connected) {
+			app.setConnectionStatus(connected);
+
+			if (connected) {
+				j.register();
+				app.startThread();
+				j.goToSwarm();
+			}
+		}
+	}
+
+	// //==============================================================
+	// // Close()
+	// //==============================================================
+	//
+	// public class Close extends AsyncTask<Void, Void, Void>
+	// {
+	// @Override
+	// protected Void doInBackground(Void... v)
+	// {
+	//
+	// Log.d("NSand.java", "Attempting to close sand...");
+	// try {
+	// if (streamOut != null) streamOut.close();
+	// if (socket != null) socket.close();
+	// }
+	// catch(IOException ioe) {
+	// Log.e("NSand.java", "Error closing...");
+	// }
+	//
+	// return null;
+	// }
+	// }
+
+	// =====================================================================
+	// These methods have been replaced by AsyncTask classes above
+	// in compliance with Android v.3.x+
+	// =====================================================================
+
+	// //Connect, opens the socket, creates the streams
+	// // Altered by PT 2012.07.29
+	// public boolean connect()
+	// {
+	// boolean connectStatus = connectSocket();
+	//
+	// if (connectStatus) openSocketStreams();
+	//
+	// Log.d("NSand.java", "NSand.java -> connect() -> connectStatus: " +
+	// connectStatus);
+	//
+	// return connectStatus;
+	// }
+	//
+	// public boolean connectSocket()
+	// {
+	// Log.d("NSand.java", "Establishing connection. Please wait ...");
+	// try
+	// {
+	// socket = new Socket(serverName, serverPort);
+	// Log.d("NSand.java", "Connected");
+	// }
+	// catch(IOException ioe) {
+	// socket = null;
+	// Log.d("NSand.java", "socket connect exception");
+	// }
+	//
+	// if (socket != null) return true;
+	//
+	// return false;
+	// }
+	//
+	// public void openSocketStreams()
+	// {
+	// try
+	// {
+	// streamOut = new DataOutputStream(socket.getOutputStream());
+	// streamIn = new DataInputStream(socket.getInputStream());
+	// }
+	// catch(IOException ioe)
+	// {
+	// Log.d("NSand.java", "Error opening output stream");
+	// }
+	// }
+	//
+	public void closeConnection() {
 		try {
 			// ???
-			//if (streamOut != null)  streamOut.close();
-		    if (streamOut != null)  streamOut.close();
-		    if (socket    != null)  socket.close();
+			// if (streamOut != null) streamOut.close();
+			if (streamOut != null)
+				streamOut.close();
+			if (socket != null)
+				socket.close();
+		} catch (IOException ioe) {
+			Log.d("NSand.java", "Error closing...");
 		}
-		catch(IOException ioe) {
-		    Log.d("NSand.java", "Error closing...");
-		}
-    }
+	}
 
 }
