@@ -8,6 +8,8 @@
 	    \nPlease check network settings and try again.
 	    </string>
 	<string name="connectButton">Refresh</string>
+	<string name="OK">OK</string>
+	<string name="cancel">cancel</string>
 	<string name="incoming"></string>
     <string name="outgoing"></string>
     <string name="connected">Connected to Nomads server.</string>
