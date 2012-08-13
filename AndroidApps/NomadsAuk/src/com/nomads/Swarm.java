@@ -26,6 +26,7 @@ import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,6 +106,7 @@ public class Swarm extends Activity {
 		buttonCancel = (Button) findViewById(R.id.cancel);
 		buttonCancel.setOnClickListener(cancelListener);
 		message = (EditText) findViewById(R.id.message);
+		message.setOnFocusChangeListener(messageListener);
 		prompt = (TextView) findViewById(R.id.prompt);
 
 	}
@@ -115,10 +117,23 @@ public class Swarm extends Activity {
 		buttonCancel.setVisibility(View.GONE);
 		message.setVisibility(View.GONE);
 //		prompt.setVisibility(View.GONE);
-		InputMethodManager imm = (InputMethodManager)getSystemService(
-			      Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
+//		InputMethodManager imm = (InputMethodManager)getSystemService(
+//			      Context.INPUT_METHOD_SERVICE);
+//		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
 	}
+	
+	public void setMessageFocus(boolean isFocused)
+	{
+		message.setCursorVisible(isFocused);
+		message.setFocusable(isFocused);
+		message.setFocusableInTouchMode(isFocused);
+
+	    if (isFocused)
+	    {
+	    	message.requestFocus();
+	    }
+	}
+
 
 	// ========================================================
 	// Network
@@ -174,6 +189,7 @@ public class Swarm extends Activity {
 			message.setVisibility(View.VISIBLE);
 //			prompt.setVisibility(View.VISIBLE);
 			message.setText("");
+			setMessageFocus(true);
 		}
 	};
 
@@ -186,6 +202,7 @@ public class Swarm extends Activity {
 			message.setVisibility(View.VISIBLE);
 //			prompt.setVisibility(View.VISIBLE);
 			message.setText("");
+			setMessageFocus(true);
 		}
 	};
 
@@ -253,6 +270,30 @@ public class Swarm extends Activity {
 			cancelAllTextInput();
 		}
 	};
+	
+	EditText.OnFocusChangeListener messageListener = new OnFocusChangeListener()
+    {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus)
+        {
+            if (v == message)
+            {
+                if (hasFocus)
+                {
+                    //open keyboard
+                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(message,
+                            InputMethodManager.SHOW_FORCED);
+
+                }
+                else
+                { //close keyboard
+                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                    		message.getWindowToken(), 0);
+                }
+            }
+        }
+    };
+
 
 	// ========================================================
 	// Alerts
