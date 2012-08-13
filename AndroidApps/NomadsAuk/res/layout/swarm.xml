@@ -51,5 +51,49 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/settings" />
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/buttonLinearLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/buttonDiscuss">
+	    <Button
+		    android:id="@+id/sendDiscuss"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/discuss"
+		    android:visibility="gone" />
+		<Button
+		    android:id="@+id/sendCloud"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/cloud"
+		    android:visibility="gone" />
+		<Button
+		    android:id="@+id/cancel"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/cancel"
+		    android:visibility="gone" />
+	</LinearLayout>
+	
+	<EditText
+	    android:id="@+id/message"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/buttonLinearLayout"
+	    android:hint="@string/hint"
+	    android:inputType="text"
+	    android:text="@string/outgoing"
+	    android:visibility="gone" />
+	
+	<TextView
+        android:id="@+id/prompt"
+        style="@style/h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/message"
+        android:text=""
+        android:visibility="gone" />
 
 </RelativeLayout>
