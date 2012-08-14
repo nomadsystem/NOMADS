@@ -34,7 +34,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-//import android.content.Intent;
 
 public class Swarm extends Activity {
 	private NomadsApp app;
@@ -46,12 +45,11 @@ public class Swarm extends Activity {
 	
 	private boolean mPPlaying[];
 	private boolean onePlayPlaying;
-	private boolean dropletsToggle = false;
-	private boolean tonesToggle = false;
 	private boolean discussToggle = true;
 	private boolean cloudToggle = true;
-//	private int tonesPlayInterval = 200;
-//	private int dropletsPlayInterval = 6000;
+	private boolean dropletsToggle = false;
+	private boolean tonesToggle = false;
+	private boolean cloudTonesToggle = false;
 	private int tonesRange = 400;
 	private int tonesOffset = 100;
 	private int dropletsRange = 5000;
@@ -182,51 +180,87 @@ public class Swarm extends Activity {
 		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL) {
 			Log.d("Swarm", "from Conductor Panel: ");
 
-
-			if (grain.command == NCommandAuk.SET_DROPLET_STATUS) {
+			if (grain.command == NCommandAuk.SET_DISCUSS_STATUS) {
 				if (grain.bArray[0] == 0) {
-					dropletsToggle = false;
-					Log.d("Swarm", "Setting Droplets to OFF");
-				} else if (grain.bArray[0] == 1) {
-					dropletsToggle = true;
-					Log.d("Swarm", "Setting Droplets to ON");
-				}
-			}
-
-			else if (grain.command == NCommandAuk.SET_DISCUSS_STATUS) {
-				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "from Control Panel: Discuss OFF");
 					discussToggle = false;
-					Log.d("Swarm", "DISCUSS_STATUS false");
+					cancelAllTextInput();
 				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "from Control Panel: Discuss ON");
 					discussToggle = true;
-					Log.d("Swarm", "DISCUSS_STATUS true");
 				}
 			}
 
 			else if (grain.command == NCommandAuk.SET_CLOUD_STATUS) {
 				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "from Control Panel: Cloud OFF");
 					cloudToggle = false;
-					Log.d("Swarm", "CLOUD_STATUS false");
+					cancelAllTextInput();
 				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "from Control Panel: Cloud ON");
 					cloudToggle = true;
-					Log.d("Swarm", "CLOUD_STATUS true");
 				}
 			}
+			
+			else if (grain.command == NCommandAuk.SET_DROPLET_STATUS) {
+				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "Setting Droplets to OFF");
+					stopDroplets();
+				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "Setting Droplets to ON");
+					startDroplets();
+				}
+			}
+			
+			else if (grain.command == NCommandAuk.SET_CLOUD_SOUND_STATUS) {
+				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "Setting CloudTones to OFF");
+					cloudTonesToggle = false;
+				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "Setting CloudTones to ON");
+					cloudTonesToggle = true;
+				}
+			}
+			
+			else if (grain.command == NCommandAuk.SET_POINTER_TONE_STATUS) {
+				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "Setting Tones to OFF");
+					stopTones();
+				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "Setting Tones to ON");
+					startTones();
+				}
+			}
+			
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
-//				double tDropVal = (double) grain.iArray[0]; // Using text from
-//															// NGrain byte
-//															// array--Should
-//															// change to int
-//															// array ***STK
-//															// 6/20/12
-//				float tDropVolume = (float) (Math.pow(tDropVal, 2) / 10000.0);
-//
-//				Log.d("Swarm", "tDropVolume = " + tDropVolume);
-//				// TO DO: Make this a log function. . .
-//				myOC_Pointer.myBusReader.amplitude.set(tDropVolume);
-
+				Log.i("Swarm", "changing volume for mPlayers");
+				double dropletsVolVal = (double) grain.iArray[0]; // Using text from
+				float dropletsVolume = (float) (Math.pow(dropletsVolVal, 2) / 10000.0);
+				
+				for (int i = 0; i < mPlayer.length; i++) {
+					mPlayer[i].setVolume(dropletsVolume, dropletsVolume);
+				}
 			}
+			
+			else if (grain.command == NCommandAuk.SET_CLOUD_SOUND_VOLUME) {
+				Log.i("Swarm", "changing volume for onePlayer");
+				double cloudVolVal = (double) grain.iArray[0]; // Using text from
+				float cloudVolume = (float) (Math.pow(cloudVolVal, 2) / 10000.0);
+				
+				onePlayer.setVolume(cloudVolume, cloudVolume);
+			}
+			
+			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
+				Log.i("Swarm", "changing volume for mPlayers");
+				double pointerVolVal = (double) grain.iArray[0]; // Using text from
+				float pointerVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
+				
+				for (int i = 0; i < mPlayer.length; i++) {
+					mPlayer[i].setVolume(pointerVolume, pointerVolume);
+				}
+			}
+			
 		} else if (grain.appID == NAppIDAuk.OC_DISCUSS) {
 			if (grain.command == NCommandAuk.SEND_MESSAGE) {
 				String msg = new String(grain.bArray);
@@ -352,7 +386,7 @@ public class Swarm extends Activity {
 					NDataType.CHAR,
 					cloudMsg.length,
 					cloudMsg);
-			if (!onePlayPlaying)
+			if (cloudTonesToggle && !onePlayPlaying)
 				playSingleRandomSoundFromBank("cloud", cloudFiles);
 			cancelAllTextInput();
 		}
