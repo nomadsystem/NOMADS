@@ -20,7 +20,7 @@ public class NomadsApp extends Application {
 	private Join join;
 	private Swarm swarm;
 	private Settings settings;
-	private static GrainTarget gT = GrainTarget.JOIN;
+	private GrainTarget gT;
 	private NSand sand;
 	private NGrain grain;
 	private NomadsAppThread nThread;
@@ -131,7 +131,7 @@ public class NomadsApp extends Application {
 	}
 
 	private void routeGrain(GrainTarget _target) {
-		Log.d("NomadsApp", "routeGrain(): Current target: " + _target);
+		Log.d("NomadsApp", "routeGrain() to target: " + _target);
 
 		if (grain != null) {
 			if (_target == GrainTarget.JOIN && join != null)
@@ -239,11 +239,19 @@ public class NomadsApp extends Application {
 		// return phone ringer to normal
 		phoneRingerState(true);
 
-		if (settings != null)
+		if (settings != null) {
 			settings.finish();
-		if (swarm != null)
+			Log.i("NomadsApp", "Settings Activity finished.");
+		}
+		
+		if (swarm != null) {
 			swarm.finish();
-		if (join != null)
+			Log.i("NomadsApp", "Swarm Activity finished.");
+		}
+		
+		if (join != null) {
 			join.finish();
+			Log.i("NomadsApp", "Join Activity finished.");
+		}
 	}
 }
