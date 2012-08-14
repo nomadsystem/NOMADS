@@ -26,6 +26,7 @@ public class NomadsApp extends Application {
 	private NomadsAppThread nThread;
 	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
+	private float[] xy;
 
 	public NomadsApp getInstance() {
 		return singleton;
@@ -41,6 +42,11 @@ public class NomadsApp extends Application {
 
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
+		
+		// initialize xy coordinates in case of sound before any touches
+		xy = new float[2];
+		xy[0] = 0.5f;
+		xy[1] = 0.5f;
 	}
 
 	// ========================================================
@@ -92,6 +98,14 @@ public class NomadsApp extends Application {
 		}
 
 		Log.d("NomadsApp", "ringer state was set to: " + on);
+	}
+	
+	public void setXY(float[] _xy) {
+		xy = _xy;
+	}
+	
+	public float[] getXY() {
+		return xy;
 	}
 
 	// ========================================================

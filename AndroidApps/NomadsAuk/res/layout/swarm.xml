@@ -36,12 +36,20 @@
         android:contentDescription="@string/cloud" />
     
     <Button
-        android:id="@+id/buttonAudioTest"
+        android:id="@+id/buttonAudioTest1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/buttonCloud"
-        android:text="@string/test" />
+        android:text="@string/testTones" />
+    
+    <Button
+        android:id="@+id/buttonAudioTest2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonAudioTest1"
+        android:text="@string/testDroplets" />
     
     <ImageButton
         android:id="@+id/buttonSettings"
@@ -84,7 +92,7 @@
 	    android:layout_above="@id/buttonLinearLayout"
 	    android:hint="@string/hint"
 	    android:inputType="text"
-	    android:text="@string/outgoing"
+	    android:text="@string/blank"
 	    android:visibility="gone" />
 	
 	<TextView
