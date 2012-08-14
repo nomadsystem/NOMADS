@@ -5,6 +5,7 @@
 package com.nomads;
 
 import java.io.IOException;
+import java.util.Random;
 
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
@@ -38,47 +39,36 @@ import android.widget.TextView;
 public class Swarm extends Activity {
 	private NomadsApp app;
 	private MediaPlayer[] mPlayer;
-	// private MediaPlayer currentPlayer;
-	private boolean mPPlaying[];
-	private boolean dropletsToggle = false;
-	private boolean tonesToggle = false;
-	private boolean discussToggle = false;
-	private boolean cloudToggle = false;
-
+	private MediaPlayer onePlayer;
 	private NSand sand;
 	private NGrain grain;
-
+	private AssetManager assetManager;
+	
+	private boolean mPPlaying[];
+	private boolean onePlayPlaying;
+	private boolean dropletsToggle = false;
+	private boolean tonesToggle = false;
+	private boolean discussToggle = true;
+	private boolean cloudToggle = true;
+//	private int tonesPlayInterval = 200;
+//	private int dropletsPlayInterval = 6000;
+	private int tonesRange = 400;
+	private int tonesOffset = 100;
+	private int dropletsRange = 5000;
+	private int dropletsOffset = 4000;
+	private Handler tonesHandler, dropletsHandler;
+	private String[] tonesFiles, dropletsFiles, cloudFiles;
+	
 	TextView chatWindow, prompt;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
 	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
 	EditText message;
 	final Context context = this;
 	AlertDialog.Builder alert;
-	
-	String tempString = "";
-
-	private int tonesInterval = 200;
-	private int dropletsInterval = 1000;
-	private Handler tonesHandler, dropletsHandler;
-	
-	private AssetManager assetManager;
-	String[] tonesFiles;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i("Swarm", "onCreate()");
-		
-		assetManager = context.getAssets();
-		try {
-			tonesFiles = assetManager.list("tones");
-			for (int i=0; i<tonesFiles.length; i++) {
-				Log.d("Swarm", "tones file #" + i + ": " + tonesFiles[i]);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		
 		super.onCreate(savedInstanceState);
 
@@ -89,16 +79,29 @@ public class Swarm extends Activity {
 
 		// get NSand instance from Join
 		sand = app.getSand();
+		
+		assetManager = context.getAssets();
+		try {
+			tonesFiles = assetManager.list("tones");
+			dropletsFiles = assetManager.list("droplets");
+			cloudFiles = assetManager.list("cloud");
+//			for (int i=0; i<tonesFiles.length; i++) {
+//				Log.i("Swarm", "tones file #" + i + ": " + tonesFiles[i]);
+//			}
+		} catch (IOException e) {
+			Log.i("Swarm", "Error attempting to access assets");
+			e.printStackTrace();
+		}
 
-		// initialize MediaPlayer array and boolean array
+		// initialize MediaPlayer array, boolean array
 		mPlayer = new MediaPlayer[20];
 		mPPlaying = new boolean[20];
 
 		// set all media players to ready
 //		for (int i = 0; i < mPPlaying.length; i++) {
-//			Log.d("Swarm", "setting mPPlaying[i] to false...");
+//			Log.i("Swarm", "setting mPPlaying[i] to false...");
 //			mPPlaying[i] = false;
-//			Log.d("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
+//			Log.i("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
 //		}
 
 		// initialize handler for timed sound playback
@@ -122,7 +125,7 @@ public class Swarm extends Activity {
 		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
 		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
 		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
-		buttonSendCloud.setOnClickListener(sendDiscussListener);
+		buttonSendCloud.setOnClickListener(sendCloudListener);
 		buttonCancel = (Button) findViewById(R.id.cancel);
 		buttonCancel.setOnClickListener(cancelListener);
 		message = (EditText) findViewById(R.id.message);
@@ -131,11 +134,11 @@ public class Swarm extends Activity {
 	}
 
 	public void cancelAllTextInput() {
-		buttonSendDiscuss.setVisibility(View.GONE);
-		buttonSendCloud.setVisibility(View.GONE);
-		buttonCancel.setVisibility(View.GONE);
-		message.setVisibility(View.GONE);
-//		prompt.setVisibility(View.GONE);
+		if (buttonSendDiscuss.getVisibility() == View.VISIBLE) buttonSendDiscuss.setVisibility(View.GONE);
+		if (buttonSendCloud.getVisibility() == View.VISIBLE) buttonSendCloud.setVisibility(View.GONE);
+		if (buttonCancel.getVisibility() == View.VISIBLE) buttonCancel.setVisibility(View.GONE);
+		if (message.getVisibility() == View.VISIBLE) message.setVisibility(View.GONE);
+		if (prompt.getVisibility() == View.VISIBLE) prompt.setVisibility(View.GONE);
 //		InputMethodManager imm = (InputMethodManager)getSystemService(
 //			      Context.INPUT_METHOD_SERVICE);
 //		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
@@ -152,6 +155,15 @@ public class Swarm extends Activity {
 	    	message.requestFocus();
 	    }
 	}
+	
+//	private void setPlayInterval(int _playInterval) {
+//		playInterval = _playInterval;		
+//	}
+	
+	private int getPlayInterval(int _range, int _offset) {
+		int pI = (int) (app.getXY()[0] * _range + _offset);
+		return pI;
+	}
 
 
 	// ========================================================
@@ -159,11 +171,11 @@ public class Swarm extends Activity {
 	// ========================================================
 
 	public void parseGrain(NGrain _grain) {
-		Log.d("Swarm", "parseGrain(): grain received");
+		Log.i("Swarm", "parseGrain(): grain received");
 		grain = _grain;
 
 //		if (grain == null) {
-//			Log.d("Swarm", "parseGrain(): grain is null");
+//			Log.e("Swarm", "parseGrain(): grain is null");
 //			return;
 //		}
 		
@@ -290,7 +302,7 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (!tonesToggle) {
-				Log.d("Swarm", "Starting tones...");
+				Log.i("Swarm", "Starting tones...");
 				startTones();
 			} else {
 				stopTones();
@@ -302,7 +314,7 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (!dropletsToggle) {
-				Log.d("Swarm", "Starting droplets...");
+				Log.i("Swarm", "Starting droplets...");
 				startDroplets();
 			} else {
 				stopDroplets();
@@ -314,7 +326,7 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			String value = message.getText().toString();
-			Log.d("Swarm->Discuss", "value = " + value);
+			Log.i("Swarm->Discuss", "value = " + value);
 			byte[] discussMsg = value.getBytes();
 			// eventually use this:
 			// char[] discussMsg = value.toCharArray();
@@ -332,7 +344,7 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			String value = message.getText().toString();
-			Log.d("Swarm", "Cloud sent: " + value);
+			Log.i("Swarm", "Cloud sent: " + value);
 			byte[] cloudMsg = value.getBytes();
 			sand.sendGrain(
 					NAppIDAuk.OC_CLOUD,
@@ -340,6 +352,8 @@ public class Swarm extends Activity {
 					NDataType.CHAR,
 					cloudMsg.length,
 					cloudMsg);
+			if (!onePlayPlaying)
+				playSingleRandomSoundFromBank("cloud", cloudFiles);
 			cancelAllTextInput();
 		}
 	};
@@ -408,27 +422,86 @@ public class Swarm extends Activity {
 	// Audio Methods
 	// ========================================================
 
-	public void playSound(String pathTo, String soundFile) {
-		Log.d("Swarm", "playSound() started");
+	public void playSingleRandomSoundFromBank (String _pathTo, String[] _soundBank) {
+		Log.i("Swarm", "playSingleRandomSoundFromBank() started");
+		try {
+			// if one Player is current playing, return
+			if (onePlayer.isPlaying())
+				return;
+			
+			onePlayPlaying = true;
+			onePlayer.reset();
+			Random rand = new Random();
+			int soundFileIndex = (int) (rand.nextFloat() * (float)_soundBank.length);
+					
+			AssetFileDescriptor afd = context.getAssets().openFd(_pathTo + "/" + _soundBank[soundFileIndex]);
+			onePlayer.setDataSource(
+					afd.getFileDescriptor(),
+					afd.getStartOffset(),
+					afd.getLength());
+			afd.close();
+			onePlayer.prepare();
+			// currentPlayer.setLooping(true);
+			// currentPlayer.seekTo(0);
+			Log.i("Swarm", "playing onePlayer...");
+			onePlayer.start();
+			onePlayer
+					.setOnCompletionListener(new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							if (onePlayer == mp) {
+								Log.i("Swarm",
+										"onePlayer completed. Setting onePlayLocked to false");
+								onePlayPlaying = false;
+							}
+						}
+					});
+
+		} catch (IllegalArgumentException e) {
+			Log.e("Swarm",
+					"IllegalArgumentException: " + e.getMessage(), e);
+		} catch (IllegalStateException e) {
+			Log.e("Swarm", "IllegalStateException: " + e.getMessage(),
+					e);
+		} catch (IOException e) {
+			Log.e("Swarm", "IOException: " + e.getMessage(), e);
+		} catch (Exception e) {
+			Log.e("Swarm", "Exception: " + e.getMessage(), e);
+		}
+	}
+	
+	public void playSoundFromBankWithXY(String _pathTo, String[] _soundBank) {
+		Log.i("Swarm", "playSoundFromBankWithXY() started");
 
 		for (int i = 0; i < mPlayer.length; i++) {
 			if (!mPPlaying[i] && mPlayer[i] != null) {
-				Log.d("Swarm", "mPPlaying[" + i + "] = " + mPPlaying[i]);
+				Log.i("Swarm", "mPPlaying[" + i + "] = " + mPPlaying[i]);
 				mPPlaying[i] = true;
 
 				try {
+					// in case mPlayer is still somehow playing, stop it
 					if (mPlayer[i].isPlaying())
 						mPlayer[i].stop();
 
+					// allows a previously played mPlayer to play again
 					mPlayer[i].reset();
-					AssetFileDescriptor afd = context.getAssets().openFd(pathTo + "/" + soundFile);
-					mPlayer[i].setDataSource(afd.getFileDescriptor(),
-							afd.getStartOffset(), afd.getLength());
+					
+					int soundFileIndex = (int) (app.getXY()[1] * (float)_soundBank.length);
+					
+					Log.i("Swarm", "normalized Y value is: " + app.getXY()[1]);
+					Log.i("Swarm", "soundFileIndex is: " + soundFileIndex);
+					Log.i("Swarm", "soundFile is: " + _soundBank[soundFileIndex]);
+							
+					AssetFileDescriptor afd = context.getAssets().openFd(_pathTo + "/" + _soundBank[soundFileIndex]);
+					mPlayer[i].setDataSource(
+							afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
 					afd.close();
 					mPlayer[i].prepare();
 					// currentPlayer.setLooping(true);
 					// currentPlayer.seekTo(0);
-					Log.d("Swarm", "playing MediaPlayer instance #: " + i);
+					Log.i("Swarm", "playing MediaPlayer instance #: " + i);
 					mPlayer[i].start();
 					mPlayer[i]
 							.setOnCompletionListener(new OnCompletionListener() {
@@ -436,10 +509,8 @@ public class Swarm extends Activity {
 								public void onCompletion(MediaPlayer mp) {
 									for (int i = 0; i < mPlayer.length; i++) {
 										if (mPlayer[i] == mp) {
-											Log.d("Swarm",
-													"mPlayer["
-															+ i
-															+ "] completed... setting mPPlaying[i] to false");
+											Log.i("Swarm",
+													"mPlayer["+i+"] completed. Setting mPPlaying["+i+"] to false");
 											mPPlaying[i] = false;
 										}
 									}
@@ -467,11 +538,12 @@ public class Swarm extends Activity {
 		@Override
 		public void run() {
 			if (tonesToggle) {
-				 Log.d("Swarm", "tonesToggle is true");
-				String soundfile = getSoundFileTones(app.getXY());
-				playSound("tones", soundfile);
+//				Log.d("Swarm", "tonesToggle is true");
+				// sounds located in "tones" directory (get rid of this)
+				// play a sound from the tonesFiles array
+				playSoundFromBankWithXY("tones", tonesFiles);
 				// updateStatus(); // change value of interval
-				tonesHandler.postDelayed(tonesRunnable, tonesInterval);
+				tonesHandler.postDelayed(tonesRunnable, getPlayInterval(tonesRange, tonesOffset));
 			}
 		}
 	};
@@ -480,32 +552,33 @@ public class Swarm extends Activity {
 		@Override
 		public void run() {
 			if (dropletsToggle) {
-				 Log.d("Swarm", "dropletsToggle is true");
-				String soundfile = getSoundFileDroplets(app.getXY());
-				playSound("droplets", soundfile);
+//				Log.d("Swarm", "dropletsToggle is true");
+				// sounds located in "droplets" directory (get rid of this)
+				// play a sound from the dropletsFiles array
+				playSoundFromBankWithXY("droplets", dropletsFiles);
 				// updateStatus(); // change value of interval
-				dropletsHandler.postDelayed(dropletsRunnable, dropletsInterval);
+				dropletsHandler.postDelayed(dropletsRunnable, getPlayInterval(dropletsRange, dropletsOffset));
 			}
 		}
 	};
 	
-	private String getSoundFileTones (float[] _xy) {
-		
-		// choose sound file based on normalized pointer position
-//		int tonesIndex = (_xy[0] * 16
-		
-//		String soundfile = "tones" + tonesIndex + ".mp3";
-		String soundfile = "tones1.mp3";
-		return soundfile;
-	}
-	
-	private String getSoundFileDroplets (float[] _xy) {
-
-		// choose sound file based on normalized pointer position
-		
-		String soundfile = "1.mp3";
-		return soundfile;
-	}
+//	private String getSoundFileTones (float[] _xy) {
+//		
+//		// choose sound file based on normalized pointer position
+////		int tonesIndex = (_xy[0] * 16
+//		
+////		String soundfile = "tones" + tonesIndex + ".mp3";
+//		String soundfile = "tones1.mp3";
+//		return soundfile;
+//	}
+//	
+//	private String getSoundFileDroplets (float[] _xy) {
+//
+//		// choose sound file based on normalized pointer position
+//		
+//		String soundfile = "1.mp3";
+//		return soundfile;
+//	}
 
 	private void startTones() {
 		tonesToggle = true;
@@ -532,6 +605,7 @@ public class Swarm extends Activity {
 		for (int i = 0; i < mPlayer.length; i++) {
 			mPlayer[i] = new MediaPlayer();
 		}
+		onePlayer = new MediaPlayer();
 	}
 
 	void releaseMediaPlayers() {
@@ -540,6 +614,9 @@ public class Swarm extends Activity {
 			if (mPlayer[i] != null) {
 				mPlayer[i].release();
 				mPlayer[i] = null;
+			}
+			if (onePlayer != null) {
+				onePlayer = null;
 			}
 		}
 	}
@@ -563,7 +640,7 @@ public class Swarm extends Activity {
 
 	@Override
 	protected void onPause() {
-		Log.d("Swarm", "onPause()");
+		Log.i("Swarm", "onPause()");
 		super.onPause();
 
 		// destroy all media player instances
@@ -579,7 +656,7 @@ public class Swarm extends Activity {
 
 	@Override
 	protected void onResume() {
-		Log.d("Swarm", "onResume()");
+		Log.i("Swarm", "onResume()");
 		super.onResume();
 		app.setGrainTarget(GrainTarget.SWARM);
 
@@ -592,13 +669,13 @@ public class Swarm extends Activity {
 
 	@Override
 	protected void onStop() {
-		Log.d("Swarm", "onStop()");
+		Log.i("Swarm", "onStop()");
 		super.onStop();
 	}
 
 	@Override
 	protected void onRestart() {
-		Log.d("Swarm", "onRestart()");
+		Log.i("Swarm", "onRestart()");
 		super.onRestart();
 
 		Intent intent = new Intent(getApplicationContext(), Join.class);

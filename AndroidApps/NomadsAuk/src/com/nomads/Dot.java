@@ -60,9 +60,9 @@ class Dot extends View {
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_CANCEL:
 			// clip touch coordinates to view dimensions
-			if (event.getX() >= 0 && event.getX() <= this.getWidth())
+			if (event.getX() >= 0.0 && event.getX() <= this.getWidth())
 				xy[0] = event.getX();
-			if (event.getY() >= 0 && event.getY() <= this.getHeight())
+			if (event.getY() >= 0.0 && event.getY() <= this.getHeight())
 				xy[1] = event.getY();
 			xyNorm[0] = xy[0] / this.getWidth();
 			xyNorm[1] = xy[1] / this.getHeight();

@@ -42,6 +42,11 @@ public class NomadsApp extends Application {
 
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
+		
+		// initialize xy coordinates in case of sound before any touches
+		xy = new float[2];
+		xy[0] = 0.5f;
+		xy[1] = 0.5f;
 	}
 
 	// ========================================================
