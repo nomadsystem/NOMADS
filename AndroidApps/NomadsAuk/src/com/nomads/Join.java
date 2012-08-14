@@ -63,6 +63,9 @@ public class Join extends Activity {
 		joinStatus = (TextView) findViewById(R.id.joinStatus);
 		connect = (Button) findViewById(R.id.connectButton);
 		connect.setOnClickListener(connectButtonListener);
+		
+		// initialize grain target
+		app.setGrainTarget(GrainTarget.JOIN);
 	}
 
 	// ========================================================
@@ -129,6 +132,8 @@ public class Join extends Activity {
 	public void goToSwarm() {
 		// Switch to Swarm activity
 		Intent intent = new Intent(getApplicationContext(), Swarm.class);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
 	
