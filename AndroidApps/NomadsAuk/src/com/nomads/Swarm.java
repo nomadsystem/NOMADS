@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -59,10 +60,26 @@ public class Swarm extends Activity {
 	private int tonesInterval = 200;
 	private int dropletsInterval = 1000;
 	private Handler tonesHandler, dropletsHandler;
+	
+	private AssetManager assetManager;
+	String[] tonesFiles;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i("Swarm", "onCreate()");
+		
+		assetManager = context.getAssets();
+		try {
+			tonesFiles = assetManager.list("tones");
+			for (int i=0; i<tonesFiles.length; i++) {
+				Log.d("Swarm", "tones file #" + i + ": " + tonesFiles[i]);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		super.onCreate(savedInstanceState);
 
 		app = (NomadsApp) this.getApplicationContext();
@@ -78,11 +95,11 @@ public class Swarm extends Activity {
 		mPPlaying = new boolean[20];
 
 		// set all media players to ready
-		for (int i = 0; i < mPPlaying.length; i++) {
-			Log.d("Swarm", "setting mPPlaying[i] to false...");
-			mPPlaying[i] = false;
-			Log.d("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
-		}
+//		for (int i = 0; i < mPPlaying.length; i++) {
+//			Log.d("Swarm", "setting mPPlaying[i] to false...");
+//			mPPlaying[i] = false;
+//			Log.d("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
+//		}
 
 		// initialize handler for timed sound playback
 		tonesHandler = new Handler();
@@ -391,7 +408,7 @@ public class Swarm extends Activity {
 	// Audio Methods
 	// ========================================================
 
-	public void playSound(String soundFile) {
+	public void playSound(String pathTo, String soundFile) {
 		Log.d("Swarm", "playSound() started");
 
 		for (int i = 0; i < mPlayer.length; i++) {
@@ -404,8 +421,7 @@ public class Swarm extends Activity {
 						mPlayer[i].stop();
 
 					mPlayer[i].reset();
-					AssetFileDescriptor afd = context.getAssets().openFd(
-							soundFile);
+					AssetFileDescriptor afd = context.getAssets().openFd(pathTo + "/" + soundFile);
 					mPlayer[i].setDataSource(afd.getFileDescriptor(),
 							afd.getStartOffset(), afd.getLength());
 					afd.close();
@@ -453,7 +469,7 @@ public class Swarm extends Activity {
 			if (tonesToggle) {
 				 Log.d("Swarm", "tonesToggle is true");
 				String soundfile = getSoundFileTones(app.getXY());
-				playSound(soundfile);
+				playSound("tones", soundfile);
 				// updateStatus(); // change value of interval
 				tonesHandler.postDelayed(tonesRunnable, tonesInterval);
 			}
@@ -466,7 +482,7 @@ public class Swarm extends Activity {
 			if (dropletsToggle) {
 				 Log.d("Swarm", "dropletsToggle is true");
 				String soundfile = getSoundFileDroplets(app.getXY());
-				playSound(soundfile);
+				playSound("droplets", soundfile);
 				// updateStatus(); // change value of interval
 				dropletsHandler.postDelayed(dropletsRunnable, dropletsInterval);
 			}
@@ -474,11 +490,19 @@ public class Swarm extends Activity {
 	};
 	
 	private String getSoundFileTones (float[] _xy) {
+		
+		// choose sound file based on normalized pointer position
+//		int tonesIndex = (_xy[0] * 16
+		
+//		String soundfile = "tones" + tonesIndex + ".mp3";
 		String soundfile = "tones1.mp3";
 		return soundfile;
 	}
 	
 	private String getSoundFileDroplets (float[] _xy) {
+
+		// choose sound file based on normalized pointer position
+		
 		String soundfile = "1.mp3";
 		return soundfile;
 	}
