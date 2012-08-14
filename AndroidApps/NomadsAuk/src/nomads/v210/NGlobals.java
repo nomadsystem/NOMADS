@@ -2,9 +2,9 @@ package nomads.v210;
 
 
 public class NGlobals {
-    public static int clientDebugLevel = 1;  // Use this for printout info
-    public static int serverDebugLevel = 1;  // Use this for printout info
-    public static int libraryDebugLevel = 1;  // Use this for printout info
+    public static int clientDebugLevel = 0;  // Use this for printout info
+    public static int serverDebugLevel = 0;  // Use this for printout info
+    public static int libraryDebugLevel = 0;  // Use this for printout info
     public static String    serverName = "nomads.music.virginia.edu";
     public static int serverPort = 52910;
     public static int serverPortDT = 52911;

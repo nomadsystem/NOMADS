@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="blank"></string>
 	<string name="app_name">Auksalaq</string>
 	<string name="welcome">Welcome to Nomads.</string>
 	<string name="login">Log in</string>
@@ -8,12 +9,12 @@
 	    \nPlease check network settings and try again.
 	    </string>
 	<string name="connectButton">Refresh</string>
-	<string name="incoming"></string>
-    <string name="outgoing"></string>
     <string name="connected">Connected to Nomads server.</string>
     <string name="hint">Enter a message.</string>
     <string name="sendButton">Send</string>
     <string name="test">test</string>
+    <string name="testTones">Tones</string>
+    <string name="testDroplets">Droplets</string>
     <string name="discuss">Discuss</string>
     <string name="cloud">Send to Cloud</string>
     <string name="cancel">Cancel</string>

@@ -15,12 +15,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 class Dot extends View {
 	private static final float RADIUS = 20;
 	private float[] xy = new float[2];
+	private float[] xyNorm = new float[2];
 	private Paint myPaint;
 	// private Paint backgroundPaint;
 
@@ -37,9 +39,9 @@ class Dot extends View {
 		// get NSand instance from Join
 		sand = app.getSand();
 
-		// starting position of dot; should be a normalized float
-		xy[0] = 30;
-		xy[1] = 30;
+		// starting position of dot
+		xy[0] = (float) (getWidth() * 0.5);
+		xy[1] = (float) (getHeight() * 0.5);
 
 		// backgroundPaint = new Paint();
 		// backgroundPaint.setColor(Color.BLUE);
@@ -57,12 +59,22 @@ class Dot extends View {
 		case MotionEvent.ACTION_MOVE:
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_CANCEL:
-			xy[0] = event.getX();
-			xy[1] = event.getY();
+			// clip touch coordinates to view dimensions
+			if (event.getX() >= 0.0 && event.getX() <= this.getWidth())
+				xy[0] = event.getX();
+			if (event.getY() >= 0.0 && event.getY() <= this.getHeight())
+				xy[1] = event.getY();
+			xyNorm[0] = xy[0] / this.getWidth();
+			xyNorm[1] = xy[1] / this.getHeight();
+			
+			// View screen size
+//			Log.d("Dot", "getWidth(): " + this.getWidth() + "getHeight(): " + this.getHeight());
+			
+			app.setXY(xyNorm);
 
 			// send position of dot to server
 			sand.sendGrain(NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY,
-					NDataType.FLOAT32, 2, xy);
+					NDataType.FLOAT32, 2, xyNorm);
 			break;
 		}
 		return (true);
