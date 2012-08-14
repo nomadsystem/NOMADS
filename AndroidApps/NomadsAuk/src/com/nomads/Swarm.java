@@ -234,26 +234,31 @@ public class Swarm extends Activity {
 			
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
-//				double tDropVal = (double) grain.iArray[0]; // Using text from
-//															// NGrain byte
-//															// array--Should
-//															// change to int
-//															// array ***STK
-//															// 6/20/12
-//				float tDropVolume = (float) (Math.pow(tDropVal, 2) / 10000.0);
-//
-//				Log.d("Swarm", "tDropVolume = " + tDropVolume);
-//				// TO DO: Make this a log function. . .
-//				myOC_Pointer.myBusReader.amplitude.set(tDropVolume);
-
+				Log.i("Swarm", "changing volume for mPlayers");
+				double dropletsVolVal = (double) grain.iArray[0]; // Using text from
+				float dropletsVolume = (float) (Math.pow(dropletsVolVal, 2) / 10000.0);
+				
+				for (int i = 0; i < mPlayer.length; i++) {
+					mPlayer[i].setVolume(dropletsVolume, dropletsVolume);
+				}
 			}
 			
 			else if (grain.command == NCommandAuk.SET_CLOUD_SOUND_VOLUME) {
+				Log.i("Swarm", "changing volume for onePlayer");
+				double cloudVolVal = (double) grain.iArray[0]; // Using text from
+				float cloudVolume = (float) (Math.pow(cloudVolVal, 2) / 10000.0);
 				
+				onePlayer.setVolume(cloudVolume, cloudVolume);
 			}
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
+				Log.i("Swarm", "changing volume for mPlayers");
+				double pointerVolVal = (double) grain.iArray[0]; // Using text from
+				float pointerVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
+				for (int i = 0; i < mPlayer.length; i++) {
+					mPlayer[i].setVolume(pointerVolume, pointerVolume);
+				}
 			}
 			
 		} else if (grain.appID == NAppIDAuk.OC_DISCUSS) {
