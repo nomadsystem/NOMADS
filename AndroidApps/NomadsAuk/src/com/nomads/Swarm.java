@@ -42,6 +42,13 @@ public class Swarm extends Activity {
 	private NSand sand;
 	private NGrain grain;
 	private AssetManager assetManager;
+	final Context context = this;
+	TextView chatWindow, prompt;
+	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
+	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
+	EditText message;
+	AlertDialog.Builder alert;
+	private Handler tonesHandler, dropletsHandler;
 	
 	private boolean mPPlaying[];
 	private boolean onePlayPlaying;
@@ -54,15 +61,7 @@ public class Swarm extends Activity {
 	private int tonesOffset = 100;
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
-	private Handler tonesHandler, dropletsHandler;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
-	
-	TextView chatWindow, prompt;
-	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
-	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
-	EditText message;
-	final Context context = this;
-	AlertDialog.Builder alert;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +77,7 @@ public class Swarm extends Activity {
 		// get NSand instance from Join
 		sand = app.getSand();
 		
+		// initialize assets
 		assetManager = context.getAssets();
 		try {
 			tonesFiles = assetManager.list("tones");
@@ -90,21 +90,13 @@ public class Swarm extends Activity {
 			Log.i("Swarm", "Error attempting to access assets");
 			e.printStackTrace();
 		}
-
-		// initialize MediaPlayer array, boolean array
-		mPlayer = new MediaPlayer[20];
-		mPPlaying = new boolean[20];
-
-		// set all media players to ready
-//		for (int i = 0; i < mPPlaying.length; i++) {
-//			Log.i("Swarm", "setting mPPlaying[i] to false...");
-//			mPPlaying[i] = false;
-//			Log.i("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
-//		}
-
+		
 		// initialize handler for timed sound playback
 		tonesHandler = new Handler();
 		dropletsHandler = new Handler();
+			
+		// media players now initialized in onResume()
+		// initializeMediaPlayers();
 
 		// initialize UI
 		setContentView(R.layout.swarm);
@@ -234,12 +226,15 @@ public class Swarm extends Activity {
 			
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
-				Log.i("Swarm", "changing volume for mPlayers");
+				Log.i("Swarm", "changing droplets volume for mPlayers (current same as pointer volume)");
 				double dropletsVolVal = (double) grain.iArray[0]; // Using text from
 				float dropletsVolume = (float) (Math.pow(dropletsVolVal, 2) / 10000.0);
 				
 				for (int i = 0; i < mPlayer.length; i++) {
-					mPlayer[i].setVolume(dropletsVolume, dropletsVolume);
+					if (mPlayer[i] != null) {
+						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + dropletsVolume);
+						mPlayer[i].setVolume(dropletsVolume, dropletsVolume);
+					}
 				}
 			}
 			
@@ -252,12 +247,15 @@ public class Swarm extends Activity {
 			}
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
-				Log.i("Swarm", "changing volume for mPlayers");
+				Log.i("Swarm", "changing pointer volume for mPlayers");
 				double pointerVolVal = (double) grain.iArray[0]; // Using text from
 				float pointerVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
 				for (int i = 0; i < mPlayer.length; i++) {
-					mPlayer[i].setVolume(pointerVolume, pointerVolume);
+					if (mPlayer[i] != null) {
+						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + pointerVolume);
+						mPlayer[i].setVolume(pointerVolume, pointerVolume);
+					}
 				}
 			}
 			
@@ -595,24 +593,6 @@ public class Swarm extends Activity {
 			}
 		}
 	};
-	
-//	private String getSoundFileTones (float[] _xy) {
-//		
-//		// choose sound file based on normalized pointer position
-////		int tonesIndex = (_xy[0] * 16
-//		
-////		String soundfile = "tones" + tonesIndex + ".mp3";
-//		String soundfile = "tones1.mp3";
-//		return soundfile;
-//	}
-//	
-//	private String getSoundFileDroplets (float[] _xy) {
-//
-//		// choose sound file based on normalized pointer position
-//		
-//		String soundfile = "1.mp3";
-//		return soundfile;
-//	}
 
 	private void startTones() {
 		tonesToggle = true;
@@ -620,8 +600,10 @@ public class Swarm extends Activity {
 	}
 
 	private void stopTones() {
-		tonesToggle = false;
-		tonesHandler.removeCallbacks(tonesRunnable);
+		if (tonesToggle) {
+			tonesHandler.removeCallbacks(tonesRunnable);
+			tonesToggle = false;
+		}
 	}
 	
 	private void startDroplets() {
@@ -630,12 +612,25 @@ public class Swarm extends Activity {
 	}
 
 	private void stopDroplets() {
-		dropletsToggle = false;
-		dropletsHandler.removeCallbacks(tonesRunnable);
+		if (dropletsToggle) {
+			dropletsHandler.removeCallbacks(dropletsRunnable);
+			dropletsToggle = false;
+		}
 	}
 
 	private void initializeMediaPlayers() {
-		// Create array of new media players
+		// initialize MediaPlayer array, boolean array size
+		mPlayer = new MediaPlayer[20];
+		mPPlaying = new boolean[20];
+
+		// set all media players to ready
+//		for (int i = 0; i < mPPlaying.length; i++) {
+//			Log.i("Swarm", "setting mPPlaying[i] to false...");
+//			mPPlaying[i] = false;
+//			Log.i("Swarm", "mPPlaying[i] = " + mPPlaying[i]);
+//		}
+		
+		// Create individual media players
 		for (int i = 0; i < mPlayer.length; i++) {
 			mPlayer[i] = new MediaPlayer();
 		}
@@ -645,14 +640,15 @@ public class Swarm extends Activity {
 	void releaseMediaPlayers() {
 		// release the media players
 		for (int i = 0; i < mPlayer.length; i++) {
-			if (mPlayer[i] != null) {
+//			if (mPlayer[i] != null) {
 				mPlayer[i].release();
-				mPlayer[i] = null;
-			}
-			if (onePlayer != null) {
-				onePlayer = null;
-			}
+//				mPlayer[i] = null;
+//			}
 		}
+//		if (onePlayer != null) {
+			onePlayer.release();
+//			onePlayer = null;
+//		}
 	}
 
 	// ========================================================
@@ -677,12 +673,16 @@ public class Swarm extends Activity {
 		Log.i("Swarm", "onPause()");
 		super.onPause();
 
+		// turn off all audio playback
+		stopTones();
+		stopDroplets();
+		if (onePlayPlaying) {
+			onePlayer.stop();
+			cloudTonesToggle = false;
+		}
+		
 		// destroy all media player instances
 		releaseMediaPlayers();
-
-		// turn off all audio playback
-		tonesToggle = false;
-		dropletsToggle = false;
 
 		// turn on ringer (?)
 		// app.phoneRingerState(true);
@@ -692,19 +692,26 @@ public class Swarm extends Activity {
 	protected void onResume() {
 		Log.i("Swarm", "onResume()");
 		super.onResume();
-		app.setGrainTarget(GrainTarget.SWARM);
 
 		// create array of media players
 		initializeMediaPlayers();
 
 		// turn off ringer
 		app.phoneRingerState(false);
+		
+		app.setGrainTarget(GrainTarget.SWARM);
 	}
 
 	@Override
 	protected void onStop() {
 		Log.i("Swarm", "onStop()");
 		super.onStop();
+	}
+	
+	@Override
+	protected void onStart() {
+		Log.i("Swarm", "onStart()");
+		super.onStart();
 	}
 
 	@Override
