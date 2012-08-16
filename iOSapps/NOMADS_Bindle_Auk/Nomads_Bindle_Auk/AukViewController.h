@@ -54,7 +54,7 @@
 @property (strong, retain) BindleAppDelegate *appDelegate;
 
 @property (weak, nonatomic) IBOutlet UIButton *joinNomadsButton;
-@property (weak, nonatomic) IBOutlet UIButton *leaveNomadsButton;
+@property (weak, nonatomic) IBOutlet UIButton *moreInfoButton;
 @property (strong, nonatomic) IBOutlet UIView *settingsView;
 @property (strong, nonatomic) IBOutlet UIView *aukView;
 @property (strong, nonatomic) IBOutlet SwarmDrawView *mySwarmDrawView;
@@ -74,7 +74,7 @@
 - (IBAction)discussButton:(id)sender;
 - (IBAction)cloudButton:(id)sender;
 - (IBAction)settingsButton:(id)sender;
-- (IBAction)leaveNomadsButton:(id)sender;
+- (IBAction)moreInfoButton:(id)sender;
 - (IBAction)joinNomadsButton:(id)sender;
 - (IBAction)settingsNavBackButton:(id)sender;
 - (IBAction)settingsNavMoreInfoButton:(id)sender;
