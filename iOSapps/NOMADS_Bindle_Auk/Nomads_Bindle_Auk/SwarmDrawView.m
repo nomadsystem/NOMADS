@@ -245,8 +245,8 @@
     
     
     //Scale for pointer output between 0-1000 (To become 0-1)
-    viewHeightScale = (int)(1000/viewHeight);
-    viewWidthScale = (int)(1000/viewWidth);
+    viewHeightScale = (1000/viewHeight);
+    viewWidthScale = (1000/viewWidth);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
