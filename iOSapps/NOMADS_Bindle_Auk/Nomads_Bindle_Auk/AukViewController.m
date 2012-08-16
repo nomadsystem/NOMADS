@@ -47,13 +47,14 @@
         [self.view bringSubviewToFront:aukView]; //Load the aukView
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     //Handles first check of internet communcation status
     if (![self internetConnectionStatus]) {
             CLog("No internet connection");
@@ -87,9 +88,16 @@
     [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
     
     
-    //Hides our "hidden" text fields for discuss and cloud
-    inputDiscussField.hidden = YES; 
+    //Hides our "hidden" text fields for discuss and cloud, sets font/size
+    inputDiscussField.hidden = YES;
+    [inputDiscussField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
+    [inputDiscussField setTextColor:[UIColor whiteColor]];
     inputCloudField.hidden = YES;
+    [inputCloudField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
+    [inputCloudField setTextColor:[UIColor whiteColor]];
+    
+    //Notification calls keyboardWillHide when keyboard is hidden
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     //Init settingsScreen
     [joinNomadsButton setHidden:YES];
@@ -116,7 +124,8 @@
     
     
     //Init aukToolbar and buttons
-    [[self aukToolbar] setTranslucent:YES];
+    [aukToolbar setTranslucent:YES];
+//    [aukToolbar setTintColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1]];
     [aukBarButtonDiscuss setEnabled:false];
     [aukBarButtonCloud setEnabled:false];
     
@@ -512,12 +521,14 @@
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
             [aukView sendSubviewToBack:inputDiscussField];
+            [mySwarmDrawView setNeedsDisplay];
         }
         else { //Dismisses keyboard if no text is entered but send button is pressed 
             inputDiscussField.text = @"";
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
             [aukView sendSubviewToBack:inputDiscussField];
+            [mySwarmDrawView setNeedsDisplay];
         }
     }
     
@@ -556,6 +567,7 @@
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
             [aukView sendSubviewToBack:inputCloudField];
+            [mySwarmDrawView setNeedsDisplay];
             
             //Note playback
             if (cloudSoundIsEnabled) { //Only play back if note is enabled
@@ -571,7 +583,8 @@
             inputCloudField.text = @"";
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
-            [aukView sendSubviewToBack:inputCloudField];  
+            [aukView sendSubviewToBack:inputCloudField];
+            [mySwarmDrawView setNeedsDisplay];
         }
     }
     
@@ -582,6 +595,17 @@
     return YES;   
 }
 
+//Detects when keyboard is dismissed 
+- (void) keyboardWillHide: (NSNotification *)inNotification {
+    inputDiscussField.text = @"";
+    [inputDiscussField setHidden:YES];
+    [aukView sendSubviewToBack:inputDiscussField];
+    
+    inputDiscussField.text = @"";
+    [inputDiscussField setHidden:YES];
+    [aukView sendSubviewToBack:inputDiscussField];
+    [mySwarmDrawView setNeedsDisplay]; //****STK Attempt to get dot redrawn after keyboard is released
+}
 
 
 //iOS Stuff ==============================================================

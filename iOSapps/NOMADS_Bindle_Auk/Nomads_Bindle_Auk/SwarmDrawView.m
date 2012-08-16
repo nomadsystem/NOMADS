@@ -23,30 +23,26 @@
     self = [super initWithFrame:r];
     if (self) {
         
-        toneVolScaler = 1.0;
-        tonePlayer = 0;
-        toneVolDone = false;
-        numRunTonePlayers = 0;
-        
-        // Graphics setup
+        //Init for Graphics
         viewRect = [self bounds];
         viewHeight = viewRect.size.height;
         viewWidth = viewRect.size.width;
         
-        CLog(@"viewHeight = %f", viewHeight);
-        CLog(@"viewWidth = %f", viewWidth);
+//        CLog(@"viewHeight = %f", viewHeight);
+//        CLog(@"viewWidth = %f", viewWidth);
         
         //Scale for pointer output between 0-1000 (To become 0-1)
         viewHeightScale = (1000/viewHeight);
         viewWidthScale = (1000/viewWidth);
         
-        CLog(@"viewHeightScale = %f", viewHeightScale);
-        CLog(@"viewWidthScale = %f", viewWidthScale);
+//        CLog(@"viewHeightScale = %f", viewHeightScale);
+//        CLog(@"viewWidthScale = %f", viewWidthScale);
         
-        // Prompt text
+        // Init prompt text
         prompt = [NSString stringWithFormat:@"Auksalaq NOMADS"];
         promptAlpha = 0;
         
+        //Resize prompt text based on device
         if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
         {
             promptTextSize = 50;
@@ -57,34 +53,36 @@
             discussTextSize = 10;
         }
         
-        // chat lines
+        //Initialize number of chat lines and array
         numChatLines = 15; //Initialize number of chat lines to display
         chatLines = [[NSMutableArray alloc] init];
         
-        //Code to get the point to start at the center of the screen
-        [self setMultipleTouchEnabled:YES];
+        //Set up multiple touches
+        [self setMultipleTouchEnabled:NO];
         
+        //Code to get the point to start at the center of the screen
         myFingerPoint.x = (CGRectGetMidX(viewRect));
         myFingerPoint.y = (CGRectGetMidY(viewRect));
         
-        maxTrails = 10;
-        
+        //Setup for Dot
+        maxTrails = 10; //Max number of dot trailers
+        //Create array for X and Y trail coordinates
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
         yTrail = (int *)malloc(sizeof(int)*maxTrails);
-        
         for (int i=0;i<maxTrails;i++) {
             xTrail[i]=(viewWidth * 0.5);
             yTrail[i]=(viewHeight * 0.5);
         }
-        decayColor = 1.0;
+        decayColor = 1.0; 
         decayColorChangeDelta = (decayColor/(float)maxTrails);
-        dropFlash = NO;
+        dropFlash = NO; //Don't flash the dot
         
+        //Color init for dot
         ellipseR = decayColor;
         ellipseG = touchColor;
         ellipseB = 1.0;
         ellipseA = decayColor;
-        
+
         dotSizeScaler = 1;
         
         //    CLog(@" brightness = %f ", brightness);
@@ -94,25 +92,33 @@
         
         
         //Set up our Audio Session
-        
         NSError *activationError = nil;
         session = [AVAudioSession sharedInstance];
         [session setActive:YES error:&activationError];
         NSError *setCategoryError = nil;
         
-        //This category should prevent our audio from being interrupted by incoming calls, etc.
+        //This category prevents our audio from being interrupted by incoming calls, etc.
         [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
         if (setCategoryError) {
             CLog("Error initializing Audio Session Category");
         }
+        
+        
+        //Init for Audio
+        toneVolScaler = 1.0;
+        tonePlayer = 0;
+        toneVolDone = false;
+        numRunTonePlayers = 0;
         dropletVolume = 1.0;
         toneVolume = 1.0;
         toneCntrlOn = NO;
         maxNumOfTonePlayers = 19;
         
+        //Init timer for prompt fading
         promptWaitTick = 0;
         promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
         
+        //Init initial status of Cloud/Discuss/Pointer
         cloudStatus = 0;
         discussStatus = 0;
         pointerStatus = 0;
@@ -120,6 +126,8 @@
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate->appSand setDelegate:self];
+        
+        
         
     }
     return self;
@@ -129,7 +137,6 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    //This delegate not being
     CLog(@"SwarmDrawView: Data Ready Handle\n");
     
     if (nil != inGrain) {
@@ -173,13 +180,13 @@
             }
             else if (inGrain->command == SET_DROPLET_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
-                dropletVolume =  (inGrain->iArray[0]*0.01);
+                dropletVolume =  (inGrain->iArray[0]*0.01); //scales value from 0-1
                 CLog("inGrain setting dropletVolume = %f", dropletVolume);
                 
             }
             else if (inGrain->command == SET_POINTER_TONE_VOLUME) {
                 //   float noteVolume = (((inGrain->iArray[0])*0.01);//****STK data to be scaled from 0-1
-                toneVolume =  (inGrain->iArray[0]*0.01);
+                toneVolume =  (inGrain->iArray[0]*0.01); //scales value from 0-1
                 CLog("inGrain setting pointerTone volume = %f", toneVolume);
                 
             }
@@ -206,10 +213,7 @@
             else if(inGrain->command == SEND_PROMPT_OFF) {
                 // xxx
                 promptFadeOutTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeOutTick target:self selector:@selector(fadeOutPrompt) userInfo:nil repeats:YES];
-                
             }
-            
-            
         }
         
         
@@ -248,8 +252,12 @@
     viewHeightScale = (1000/viewHeight);
     viewWidthScale = (1000/viewWidth);
     
+    //Set up our context
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    // Prompt ======================================================
+    
+    //Set up drawing for prompt text
     CGContextSetCharacterSpacing (context, 1);
     CGContextSetTextDrawingMode (context, kCGTextFillStroke);
     CGContextSetRGBFillColor (context, 1, 1, 1, promptAlpha);
@@ -260,8 +268,7 @@
     CGContextSetShouldAntialias(context, YES);
     CGContextSetShouldSmoothFonts(context, YES);
     
-    
-    // Display Prompt Text
+    // Display prompt Text
     const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
     int len = strlen(str); //get length of string
     
@@ -272,8 +279,9 @@
     
     CGContextShowTextAtPoint (context, (viewWidth * 0.1), (viewHeight * 0.1), str, len);
     
-    // Display discussion text
+    // Discuss Display ======================================================
     
+    // Set up and display discussion text
     if (discussStatus) {
         CGContextSelectFont (context,
                              "Helvetica-Light",
@@ -282,11 +290,12 @@
         CGContextSetRGBFillColor (context, 0.7, 0.7, 0.8, 1);
         CGContextSetRGBStrokeColor (context, 0.7, 0.7, 0.8, 1);
         
+        //Sets position for discuss display text
         CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
         CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
         CGFloat chatXLoc = (viewWidth * 0.1);
         
-        
+        //Displays incoming discuss text in our app
         for (int i=0;i<[chatLines count];i++) {
             
             NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
@@ -302,6 +311,7 @@
     
     // The Dot ======================================================
     
+    //Show the dot if the pointer is on
     if (pointerStatus) {
         for(int i=maxTrails;i>0;i--) {
             xTrail[i] = xTrail[i-1];
@@ -313,6 +323,7 @@
         
         decayColor = 1.0;
         float dotSize;
+        //Change dot size based on device
         if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
         {
              dotSize = 50;
@@ -320,7 +331,8 @@
         else {
             dotSize = 20;
         }
-                
+        
+        //Display the dot
         for (int i=0; i<maxTrails; i++) {
             if (i<(maxTrails-1)) {
                 //            ellipseR = decayColor;
@@ -331,7 +343,7 @@
                 int yDiff = yTrail[i]-yTrail[i+1];
                 
                 if (i==0) {
-                    if (dropFlash) {
+                    if (dropFlash) { //If dot is flashing with droplets
                         CLog("dropFlash!");
                         CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                         CLog("R = %f G = %f B = %f A = %F", ellipseR, ellipseG, ellipseB, ellipseA);
@@ -342,6 +354,7 @@
                     }
                 }
                 
+                //If dot is moved "enough"
                 if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
                     CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
                     
@@ -372,7 +385,7 @@
     
     //Sounds ======================================================
     
-    //Droplets
+    //Droplets (Needs to be updated in case device orientation changes)
     int numOfDroplets = 203;
     float viewXGrid  = (viewWidth / 5);
     float viewYGrid  = (viewHeight / numOfDroplets);
@@ -386,10 +399,6 @@
 
 -(void)clearAll
 {
-    //Clear the Collections
-    //    [linesInProcess removeAllObjects];
-    //    [completeLines removeAllObjects];
-    
     //Redraw
     [self setNeedsDisplay];
 }
@@ -400,7 +409,7 @@
 {
     maxTrails = 2;
     
-    
+    //If the pointer is enabled, check for touches
     if (pointerStatus) {
         for (UITouch *t in touches) {
             CLog(@" Touches Began");
@@ -417,9 +426,6 @@
             CLog(@"SWARM_Y loc = %f", loc.y);
             myFingerPoint.x = loc.x;
             myFingerPoint.y = loc.y;
-            
-            //Put pair in dictionary
-            //        [linesInProcess setObject:newLine forKey:key];
         }
         
         //Pointer Tones
@@ -446,22 +452,15 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
-    
-    
-    
+    //If the pointer is enabled
     if (pointerStatus) {
         maxTrails = 10;
         
         //This loop is for display purposes
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             
-            int xy[2];
             //Update linesInProcess with moved touches
             for (UITouch *t in touches) {
-                
-                //Find the line for this touch
-                //   myLine = [linesInProcess objectForKey:key];
                 
                 //Update the point
                 CGPoint loc = [t locationInView:self];
@@ -469,13 +468,6 @@
                 myFingerPoint.y = loc.y;
                 CLog(@"SWARM_X loc = %f", loc.x);
                 CLog(@"SWARM_Y loc = %f", loc.y);
-                
-                
-                
-                xy[0] = (int) loc.x;
-                xy[1] = (int) loc.y;
-                
-                
                 
             }
             [self setNeedsDisplay];
@@ -489,50 +481,25 @@
         //Update linesInProcess with moved touches
         for (UITouch *t in touches) {
             
-            //Find the line for this touch
-            //   myLine = [linesInProcess objectForKey:key];
-            
             //Update the point
             CGPoint loc = [t locationInView:self];
-            myFingerPoint.x = loc.x;
-            myFingerPoint.y = loc.y;
-            CLog(@"SWARM_X loc = %f", loc.x);
-            CLog(@"SWARM_Y loc = %f", loc.y);
-            
-            
-            
-            //            float screenScaleX = 5.9;
-            //            float screenScaleY = 3.33;
-            //            int screenMinusX = 1000;
-            //            int screenMinusY = 800;
-            
-            
-            //            xy[0] = (int) ((loc.x * screenScaleX)- screenMinusX);
-            //            xy[1] = (int) ((loc.y * screenScaleY)- screenMinusY);
             
             //STK Send out scaled values between 0-1000 (to become 0-1)
-            
-            int tIntX = (int) (loc.x * viewWidthScale);
-            int tIntY = (int) (loc.y * viewHeightScale);
-            CLog(@"SWARM_X SCALED = %d", tIntX);
-            CLog(@"SWARM_Y SCALED = %d", tIntY);
-            
             xy[0] = (int) (loc.x * viewWidthScale);
             xy[1] = (int) (loc.y * viewHeightScale);
-            
-            
-            
+
         }
+        //Send pointer data to NOMADS
         [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
         
     }
     
 }
 
+//Called from touchesEnded and touchesCancelled
 - (void)endTouches:(NSSet *)touches
 {
     maxTrails = 2;
-    //Remove ending touches from dictionary
     for (UITouch *t in touches) {
         //      touchColor = 0.6;
         
@@ -548,11 +515,13 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self endTouches:touches];
+    CLog("TOUCHES ENDED");
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self endTouches:touches];
+    CLog("TOUCHES CANCELLED");
 }
 
 //Method called from dotFlashTimer--resets dot size/color
