@@ -312,17 +312,17 @@
 
 - (IBAction)joinNomadsButton:(id)sender {
 //    [joinTextField resignFirstResponder];
-//    [appDelegate->appSand connect];  
-//    
-//    Byte c[1];
-//    c[0] = 1;
-//    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-//    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-//                                                   Command:REGISTER 
-//                                                  DataType:UINT8 
-//                                                   DataLen:1 
-//                                                    Uint8:c];
-//    
+    [appDelegate->appSand connect];  
+    
+    Byte c[1];
+    c[0] = 1;
+    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                                   Command:REGISTER 
+                                                  DataType:UINT8 
+                                                   DataLen:1 
+                                                    Uint8:c];
+    
 //    if ([joinTextField.text length] > 0){
 //        
 //        //****STK 7/25/12 Not currently checking settings, to be implemented
