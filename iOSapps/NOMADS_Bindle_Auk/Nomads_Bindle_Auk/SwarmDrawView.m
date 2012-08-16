@@ -424,7 +424,7 @@
         
         //Pointer Tones
         if (toneCntrlOn) {
-            int numOfTones = 17;
+            int numOfTones = 16;
             float viewYGrid  = (viewHeight / numOfTones);
             
             if (((int)(myFingerPoint.y/viewYGrid)) < 1) {
