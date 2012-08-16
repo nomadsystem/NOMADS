@@ -254,6 +254,8 @@ public class NomadsApp extends Application {
 		};
 	}
 	
+	// ========================================================
+	
 	public void cancelAllTextInput() {
 		if (swarm != null) {
 			swarm.cancelAllTextInput();
