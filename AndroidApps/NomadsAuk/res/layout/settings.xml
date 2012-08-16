@@ -32,21 +32,7 @@
 	    android:layout_below="@id/connectionStatusPre"
 	    android:text="" />
 	
-<!-- 	<LinearLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:gravity="center"
-    	android:layout_below="@id/connectionStatus">
-		<Button
-		    android:id="@+id/quitButton"
-		    android:gravity="center"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/quitButton" />
-	</LinearLayout> -->
-	
-	<TextView
+<!-- 	<TextView
 	    android:id="@+id/nomadsInfo2"
 	    style="@style/info"
 	    android:gravity="center"
@@ -62,7 +48,22 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_above="@id/nomadsInfo2"
-	    android:text="@string/nomadsLink" />
+	    android:text="@string/nomadsLink" /> -->
+	    
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/nomadsLinkLayout"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:layout_alignParentBottom="true">
+		<Button
+		    android:id="@+id/linkButton"
+		    android:gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/linkButton" />
+	</LinearLayout>
 	
 	<TextView
 	    android:id="@+id/nomadsInfo"
@@ -70,7 +71,7 @@
 	    android:gravity="center"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_above="@id/nomadsLink"
+	    android:layout_above="@id/nomadsLinkLayout"
 	    android:text="@string/nomadsInfo" />
 
 </RelativeLayout>

@@ -20,8 +20,11 @@
     <string name="cancel">Cancel</string>
     <string name="settings">Settings</string>
     <string name="connectionStatus">Connection status:</string>
-    <string name="nomadsInfo">This app was created by the</string>
-	<string name="nomadsInfo2">University of Virginia, 2012</string>
+    <string name="nomadsInfo">
+        This app was created by the
+        \n<b>Nomads</b> Team
+        \nUniversity of Virginia, 2012</string>
 	<string name="nomadsLink"><a href="http://nomads.music.virginia.edu"><b>Nomads</b> Team</a></string>
+	<string name="linkButton">Nomads on the web</string>
 	<string name="quitButton">Close connection and quit</string>
 </resources>
