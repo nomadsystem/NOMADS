@@ -7,10 +7,12 @@ package com.nomads;
 import nomads.v210.NGlobals.GrainTarget;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.os.Handler;
 import android.util.Log;
 
@@ -109,12 +111,46 @@ public class NomadsApp extends Application {
 	}
 
 	// ========================================================
+	// AUDIO
+	// ========================================================
 	
-	public void cancelAllTextInput() {
-		if (swarm != null) {
-			swarm.cancelAllTextInput();
-		}
+	// audio focus can only be requested in API 8 (Froyo) or higher
+	@TargetApi(8)
+	public int requestAudioFocus () {
+		// Request audio focus for playback
+		int result = am.requestAudioFocus(afChangeListener,
+		                                 // Use the music stream.
+		                                 AudioManager.STREAM_MUSIC,
+		                                 // Request permanent focus.
+		                                 AudioManager.AUDIOFOCUS_GAIN);
+		return result;
 	}
+	
+	@TargetApi(8)
+	public void releaseAudioFocus () {
+		// Abandon audio focus
+		am.abandonAudioFocus(afChangeListener);
+	}
+	
+	// currently does nothing when other apps request audio focus
+	// audio focus is abandoned in the Swarm onPause() method
+	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+	    public void onAudioFocusChange(int focusChange) {
+	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+	            // Pause playback
+	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+	            // Resume playback 
+	        } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+//	            am.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+//	            am.abandonAudioFocus(afChangeListener);
+	            // Stop playback
+	        }
+	    }
+	};
+	
+	// ========================================================
+	// NOMADS methods
+	// ========================================================
 
 	public NSand getSand() {
 		return sand;
@@ -216,6 +252,12 @@ public class NomadsApp extends Application {
 				routeGrain(gT);
 			}
 		};
+	}
+	
+	public void cancelAllTextInput() {
+		if (swarm != null) {
+			swarm.cancelAllTextInput();
+		}
 	}
 
 	@Override
