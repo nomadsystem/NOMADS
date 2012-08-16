@@ -48,7 +48,6 @@
 						<string key="NSFrame">{{0, 39}, {1024, 729}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -208,12 +207,6 @@
 											<int key="IBUIStyle">1</int>
 											<reference key="IBUINavigationItem" ref="948089652"/>
 										</object>
-										<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="467291149">
-											<string key="IBUITitle">More Info</string>
-											<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-											<int key="IBUIStyle">1</int>
-											<reference key="IBUINavigationItem" ref="948089652"/>
-										</object>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									</object>
 								</array>
@@ -345,7 +338,6 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<int key="IBUIBorderStyle">3</int>
 								<string key="IBUIPlaceholder">Enter Discuss Text</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">3</int>
@@ -374,7 +366,6 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<int key="IBUIBorderStyle">3</int>
 								<string key="IBUIPlaceholder">Enter Cloud Text</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">3</int>
@@ -536,30 +527,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">settingsNavMoreInfoButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="467291149"/>
-					</object>
-					<int key="connectionID">148</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">settingsNavBackButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="467291149"/>
-					</object>
-					<int key="connectionID">149</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">settingsNavBarMoreInfoButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="467291149"/>
-					</object>
-					<int key="connectionID">150</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">infoViewNOMADS</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="928837754"/>
@@ -656,14 +623,6 @@
 					</object>
 					<int key="connectionID">153</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">settingsNavMoreInfoButton:</string>
-						<reference key="source" ref="467291149"/>
-						<reference key="destination" ref="372490531"/>
-					</object>
-					<int key="connectionID">151</int>
-				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -742,7 +701,6 @@
 						<reference key="object" ref="948089652"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="246726192"/>
-							<reference ref="467291149"/>
 						</array>
 						<reference key="parent" ref="225647217"/>
 					</object>
@@ -811,12 +769,6 @@
 						<reference key="parent" ref="338960657"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">147</int>
-						<reference key="object" ref="467291149"/>
-						<reference key="parent" ref="948089652"/>
-						<string key="objectName">Bar Button Item - More Info</string>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">144</int>
 						<reference key="object" ref="928837754"/>
 						<reference key="parent" ref="191373211"/>
@@ -846,7 +798,6 @@
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="1.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="144.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="147.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="154.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="155.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="156.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
