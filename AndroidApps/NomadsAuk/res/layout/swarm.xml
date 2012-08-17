@@ -18,24 +18,30 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content" />
 
-    <ImageButton
-        android:id="@+id/buttonDiscuss"
-        android:src="@drawable/discuss"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:contentDescription="@string/discuss"/>
-
-    <ImageButton
-        android:id="@+id/buttonCloud"
-        android:src="@drawable/cloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/buttonDiscuss"
-        android:contentDescription="@string/cloud" />
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/buttonLinearLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:gravity="center"
+	    android:background="@drawable/swarmbuttonbg">
+	    	    
+	    <ImageButton
+	        android:id="@+id/buttonDiscuss"
+	        android:src="@drawable/discuss"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/discuss"/>
+	
+	    <ImageButton
+	        android:id="@+id/buttonCloud"
+	        android:src="@drawable/cloud"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/cloud" />
+	</LinearLayout>
     
-    <Button
+<!--     <Button
         android:id="@+id/buttonAudioTest1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/buttonAudioTest1"
-        android:text="@string/testDroplets" />
+        android:text="@string/testDroplets" /> -->
     
     <ImageButton
         android:id="@+id/buttonSettings"
@@ -61,10 +67,10 @@
         android:contentDescription="@string/settings" />
     
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/buttonLinearLayout"
+	    android:id="@+id/button2LinearLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_above="@id/buttonDiscuss">
+	    android:layout_above="@id/buttonLinearLayout">
 	    <Button
 		    android:id="@+id/sendDiscuss"
 		    android:layout_width="wrap_content"
@@ -87,12 +93,14 @@
 	
 	<EditText
 	    android:id="@+id/message"
+	    style="@style/h2"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_above="@id/buttonLinearLayout"
+	    android:layout_above="@id/button2LinearLayout"
 	    android:hint="@string/hint"
 	    android:inputType="text"
 	    android:text="@string/blank"
+	    android:background="@null"
 	    android:visibility="gone" />
 	
 	<TextView
