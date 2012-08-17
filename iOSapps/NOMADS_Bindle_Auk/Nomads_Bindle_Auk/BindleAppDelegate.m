@@ -34,6 +34,7 @@
     AukViewController *avc = [[AukViewController alloc] init];
     [[self window] setRootViewController:avc];
     [self.window makeKeyAndVisible];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES]; //Prevents device from sleeping
 
     //   self.window.backgroundColor = [UIColor whiteColor];
     
