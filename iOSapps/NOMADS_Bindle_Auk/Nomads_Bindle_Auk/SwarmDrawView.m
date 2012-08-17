@@ -407,7 +407,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    maxTrails = 2;
+  //  maxTrails = 2;
     
     //If the pointer is enabled, check for touches
     if (pointerStatus) {
@@ -499,7 +499,7 @@
 //Called from touchesEnded and touchesCancelled
 - (void)endTouches:(NSSet *)touches
 {
-    maxTrails = 2;
+   // maxTrails = 2;
     for (UITouch *t in touches) {
         //      touchColor = 0.6;
         
