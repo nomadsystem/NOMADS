@@ -23,7 +23,7 @@
 @synthesize settingsNavBackButton;
 @synthesize settingsNavBarMoreInfoButton;
 @synthesize joinNomadsButton;
-@synthesize leaveNomadsButton;
+@synthesize moreInfoButton;
 @synthesize settingsNavTitle;
 @synthesize settingsNavBar;
 @synthesize settingsView;
@@ -47,13 +47,14 @@
         [self.view bringSubviewToFront:aukView]; //Load the aukView
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     }
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     //Handles first check of internet communcation status
     if (![self internetConnectionStatus]) {
             CLog("No internet connection");
@@ -87,13 +88,20 @@
     [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
     
     
-    //Hides our "hidden" text fields for discuss and cloud
-    inputDiscussField.hidden = YES; 
+    //Hides our "hidden" text fields for discuss and cloud, sets font/size
+    inputDiscussField.hidden = YES;
+    [inputDiscussField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
+    [inputDiscussField setTextColor:[UIColor whiteColor]];
     inputCloudField.hidden = YES;
+    [inputCloudField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
+    [inputCloudField setTextColor:[UIColor whiteColor]];
+    
+    //Notification calls keyboardWillHide when keyboard is hidden
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     //Init settingsScreen
     [joinNomadsButton setHidden:YES];
-    [leaveNomadsButton setHidden:YES];
+    [moreInfoButton setHidden:NO];
     [joinTextField setHidden:YES];
     //Init connection label
     [connectionLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
@@ -104,8 +112,8 @@
     //Init backgrounds
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
-        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
-        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+        [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
+        [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
     }
     else {
         [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
@@ -116,7 +124,8 @@
     
     
     //Init aukToolbar and buttons
-    [[self aukToolbar] setTranslucent:YES];
+    [aukToolbar setTranslucent:YES];
+//    [aukToolbar setTintColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1]];
     [aukBarButtonDiscuss setEnabled:false];
     [aukBarButtonCloud setEnabled:false];
     
@@ -156,7 +165,7 @@
     mySwarmDrawView = [[SwarmDrawView alloc]initWithFrame:myCGRect];
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
-        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+        [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
     }
     else {
         [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
@@ -257,7 +266,7 @@
     //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
     if (buttonIndex == 0) {
         CLog("Alert button %i pressed", buttonIndex);
-        [leaveNomadsButton setHidden:YES]; //Hide the Leave button
+        [moreInfoButton setHidden:YES]; //Hide the Leave button
         [joinNomadsButton setHidden:NO]; //Show the Join Button
         connectionLabel.text = @"Not Connected!";
         [self.view bringSubviewToFront:settingsView];
@@ -312,17 +321,17 @@
 
 - (IBAction)joinNomadsButton:(id)sender {
 //    [joinTextField resignFirstResponder];
-//    [appDelegate->appSand connect];  
-//    
-//    Byte c[1];
-//    c[0] = 1;
-//    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-//    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-//                                                   Command:REGISTER 
-//                                                  DataType:UINT8 
-//                                                   DataLen:1 
-//                                                    Uint8:c];
-//    
+    [appDelegate->appSand connect];  
+    
+    Byte c[1];
+    c[0] = 1;
+    //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
+                                                   Command:REGISTER 
+                                                  DataType:UINT8 
+                                                   DataLen:1 
+                                                    Uint8:c];
+    
 //    if ([joinTextField.text length] > 0){
 //        
 //        //****STK 7/25/12 Not currently checking settings, to be implemented
@@ -334,7 +343,7 @@
 //        joinTextField.text = @"";
 //        [joinTextField setHidden:YES];
         [joinNomadsButton setHidden:YES];
-        [leaveNomadsButton setHidden:YES];
+        [moreInfoButton setHidden:NO];
         
         connectionLabel.text = @"Connected to NOMADS!";
 //        
@@ -378,12 +387,17 @@
     [self.infoViewNOMADS loadRequest:myLoadRequest];
 }
 
-// Button to leave NOMADS ***STK 8/7/12 NOT IMPLEMENTED
-- (IBAction)leaveNomadsButton:(id)sender {
-    connectionLabel.text = @"Leaving NOMADS";
-    [leaveNomadsButton setHidden:YES];
-    [joinTextField setHidden:YES];
-    [joinNomadsButton setHidden:NO];
+- (IBAction)moreInfoButton:(id)sender {
+    [settingsNavBarMoreInfoButton setEnabled:NO];
+    NSString *infoURL = @"http://nomads.music.virginia.edu";
+    NSURL *url = [NSURL URLWithString:infoURL];
+    NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
+    
+    [self.view bringSubviewToFront:infoViewNOMADS];
+    //  [infoViewNOMADS setUserInteractionEnabled:NO];
+    currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+    
+    [self.infoViewNOMADS loadRequest:myLoadRequest];
 }
 
 // Auk view items ===============================================
@@ -507,12 +521,14 @@
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
             [aukView sendSubviewToBack:inputDiscussField];
+            [mySwarmDrawView setNeedsDisplay];
         }
         else { //Dismisses keyboard if no text is entered but send button is pressed 
             inputDiscussField.text = @"";
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
             [aukView sendSubviewToBack:inputDiscussField];
+            [mySwarmDrawView setNeedsDisplay];
         }
     }
     
@@ -551,6 +567,7 @@
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
             [aukView sendSubviewToBack:inputCloudField];
+            [mySwarmDrawView setNeedsDisplay];
             
             //Note playback
             if (cloudSoundIsEnabled) { //Only play back if note is enabled
@@ -566,7 +583,8 @@
             inputCloudField.text = @"";
             [inputCloudField setHidden:YES];
             [inputCloudField resignFirstResponder];
-            [aukView sendSubviewToBack:inputCloudField];  
+            [aukView sendSubviewToBack:inputCloudField];
+            [mySwarmDrawView setNeedsDisplay];
         }
     }
     
@@ -577,6 +595,17 @@
     return YES;   
 }
 
+//Detects when keyboard is dismissed 
+- (void) keyboardWillHide: (NSNotification *)inNotification {
+    inputDiscussField.text = @"";
+    [inputDiscussField setHidden:YES];
+    [aukView sendSubviewToBack:inputDiscussField];
+    
+    inputDiscussField.text = @"";
+    [inputDiscussField setHidden:YES];
+    [aukView sendSubviewToBack:inputDiscussField];
+    [mySwarmDrawView setNeedsDisplay]; //****STK Attempt to get dot redrawn after keyboard is released
+}
 
 
 //iOS Stuff ==============================================================
@@ -621,13 +650,13 @@
         if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
         {
             //Load images for portrait view
-            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
-            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+            [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
+            [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             
             //Reset screen size of SwarmDrawView for portrait view
             CGRect screenRect = [mySwarmDrawView bounds];
             [mySwarmDrawView setFrame:screenRect];
-            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1004_IpadPortrait.png"]]];
+            [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
         }
         else {
             //Load images for portrait view
@@ -656,7 +685,7 @@
     [self setAukBarButtonCloud:nil];
     [self setAukBarButtonSettings:nil];
     [self setJoinNomadsButton:nil];
-    [self setLeaveNomadsButton:nil];
+    [self setMoreInfoButton:nil];
     [self setInputDiscussField:nil];
     [self setInputCloudField:nil];
     [self setSettingsNavBar:nil];
