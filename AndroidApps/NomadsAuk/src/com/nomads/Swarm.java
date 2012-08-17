@@ -109,10 +109,10 @@ public class Swarm extends Activity {
 		buttonCloud.setOnClickListener(cloudListener);
 		buttonSettings = (ImageButton) findViewById(R.id.buttonSettings);
 		buttonSettings.setOnClickListener(settingsListener);
-		buttonAudioTest1 = (Button) findViewById(R.id.buttonAudioTest1);
-		buttonAudioTest1.setOnClickListener(tonesTestButtonListener);
-		buttonAudioTest2 = (Button) findViewById(R.id.buttonAudioTest2);
-		buttonAudioTest2.setOnClickListener(dropletsTestButtonListener);
+//		buttonAudioTest1 = (Button) findViewById(R.id.buttonAudioTest1);
+//		buttonAudioTest1.setOnClickListener(tonesTestButtonListener);
+//		buttonAudioTest2 = (Button) findViewById(R.id.buttonAudioTest2);
+//		buttonAudioTest2.setOnClickListener(dropletsTestButtonListener);
 		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
 		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
 		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
@@ -331,29 +331,29 @@ public class Swarm extends Activity {
 		}
 	};
 
-	Button.OnClickListener tonesTestButtonListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (!tonesToggle) {
-				Log.i("Swarm", "Starting tones...");
-				startTones();
-			} else {
-				stopTones();
-			}
-		}
-	};
-	
-	Button.OnClickListener dropletsTestButtonListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (!dropletsToggle) {
-				Log.i("Swarm", "Starting droplets...");
-				startDroplets();
-			} else {
-				stopDroplets();
-			}
-		}
-	};
+//	Button.OnClickListener tonesTestButtonListener = new Button.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			if (!tonesToggle) {
+//				Log.i("Swarm", "Starting tones...");
+//				startTones();
+//			} else {
+//				stopTones();
+//			}
+//		}
+//	};
+//	
+//	Button.OnClickListener dropletsTestButtonListener = new Button.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			if (!dropletsToggle) {
+//				Log.i("Swarm", "Starting droplets...");
+//				startDroplets();
+//			} else {
+//				stopDroplets();
+//			}
+//		}
+//	};
 	
 	Button.OnClickListener sendDiscussListener = new Button.OnClickListener() {
 		@Override
