@@ -116,7 +116,7 @@
         
         //Init timer for prompt fading
         promptWaitTick = 0;
-        promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
+        promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(initWaitPrompt) userInfo:nil repeats:YES];
         
         //Init initial status of Cloud/Discuss/Pointer
         cloudStatus = 0;
@@ -538,7 +538,7 @@
 }
 
 
-- (void)zeroPrompt {
+- (void)initWaitPrompt {
     
     CLog("zeroPrompt %2.2f\n",promptWaitTick);
     

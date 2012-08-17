@@ -46,7 +46,6 @@
 		F9B0D05215DD61F400384C5D /* AukViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9B0D05115DD61F400384C5D /* AukViewController~ipad.xib */; };
 		F9DCBBEF15CC71FD00E32F03 /* auklogo_57.png in Resources */ = {isa = PBXBuildFile; fileRef = F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */; };
 		F9F2526F15CC231400A975FA /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F2526E15CC231400A975FA /* Reachability.m */; };
-		F9F5FA4A15DD6D8100902E91 /* AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5FA4915DD6D8100902E91 /* AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png */; };
 		F9F5FA4E15DD6DC300902E91 /* blue_ice_bg_768_1024_IpadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = F9F5FA4C15DD6DC300902E91 /* blue_ice_bg_768_1024_IpadPortrait.png */; };
 /* End PBXBuildFile section */
 
@@ -103,7 +102,6 @@
 		F9DCBBE315CC6C6D00E32F03 /* auklogo_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auklogo_57.png; sourceTree = "<group>"; };
 		F9F2526D15CC231400A975FA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F9F2526E15CC231400A975FA /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		F9F5FA4915DD6D8100902E91 /* AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png; path = ../../../Dropbox/IMRG/Images/iOS/AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png; sourceTree = "<group>"; };
 		F9F5FA4C15DD6DC300902E91 /* blue_ice_bg_768_1024_IpadPortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_ice_bg_768_1024_IpadPortrait.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,7 +126,6 @@
 			children = (
 				F9B0D03015DD564000384C5D /* Default-Landscape@2x~ipad.png */,
 				F9B0D03115DD564000384C5D /* Default-Landscape~ipad.png */,
-				F9F5FA4915DD6D8100902E91 /* AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png */,
 				F9B0D03215DD564000384C5D /* Default-Portrait@2x~ipad.png */,
 				F9B0D03315DD564000384C5D /* Default-Portrait~ipad.png */,
 				F9B0D03415DD564000384C5D /* Default.png */,
@@ -284,7 +281,6 @@
 				F9B0D03A15DD564000384C5D /* Default.png in Resources */,
 				F9B0D03B15DD564000384C5D /* Default@2x.png in Resources */,
 				F9B0D05215DD61F400384C5D /* AukViewController~ipad.xib in Resources */,
-				F9F5FA4A15DD6D8100902E91 /* AuksalaqLogoLoadScreen_1024x748_iPadLandscape.png in Resources */,
 				F9F5FA4E15DD6DC300902E91 /* blue_ice_bg_768_1024_IpadPortrait.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
