@@ -28,7 +28,7 @@ public class Join extends Activity {
 	private NGrain grain;
 
 	TextView joinStatus;
-	Button connect;
+	Button connectButton, linkButton;
 	
 	final Context context = this;
 
@@ -50,6 +50,7 @@ public class Join extends Activity {
 		sand = app.getSand();
 
 		// connect via asynctask--if successful:
+		// join.updateConnectionStatusMessage(true); else false
 		// NomadsApp.connectStatus is set to true; else false
 		// register byte is sent to Nomads server from Join
 		// startThread() is called in NomadsApp
@@ -61,8 +62,10 @@ public class Join extends Activity {
 		// Setup UI
 		setContentView(R.layout.join);
 		joinStatus = (TextView) findViewById(R.id.joinStatus);
-		connect = (Button) findViewById(R.id.connectButton);
-		connect.setOnClickListener(connectButtonListener);
+		connectButton = (Button) findViewById(R.id.connectButton);
+		connectButton.setOnClickListener(connectButtonListener);
+		linkButton = (Button)findViewById(R.id.linkButton);
+		linkButton.setOnClickListener(linkListener);
 		
 		// initialize grain target
 		app.setGrainTarget(GrainTarget.JOIN);
@@ -72,6 +75,19 @@ public class Join extends Activity {
 	// Network methods
 	// ========================================================
 
+	public void setConnectionStatus (boolean _connected) {
+		if (_connected) {
+			joinStatus.setText("Connected.\nStarting app...");
+			connectButton.setVisibility(View.GONE);
+			register();
+			goToSwarm();
+		}
+		else {
+			joinStatus.setText("Connection error.\nPlease check network settings and try again.");
+			connectButton.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	public void register() {
 		Log.d("NomadsApp",
 				"register() -> connectionStatus is: " + app.isConnected());
@@ -104,7 +120,7 @@ public class Join extends Activity {
 	}
 
 	// ========================================================
-	// Refresh connection button
+	// Button Listeners
 	// ========================================================
 	Button.OnClickListener connectButtonListener = new Button.OnClickListener() {
 		@Override
@@ -112,6 +128,16 @@ public class Join extends Activity {
 			sand.new Connect().execute(Join.this, app);
 		}
 	};
+	
+	Button.OnClickListener linkListener = new Button.OnClickListener(){
+		 @Override
+		 public void onClick(View v) {
+			 // use this to open web page in another browser (can also use text link in Strings.xml)
+			 // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://nomads.music.virginia.edu"));
+			 Intent intent = new Intent(getApplicationContext(), NomadsWebView.class);
+			 startActivity(intent);
+		 }
+	 };
 
 	// ========================================================
 

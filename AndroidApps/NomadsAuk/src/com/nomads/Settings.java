@@ -8,19 +8,20 @@ import nomads.v210.NGrain;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-//import android.content.DialogInterface;
+import android.content.Intent;
+//import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
+//import android.text.method.LinkMovementMethod;
 import android.util.Log;
-//import android.view.View;
-//import android.widget.Button;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class Settings extends Activity {
 	NomadsApp app;
 
 	TextView connectionStatus, nomadsLink;
-	// Button quitButton;
+	Button linkButton, quitButton;
 	String connectedMessage;
 	final Context context = this;
 	AlertDialog.Builder alert;
@@ -38,8 +39,10 @@ public class Settings extends Activity {
 
 		setContentView(R.layout.settings);
 		connectionStatus = (TextView) findViewById(R.id.connectionStatus);
-		nomadsLink = (TextView) findViewById(R.id.nomadsLink);
-		nomadsLink.setMovementMethod(LinkMovementMethod.getInstance());
+//		nomadsLink = (TextView) findViewById(R.id.nomadsLink);
+//		nomadsLink.setMovementMethod(LinkMovementMethod.getInstance());
+		linkButton = (Button)findViewById(R.id.linkButton);
+		linkButton.setOnClickListener(linkListener);
 		// quitButton = (Button)findViewById(R.id.quitButton);
 		// quitButton.setOnClickListener(quitListener);
 
@@ -57,15 +60,18 @@ public class Settings extends Activity {
 	}
 
 	// ========================================================
-	// Buttons
+	// Button Listeners
 	// ========================================================
 
-	// Button.OnClickListener quitListener = new Button.OnClickListener(){
-	// @Override
-	// public void onClick(View v) {
-	// quitAlert();
-	// }
-	// };
+	 Button.OnClickListener linkListener = new Button.OnClickListener(){
+		 @Override
+		 public void onClick(View v) {
+			 // use this to open web page in another browser (can also use text link in Strings.xml)
+			 // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://nomads.music.virginia.edu"));
+			 Intent intent = new Intent(getApplicationContext(), NomadsWebView.class);
+			 startActivity(intent);
+		 }
+	 };
 
 	// ========================================================
 	// Network

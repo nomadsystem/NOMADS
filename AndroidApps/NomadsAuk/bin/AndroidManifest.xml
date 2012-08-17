@@ -40,6 +40,10 @@
     	    android:name=".Settings">
     	</activity>
     	
+    	<activity
+    	    android:name=".NomadsWebView">
+    	</activity>
+    	
     </application>
 
 </manifest> 

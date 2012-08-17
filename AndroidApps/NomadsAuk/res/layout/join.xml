@@ -34,7 +34,32 @@
 		    android:gravity="center"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/connectButton" />
+		    android:text="@string/connectButton"
+		    android:visibility="gone" />
 	</LinearLayout>
+	
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/nomadsLinkLayout"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:layout_alignParentBottom="true">
+		<Button
+		    android:id="@+id/linkButton"
+		    android:gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/linkButton" />
+	</LinearLayout>
+	
+	<TextView
+	    android:id="@+id/nomadsInfo"
+	    style="@style/infoBlack"
+	    android:gravity="center"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/nomadsLinkLayout"
+	    android:text="@string/nomadsInfo" />
 
 </RelativeLayout>
