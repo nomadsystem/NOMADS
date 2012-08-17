@@ -33,6 +33,7 @@ public class NomadServer implements Runnable {
 	private static byte _POINTER_TONE_STATUS = 0;
 	private static int _POINTER_TONE_VOLUME = 100;
 	private static int _SYNTH_VOLUME = 100;
+	private String _SEND_PROMPT_ON = new String ("Auksalaq NOMADS");
 
 
 
@@ -294,6 +295,12 @@ public class NomadServer implements Runnable {
 			ix[0] = _SYNTH_VOLUME;
 			currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_SYNTH_VOLUME, NDataType.INT32, 1, ix);
 			NGlobals.lPrint("_SYNTH_VOLUME:  " + ix[0]);
+			
+			String tString = _SEND_PROMPT_ON;
+			byte[] tStringAsBytes = tString.getBytes();
+			int tLen = _SEND_PROMPT_ON.length();
+			currentClient.threadSand.sendGrain(NAppID.SERVER, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+			NGlobals.lPrint("ACP: Prompt " + tString + " sent"); 
 
 			currentClient.setButtonInitStatus((byte)1);
 			// tempString = new String("CNT:" + clientCount);
@@ -344,6 +351,12 @@ public class NomadServer implements Runnable {
 			ix[0] = _POINTER_TONE_VOLUME;
 			currentClient.threadSand.sendGrain(NAppID.CONDUCTOR_PANEL, NCommand.SET_POINTER_TONE_VOLUME, NDataType.INT32, 1, ix);
 			NGlobals.lPrint("_POINTER_TONE_VOLUME:  " + ix[0]);
+			
+			String tString = _SEND_PROMPT_ON;
+			byte[] tStringAsBytes = tString.getBytes();
+			int tLen = _SEND_PROMPT_ON.length();
+			currentClient.threadSand.sendGrain(NAppID.SERVER, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+			NGlobals.lPrint("ACP: Prompt " + tString + " sent"); 
 
 			currentClient.setButtonInitStatus((byte)1);
 		}
@@ -425,7 +438,9 @@ public class NomadServer implements Runnable {
 				else if (incAppCmd == NCommand.SET_SYNTH_VOLUME) {
 					_SYNTH_VOLUME = myGrain.iArray[0];
 				}
-
+				else if (incAppCmd == NCommand.SEND_PROMPT_ON) {
+					_SEND_PROMPT_ON = new String(myGrain.bArray);
+				}
 
 				for (int c = 0; c < clientCount; c++) {
 					// Get the client off the master list
