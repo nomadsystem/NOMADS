@@ -69,6 +69,9 @@ public class NomadsApp extends Application {
 
 	public void setConnectionStatus(boolean _connected) {
 		connectionStatus = _connected;
+		if (connectionStatus) {
+			startThread();
+		}
 	}
 
 	public boolean isConnected() {

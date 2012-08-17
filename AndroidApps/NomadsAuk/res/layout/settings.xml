@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/background" >
-
-	<TextView
-	    android:id="@+id/settings"
-	    style="@style/h1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginBottom="25dp"
-	    android:text="@string/settings" />
+    android:background="#FFFFFF" >
+    
+	<ImageView
+        android:id="@+id/aukLogo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/auklogo_128tr"
+        android:contentDescription="@string/welcome" />
 	
 	<TextView
 	    android:id="@+id/connectionStatusPre"
 	    style="@style/h2"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/settings"
+	    android:layout_below="@id/aukLogo"
 	    android:layout_marginBottom="15dp"
 	    android:text="@string/connectionStatus" />
 	
@@ -28,27 +28,8 @@
 	    style="@style/def"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_marginBottom="50dp"
 	    android:layout_below="@id/connectionStatusPre"
 	    android:text="" />
-	
-<!-- 	<TextView
-	    android:id="@+id/nomadsInfo2"
-	    style="@style/info"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:text="@string/nomadsInfo2" />
-	
-	<TextView 
-	    android:id="@+id/nomadsLink"
-	    style="@style/h2"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@id/nomadsInfo2"
-	    android:text="@string/nomadsLink" /> -->
 	    
 	<LinearLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
@@ -67,7 +48,7 @@
 	
 	<TextView
 	    android:id="@+id/nomadsInfo"
-	    style="@style/info"
+	    style="@style/infoBlack"
 	    android:gravity="center"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
