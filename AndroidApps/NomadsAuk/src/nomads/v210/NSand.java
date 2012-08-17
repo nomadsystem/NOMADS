@@ -490,12 +490,7 @@ public class NSand {
 		@Override
 		protected void onPostExecute(Boolean connected) {
 			app.setConnectionStatus(connected);
-
-			if (connected) {
-				j.register();
-				app.startThread();
-				j.goToSwarm();
-			}
+			j.setConnectionStatus(connected);
 		}
 	}
 

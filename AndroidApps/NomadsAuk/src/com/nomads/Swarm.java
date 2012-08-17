@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -683,6 +684,9 @@ public class Swarm extends Activity {
 		
 		// destroy all media player instances
 		releaseMediaPlayers();
+		
+		// release audio focus
+		app.releaseAudioFocus();
 
 		// turn on ringer (?)
 		// app.phoneRingerState(true);
@@ -692,6 +696,11 @@ public class Swarm extends Activity {
 	protected void onResume() {
 		Log.i("Swarm", "onResume()");
 		super.onResume();
+		
+		// request audio focus
+		if (app.requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			Log.d("Swarm", "onResume(): audio focus aquired.");
+		}
 
 		// create array of media players
 		initializeMediaPlayers();

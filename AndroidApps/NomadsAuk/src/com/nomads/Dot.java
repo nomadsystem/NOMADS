@@ -7,7 +7,6 @@ package com.nomads;
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
-//import nomads.v210.NGrain;
 import nomads.v210.NSand;
 
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +21,7 @@ class Dot extends View {
 	private static final float RADIUS = 20;
 	private float[] xy = new float[2];
 	private float[] xyNorm = new float[2];
+	private int[] xyInt = new int[2];
 	private Paint myPaint;
 	// private Paint backgroundPaint;
 
@@ -71,10 +70,17 @@ class Dot extends View {
 //			Log.d("Dot", "getWidth(): " + this.getWidth() + "getHeight(): " + this.getHeight());
 			
 			app.setXY(xyNorm);
+			
+			xyInt[0] = (int) (xyNorm[0] * 1000.0f);
+			xyInt[1] = (int) (xyNorm[1] * 1000.0f);
 
 			// send position of dot to server
-			sand.sendGrain(NAppIDAuk.OC_POINTER, NCommandAuk.SEND_SPRITE_XY,
-					NDataType.FLOAT32, 2, xyNorm);
+			sand.sendGrain(
+					NAppIDAuk.OC_POINTER,
+					NCommandAuk.SEND_SPRITE_XY,
+					NDataType.INT32,
+					2,
+					xyInt);
 			break;
 		}
 		return (true);

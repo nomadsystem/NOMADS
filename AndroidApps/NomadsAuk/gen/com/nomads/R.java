@@ -21,6 +21,7 @@ public final class R {
         public static final int settings=0x7f020007;
     }
     public static final class id {
+        public static final int aukLogo=0x7f07000b;
         public static final int auklogo=0x7f070005;
         public static final int buttonAudioTest1=0x7f070012;
         public static final int buttonAudioTest2=0x7f070013;
@@ -31,20 +32,19 @@ public final class R {
         public static final int cancel=0x7f070004;
         public static final int chatWindow=0x7f07000e;
         public static final int connectButton=0x7f070007;
-        public static final int connectionStatus=0x7f07000a;
-        public static final int connectionStatusPre=0x7f070009;
+        public static final int connectionStatus=0x7f07000d;
+        public static final int connectionStatusPre=0x7f07000c;
         public static final int dot=0x7f07000f;
         public static final int joinStatus=0x7f070006;
+        public static final int linkButton=0x7f070009;
         public static final int message=0x7f070002;
-        public static final int nomadsInfo=0x7f07000d;
-        public static final int nomadsInfo2=0x7f07000b;
-        public static final int nomadsLink=0x7f07000c;
+        public static final int nomadsInfo=0x7f07000a;
+        public static final int nomadsLinkLayout=0x7f070008;
         public static final int ok=0x7f070003;
         public static final int prompt=0x7f070001;
         public static final int relativelayout=0x7f070000;
         public static final int sendCloud=0x7f070017;
         public static final int sendDiscuss=0x7f070016;
-        public static final int settings=0x7f070008;
     }
     public static final class layout {
         public static final int customdialog=0x7f030000;
@@ -65,11 +65,11 @@ public final class R {
         public static final int connectionStatus=0x7f050010;
         public static final int discuss=0x7f05000c;
         public static final int hint=0x7f050007;
+        public static final int linkButton=0x7f050013;
         public static final int login=0x7f050003;
         public static final int loginPrompt=0x7f050004;
         public static final int nomadsInfo=0x7f050011;
-        public static final int nomadsInfo2=0x7f050012;
-        public static final int nomadsLink=0x7f050013;
+        public static final int nomadsLink=0x7f050012;
         public static final int quitButton=0x7f050014;
         public static final int sendButton=0x7f050008;
         public static final int settings=0x7f05000f;
