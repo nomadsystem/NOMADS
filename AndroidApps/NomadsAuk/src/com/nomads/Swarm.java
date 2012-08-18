@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -132,6 +133,9 @@ public class Swarm extends Activity {
 		message = (EditText) findViewById(R.id.message);
 		message.setOnFocusChangeListener(messageListener);
 		prompt = (TextView) findViewById(R.id.prompt);
+		Typeface type = Typeface.createFromAsset(getAssets(),"fonts/papyrus.ttf"); 
+		prompt.setTypeface(type);
+
 		
 		// register with server
 		register();
@@ -271,6 +275,16 @@ public class Swarm extends Activity {
 				}
 			}
 			
+			else if (grain.command == NCommandAuk.SEND_PROMPT_ON) {
+				String text = new String(grain.bArray);
+				Log.d("Swarm", "Setting PROMPT Topic: " + text);
+				prompt.setText(text);
+			}
+			
+			else if (grain.command == NCommandAuk.SEND_PROMPT_OFF) {
+				Log.d("Swarm", "PROMPT IS OFF");
+				prompt.setText("");
+			}
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
 				Log.i("Swarm", "changing droplets volume for mPlayers (current same as pointer volume)");
@@ -321,13 +335,6 @@ public class Swarm extends Activity {
 				Log.d("Swarm", "Cloud message received: " + text);
 			}
 		}
-
-		else if (grain.appID == NAppIDAuk.DISCUSS_TOPIC)
-			if (grain.command == NCommandAuk.SEND_PROMPT_ON) {
-				String text = new String(grain.bArray);
-				Log.d("Swarm", "Setting Discuss Topic");
-				prompt.setText(text);
-			}
 
 //		if (grain != null)
 //			grain = null;

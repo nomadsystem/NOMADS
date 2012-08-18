@@ -9,9 +9,10 @@
     <TextView
         android:id="@+id/prompt"
         style="@style/h1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/test"/>
+        android:text="@string/blank"
+        android:gravity="center"/>
     
     <TextView
         android:id="@+id/chatWindow"
