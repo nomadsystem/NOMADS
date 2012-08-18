@@ -28,8 +28,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -50,8 +52,8 @@ public class Swarm extends Activity {
 	ScrollView chatScrollView;
 	TextView chatWindow, prompt;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
-	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
-	EditText message;
+//	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
+	EditText messageDiscuss, messageCloud;
 	AlertDialog.Builder alert;
 	private Handler tonesHandler, dropletsHandler;
 	
@@ -127,14 +129,18 @@ public class Swarm extends Activity {
 //		buttonAudioTest1.setOnClickListener(tonesTestButtonListener);
 //		buttonAudioTest2 = (Button) findViewById(R.id.buttonAudioTest2);
 //		buttonAudioTest2.setOnClickListener(dropletsTestButtonListener);
-		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
-		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
-		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
-		buttonSendCloud.setOnClickListener(sendCloudListener);
-		buttonCancel = (Button) findViewById(R.id.cancel);
-		buttonCancel.setOnClickListener(cancelListener);
-		message = (EditText) findViewById(R.id.message);
-		message.setOnFocusChangeListener(messageListener);
+//		buttonSendDiscuss = (Button) findViewById(R.id.sendDiscuss);
+//		buttonSendDiscuss.setOnClickListener(sendDiscussListener);
+//		buttonSendCloud = (Button) findViewById(R.id.sendCloud);
+//		buttonSendCloud.setOnClickListener(sendCloudListener);
+//		buttonCancel = (Button) findViewById(R.id.cancel);
+//		buttonCancel.setOnClickListener(cancelListener);
+		messageDiscuss = (EditText) findViewById(R.id.messageDiscuss);
+		messageDiscuss.setOnFocusChangeListener(messageListener);
+		messageDiscuss.setOnKeyListener(messageKeyListener);
+		messageCloud = (EditText) findViewById(R.id.messageCloud);
+		messageCloud.setOnFocusChangeListener(messageListener);
+		messageCloud.setOnKeyListener(messageKeyListener);
 		prompt = (TextView) findViewById(R.id.prompt);
 		Typeface type = Typeface.createFromAsset(getAssets(),"fonts/papyrus.ttf"); 
 		prompt.setTypeface(type);
@@ -145,23 +151,24 @@ public class Swarm extends Activity {
 	}
 
 	public void cancelAllTextInput() {
-		if (buttonSendDiscuss.getVisibility() == View.VISIBLE) buttonSendDiscuss.setVisibility(View.GONE);
-		if (buttonSendCloud.getVisibility() == View.VISIBLE) buttonSendCloud.setVisibility(View.GONE);
-		if (buttonCancel.getVisibility() == View.VISIBLE) buttonCancel.setVisibility(View.GONE);
-		if (message.getVisibility() == View.VISIBLE) message.setVisibility(View.GONE);
+//		if (buttonSendDiscuss.getVisibility() == View.VISIBLE) buttonSendDiscuss.setVisibility(View.GONE);
+//		if (buttonSendCloud.getVisibility() == View.VISIBLE) buttonSendCloud.setVisibility(View.GONE);
+//		if (buttonCancel.getVisibility() == View.VISIBLE) buttonCancel.setVisibility(View.GONE);
+		if (messageDiscuss.getVisibility() == View.VISIBLE) messageDiscuss.setVisibility(View.GONE);
+		if (messageCloud.getVisibility() == View.VISIBLE) messageCloud.setVisibility(View.GONE);
 //		if (prompt.getVisibility() == View.VISIBLE) prompt.setVisibility(View.GONE);
 //		InputMethodManager imm = (InputMethodManager)getSystemService(
 //			      Context.INPUT_METHOD_SERVICE);
 //		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
 	}
 	
-	public void setMessageFocus(boolean isFocused) {
-		message.setCursorVisible(isFocused);
-		message.setFocusable(isFocused);
-		message.setFocusableInTouchMode(isFocused);
+	public void setMessageFocus (boolean isFocused, EditText _target) {
+		_target.setCursorVisible(isFocused);
+		_target.setFocusable(isFocused);
+		_target.setFocusableInTouchMode(isFocused);
 
 	    if (isFocused) {
-	    	message.requestFocus();
+	    	_target.requestFocus();
 	    }
 	}
 	
@@ -356,13 +363,16 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (discussToggle) {
-				buttonSendCloud.setVisibility(View.GONE);
-				buttonSendDiscuss.setVisibility(View.VISIBLE);
-				buttonCancel.setVisibility(View.VISIBLE);
-				message.setVisibility(View.VISIBLE);
+//				buttonSendCloud.setVisibility(View.GONE);
+//				buttonSendDiscuss.setVisibility(View.VISIBLE);
+//				buttonCancel.setVisibility(View.VISIBLE);
+				
+				// hide cloud message field if visible
+				if (messageCloud.getVisibility() == View.VISIBLE) messageCloud.setVisibility(View.GONE);
+				messageDiscuss.setVisibility(View.VISIBLE);
 //				prompt.setVisibility(View.VISIBLE);
-				message.setText(null);
-				setMessageFocus(true);
+				messageDiscuss.setText(null);
+				setMessageFocus(true, messageDiscuss);
 			}
 		}
 	};
@@ -371,13 +381,16 @@ public class Swarm extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (cloudToggle) {
-				buttonSendDiscuss.setVisibility(View.GONE);
-				buttonSendCloud.setVisibility(View.VISIBLE);
-				buttonCancel.setVisibility(View.VISIBLE);
-				message.setVisibility(View.VISIBLE);
+//				buttonSendDiscuss.setVisibility(View.GONE);
+//				buttonSendCloud.setVisibility(View.VISIBLE);
+//				buttonCancel.setVisibility(View.VISIBLE);
+				
+				// hide discuss message field if visible
+				if (messageDiscuss.getVisibility() == View.VISIBLE) messageDiscuss.setVisibility(View.GONE);
+				messageCloud.setVisibility(View.VISIBLE);
 //				prompt.setVisibility(View.VISIBLE);
-				message.setText(null);
-				setMessageFocus(true);
+				messageCloud.setText(null);
+				setMessageFocus(true, messageCloud);
 			}
 		}
 	};
@@ -416,41 +429,41 @@ public class Swarm extends Activity {
 //		}
 //	};
 	
-	Button.OnClickListener sendDiscussListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			String value = message.getText().toString();
-			Log.i("Swarm->Discuss", "value = " + value);
-			byte[] discussMsg = value.getBytes();
-			// eventually use this:
-			// char[] discussMsg = value.toCharArray();
-			sand.sendGrain(
-					NAppIDAuk.OC_DISCUSS,
-					NCommandAuk.SEND_MESSAGE,
-					NDataType.CHAR,
-					discussMsg.length,
-					discussMsg);
-			cancelAllTextInput();
-		}
-	};
-	
-	Button.OnClickListener sendCloudListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			String value = message.getText().toString();
-			Log.i("Swarm", "Cloud sent: " + value);
-			byte[] cloudMsg = value.getBytes();
-			sand.sendGrain(
-					NAppIDAuk.OC_CLOUD,
-					NCommandAuk.SEND_MESSAGE,
-					NDataType.CHAR,
-					cloudMsg.length,
-					cloudMsg);
-			if (cloudTonesToggle && !onePlayPlaying)
-				playSingleRandomSoundFromBank("cloud", cloudFiles);
-			cancelAllTextInput();
-		}
-	};
+//	Button.OnClickListener sendDiscussListener = new Button.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			String value = message.getText().toString();
+//			Log.i("Swarm->Discuss", "value = " + value);
+//			byte[] discussMsg = value.getBytes();
+//			// eventually use this:
+//			// char[] discussMsg = value.toCharArray();
+//			sand.sendGrain(
+//					NAppIDAuk.OC_DISCUSS,
+//					NCommandAuk.SEND_MESSAGE,
+//					NDataType.CHAR,
+//					discussMsg.length,
+//					discussMsg);
+//			cancelAllTextInput();
+//		}
+//	};
+//	
+//	Button.OnClickListener sendCloudListener = new Button.OnClickListener() {
+//		@Override
+//		public void onClick(View v) {
+//			String value = message.getText().toString();
+//			Log.i("Swarm", "Cloud sent: " + value);
+//			byte[] cloudMsg = value.getBytes();
+//			sand.sendGrain(
+//					NAppIDAuk.OC_CLOUD,
+//					NCommandAuk.SEND_MESSAGE,
+//					NDataType.CHAR,
+//					cloudMsg.length,
+//					cloudMsg);
+//			if (cloudTonesToggle && !onePlayPlaying)
+//				playSingleRandomSoundFromBank("cloud", cloudFiles);
+//			cancelAllTextInput();
+//		}
+//	};
 	
 	Button.OnClickListener cancelListener = new Button.OnClickListener() {
 		@Override
@@ -459,29 +472,84 @@ public class Swarm extends Activity {
 		}
 	};
 	
-	EditText.OnFocusChangeListener messageListener = new OnFocusChangeListener()
-    {
+	EditText.OnFocusChangeListener messageListener = new OnFocusChangeListener() {
         @Override
-        public void onFocusChange(View v, boolean hasFocus)
-        {
-            if (v == message)
-            {
-                if (hasFocus)
-                {
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (v == messageDiscuss) {
+                if (hasFocus) {
                     //open keyboard
-                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(message,
+                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(messageDiscuss,
                             InputMethodManager.SHOW_FORCED);
-
-                }
-                else
-                { //close keyboard
+                } else {
+                	//close keyboard
                     ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-                    		message.getWindowToken(), 0);
+                    		messageDiscuss.getWindowToken(), 0);
+                }
+            } else if (v == messageCloud) {
+            	if (hasFocus) {
+                    //open keyboard
+                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(messageCloud,
+                            InputMethodManager.SHOW_FORCED);
+                } else {
+                	//close keyboard
+                    ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                    		messageDiscuss.getWindowToken(), 0);
                 }
             }
         }
     };
-
+    
+    EditText.OnKeyListener messageKeyListener = new OnKeyListener() {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        	if (v == messageDiscuss) {
+	            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+	                switch (keyCode) {
+	                    case KeyEvent.KEYCODE_DPAD_CENTER:
+	                    case KeyEvent.KEYCODE_ENTER:
+	                    	String value = messageDiscuss.getText().toString();
+	            			Log.i("Swarm->Discuss", "value = " + value);
+	            			byte[] discussMsg = value.getBytes();
+	            			// eventually use this:
+	            			// char[] discussMsg = value.toCharArray();
+	            			sand.sendGrain(
+	            					NAppIDAuk.OC_DISCUSS,
+	            					NCommandAuk.SEND_MESSAGE,
+	            					NDataType.CHAR,
+	            					discussMsg.length,
+	            					discussMsg);
+	            			cancelAllTextInput();
+	                        return true;
+	                    default:
+	                        break;
+	                }
+	            } 
+        	} else if (v == messageCloud) {
+	        	if (event.getAction() == KeyEvent.ACTION_DOWN) {
+	                switch (keyCode) {
+	                    case KeyEvent.KEYCODE_DPAD_CENTER:
+	                    case KeyEvent.KEYCODE_ENTER:
+	            			String value = messageDiscuss.getText().toString();
+	            			Log.i("Swarm", "Cloud sent: " + value);
+	            			byte[] cloudMsg = value.getBytes();
+	            			sand.sendGrain(
+	            					NAppIDAuk.OC_CLOUD,
+	            					NCommandAuk.SEND_MESSAGE,
+	            					NDataType.CHAR,
+	            					cloudMsg.length,
+	            					cloudMsg);
+	            			if (cloudTonesToggle && !onePlayPlaying)
+	            				playSingleRandomSoundFromBank("cloud", cloudFiles);
+	            			cancelAllTextInput();
+	                        return true;
+	                    default:
+	                        break;
+	                }
+	        	}
+        	}
+        	
+            return false;
+        }
+    };
 
 	// ========================================================
 	// Alerts

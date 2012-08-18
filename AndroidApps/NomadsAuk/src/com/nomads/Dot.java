@@ -106,6 +106,8 @@ class Dot extends View {
 			case MotionEvent.ACTION_CANCEL:
 				Log.i("Dot", "ACTION_CANCEL");
 				app.setTouchDown(false);
+			default:
+					break;
 		}
 		return (true);
 	}
