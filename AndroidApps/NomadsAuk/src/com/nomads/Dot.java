@@ -34,7 +34,8 @@ class Dot extends View {
 	public Dot(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		app = (NomadsApp) context.getApplicationContext();
+//		app = (NomadsApp) context.getApplicationContext();
+		app = NomadsApp.getInstance();
 
 		// get NSand instance from Join
 		sand = app.getSand();

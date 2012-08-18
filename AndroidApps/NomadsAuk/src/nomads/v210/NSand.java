@@ -473,7 +473,8 @@ public class NSand {
 		protected Boolean doInBackground(Object... params) {
 			// set caller variable to the object that called ConnectAsync
 			j = (Join) params[0];
-			app = (NomadsApp) params[1];
+//			app = (NomadsApp) params[1];
+			app = NomadsApp.getInstance();
 
 			NGlobals.lPrint("NSand.java: Establishing connection. Please wait ...");
 			try {
@@ -502,6 +503,7 @@ public class NSand {
 		@Override
 		protected void onPostExecute(Boolean connected) {
 			app.setConnectionStatus(connected);
+//			NomadsApp.getInstance().setConnectionStatus(connected);
 			j.setConnectionStatus(connected);
 		}
 	}

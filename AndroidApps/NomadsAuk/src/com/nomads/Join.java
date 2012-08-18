@@ -38,7 +38,8 @@ public class Join extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// get reference to NomadsApp singleton
-		app = (NomadsApp) this.getApplicationContext();
+//		app = (NomadsApp) this.getApplicationContext();
+		app = NomadsApp.getInstance();
 
 		// send reference of Join to NomadsApp
 		app.setJoin(this);
@@ -52,7 +53,7 @@ public class Join extends Activity {
 		// connect via asynctask. Result:
 		// app.setConnectionStatus(connected);
 		// j.setConnectionStatus(connected);
-		sand.new Connect().execute(this, app);
+		sand.new Connect().execute(this);
 
 		Log.d("Join", "app.isConnected() = " + app.isConnected());
 
@@ -122,7 +123,7 @@ public class Join extends Activity {
 	Button.OnClickListener connectButtonListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			sand.new Connect().execute(Join.this, app);
+			sand.new Connect().execute(Join.this);
 		}
 	};
 	

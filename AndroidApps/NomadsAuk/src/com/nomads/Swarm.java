@@ -70,7 +70,8 @@ public class Swarm extends Activity {
 		
 		super.onCreate(savedInstanceState);
 
-		app = (NomadsApp) this.getApplicationContext();
+//		app = (NomadsApp) this.getApplicationContext();
+		app = NomadsApp.getInstance();
 
 		// send reference of Swarm to NomadsApp
 		app.setSwarm(this);

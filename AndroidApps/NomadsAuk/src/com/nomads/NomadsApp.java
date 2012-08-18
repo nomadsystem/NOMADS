@@ -24,15 +24,14 @@ public class NomadsApp extends Application {
 	private Swarm swarm;
 	private Settings settings;
 //	private GrainTarget gT;
-	private NSand sand;
+	private static NSand sand;
 	private NGrain grain;
 	private NomadsAppThread nThread;
-//	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
 	private boolean touchDown = false;
 	private float[] xy, xytd;
 
-	public NomadsApp getInstance() {
+	public static NomadsApp getInstance() {
 		return singleton;
 	}
 
@@ -82,16 +81,6 @@ public class NomadsApp extends Application {
 	public boolean isConnected() {
 		return connectionStatus;
 	}
-
-//	public void setAppState(boolean _state) {
-//		Log.i("NomadsApp", "Thread state set to: " + _state);
-//		appState = _state;
-//	}
-//
-//	// checked by NomadsAppThread run loop
-//	public boolean getAppState() {
-//		return appState;
-//	}
 
 //	public void setGrainTarget(GrainTarget _target) {
 //		Log.i("NomadsApp", "setGrainTarget(): " + _target);
@@ -205,11 +194,6 @@ public class NomadsApp extends Application {
 		sand = new NSand();
 	}
 
-//	private void routeGrain(NGrain _grain) {
-////		Log.d("NomadsApp", "routeGrain()");
-//		swarm.parseGrain(grain);
-//	}
-
 	// ========================================================
 	// Thread Helpers
 	// ========================================================
@@ -242,59 +226,54 @@ public class NomadsApp extends Application {
 	// Connection Thread
 	// ========================================================
 
-	private class NomadsAppThread extends Thread {
+	private static class NomadsAppThread extends Thread {
 		public NomadsAppThread() {
-			System.out.println("appState: " + isConnected());
+			System.out.println("appState: " + singleton.isConnected());
 		}
 
 		public void run() {
-			while (isConnected()) {
+			while (singleton.isConnected()) {
 				// Log.i( "NomadsApp->Thread", "getThreadState() = " +
 				// getAppState() );
-				byte tByte = sand.getAppID();
+				byte tByte = singleton.getSand().getAppID();
 //				Log.d("NomadsApp", "tByte == " + tByte);
 				try {
 					if (tByte != 0) {
 //						Log.e("NomadsApp", "GETTING GRAIN...");
-						grain = sand.getGrain(tByte);
+						singleton.grain = sand.getGrain(tByte);
 //						Log.e("NomadsApp", "GRAIN RECEIVED. handle.post STARTING...");
-//						handle.post(updateUI);
-						handle.sendMessage(handle.obtainMessage(0, grain));
-//						routeGrain(grain);
-//						Log.e("NomadsApp", "handle.post DONE");
+						handle.sendMessage(handle.obtainMessage(1, singleton.grain));
+//						Log.e("NomadsApp", "handle: Message Sent.");
 					} else {
 						Log.e("NomadsApp", "tByte == 0");
 					}
-				} catch (NullPointerException npe) {
-					Log.i("NomadsApp -> Thread", "run() -> grain == null; exiting.");		
+				} catch (NullPointerException npe) {		
 //					grain = null;
-					if (settings != null) {
-						settings.finish();
-					}
-					if (swarm != null) {
-						swarm.finish();
-					}
-					setConnectionStatus(false);
-					removeThread();
+					handle.sendMessage(handle.obtainMessage(0));
 				}
 			}
 		}
-
-//		final Runnable updateUI = new Runnable() {
-//			@Override
-//			public void run() {
-//				Log.e("NomadsApp", "grain.appID: " + grain.appID);
-//				Log.e("NomadsApp", "grain.command: " + grain.command);
-//				swarm.parseGrain(grain);
-//			}
-//		};
 		
-		final Handler handle = new Handler () {
+		static Handler handle = new Handler () {
 			@Override
 			public void handleMessage (Message _msg) {
-				swarm.parseGrain( (NGrain)_msg.obj );
+				if (_msg.what == 1) {
+					singleton.swarm.parseGrain( (NGrain)_msg.obj );
+				}
+				else if (_msg.what == 0) {
+					Log.i("NomadsApp -> Thread", "run() -> grain == null; exiting.");
+					if (singleton.settings != null) {
+						singleton.settings.finish();
+					}
+					if (singleton.swarm != null) {
+						singleton.swarm.finish();
+					}
+					singleton.setConnectionStatus(false);
+					singleton.removeThread();
+				}
 			}
 		};
+		
 	}
 	
 	// ========================================================

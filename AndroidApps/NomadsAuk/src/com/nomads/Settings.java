@@ -32,7 +32,8 @@ public class Settings extends Activity {
 		Log.i("Settings", "onCreate()");
 		super.onCreate(savedInstanceState);
 
-		app = (NomadsApp) getApplicationContext();
+//		app = (NomadsApp) getApplicationContext();
+		app = NomadsApp.getInstance();
 
 		// send reference of Swarm to NomadsApp
 		app.setSettings(this);
