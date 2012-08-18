@@ -31,6 +31,7 @@ class Dot extends View {
 
 	private NomadsApp app;
 	private NSand sand;
+	private boolean pointerIsVisible;
 
 	// private NGrain grain;
 
@@ -56,6 +57,10 @@ class Dot extends View {
 		myPaint = new Paint();
 		myPaint.setColor(Color.WHITE);
 		myPaint.setAntiAlias(true);
+	}
+	
+	public void setPointerVisibility (boolean _v) {
+		pointerIsVisible = _v;
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -133,8 +138,12 @@ class Dot extends View {
 		// int width = canvas.getWidth();
 		// int height = canvas.getHeight();
 		// canvas.drawRect(0, 0, width, height, backgroundPaint);
-
-		c.drawCircle(xy[0], xy[1], getAnimatedRadius(), myPaint);
+		
+		float tempRad = getAnimatedRadius();
+		
+		if (pointerIsVisible) {
+			c.drawCircle(xy[0], xy[1], tempRad, myPaint);
+		}
 
 		// need to invalidate in custom view class only
 		invalidate();

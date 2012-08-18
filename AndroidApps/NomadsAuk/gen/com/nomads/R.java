@@ -24,11 +24,11 @@ public final class R {
     public static final class id {
         public static final int aukLogo=0x7f07000b;
         public static final int auklogo=0x7f070005;
-        public static final int button2LinearLayout=0x7f070014;
-        public static final int buttonCloud=0x7f070012;
-        public static final int buttonDiscuss=0x7f070011;
-        public static final int buttonLinearLayout=0x7f070010;
-        public static final int buttonSettings=0x7f070013;
+        public static final int button2LinearLayout=0x7f070015;
+        public static final int buttonCloud=0x7f070014;
+        public static final int buttonDiscuss=0x7f070013;
+        public static final int buttonLinearLayout=0x7f070012;
+        public static final int buttonSettings=0x7f070011;
         public static final int cancel=0x7f070004;
         public static final int chatWindow=0x7f07000e;
         public static final int connectButton=0x7f070007;
@@ -43,8 +43,9 @@ public final class R {
         public static final int ok=0x7f070003;
         public static final int prompt=0x7f070001;
         public static final int relativelayout=0x7f070000;
-        public static final int sendCloud=0x7f070016;
-        public static final int sendDiscuss=0x7f070015;
+        public static final int sendCloud=0x7f070017;
+        public static final int sendDiscuss=0x7f070016;
+        public static final int settingsLinearLayout=0x7f070010;
     }
     public static final class layout {
         public static final int customdialog=0x7f030000;

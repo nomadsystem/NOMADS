@@ -205,10 +205,12 @@ public class Swarm extends Activity {
 				if (grain.bArray[0] == 0) {
 					Log.d("Swarm", "from Control Panel: Discuss OFF");
 					discussToggle = false;
+					buttonDiscuss.setVisibility(View.GONE);
 					cancelAllTextInput();
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "from Control Panel: Discuss ON");
 					discussToggle = true;
+					buttonDiscuss.setVisibility(View.VISIBLE);
 				}
 			}
 
@@ -216,10 +218,12 @@ public class Swarm extends Activity {
 				if (grain.bArray[0] == 0) {
 					Log.d("Swarm", "from Control Panel: Cloud OFF");
 					cloudToggle = false;
+					buttonCloud.setVisibility(View.GONE);
 					cancelAllTextInput();
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "from Control Panel: Cloud ON");
 					cloudToggle = true;
+					buttonCloud.setVisibility(View.VISIBLE);
 				}
 			}
 			
@@ -242,6 +246,16 @@ public class Swarm extends Activity {
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "Setting CloudTones to ON");
 					cloudTonesToggle = true;
+				}
+			}
+			
+			else if (grain.command == NCommandAuk.SET_POINTER_STATUS) {
+				if (grain.bArray[0] == 0) {
+					Log.d("Swarm", "Setting Pointer to OFF");
+					app.setPointerVisibility(false);
+				} else if (grain.bArray[0] == 1) {
+					Log.d("Swarm", "Setting Pointer to ON");
+					app.setPointerVisibility(true);
 				}
 			}
 			

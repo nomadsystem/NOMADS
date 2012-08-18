@@ -278,7 +278,6 @@ public class NomadsApp extends Application {
 				}
 			}
 		};
-		
 	}
 	
 	// ========================================================
@@ -287,6 +286,10 @@ public class NomadsApp extends Application {
 		if (dot != null) {
 			dot.animateGrow();
 		}
+	}
+	
+	public void setPointerVisibility (boolean _v) {
+		dot.setPointerVisibility (_v);
 	}
 	
 	public void cancelAllTextInput() {
