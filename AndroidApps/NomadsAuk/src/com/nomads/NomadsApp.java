@@ -31,6 +31,7 @@ public class NomadsApp extends Application {
 	private boolean connectionStatus = false;
 	private boolean touchDown = false;
 	private float[] xy, xytd;
+	private String currentPrompt, currentChatWindow;
 
 	public static NomadsApp getInstance() {
 		return singleton;
@@ -54,6 +55,8 @@ public class NomadsApp extends Application {
 		xy[1] = 0.5f;
 		xytd[0] = 0.5f;
 		xytd[1] = 0.5f;
+		
+//		currentPrompt = currentChatWindow = null;
 	}
 
 	// ========================================================
@@ -141,6 +144,22 @@ public class NomadsApp extends Application {
 	
 	public boolean pointerIsTouching () {
 		return touchDown;
+	}
+	
+	public void setCurrentPrompt (String _newPrompt) {
+		currentPrompt = _newPrompt;
+	}
+	
+	public String getCurrentPrompt () {
+		return currentPrompt;
+	}
+	
+	public void setCurrentChatWindow (String _newChatWindow) {
+		currentChatWindow = _newChatWindow;
+	}
+	
+	public String getCurrentChatWindow () {
+		return currentChatWindow;
 	}
 
 	// ========================================================

@@ -26,7 +26,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +36,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class Swarm extends Activity {
@@ -47,6 +47,7 @@ public class Swarm extends Activity {
 	private NGrain grain;
 	private AssetManager assetManager;
 	final Context context = this;
+	ScrollView chatScrollView;
 	TextView chatWindow, prompt;
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
 	Button buttonAudioTest1, buttonAudioTest2, buttonSendDiscuss, buttonSendCloud, buttonCancel;
@@ -67,6 +68,7 @@ public class Swarm extends Activity {
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
+	private String currentPrompt, currentChatWindow;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class Swarm extends Activity {
 
 		// initialize UI
 		setContentView(R.layout.swarm);
+		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
 		chatWindow = (TextView) findViewById(R.id.chatWindow);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		buttonDiscuss = (ImageButton) findViewById(R.id.buttonDiscuss);
@@ -276,14 +279,19 @@ public class Swarm extends Activity {
 			}
 			
 			else if (grain.command == NCommandAuk.SEND_PROMPT_ON) {
-				String text = new String(grain.bArray);
-				Log.d("Swarm", "Setting PROMPT Topic: " + text);
-				prompt.setText(text);
+				currentPrompt = new String(grain.bArray);
+				Log.d("Swarm", "Setting PROMPT Topic: " + currentPrompt);
+				prompt.setText(currentPrompt);
+				// save current prompt in case of device rotation ( see onResume() below )
+				app.setCurrentPrompt(currentPrompt);
 			}
 			
 			else if (grain.command == NCommandAuk.SEND_PROMPT_OFF) {
+				currentPrompt = " ";
 				Log.d("Swarm", "PROMPT IS OFF");
-				prompt.setText("");
+				prompt.setText(currentPrompt);
+				// save current prompt in case of device rotation ( see onResume() below )
+				app.setCurrentPrompt(currentPrompt);
 			}
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
@@ -324,7 +332,7 @@ public class Swarm extends Activity {
 			if (grain.command == NCommandAuk.SEND_MESSAGE) {
 				String msg = new String(grain.bArray);
 				Log.d("Swarm", "Discuss message received: " + msg);
-				appendTextAndScroll(msg);
+				appendText(msg);
 				Log.d("Discuss", "ChatWindow: " + msg);
 			}
 		}
@@ -353,7 +361,7 @@ public class Swarm extends Activity {
 				buttonCancel.setVisibility(View.VISIBLE);
 				message.setVisibility(View.VISIBLE);
 //				prompt.setVisibility(View.VISIBLE);
-				message.setText("");
+				message.setText(null);
 				setMessageFocus(true);
 			}
 		}
@@ -368,7 +376,7 @@ public class Swarm extends Activity {
 				buttonCancel.setVisibility(View.VISIBLE);
 				message.setVisibility(View.VISIBLE);
 //				prompt.setVisibility(View.VISIBLE);
-				message.setText("");
+				message.setText(null);
 				setMessageFocus(true);
 			}
 		}
@@ -778,19 +786,47 @@ public class Swarm extends Activity {
 		}
 	}
 
-	private void appendTextAndScroll(String text) {
+	private void appendText(String _text) {
 		if (chatWindow != null) {
-			chatWindow.append(text + "\n");
-			final Layout layout = chatWindow.getLayout();
-			if (layout != null) {
-				int scrollDelta = layout.getLineBottom(chatWindow
-						.getLineCount() - 1)
-						- chatWindow.getScrollY()
-						- chatWindow.getHeight();
-				if (scrollDelta > 0)
-					chatWindow.scrollBy(0, scrollDelta);
+			if (_text == null) {
+				currentChatWindow = (_text + "\n");		// start new chat window
+			} else {
+				currentChatWindow += (_text + "\n");	// append
+				
+				// save current chatWindow text in case of device rotation ( see onResume() below )
+				app.setCurrentChatWindow(currentChatWindow);
+				
+				chatWindow.setText( app.getCurrentChatWindow() );
+				
+				scrollText();
 			}
 		}
+	}
+	
+	// scroll the textview to view latest messages
+	private void scrollText () {
+		Log.d("Swarm", "scrollText()");
+		
+//		final Layout layout = chatWindow.getLayout();
+//		if (layout != null) {
+//			int scrollDelta = layout.getLineBottom(chatWindow
+//					.getLineCount() - 1)
+//					- chatWindow.getScrollY()
+//					- chatWindow.getHeight();
+//			if (scrollDelta > 0) {
+//				chatWindow.scrollTo(0, scrollDelta);
+//				Log.d("Swarm", "scrollDelta: " + scrollDelta);
+//			}
+//		} else {
+//			Log.e("Swarm", "chatWindow layout is NULL");
+//		}
+		
+	    chatScrollView.post(new Runnable() {
+	        public void run() {
+	            chatScrollView.fullScroll(View.FOCUS_DOWN);
+	        }
+	    });
+
 	}
 
 	@Override
@@ -833,6 +869,20 @@ public class Swarm extends Activity {
 		app.phoneRingerState(false);
 		
 //		app.setGrainTarget(GrainTarget.SWARM);
+		
+		// restore prompt message if device is rotated
+		prompt.setText( app.getCurrentPrompt() );
+		
+		// test scrolling
+		for(int i=0; i<50; i++) {
+			currentChatWindow += ("testing: " + i + "\n");
+		}
+		app.setCurrentChatWindow(currentChatWindow);
+		
+		// restore chat window and scroll to the newest message if device is rotated
+		chatWindow.setText( app.getCurrentChatWindow() );
+				
+		scrollText();
 	}
 
 	@Override

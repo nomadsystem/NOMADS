@@ -6,6 +6,7 @@
     android:background="@drawable/background"
     android:keepScreenOn="true">
     
+<!-- Prompt -->
     <TextView
         android:id="@+id/prompt"
         style="@style/h1"
@@ -14,18 +15,7 @@
         android:text="@string/blank"
         android:gravity="center"/>
     
-    <TextView
-        android:id="@+id/chatWindow"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
-    
-    <com.nomads.Dot
-	    android:id="@+id/dot"
-	    android:tag="trueDot"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content" />
-    
+<!-- Settings. right-aligned, includes gradient background -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/settingsLinearLayout"
 	    android:layout_width="match_parent"
@@ -40,14 +30,14 @@
 	        android:layout_height="wrap_content"
 	        android:contentDescription="@string/settings" />
 	</LinearLayout>
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	
+<!-- Discuss, Cloud. center-aligned -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/buttonLinearLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:gravity="center">
-	    	    
 	    <ImageButton
 	        android:id="@+id/buttonDiscuss"
 	        android:src="@drawable/discuss"
@@ -57,7 +47,6 @@
 			android:paddingLeft="10dp"
 	        android:paddingRight="10dp"
 	        android:contentDescription="@string/discuss"/>
-	
 	    <ImageButton
 	        android:id="@+id/buttonCloud"
 	        android:src="@drawable/cloud"
@@ -67,28 +56,27 @@
 	        android:paddingRight="10dp"
 	        android:contentDescription="@string/cloud" />
 	</LinearLayout>
-    
-<!--     <Button
-        android:id="@+id/buttonAudioTest1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/buttonCloud"
-        android:text="@string/testTones" />
-    
-    <Button
-        android:id="@+id/buttonAudioTest2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/buttonAudioTest1"
-        android:text="@string/testDroplets" /> -->
-    
+	
+<!-- user text input -->
+	<EditText
+	    android:id="@+id/message"
+	    style="@style/h2"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/buttonLinearLayout"
+	    android:hint="@string/hint"
+	    android:inputType="text"
+	    android:text="@string/blank"
+	    android:background="@null"
+	    android:visibility="gone"
+	    android:singleLine="true"/>
+	
+<!-- Send buttons. DELETE? -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/button2LinearLayout"
-	    android:layout_width="match_parent"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_above="@id/buttonLinearLayout">
+	    android:layout_above="@id/message">
 	    <Button
 		    android:id="@+id/sendDiscuss"
 		    android:layout_width="wrap_content"
@@ -109,16 +97,48 @@
 		    android:visibility="gone" />
 	</LinearLayout>
 	
-	<EditText
-	    android:id="@+id/message"
-	    style="@style/h2"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+<!-- chat display -->
+    <ScrollView android:id="@+id/chat_ScrollView"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:layout_below="@id/prompt"
 	    android:layout_above="@id/button2LinearLayout"
-	    android:hint="@string/hint"
-	    android:inputType="text"
-	    android:text="@string/blank"
-	    android:background="@null"
-	    android:visibility="gone" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true">
+	    <TextView
+	        android:id="@+id/chatWindow"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingBottom="80dp"
+	        android:scrollbars="vertical"
+	        android:focusableInTouchMode="false" />
+    </ScrollView>
+    
+<!-- pointer; custom view -->
+    <com.nomads.Dot
+	    android:id="@+id/dot"
+	    android:tag="trueDot"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/prompt"
+	    android:layout_above="@id/button2LinearLayout" />
+
+
+    
+<!--     <Button
+        android:id="@+id/buttonAudioTest1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonCloud"
+        android:text="@string/testTones" />
+    
+    <Button
+        android:id="@+id/buttonAudioTest2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonAudioTest1"
+        android:text="@string/testDroplets" /> -->
 
 </RelativeLayout>
