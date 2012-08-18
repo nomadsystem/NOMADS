@@ -18,12 +18,12 @@ public class NGrain {
 		dataType = dT;
 		dataLen = dL;
 		bArray = bA;
-		    NGlobals.lPrint("creating new NGrain");
-		    NGlobals.lPrint("appID =" + appID);
-		    NGlobals.lPrint("commd =" + command);
-		    NGlobals.lPrint("dataType =" + dataType);
-		    NGlobals.lPrint("dLen  =" + dataLen);
-		    NGlobals.lPrint("data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
+		    // NGlobals.lPrint("NGrain: creating new NGrain");
+		    // NGlobals.lPrint("NGrain: appID =" + appID);
+		    // NGlobals.lPrint("NGrain: commd =" + command);
+		    // NGlobals.lPrint("NGrain: dataType =" + dataType);
+		    // NGlobals.lPrint("NGrain: dLen  =" + dataLen);
+		    // NGlobals.lPrint("NGrain: data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
 	}
 
 	public NGrain(byte a, byte c, byte dT, int dL, int[] iA) {
@@ -33,12 +33,12 @@ public class NGrain {
 		dataType = dT;
 		dataLen = dL;
 		iArray = iA;
-		NGlobals.lPrint("creating new NGrain");
-		NGlobals.lPrint("appID =" + appID);
-		NGlobals.lPrint("commd =" + command);
-		NGlobals.lPrint("dataType =" + dataType);
-		NGlobals.lPrint("dLen  =" + dataLen);
-		NGlobals.lPrint("data[] = INT/INT32");
+		// NGlobals.lPrint("NGrain: creating new NGrain");
+		// NGlobals.lPrint("NGrain: appID =" + appID);
+		// NGlobals.lPrint("NGrain: commd =" + command);
+		// NGlobals.lPrint("NGrain: dataType =" + dataType);
+		// NGlobals.lPrint("NGrain: dLen  =" + dataLen);
+		// NGlobals.lPrint("NGrain: data[] = INT/INT32");
 
 	}
 	public NGrain(byte a, byte c, byte dT, int dL, float[] fA) {
@@ -47,53 +47,53 @@ public class NGrain {
 		dataType = dT;
 		dataLen = dL;
 		fArray = fA;
-		NGlobals.lPrint("creating new NGrain");
-		NGlobals.lPrint("appID =" + appID);
-		NGlobals.lPrint("commd =" + command);
-		NGlobals.lPrint("dataType =" + dataType);
-		NGlobals.lPrint("dLen  =" + dataLen);
-		NGlobals.lPrint("data[] = FLOAT/FLOAT32");
+		// NGlobals.lPrint("NGrain: creating new NGrain");
+		// NGlobals.lPrint("NGrain: appID =" + appID);
+		// NGlobals.lPrint("NGrain: commd =" + command);
+		// NGlobals.lPrint("NGrain: dataType =" + dataType);
+		// NGlobals.lPrint("NGrain: dLen  =" + dataLen);
+		// NGlobals.lPrint("NGrain: data[] = FLOAT/FLOAT32");
 	}
 
 	public void print() {
-		NGlobals.lPrint("NGrain -> print()");
-		NGlobals.lPrint("appID =" + appID);
-		NGlobals.lPrint("commd =" + command);
-		NGlobals.lPrint("dataType =" + dataType);
-		NGlobals.lPrint("dLen  =" + dataLen);
+		// NGlobals.lPrint("NGrain: NGrain -> print()");
+		// NGlobals.lPrint("NGrain: appID =" + appID);
+		// NGlobals.lPrint("NGrain: commd =" + command);
+		// NGlobals.lPrint("NGrain: dataType =" + dataType);
+		// NGlobals.lPrint("NGrain: dLen  =" + dataLen);
 
 		if (dataType == NDataType.BYTE) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("BYTE: " + (char)bArray[i]);
+			    // NGlobals.lPrint("NGrain: BYTE: " + (char)bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.CHAR) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("CHAR: " + (char)bArray[i]);
+			    // NGlobals.lPrint("NGrain: CHAR: " + (char)bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.UINT8) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("UINT8: " + bArray[i]);
+			    // NGlobals.lPrint("NGrain: UINT8: " + bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.INT32) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("INT32: " + iArray[i]);
+			    // NGlobals.lPrint("NGrain: INT32: " + iArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.FLOAT32) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("FLOAT32: " + fArray[i]);
+			    // NGlobals.lPrint("NGrain: FLOAT32: " + fArray[i]);
 			}
 		} 
 
 		else {
-		    NGlobals.lPrint("NGRAIN:  UNKNOWN DATA TYPE\n");
+		    // NGlobals.lPrint("NGrain: NGRAIN:  UNKNOWN DATA TYPE\n");
 		}
 
 	}

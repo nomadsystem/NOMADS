@@ -4,7 +4,7 @@
 
 package com.nomads;
 
-import nomads.v210.NGlobals.GrainTarget;
+//import nomads.v210.NGlobals.GrainTarget;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 import android.annotation.TargetApi;
@@ -14,6 +14,7 @@ import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public class NomadsApp extends Application {
@@ -22,13 +23,14 @@ public class NomadsApp extends Application {
 	private Join join;
 	private Swarm swarm;
 	private Settings settings;
-	private GrainTarget gT;
+//	private GrainTarget gT;
 	private NSand sand;
 	private NGrain grain;
 	private NomadsAppThread nThread;
-	final Handler handle = new Handler();
+//	final Handler handle = new Handler();
 	private boolean connectionStatus = false;
-	private float[] xy;
+	private boolean touchDown = false;
+	private float[] xy, xytd;
 
 	public NomadsApp getInstance() {
 		return singleton;
@@ -47,8 +49,11 @@ public class NomadsApp extends Application {
 		
 		// initialize xy coordinates in case of sound before any touches
 		xy = new float[2];
+		xytd = new float [2];
 		xy[0] = 0.5f;
 		xy[1] = 0.5f;
+		xytd[0] = 0.5f;
+		xytd[1] = 0.5f;
 	}
 
 	// ========================================================
@@ -88,10 +93,10 @@ public class NomadsApp extends Application {
 //		return appState;
 //	}
 
-	public void setGrainTarget(GrainTarget _target) {
-		Log.i("NomadsApp", "setGrainTarget(): " + _target);
-		gT = _target;
-	}
+//	public void setGrainTarget(GrainTarget _target) {
+//		Log.i("NomadsApp", "setGrainTarget(): " + _target);
+//		gT = _target;
+//	}
 
 	public void phoneRingerState(boolean on) {
 		if (on) {
@@ -105,12 +110,43 @@ public class NomadsApp extends Application {
 		Log.d("NomadsApp", "ringer state was set to: " + on);
 	}
 	
+	// set xy position
 	public void setXY(float[] _xy) {
-		xy = _xy;
+		System.arraycopy(_xy, 0, xy, 0, _xy.length);
 	}
 	
 	public float[] getXY() {
 		return xy;
+	}
+	
+	// set xy position on touch down
+	public void setXY_td(float[] _xytd) {
+//		for (int i=0; i<_xytd.length; i++) {
+//			xytd[i] = _xytd[i];
+//		}
+		System.arraycopy(_xytd, 0, xytd, 0, _xytd.length);
+		Log.d("NomadsApp", "xytd[1] set to: " + xytd[1]);
+	}
+	
+	public float[] getXY_td() {
+		Log.d("NomadsApp", "getXY_td(): Y value returned: " + xytd[1]);
+		return xytd;
+	}
+	
+	public void setTouchDown (boolean _td) {
+		touchDown = _td;
+		if (touchDown) {
+			cancelAllTextInput();
+			Log.i("NomadsApp", "Touch is down.");
+			swarm.pointerStatus(true);
+		} else {
+			Log.i("NomadsApp", "Touch is up.");
+			swarm.pointerStatus(false);
+		}
+	}
+	
+	public boolean pointerIsTouching () {
+		return touchDown;
 	}
 
 	// ========================================================
@@ -169,24 +205,10 @@ public class NomadsApp extends Application {
 		sand = new NSand();
 	}
 
-	private void routeGrain(GrainTarget _target) {
-		Log.d("NomadsApp", "routeGrain() to target: " + _target);
-
-		if (grain != null) {
-			if (_target == GrainTarget.JOIN && join != null)
-				join.parseGrain(grain);
-
-			else if (_target == GrainTarget.SWARM && swarm != null)
-				swarm.parseGrain(grain);
-
-			else if (_target == GrainTarget.SETTINGS && settings != null)
-				settings.parseGrain(grain);
-
-			else
-				Log.e("NomadsApp", "invalid grain target");
-		} else
-			Log.e("NomadsApp", "routeGrain(): grain is null");
-	}
+//	private void routeGrain(NGrain _grain) {
+////		Log.d("NomadsApp", "routeGrain()");
+//		swarm.parseGrain(grain);
+//	}
 
 	// ========================================================
 	// Thread Helpers
@@ -229,14 +251,22 @@ public class NomadsApp extends Application {
 			while (isConnected()) {
 				// Log.i( "NomadsApp->Thread", "getThreadState() = " +
 				// getAppState() );
+				byte tByte = sand.getAppID();
+//				Log.d("NomadsApp", "tByte == " + tByte);
 				try {
-					grain = sand.getGrain();
-					grain.print(); // prints grain data to console
-					handle.post(updateUI);
+					if (tByte != 0) {
+//						Log.e("NomadsApp", "GETTING GRAIN...");
+						grain = sand.getGrain(tByte);
+//						Log.e("NomadsApp", "GRAIN RECEIVED. handle.post STARTING...");
+//						handle.post(updateUI);
+						handle.sendMessage(handle.obtainMessage(0, grain));
+//						routeGrain(grain);
+//						Log.e("NomadsApp", "handle.post DONE");
+					} else {
+						Log.e("NomadsApp", "tByte == 0");
+					}
 				} catch (NullPointerException npe) {
-					Log.i("NomadsApp -> Thread",
-							"run() -> grain == null; exiting.");
-					setConnectionStatus(false);
+					Log.i("NomadsApp -> Thread", "run() -> grain == null; exiting.");		
 //					grain = null;
 					if (settings != null) {
 						settings.finish();
@@ -244,15 +274,25 @@ public class NomadsApp extends Application {
 					if (swarm != null) {
 						swarm.finish();
 					}
+					setConnectionStatus(false);
 					removeThread();
 				}
 			}
 		}
 
-		final Runnable updateUI = new Runnable() {
+//		final Runnable updateUI = new Runnable() {
+//			@Override
+//			public void run() {
+//				Log.e("NomadsApp", "grain.appID: " + grain.appID);
+//				Log.e("NomadsApp", "grain.command: " + grain.command);
+//				swarm.parseGrain(grain);
+//			}
+//		};
+		
+		final Handler handle = new Handler () {
 			@Override
-			public void run() {
-				routeGrain(gT);
+			public void handleMessage (Message _msg) {
+				swarm.parseGrain( (NGrain)_msg.obj );
 			}
 		};
 	}

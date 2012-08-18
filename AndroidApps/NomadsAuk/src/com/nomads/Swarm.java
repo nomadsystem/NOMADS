@@ -10,7 +10,7 @@ import java.util.Random;
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
-import nomads.v210.NGlobals.GrainTarget;
+//import nomads.v210.NGlobals.GrainTarget;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 import android.app.Activity;
@@ -122,6 +122,9 @@ public class Swarm extends Activity {
 		message = (EditText) findViewById(R.id.message);
 		message.setOnFocusChangeListener(messageListener);
 		prompt = (TextView) findViewById(R.id.prompt);
+		
+		// register with server
+		register();
 	}
 
 	public void cancelAllTextInput() {
@@ -129,20 +132,18 @@ public class Swarm extends Activity {
 		if (buttonSendCloud.getVisibility() == View.VISIBLE) buttonSendCloud.setVisibility(View.GONE);
 		if (buttonCancel.getVisibility() == View.VISIBLE) buttonCancel.setVisibility(View.GONE);
 		if (message.getVisibility() == View.VISIBLE) message.setVisibility(View.GONE);
-		if (prompt.getVisibility() == View.VISIBLE) prompt.setVisibility(View.GONE);
+//		if (prompt.getVisibility() == View.VISIBLE) prompt.setVisibility(View.GONE);
 //		InputMethodManager imm = (InputMethodManager)getSystemService(
 //			      Context.INPUT_METHOD_SERVICE);
 //		imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
 	}
 	
-	public void setMessageFocus(boolean isFocused)
-	{
+	public void setMessageFocus(boolean isFocused) {
 		message.setCursorVisible(isFocused);
 		message.setFocusable(isFocused);
 		message.setFocusableInTouchMode(isFocused);
 
-	    if (isFocused)
-	    {
+	    if (isFocused) {
 	    	message.requestFocus();
 	    }
 	}
@@ -160,6 +161,21 @@ public class Swarm extends Activity {
 	// ========================================================
 	// Network
 	// ========================================================
+	
+	public void register() {
+		Log.d("Swarm", "register()");
+
+		if (!app.isConnected()) {
+			Log.e("Swarm", "Register failed because connectionStatus is false");
+			return;
+		}
+
+		// Send the register byte to the Nomads server
+		byte[] registerByte = new byte[1];
+		registerByte[0] = 1;
+		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER,
+				NDataType.BYTE, 1, registerByte);
+	}
 
 	public void parseGrain(NGrain _grain) {
 		Log.i("Swarm", "parseGrain(): grain received");
@@ -172,6 +188,8 @@ public class Swarm extends Activity {
 		
 		if (grain.appID == NAppIDAuk.CONDUCTOR_PANEL) {
 			Log.d("Swarm", "from Conductor Panel: ");
+			
+			Log.i("Swarm", "grain.command == " + grain.command);
 
 			if (grain.command == NCommandAuk.SET_DISCUSS_STATUS) {
 				if (grain.bArray[0] == 0) {
@@ -198,10 +216,12 @@ public class Swarm extends Activity {
 			else if (grain.command == NCommandAuk.SET_DROPLET_STATUS) {
 				if (grain.bArray[0] == 0) {
 					Log.d("Swarm", "Setting Droplets to OFF");
-					stopDroplets();
+//					stopDroplets();
+					dropletsToggle = false;
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "Setting Droplets to ON");
-					startDroplets();
+//					startDroplets();
+					dropletsToggle = true;
 				}
 			}
 			
@@ -218,10 +238,12 @@ public class Swarm extends Activity {
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_STATUS) {
 				if (grain.bArray[0] == 0) {
 					Log.d("Swarm", "Setting Tones to OFF");
-					stopTones();
+//					stopTones();
+					tonesToggle = false;
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "Setting Tones to ON");
-					startTones();
+//					startTones();
+					tonesToggle = true;
 				}
 			}
 			
@@ -233,7 +255,7 @@ public class Swarm extends Activity {
 				
 				for (int i = 0; i < mPlayer.length; i++) {
 					if (mPlayer[i] != null) {
-						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + dropletsVolume);
+//						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + dropletsVolume);
 						mPlayer[i].setVolume(dropletsVolume, dropletsVolume);
 					}
 				}
@@ -254,7 +276,7 @@ public class Swarm extends Activity {
 				
 				for (int i = 0; i < mPlayer.length; i++) {
 					if (mPlayer[i] != null) {
-						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + pointerVolume);
+//						Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + pointerVolume);
 						mPlayer[i].setVolume(pointerVolume, pointerVolume);
 					}
 				}
@@ -277,7 +299,7 @@ public class Swarm extends Activity {
 		}
 
 		else if (grain.appID == NAppIDAuk.DISCUSS_TOPIC)
-			if (grain.command == NCommandAuk.SEND_MESSAGE) {
+			if (grain.command == NCommandAuk.SEND_PROMPT_ON) {
 				String text = new String(grain.bArray);
 				Log.d("Swarm", "Setting Discuss Topic");
 				prompt.setText(text);
@@ -299,7 +321,7 @@ public class Swarm extends Activity {
 				buttonSendDiscuss.setVisibility(View.VISIBLE);
 				buttonCancel.setVisibility(View.VISIBLE);
 				message.setVisibility(View.VISIBLE);
-				prompt.setVisibility(View.VISIBLE);
+//				prompt.setVisibility(View.VISIBLE);
 				message.setText("");
 				setMessageFocus(true);
 			}
@@ -314,7 +336,7 @@ public class Swarm extends Activity {
 				buttonSendCloud.setVisibility(View.VISIBLE);
 				buttonCancel.setVisibility(View.VISIBLE);
 				message.setVisibility(View.VISIBLE);
-				prompt.setVisibility(View.VISIBLE);
+//				prompt.setVisibility(View.VISIBLE);
 				message.setText("");
 				setMessageFocus(true);
 			}
@@ -503,8 +525,71 @@ public class Swarm extends Activity {
 		}
 	}
 	
-	public void playSoundFromBankWithXY(String _pathTo, String[] _soundBank) {
-		Log.i("Swarm", "playSoundFromBankWithXY() started");
+	public void playSoundFromBankXY(String _pathTo, String[] _soundBank) {
+		Log.i("Swarm", "playSoundFromBankXY() started");
+
+		for (int i = 0; i < mPlayer.length; i++) {
+			if (!mPPlaying[i] && mPlayer[i] != null) {
+//				Log.i("Swarm", "mPPlaying[" + i + "] = " + mPPlaying[i]);
+				mPPlaying[i] = true;
+
+				try {
+					// in case mPlayer is still somehow playing, stop it
+					if (mPlayer[i].isPlaying())
+						mPlayer[i].stop();
+
+					// allows a previously played mPlayer to play again
+					mPlayer[i].reset();
+					
+					int soundFileIndex = (int) (app.getXY_td()[1] * (float)_soundBank.length);
+					
+					Log.i("Swarm", "normalized Y value is: " + app.getXY_td()[1]);
+					Log.i("Swarm", "soundFileIndex is: " + soundFileIndex);
+					Log.i("Swarm", "soundFile is: " + _soundBank[soundFileIndex]);
+							
+					AssetFileDescriptor afd = context.getAssets().openFd(_pathTo + "/" + _soundBank[soundFileIndex]);
+					mPlayer[i].setDataSource(
+							afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
+					afd.close();
+					mPlayer[i].prepare();
+					// currentPlayer.setLooping(true);
+					// currentPlayer.seekTo(0);
+					Log.i("Swarm", "playing MediaPlayer instance #: " + i);
+					mPlayer[i].start();
+					mPlayer[i]
+							.setOnCompletionListener(new OnCompletionListener() {
+								@Override
+								public void onCompletion(MediaPlayer mp) {
+									for (int i = 0; i < mPlayer.length; i++) {
+										if (mPlayer[i] == mp) {
+//											Log.i("Swarm", "mPlayer["+i+"] completed. Setting mPPlaying["+i+"] to false");
+											mPPlaying[i] = false;
+										}
+									}
+								}
+							});
+
+				} catch (IllegalArgumentException e) {
+					Log.e("Swarm",
+							"IllegalArgumentException: " + e.getMessage(), e);
+				} catch (IllegalStateException e) {
+					Log.e("Swarm", "IllegalStateException: " + e.getMessage(),
+							e);
+				} catch (IOException e) {
+					Log.e("Swarm", "IOException: " + e.getMessage(), e);
+				} catch (Exception e) {
+					Log.e("Swarm", "Exception: " + e.getMessage(), e);
+				}
+
+				break;
+			}
+		}
+	}
+	
+	public void playSoundFromBankXYDynamic(String _pathTo, String[] _soundBank) {
+		Log.i("Swarm", "playSoundFromBankXYDynamic() started");
 
 		for (int i = 0; i < mPlayer.length; i++) {
 			if (!mPPlaying[i] && mPlayer[i] != null) {
@@ -570,11 +655,12 @@ public class Swarm extends Activity {
 	Runnable tonesRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (tonesToggle) {
+			Log.d("NomadsApp", "TT: " + tonesToggle + " app.pIT: " + app.pointerIsTouching());
+			if ( tonesToggle && app.pointerIsTouching() ) {
 //				Log.d("Swarm", "tonesToggle is true");
 				// sounds located in "tones" directory (get rid of this)
 				// play a sound from the tonesFiles array
-				playSoundFromBankWithXY("tones", tonesFiles);
+				playSoundFromBankXY("tones", tonesFiles);
 				// updateStatus(); // change value of interval
 				tonesHandler.postDelayed(tonesRunnable, getPlayInterval(tonesRange, tonesOffset));
 			}
@@ -584,11 +670,11 @@ public class Swarm extends Activity {
 	Runnable dropletsRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (dropletsToggle) {
+			if ( dropletsToggle && app.pointerIsTouching() ) {
 //				Log.d("Swarm", "dropletsToggle is true");
 				// sounds located in "droplets" directory (get rid of this)
 				// play a sound from the dropletsFiles array
-				playSoundFromBankWithXY("droplets", dropletsFiles);
+				playSoundFromBankXYDynamic("droplets", dropletsFiles);
 				// updateStatus(); // change value of interval
 				dropletsHandler.postDelayed(dropletsRunnable, getPlayInterval(dropletsRange, dropletsOffset));
 			}
@@ -596,27 +682,23 @@ public class Swarm extends Activity {
 	};
 
 	private void startTones() {
-		tonesToggle = true;
 		tonesRunnable.run();
 	}
 
 	private void stopTones() {
-		if (tonesToggle) {
+//		if (tonesToggle) {
 			tonesHandler.removeCallbacks(tonesRunnable);
-			tonesToggle = false;
-		}
+//		}
 	}
 	
 	private void startDroplets() {
-		dropletsToggle = true;
 		dropletsRunnable.run();
 	}
 
 	private void stopDroplets() {
-		if (dropletsToggle) {
+//		if (dropletsToggle) {
 			dropletsHandler.removeCallbacks(dropletsRunnable);
-			dropletsToggle = false;
-		}
+//		}
 	}
 
 	private void initializeMediaPlayers() {
@@ -653,6 +735,16 @@ public class Swarm extends Activity {
 	}
 
 	// ========================================================
+	
+	public void pointerStatus (boolean _down) {
+		if (_down) {
+			startTones();
+			startDroplets();
+		} else {
+			stopTones();
+			stopDroplets();
+		}
+	}
 
 	private void appendTextAndScroll(String text) {
 		if (chatWindow != null) {
@@ -708,7 +800,7 @@ public class Swarm extends Activity {
 		// turn off ringer
 		app.phoneRingerState(false);
 		
-		app.setGrainTarget(GrainTarget.SWARM);
+//		app.setGrainTarget(GrainTarget.SWARM);
 	}
 
 	@Override

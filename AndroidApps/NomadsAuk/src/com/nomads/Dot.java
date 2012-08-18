@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -52,36 +53,47 @@ class Dot extends View {
 
 	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
+		
+		// View screen size
+//		Log.d("Dot", "getWidth(): " + this.getWidth() + "getHeight(): " + this.getHeight());
+		
+		// clip touch coordinates to view dimensions
+		if (event.getX() >= 0.0 && event.getX() <= this.getWidth())
+			xy[0] = event.getX();
+		if (event.getY() >= 0.0 && event.getY() <= this.getHeight())
+			xy[1] = event.getY();
+		xyNorm[0] = xy[0] / this.getWidth();
+		xyNorm[1] = xy[1] / this.getHeight();
+		
 		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			app.cancelAllTextInput();
-		case MotionEvent.ACTION_MOVE:
-		case MotionEvent.ACTION_UP:
-		case MotionEvent.ACTION_CANCEL:
-			// clip touch coordinates to view dimensions
-			if (event.getX() >= 0.0 && event.getX() <= this.getWidth())
-				xy[0] = event.getX();
-			if (event.getY() >= 0.0 && event.getY() <= this.getHeight())
-				xy[1] = event.getY();
-			xyNorm[0] = xy[0] / this.getWidth();
-			xyNorm[1] = xy[1] / this.getHeight();
-			
-			// View screen size
-//			Log.d("Dot", "getWidth(): " + this.getWidth() + "getHeight(): " + this.getHeight());
-			
-			app.setXY(xyNorm);
-			
-			xyInt[0] = (int) (xyNorm[0] * 1000.0f);
-			xyInt[1] = (int) (xyNorm[1] * 1000.0f);
-
-			// send position of dot to server
-			sand.sendGrain(
-					NAppIDAuk.OC_POINTER,
-					NCommandAuk.SEND_SPRITE_XY,
-					NDataType.INT32,
-					2,
-					xyInt);
-			break;
+			case MotionEvent.ACTION_DOWN:
+				Log.i("Dot", "ACTION_DOWN");
+				app.setXY_td(xyNorm);
+				Log.i("Dot", "app.setXY_td(): Y value: " + xyNorm[1]);
+				app.setTouchDown(true);
+				break;
+				
+			case MotionEvent.ACTION_MOVE:
+				Log.i("Dot", "ACTION_MOVE");			
+				app.setXY(xyNorm);
+				
+				xyInt[0] = (int) (xyNorm[0] * 1000.0f);
+				xyInt[1] = (int) (xyNorm[1] * 1000.0f);
+	
+				// send position of dot to server
+				sand.sendGrain(
+						NAppIDAuk.OC_POINTER,
+						NCommandAuk.SEND_SPRITE_XY,
+						NDataType.INT32,
+						2,
+						xyInt);
+				break;
+				
+			case MotionEvent.ACTION_UP:
+				Log.i("Dot", "ACTION_UP");
+			case MotionEvent.ACTION_CANCEL:
+				Log.i("Dot", "ACTION_CANCEL");
+				app.setTouchDown(false);
 		}
 		return (true);
 	}

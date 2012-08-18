@@ -7,6 +7,13 @@
     android:keepScreenOn="true">
     
     <TextView
+        android:id="@+id/prompt"
+        style="@style/h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""/>
+    
+    <TextView
         android:id="@+id/chatWindow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -102,14 +109,5 @@
 	    android:text="@string/blank"
 	    android:background="@null"
 	    android:visibility="gone" />
-	
-	<TextView
-        android:id="@+id/prompt"
-        style="@style/h2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/message"
-        android:text=""
-        android:visibility="gone" />
 
 </RelativeLayout>
