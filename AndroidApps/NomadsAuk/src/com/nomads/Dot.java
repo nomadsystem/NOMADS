@@ -19,7 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 class Dot extends View {
-	private static final float RADIUS = 20;
+	private static final float RADIUS = 30;
+	private static final float RADIUS_MAX = 90;
+	private float radCurrent = RADIUS;
+	private boolean dropGrow, dropShrink;
 	private float[] xy = new float[2];
 	private float[] xyNorm = new float[2];
 	private int[] xyInt = new int[2];
@@ -31,11 +34,14 @@ class Dot extends View {
 
 	// private NGrain grain;
 
-	public Dot(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public Dot(Context _context, AttributeSet _attrs) {
+		super(_context, _attrs);
 
 //		app = (NomadsApp) context.getApplicationContext();
 		app = NomadsApp.getInstance();
+		
+		// send reference of Swarm to NomadsApp
+		app.setDot(this);
 
 		// get NSand instance from Join
 		sand = app.getSand();
@@ -98,13 +104,37 @@ class Dot extends View {
 		}
 		return (true);
 	}
+	
+	public float getAnimatedRadius () {
+		if (dropGrow) {
+			if (radCurrent <= RADIUS_MAX) {
+				radCurrent += 15;
+			} else {
+				dropGrow = false;
+				dropShrink = true;
+			}
+		}
+		if (dropShrink) {
+			if (RADIUS < radCurrent) {
+				radCurrent -= 3;
+			} else {
+				dropShrink = false;
+			}
+		}
+		return radCurrent;
+	}
+	
+	public void animateGrow () {
+		dropGrow = true;
+	}
 
 	public void draw(Canvas c) {
 		// draw the dot
 		// int width = canvas.getWidth();
 		// int height = canvas.getHeight();
 		// canvas.drawRect(0, 0, width, height, backgroundPaint);
-		c.drawCircle(xy[0], xy[1], RADIUS, myPaint);
+
+		c.drawCircle(xy[0], xy[1], getAnimatedRadius(), myPaint);
 
 		// need to invalidate in custom view class only
 		invalidate();

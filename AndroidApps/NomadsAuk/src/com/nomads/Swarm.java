@@ -60,8 +60,9 @@ public class Swarm extends Activity {
 	private boolean dropletsToggle = false;
 	private boolean tonesToggle = false;
 	private boolean cloudTonesToggle = false;
-	private int tonesRange = 400;
-	private int tonesOffset = 100;
+//	private int tonesRange = 400;
+//	private int tonesOffset = 100;
+	private int tonesDelay = 250;
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
@@ -671,7 +672,7 @@ public class Swarm extends Activity {
 				// play a sound from the tonesFiles array
 				playSoundFromBankXY("tones", tonesFiles);
 				// updateStatus(); // change value of interval
-				tonesHandler.postDelayed(tonesRunnable, getPlayInterval(tonesRange, tonesOffset));
+				tonesHandler.postDelayed(tonesRunnable, tonesDelay);
 			}
 		}
 	};
@@ -684,6 +685,7 @@ public class Swarm extends Activity {
 				// sounds located in "droplets" directory (get rid of this)
 				// play a sound from the dropletsFiles array
 				playSoundFromBankXYDynamic("droplets", dropletsFiles);
+				app.dropAnimation();
 				// updateStatus(); // change value of interval
 				dropletsHandler.postDelayed(dropletsRunnable, getPlayInterval(dropletsRange, dropletsOffset));
 			}

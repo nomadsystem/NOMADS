@@ -22,6 +22,7 @@ public class NomadsApp extends Application {
 	AudioManager am;
 	private Join join;
 	private Swarm swarm;
+	private Dot dot;
 	private Settings settings;
 //	private GrainTarget gT;
 	private static NSand sand;
@@ -69,6 +70,10 @@ public class NomadsApp extends Application {
 
 	public void setSettings(Settings _set) {
 		settings = _set;
+	}
+	
+	public void setDot(Dot _dot) {
+		dot = _dot;
 	}
 
 	public void setConnectionStatus(boolean _connected) {
@@ -277,6 +282,12 @@ public class NomadsApp extends Application {
 	}
 	
 	// ========================================================
+	
+	public void dropAnimation () {
+		if (dot != null) {
+			dot.animateGrow();
+		}
+	}
 	
 	public void cancelAllTextInput() {
 		if (swarm != null) {
