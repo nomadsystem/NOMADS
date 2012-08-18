@@ -122,7 +122,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		JLabel cloudSoundLabel = new JLabel("Cloud Sound");
 		cloudSoundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		cloudSoundWrapper.add(cloudSoundLabel);
-		
+
 		JPanel pointerToneWrapper = new JPanel();
 		pointerToneWrapper.setBorder(BorderFactory.createLineBorder (Color.black, 1));
 		JLabel pointerToneLabel = new JLabel("Pointer Tone");
@@ -173,7 +173,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		//		dropletCntrl.addChangeListener(buttonListener);
 		cloudSoundCntrl.addItemListener(buttonListener);
 		cloudSoundCntrl.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		pointerToneCntrl = new JToggleButton("Pointer Tone");
 		//		dropletCntrl.addChangeListener(buttonListener);
 		pointerToneCntrl.addItemListener(buttonListener);
@@ -240,7 +240,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 		cloudSoundWrapper.add(cloudSoundLevel);
 		cloudSoundWrapper.add(cloudSoundCntrl);
-		
+
 		pointerToneLevel = new JSlider(JSlider.VERTICAL,0, 100, 100);
 		pointerToneLevel.addChangeListener(sliderListener);
 
@@ -271,6 +271,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		promptTextField.addKeyListener(this);
 		promptButton = new JToggleButton("Prompt");
 		promptButton.setMaximumSize(new Dimension(20,10));
+		promptButton.setSelected(true);
 		promptButton.addItemListener(buttonListener);
 		promptTextAndButton.add(promptTextField);
 		promptTextAndButton.add(promptButton);
@@ -441,6 +442,15 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 					NGlobals.cPrint("ACP: pointerTone enable");
 				}
 			}
+			if (incCmd == NCommand.SEND_PROMPT_ON) {
+				String prompt = new String(grain.bArray);
+				NGlobals.cPrint("ACP: SEND_PROMPT_ON Prompt: "+ prompt);
+				promptLabel.setText(prompt);
+				promptTextField.setText(prompt);
+				promptTextField.setEnabled(false);
+			}
+			
+
 
 		}
 

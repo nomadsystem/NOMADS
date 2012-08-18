@@ -92,6 +92,7 @@
     inputDiscussField.hidden = YES;
     [inputDiscussField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
     [inputDiscussField setTextColor:[UIColor whiteColor]];
+    [inputDiscussField setBackgroundColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1.0 ]];
     inputCloudField.hidden = YES;
     [inputCloudField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
     [inputCloudField setTextColor:[UIColor whiteColor]];
@@ -140,7 +141,8 @@
     if (setCategoryError) { 
         CLog("Error initializing Audio Session Category");
     }
-    fileNum = 1; //Selects AukNote file number
+    
+    fileNum = (arc4random() % 18); //Selects AukNote file number
     cloudSoundIsEnabled = NO;
     cloudSoundVolume = 1.0;
     
@@ -469,12 +471,14 @@
 //Method to advance filenumber after playback of AukNote
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     CLog("AVC: Audio finished playing");
-    if (fileNum == 18) {
-        fileNum = 0;
-    }
-    else {
-        fileNum++;
-    }
+//    if (fileNum == 18) {
+//        fileNum = 0;
+//    }
+//    else {
+//        fileNum++;
+//    }
+    //Random fileNum
+    fileNum = (arc4random() % 18);
     audioPlayer = nil;
 }
 

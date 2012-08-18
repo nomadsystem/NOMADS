@@ -39,7 +39,7 @@
 //        CLog(@"viewWidthScale = %f", viewWidthScale);
         
         // Init prompt text
-        prompt = [NSString stringWithFormat:@"Auksalaq NOMADS"];
+        prompt = [NSString stringWithFormat:@""];
         promptAlpha = 0;
         
         //Resize prompt text based on device
@@ -116,7 +116,7 @@
         
         //Init timer for prompt fading
         promptWaitTick = 0;
-        promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(zeroPrompt) userInfo:nil repeats:YES];
+      //  promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(initWaitPrompt) userInfo:nil repeats:YES];
         
         //Init initial status of Cloud/Discuss/Pointer
         cloudStatus = 0;
@@ -142,6 +142,15 @@
     if (nil != inGrain) {
         
         // Set respective STATUS of various app components
+        
+        if(inGrain->appID == SERVER){
+            if (inGrain->command == SEND_PROMPT_ON) {
+                prompt = inGrain->str;
+                promptFadeInVal = 0.05;
+                promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
+                                    @selector(fadeInPrompt) userInfo:nil repeats:YES];
+            }
+        }
         
         if(inGrain->appID == CONDUCTOR_PANEL) {
             if(inGrain->command == SET_DROPLET_STATUS) {
@@ -255,6 +264,14 @@
     //Set up our context
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        promptTextSize = 50;
+    }
+    else {
+        promptTextSize = 30;
+    }
+    
     // Prompt ======================================================
     
     //Set up drawing for prompt text
@@ -272,12 +289,23 @@
     const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
     int len = strlen(str); //get length of string
     
+    
+    CGSize theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
+    
+    float centerX = (CGRectGetMidX(viewRect));
+    
+    while(theSize.width > (viewWidth*0.8)) {
+        promptTextSize--;
+        theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
+    }
+    
     CGContextSelectFont (context,
                          "Papyrus",
                          promptTextSize,
                          kCGEncodingMacRoman);
     
-    CGContextShowTextAtPoint (context, (viewWidth * 0.1), (viewHeight * 0.1), str, len);
+    CGContextShowTextAtPoint (context, centerX-((theSize.width * 1.1)/2.0), (viewHeight * 0.1), str, len);
+   // CLog("centerX = %f theSize.width = %f", centerX, theSize.width);
     
     // Discuss Display ======================================================
     
@@ -296,7 +324,7 @@
         CGFloat chatXLoc = (viewWidth * 0.1);
         
         //Displays incoming discuss text in our app
-        for (int i=0;i<[chatLines count];i++) {
+        for (int i=([chatLines count]-1);i>=0;i--) {
             
             NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
             const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
@@ -407,7 +435,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    maxTrails = 2;
+  //  maxTrails = 2;
     
     //If the pointer is enabled, check for touches
     if (pointerStatus) {
@@ -499,7 +527,7 @@
 //Called from touchesEnded and touchesCancelled
 - (void)endTouches:(NSSet *)touches
 {
-    maxTrails = 2;
+   // maxTrails = 2;
     for (UITouch *t in touches) {
         //      touchColor = 0.6;
         
@@ -538,19 +566,19 @@
 }
 
 
-- (void)zeroPrompt {
-    
-    CLog("zeroPrompt %2.2f\n",promptWaitTick);
-    
-    promptWaitTick += 1;
-    if (promptWaitTick > 1) {
-        [promptWaitTimer invalidate];
-        CLog("deleting promptWaitTimer\n");
-        promptFadeInVal = 0.05;
-        promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
-                            @selector(fadeInPrompt) userInfo:nil repeats:YES];
-    }
-}
+//- (void)initWaitPrompt {
+//    
+//    CLog("zeroPrompt %2.2f\n",promptWaitTick);
+//    
+//    promptWaitTick += 1;
+//    if (promptWaitTick > 1) {
+//        [promptWaitTimer invalidate];
+//        CLog("deleting promptWaitTimer\n");
+//        promptFadeInVal = 0.05;
+//        promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
+//                            @selector(fadeInPrompt) userInfo:nil repeats:YES];
+//    }
+//}
 
 - (void)fadeInPrompt
 {
