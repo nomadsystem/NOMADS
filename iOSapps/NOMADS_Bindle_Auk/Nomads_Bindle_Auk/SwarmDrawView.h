@@ -24,9 +24,6 @@
     int *xTrail;
     int *yTrail;
     int currentRedColor;
-    float decayColor;
-    float decayColorChangeDelta;
-    float touchColor;
     NSMutableArray  *chatLines;
     int numChatLines;
     AVAudioPlayer *audioPlayerDroplet;
@@ -57,6 +54,9 @@
     float lastTimerVal;
     AVAudioSession *session;
     float ellipseR, ellipseG, ellipseB, ellipseA;
+    float dotFlashEllipseR, dotFlashEllipseG, dotFlashEllipseB, dotFlashEllipseA;
+    float toneMovementVol;
+    
     Boolean dropFlash;
     float dotSizeScaler;
 
