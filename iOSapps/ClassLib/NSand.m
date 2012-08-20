@@ -44,6 +44,7 @@
         serverName = @"nomads.music.virginia.edu";
         serverPort = SERVER_PORT_DT;
         numDelegates = 0;
+        sandErrorFlag = NO;
     }
     return self;
 }
@@ -69,6 +70,7 @@
 	[streamIn open];
 	[streamOut open];
     LLog(@"NSand: Connecting, Streams Open ");
+    sandErrorFlag = NO;
     // [self sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_MESSAGE DataType:CHAR DataLen:1 String:@"a"];
 }
 
@@ -447,12 +449,15 @@
                                 LLog(@"NSAND:  streamIn read %d bytes\n",len);
                                 if (len < 0) {
                                     // send out to all our delgates
-                                    for (int x=0;x<numDelegates;x++) {
-                                        if (self->delegate[x] != nil) {
-                                            SEL methodName = @selector(networkConnectionError:);
-
-                                            if ([self->delegate[x] respondsToSelector:methodName]) {
-                                                [self->delegate[x] networkConnectionError:@"SAND Error"];
+                                    if (!sandErrorFlag) {
+                                        sandErrorFlag = YES;
+                                        for (int x=0;x<numDelegates;x++) {
+                                            if (self->delegate[x] != nil) {
+                                                SEL methodName = @selector(networkConnectionError:);
+                                                
+                                                if ([self->delegate[x] respondsToSelector:methodName]) {
+                                                    [self->delegate[x] networkConnectionError:@"SAND Network Error"];
+                                                }
                                             }
                                         }
                                     }
@@ -949,12 +954,15 @@
         case NSStreamEventErrorOccurred:
             LLog(@"NSAND : ERROR - NSStreamEventError\n");
             // send out to all our delgates
-            for (int x=0;x<numDelegates;x++) {
-                if (self->delegate[x] != nil) {
-                    SEL methodName = @selector(networkConnectionError:);
-                    
-                    if ([self->delegate[x] respondsToSelector:methodName]) {
-                        [self->delegate[x] networkConnectionError:@"STREAM Error"];
+            if (!sandErrorFlag) {
+                sandErrorFlag = YES;
+                for (int x=0;x<numDelegates;x++) {
+                    if (self->delegate[x] != nil) {
+                        SEL methodName = @selector(networkConnectionError:);
+                        
+                        if ([self->delegate[x] respondsToSelector:methodName]) {
+                            [self->delegate[x] networkConnectionError:@"SAND Network Error"];
+                        }
                     }
                 }
             }
