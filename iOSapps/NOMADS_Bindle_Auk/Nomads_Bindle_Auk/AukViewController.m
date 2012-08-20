@@ -54,10 +54,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     //Handles first check of internet communcation status
     if (![self internetConnectionStatus]) {
-            CLog("No internet connection");
+        CLog("No internet connection");
     }
     
     
@@ -82,7 +81,7 @@
     };
     [reach startNotifier];
     //--END init handle network communcation errors
-
+    
     appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; //Sets as delegate to BindleAppDelegate
     
     [appDelegate->appSand setDelegate:self]; // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -120,13 +119,13 @@
         [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
     }
-
+    
     
     
     
     //Init aukToolbar and buttons
     [aukToolbar setTranslucent:YES];
-//    [aukToolbar setTintColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1]];
+    //    [aukToolbar setTintColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1]];
     [aukBarButtonDiscuss setEnabled:false];
     [aukBarButtonCloud setEnabled:false];
     
@@ -138,7 +137,7 @@
     NSError *setCategoryError = nil;
     //This category should prevent our audio from being interrupted by incoming calls, etc.
     [session setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (setCategoryError) { 
+    if (setCategoryError) {
         CLog("Error initializing Audio Session Category");
     }
     
@@ -177,19 +176,19 @@
     [swarmView addSubview:mySwarmDrawView];
     //Set auto-resize parameters for SwarmDrawView
     [mySwarmDrawView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        
+    
     //Connect to NOMADS via SAND
     [appDelegate->appSand connect];
     
     connectionLabel.text = @"Connected to NOMADS!";
     
-    //Send REGISTER command 
+    //Send REGISTER command
     Byte c[1];
     c[0] = 1;
-    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-                                          Command:REGISTER 
-                                         DataType:UINT8 
-                                          DataLen:1 
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT
+                                          Command:REGISTER
+                                         DataType:UINT8
+                                          DataLen:1
                                             Uint8:c];
 }
 
@@ -230,7 +229,7 @@
     
     if([reach isReachable]) //If network is reachable
     {
-        CLog(@"Notification Says Reachable"); 
+        CLog(@"Notification Says Reachable");
     }
     else //if Network is unreachable
     {
@@ -241,7 +240,7 @@
                      initWithTitle: NSLocalizedString(@"Network error", @"Network error")
                      message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
                      delegate: self
-                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+                     cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
         
         [errorView show];
         //Calls alertView didDismissWithButtonIndex: on button press
@@ -256,9 +255,9 @@
     
     errorView = [[UIAlertView alloc]
                  initWithTitle: NSLocalizedString(ErrStr,ErrStr)
-                 message: NSLocalizedString(ErrStr,ErrStr)
+                 message: NSLocalizedString(@"Error connecting to NOMADS Server",ErrStr)
                  delegate: self
-                 cancelButtonTitle: NSLocalizedString(@"Close", @"SAND Network error") otherButtonTitles: nil];
+                 cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"SAND Network error") otherButtonTitles: nil];
     
     [errorView show];
 }
@@ -268,11 +267,13 @@
     //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
     if (buttonIndex == 0) {
         CLog("Alert button %i pressed", buttonIndex);
+        
         [moreInfoButton setHidden:YES]; //Hide the Leave button
         [joinNomadsButton setHidden:NO]; //Show the Join Button
-        connectionLabel.text = @"Not Connected!";
         [self.view bringSubviewToFront:settingsView];
         currentView = 1; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+        //
+        
     }
 }
 // END Network Error Handling ==============================================
@@ -299,13 +300,13 @@
             else if(inGrain->command == SET_CLOUD_SOUND_STATUS) {
                 if (inGrain->bArray[0] == 1) {
                     cloudSoundIsEnabled = YES;
-                     CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
+                    CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                 }
                 else if (inGrain->bArray[0] == 0) {
                     cloudSoundIsEnabled = NO;
                     CLog("SET_CLOUD_SOUND_STATUS:  %d\n",(int)inGrain->bArray[0]);
                     fileNum = 1;
-                }   
+                }
                 
                 //  CLog(@"AVC: Data Ready Handle\n");
             }
@@ -322,42 +323,42 @@
 // Login button, currently disabled ****STK 7/30/12 ===============================================
 
 - (IBAction)joinNomadsButton:(id)sender {
-//    [joinTextField resignFirstResponder];
-    [appDelegate->appSand connect];  
+    //    [joinTextField resignFirstResponder];
+    [appDelegate->appSand connect];
     
     Byte c[1];
     c[0] = 1;
     //****STK 7/25/12 Need to fix NSand to send UINT8 from iOS
-    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT  
-                                                   Command:REGISTER 
-                                                  DataType:UINT8 
-                                                   DataLen:1 
-                                                    Uint8:c];
+    [appDelegate->appSand sendWithGrainElts_AppID:OPERA_CLIENT
+                                          Command:REGISTER
+                                         DataType:UINT8
+                                          DataLen:1
+                                            Uint8:c];
     
-//    if ([joinTextField.text length] > 0){
-//        
-//        //****STK 7/25/12 Not currently checking settings, to be implemented
-////        [appDelegate->appSand sendWithGrainElts_AppID:OC_LOGIN  
-////                                              Command:SEND_MESSAGE 
-////                                             DataType:CHAR 
-////                                              DataLen:[joinTextField.text length] 
-////                                               String:joinTextField.text];
-//        joinTextField.text = @"";
-//        [joinTextField setHidden:YES];
-        [joinNomadsButton setHidden:YES];
-        [moreInfoButton setHidden:NO];
-        
-        connectionLabel.text = @"Connected to NOMADS!";
-//        
-        [self.view bringSubviewToFront:aukView];
-//        
-//        settingsNavBar.hidden = NO;
-//    }
-//    //If there's no text, connect with a "space" for now 
-//    //We want to revise this to generate a warning message to the user
-//    else {
-//        connectionLabel.text = @"Error connecting: Please enter username!";
-//    }
+    //    if ([joinTextField.text length] > 0){
+    //
+    //        //****STK 7/25/12 Not currently checking settings, to be implemented
+    ////        [appDelegate->appSand sendWithGrainElts_AppID:OC_LOGIN
+    ////                                              Command:SEND_MESSAGE
+    ////                                             DataType:CHAR
+    ////                                              DataLen:[joinTextField.text length]
+    ////                                               String:joinTextField.text];
+    //        joinTextField.text = @"";
+    //        [joinTextField setHidden:YES];
+    [joinNomadsButton setHidden:YES];
+    [moreInfoButton setHidden:NO];
+    
+    connectionLabel.text = @"Connected to NOMADS!";
+    //
+    [self.view bringSubviewToFront:aukView];
+    //
+    //        settingsNavBar.hidden = NO;
+    //    }
+    //    //If there's no text, connect with a "space" for now
+    //    //We want to revise this to generate a warning message to the user
+    //    else {
+    //        connectionLabel.text = @"Error connecting: Please enter username!";
+    //    }
 }
 
 // Back button in Settings display
@@ -383,7 +384,7 @@
     NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
     
     [self.view bringSubviewToFront:infoViewNOMADS];
-  //  [infoViewNOMADS setUserInteractionEnabled:NO];
+    //  [infoViewNOMADS setUserInteractionEnabled:NO];
     currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
     
     [self.infoViewNOMADS loadRequest:myLoadRequest];
@@ -460,23 +461,23 @@
         }
     }
     
-    //****STK Other useful control parameters 
+    //****STK Other useful control parameters
     //    audioPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
     //    Clog(@"%f seconds played so far", audioPlayer.currentTime);
     //    audioPlayer.currentTime = 10; // jump to the 10 second mark
-    //    [audioPlayer pause]; 
+    //    [audioPlayer pause];
     //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
 }
 
 //Method to advance filenumber after playback of AukNote
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     CLog("AVC: Audio finished playing");
-//    if (fileNum == 18) {
-//        fileNum = 0;
-//    }
-//    else {
-//        fileNum++;
-//    }
+    //    if (fileNum == 18) {
+    //        fileNum = 0;
+    //    }
+    //    else {
+    //        fileNum++;
+    //    }
     //Random fileNum
     fileNum = (arc4random() % 18);
     audioPlayer = nil;
@@ -484,15 +485,15 @@
 
 //Text Field Handler ===============================================
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
-{   
+{
     
-    // Text field from settings screen 
-    //    if (textField == joinTextField) 
+    // Text field from settings screen
+    //    if (textField == joinTextField)
     //        [self joinNomadsButton:(id)self];
     
     //---------------------------------------------------
     
-    // Text field from Discuss Button 
+    // Text field from Discuss Button
     if (textField == inputDiscussField) {
         CLog(@"Entered sendDiscuss");
         if([inputDiscussField.text length]>0) { //Prevents null strings from being sent
@@ -515,10 +516,10 @@
             //DATA ARRAY (String from inputDiscussField)
             //****STK Currently set directly in sendWithGrainElts
             
-            [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
-                                                  Command:myCommand 
-                                                 DataType:myDataType 
-                                                  DataLen:[inputDiscussField.text length] 
+            [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                                  Command:myCommand
+                                                 DataType:myDataType
+                                                  DataLen:[inputDiscussField.text length]
                                                    String:inputDiscussField.text];
             
             inputDiscussField.text = @"";
@@ -527,7 +528,7 @@
             [aukView sendSubviewToBack:inputDiscussField];
             [mySwarmDrawView setNeedsDisplay];
         }
-        else { //Dismisses keyboard if no text is entered but send button is pressed 
+        else { //Dismisses keyboard if no text is entered but send button is pressed
             inputDiscussField.text = @"";
             [inputDiscussField setHidden:YES];
             [inputDiscussField resignFirstResponder];
@@ -538,7 +539,7 @@
     
     //---------------------------------------------------
     
-    // Text field from Cloud Button 
+    // Text field from Cloud Button
     if (textField == inputCloudField) {
         NSLog(@"Entered sendCloud");
         if([inputCloudField.text length]>0) { //Prevents null strings from being sent
@@ -561,10 +562,10 @@
             //DATA ARRAY (String from inputDiscussField)
             //****STK Currently set directly in sendWithGrainElts
             
-            [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
-                                                  Command:myCommand 
-                                                 DataType:myDataType 
-                                                  DataLen:[inputCloudField.text length] 
+            [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                                  Command:myCommand
+                                                 DataType:myDataType
+                                                  DataLen:[inputCloudField.text length]
                                                    String:inputCloudField.text];
             
             inputCloudField.text = @"";
@@ -596,10 +597,10 @@
     
     [textField resignFirstResponder];
     
-    return YES;   
+    return YES;
 }
 
-//Detects when keyboard is dismissed 
+//Detects when keyboard is dismissed
 - (void) keyboardWillHide: (NSNotification *)inNotification {
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:YES];
