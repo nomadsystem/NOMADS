@@ -150,6 +150,17 @@
                 promptFadeInTimer =[NSTimer scheduledTimerWithTimeInterval:promptFadeInVal target:self selector:
                                     @selector(fadeInPrompt) userInfo:nil repeats:YES];
             }
+            if (inGrain->command == SEND_CACHED_DISCUSS_STRING) {
+                [chatLines addObject:inGrain->str]; //Add the new text to the array
+                
+                if ([chatLines count] > numChatLines) {
+                    [chatLines removeObjectAtIndex:0]; //if the array is bigger than numChatLines
+                    //remove the first item
+                }
+                
+                CLog(@"chatLines = %@", chatLines);
+                [self setNeedsDisplay];
+            }
         }
         
         if(inGrain->appID == CONDUCTOR_PANEL) {
