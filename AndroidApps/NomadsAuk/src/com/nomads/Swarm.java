@@ -324,7 +324,7 @@ public class Swarm extends Activity {
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
 				Log.i("Swarm", "changing pointer volume for mPlayers");
-				double pointerVolVal = ((double) grain.iArray[0]) * 0.3f;
+				double pointerVolVal = ((double) grain.iArray[0]) * 0.2f;
 				float pointerVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
 				for (int i = 0; i < mPlayer.length; i++) {
