@@ -27,6 +27,7 @@
     id <SandDelegate> delegate[10];  // OUTPUT:  where we send our signal
     NGrain *grain;  
     int numDelegates;
+    Boolean sandErrorFlag;
 }
 
 @property (nonatomic, retain) NSInputStream *streamIn;
