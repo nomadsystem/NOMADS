@@ -5,7 +5,7 @@
 package com.nomads;
 
 import nomads.v210.*;
-import nomads.v210.NGlobals.GrainTarget;
+//import nomads.v210.NGlobals.GrainTarget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,10 +22,10 @@ import android.widget.TextView;
 public class Join extends Activity {
 	NomadsApp app;
 
-	public static GrainTarget gT = GrainTarget.JOIN;
+//	public static GrainTarget gT = GrainTarget.JOIN;
 
 	private NSand sand;
-	private NGrain grain;
+//	private NGrain grain;
 
 	TextView joinStatus;
 	Button connectButton, linkButton;
@@ -38,7 +38,8 @@ public class Join extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// get reference to NomadsApp singleton
-		app = (NomadsApp) this.getApplicationContext();
+//		app = (NomadsApp) this.getApplicationContext();
+		app = NomadsApp.getInstance();
 
 		// send reference of Join to NomadsApp
 		app.setJoin(this);
@@ -49,13 +50,10 @@ public class Join extends Activity {
 		// get NSand instance from Join
 		sand = app.getSand();
 
-		// connect via asynctask--if successful:
-		// join.updateConnectionStatusMessage(true); else false
-		// NomadsApp.connectStatus is set to true; else false
-		// register byte is sent to Nomads server from Join
-		// startThread() is called in NomadsApp
-		// goToSwarm() is called in Join
-		sand.new Connect().execute(this, app);
+		// connect via asynctask. Result:
+		// app.setConnectionStatus(connected);
+		// j.setConnectionStatus(connected);
+		sand.new Connect().execute(this);
 
 		Log.d("Join", "app.isConnected() = " + app.isConnected());
 
@@ -68,7 +66,7 @@ public class Join extends Activity {
 		linkButton.setOnClickListener(linkListener);
 		
 		// initialize grain target
-		app.setGrainTarget(GrainTarget.JOIN);
+//		app.setGrainTarget(GrainTarget.JOIN);
 	}
 
 	// ========================================================
@@ -79,7 +77,7 @@ public class Join extends Activity {
 		if (_connected) {
 			joinStatus.setText("Connected.\nStarting app...");
 			connectButton.setVisibility(View.GONE);
-			register();
+//			register();
 			goToSwarm();
 		}
 		else {
@@ -88,36 +86,36 @@ public class Join extends Activity {
 		}
 	}
 	
-	public void register() {
-		Log.d("NomadsApp",
-				"register() -> connectionStatus is: " + app.isConnected());
+//	public void register() {
+//		Log.d("NomadsApp",
+//				"register() -> connectionStatus is: " + app.isConnected());
+//
+//		if (!app.isConnected()) {
+//			Log.e("NomadsApp",
+//					"Register failed because connectionStatus is false");
+//			return;
+//		}
+//
+//		// Send the register byte to the Nomads server
+//		byte[] registerByte = new byte[1];
+//		registerByte[0] = 1;
+//		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER,
+//				NDataType.BYTE, 1, registerByte);
+//	}
 
-		if (!app.isConnected()) {
-			Log.e("NomadsApp",
-					"Register failed because connectionStatus is false");
-			return;
-		}
-
-		// Send the register byte to the Nomads server
-		byte[] registerByte = new byte[1];
-		registerByte[0] = 1;
-		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER,
-				NDataType.BYTE, 1, registerByte);
-	}
-
-	public void parseGrain(NGrain _grain) {
-		Log.d("Join", "parseGrain(): grain received");
-
-		if (grain == null) {
-			Log.d("Join", "parseGrain(): grain is null");
-			return;
-		}
-
-		grain = _grain;
-
-		if (grain != null)
-			grain = null;
-	}
+//	public void parseGrain(NGrain _grain) {
+//		Log.d("Join", "parseGrain(): grain received");
+//
+//		if (grain == null) {
+//			Log.d("Join", "parseGrain(): grain is null");
+//			return;
+//		}
+//
+//		grain = _grain;
+//
+//		if (grain != null)
+//			grain = null;
+//	}
 
 	// ========================================================
 	// Button Listeners
@@ -125,7 +123,7 @@ public class Join extends Activity {
 	Button.OnClickListener connectButtonListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			sand.new Connect().execute(Join.this, app);
+			sand.new Connect().execute(Join.this);
 		}
 	};
 	
@@ -145,7 +143,7 @@ public class Join extends Activity {
 	public void onResume() {
 		super.onResume();
 		Log.d("Join", "is resumed");
-		gT = GrainTarget.JOIN;
+//		gT = GrainTarget.JOIN;
 	}
 
 	@Override
