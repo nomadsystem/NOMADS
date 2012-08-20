@@ -48,6 +48,12 @@ public class NomadsApp extends Application {
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
 		
+		// set media volume to max
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,
+				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+			    AudioManager.FLAG_SHOW_UI);
+
+		
 		// initialize xy coordinates in case of sound before any touches
 		xy = new float[2];
 		xytd = new float [2];
