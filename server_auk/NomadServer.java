@@ -34,8 +34,8 @@ public class NomadServer implements Runnable {
 	private static int _POINTER_TONE_VOLUME = 100;
 	private static int _SYNTH_VOLUME = 100;
 	private String _SEND_PROMPT_ON = new String ("Auksalaq NOMADS");
-	private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"));
-	private static int MAX_CACHED_DISCUSS_STRINGS = 10;
+	private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList(" "));
+	private static int MAX_CACHED_DISCUSS_STRINGS = 15;
 	
 
 
