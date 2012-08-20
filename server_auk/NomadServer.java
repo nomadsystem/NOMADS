@@ -34,6 +34,9 @@ public class NomadServer implements Runnable {
 	private static int _POINTER_TONE_VOLUME = 100;
 	private static int _SYNTH_VOLUME = 100;
 	private String _SEND_PROMPT_ON = new String ("Auksalaq NOMADS");
+	private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"));
+	
+	
 
 
 
@@ -302,11 +305,14 @@ public class NomadServer implements Runnable {
 			currentClient.threadSand.sendGrain(NAppID.SERVER, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
 			NGlobals.lPrint("ACP: Prompt " + tString + " sent"); 
 
+			
 			currentClient.setButtonInitStatus((byte)1);
 			// tempString = new String("CNT:" + clientCount);
 			// clients[cNum].send((byte)NAppID.MONITOR, tempString);
 			// NGlobals.lPrint("  Sending " + tempString + " to MONITOR client [" + cNum + "] from SERVER");
 
+			
+			
 		}
 
 		// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
@@ -358,6 +364,15 @@ public class NomadServer implements Runnable {
 			currentClient.threadSand.sendGrain(NAppID.SERVER, (byte)NCommand.SEND_PROMPT_ON, (byte)NDataType.CHAR, tLen, tStringAsBytes);
 			NGlobals.lPrint("ACP: Prompt " + tString + " sent"); 
 
+			//Cached Discuss String
+			for (int i=0;i<discussStringCached.size();i++) {
+				tString = discussStringCached.get(i);
+				tStringAsBytes = tString.getBytes();
+				tLen = tString.length();
+				currentClient.threadSand.sendGrain(NAppID.SERVER, (byte)NCommand.SEND_CACHED_DISCUSS_STRING, (byte)NDataType.CHAR, tLen, tStringAsBytes);
+				NGlobals.lPrint("ACP: Cached Discuss String " + tString + " arrayElt# " + i + " sent");
+			}
+			
 			currentClient.setButtonInitStatus((byte)1);
 		}
 
@@ -495,6 +510,15 @@ public class NomadServer implements Runnable {
 			if (incAppID == NAppID.OC_DISCUSS) {
 
 			    if (incAppCmd == NCommand.SEND_MESSAGE && (_DISCUSS_STATUS == 1)) {
+			    	
+//			    	discussStringCached.add(10, new String(myGrain.bArray));
+//			    	
+//			    	for (int i = (discussStringCached.size() - 1); i>1; i--) {
+//			    		String tString = discussStringCached.get(i);
+//			    		discussStringCached.set((i-1), tString);
+//			    		
+//			    	}
+			    	
 					// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
 					for (int c = 0; c < clientCount; c++) {
 						// Get the client off the master list
