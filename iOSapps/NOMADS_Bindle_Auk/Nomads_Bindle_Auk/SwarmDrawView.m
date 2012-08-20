@@ -65,7 +65,7 @@
         myFingerPoint.y = (CGRectGetMidY(viewRect));
         
         //Setup for Dot
-        maxTrails = 10; //Max number of dot trailers
+        maxTrails = 5; //Max number of dot trailers
         //Create array for X and Y trail coordinates
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
         yTrail = (int *)malloc(sizeof(int)*maxTrails);
@@ -85,7 +85,8 @@
         dotFlashEllipseA = 1.0;
 
         dropFlash = NO; //Don't flash the dot
-        
+
+        toneMovementVol = 0;
         //    CLog(@" brightness = %f ", brightness);
         //    CLog(@" brightDelta = %f ", brightDelta);
         
@@ -503,7 +504,7 @@
 {
     //If the pointer is enabled
     if (pointerStatus) {
-        maxTrails = 10;
+        maxTrails = 5;
         
         //This loop is for display purposes
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -553,6 +554,12 @@
         //      touchColor = 0.6;
         
     }
+    
+    for(int i=1;i<maxTrails;i++) {
+        xTrail[i] = xTrail[0];
+        yTrail[i] = yTrail[0];
+    }    
+    
     numRunTonePlayers = 0;
     toneVolScaler = 1;
     toneVolDone = false;
