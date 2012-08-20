@@ -73,17 +73,18 @@
             xTrail[i]=(viewWidth * 0.5);
             yTrail[i]=(viewHeight * 0.5);
         }
-        decayColor = 1.0; 
-        decayColorChangeDelta = (decayColor/(float)maxTrails);
-        dropFlash = NO; //Don't flash the dot
-        
-        //Color init for dot
-        ellipseR = decayColor;
-        ellipseG = touchColor;
-        ellipseB = 1.0;
-        ellipseA = decayColor;
 
-        dotSizeScaler = 1;
+        ellipseR = 0.8;
+        ellipseG = 0.0;
+        ellipseB = 0.8;
+        ellipseA = 0.8;
+
+        dotFlashEllipseR = 1.0;
+        dotFlashEllipseG = 0.0;
+        dotFlashEllipseB = 1.0;
+        dotFlashEllipseA = 1.0;
+
+        dropFlash = NO; //Don't flash the dot
         
         //    CLog(@" brightness = %f ", brightness);
         //    CLog(@" brightDelta = %f ", brightDelta);
@@ -360,7 +361,6 @@
         xTrail[0] = myFingerPoint.x;
         yTrail[0] = myFingerPoint.y;
         
-        decayColor = 1.0;
         float dotSize;
         //Change dot size based on device
         if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
@@ -371,53 +371,64 @@
             dotSize = 20;
         }
         
+        float dotRGBmult = 1;
+        float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
+        int xDiff, yDiff;
+        float sizeOffset;
+        float flashSizeFact = 1.15;
+        float normalSizeFact = 1.0;
+        
+        
         //Display the dot
         for (int i=0; i<maxTrails; i++) {
             if (i<(maxTrails-1)) {
-                //            ellipseR = decayColor;
-                //            ellipseG = touchColor;
-                //            ellipseB = 1.0;
-                //            ellipseA = decayColor;
-                int xDiff = xTrail[i]-xTrail[i+1];
-                int yDiff = yTrail[i]-yTrail[i+1];
+
+                xDiff = xTrail[i]-xTrail[i+1];
+                yDiff = yTrail[i]-yTrail[i+1];
+
+                toneMovementVol = (xDiff+yDiff)/3;
+
+                if (toneMovementVol > 3)
+                    toneMovementVol = 3;
                 
-                if (i==0) {
-                    if (dropFlash) { //If dot is flashing with droplets
-                        CLog("dropFlash!");
-                        CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
-                        CLog("R = %f G = %f B = %f A = %F", ellipseR, ellipseG, ellipseB, ellipseA);
-                        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[0]-xDiff/2, yTrail[0]-yDiff/2, (dotSize*dotSizeScaler), (dotSize*dotSizeScaler))));
-                        CGContextDrawPath(context, kCGPathFill);
-                        //     CGContextFillPath(context);
-                        CGContextStrokePath(context);
-                    }
+                dotRGBmult *= 0.9;
+                
+                if (dropFlash) { //If dot is flashing with droplets
+                    dotSizeScaler = flashSizeFact;
+                    my_ellipseR = (dotFlashEllipseR * dotRGBmult);
+                    my_ellipseG = (dotFlashEllipseG * dotRGBmult);
+                    my_ellipseB = (dotFlashEllipseB * dotRGBmult);
+                    my_ellipseA = (dotFlashEllipseA * dotRGBmult);
+
                 }
+                else {
+                    dotSizeScaler = normalSizeFact;
+                    my_ellipseR = (ellipseR * dotRGBmult);
+                    my_ellipseG = (ellipseG * dotRGBmult);
+                    my_ellipseB = (ellipseB * dotRGBmult);
+                    my_ellipseA = (ellipseA * dotRGBmult);
+                }                    
+
+                sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
                 
-                //If dot is moved "enough"
+                // If successive dots are > 6px apart, draw one in between
                 if ((abs(xDiff) > 6) || (abs(yDiff) > 6)) {
-                    CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
-                    
-                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2, yTrail[i]-yDiff/2, dotSize, dotSize)));
+                    CGContextSetRGBFillColor(context, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                    CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                    CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-xDiff/2-(sizeOffset/2), yTrail[i]-yDiff/2-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
                     CGContextDrawPath(context, kCGPathFill);
                     //     CGContextFillPath(context);
                     CGContextStrokePath(context);
-                    decayColor = (decayColor - decayColorChangeDelta);
-                    ellipseR = decayColor;
-                    ellipseG = touchColor;
-                    ellipseA = decayColor;
                 }
-                
-                
-                CGContextSetRGBFillColor(context, ellipseR, ellipseG, ellipseB, ellipseA);
-                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], dotSize, dotSize)));
+
+                CGContextSetRGBFillColor(context, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
                 CGContextDrawPath(context, kCGPathFill);
                 //     CGContextFillPath(context);
                 CGContextStrokePath(context);
-                decayColor = (decayColor - decayColorChangeDelta);
-                dotSize *= 0.9;
-                ellipseR = decayColor;
-                ellipseG = touchColor;
-                ellipseA = decayColor;
+
+                dotSize *= 0.95;
             }
         }
     }
@@ -459,7 +470,6 @@
             }
             
             //Create a point for the value
-            touchColor = 0.0;
             CGPoint loc = [t locationInView:self];
             CLog(@"SWARM_X loc = %f", loc.x);
             CLog(@"SWARM_Y loc = %f", loc.y);
@@ -567,10 +577,6 @@
 - (void)flashDot
 {
     CLog("flashDot");
-    ellipseR = decayColor;
-    ellipseG = touchColor;
-    ellipseB = 1.0;
-    ellipseA = decayColor;
     dotSizeScaler = 1.0;
     [self setNeedsDisplay];
     dropFlash = NO;
@@ -681,11 +687,7 @@
     //    [audioPlayer stop]; // Does not reset currentTime; sending play resumes
     
     dropFlash = YES;
-    ellipseR = 1.0;
-    ellipseG = 1.0;
-    ellipseB = 1.0;
-    ellipseA = 1.0;
-    dotSizeScaler = 1.5;
+    dotSizeScaler = 1.0;
     [self setNeedsDisplay];
     
     dotFlashTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(flashDot) userInfo:nil repeats:NO];
@@ -743,8 +745,8 @@
         CLog("SDV: Playback error: %@",[error description]);
     }
     else {
-        CLog("SDV: tonVolume = %f", (toneVolume * toneVolScaler * 3));
-        audioPlayerTone[tonePlayer].volume = toneVolume * toneVolScaler * 3;
+        CLog("SDV: tonVolume = %f", (toneVolume * toneVolScaler * toneMovementVol));
+        audioPlayerTone[tonePlayer].volume = toneVolume * toneVolScaler * toneMovementVol;
 
         [audioPlayerTone[tonePlayer] play];
 
