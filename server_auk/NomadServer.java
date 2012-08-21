@@ -34,8 +34,8 @@ public class NomadServer implements Runnable {
 	private static int _POINTER_TONE_VOLUME = 100;
 	private static int _SYNTH_VOLUME = 100;
 	private String _SEND_PROMPT_ON = new String ("Auksalaq NOMADS");
-	private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"));
-	
+	private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList(" "));
+	private static int MAX_CACHED_DISCUSS_STRINGS = 15;
 	
 
 
@@ -511,13 +511,11 @@ public class NomadServer implements Runnable {
 
 			    if (incAppCmd == NCommand.SEND_MESSAGE && (_DISCUSS_STATUS == 1)) {
 			    	
-//			    	discussStringCached.add(10, new String(myGrain.bArray));
-//			    	
-//			    	for (int i = (discussStringCached.size() - 1); i>1; i--) {
-//			    		String tString = discussStringCached.get(i);
-//			    		discussStringCached.set((i-1), tString);
-//			    		
-//			    	}
+			    	//Sets cached discuss strings from input
+			    	discussStringCached.add(new String(myGrain.bArray));
+			    	if (discussStringCached.size() > MAX_CACHED_DISCUSS_STRINGS) {
+			    		discussStringCached.remove(0);
+			    	}
 			    	
 					// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
 					for (int c = 0; c < clientCount; c++) {
