@@ -95,6 +95,7 @@
     inputCloudField.hidden = YES;
     [inputCloudField setFont:[UIFont fontWithName:@"Helvetica-Light" size:20]];
     [inputCloudField setTextColor:[UIColor whiteColor]];
+    [inputCloudField setBackgroundColor:[UIColor colorWithRed:0.15 green:0.357 blue:0.678 alpha:1.0 ]];
     
     //Notification calls keyboardWillHide when keyboard is hidden
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -114,10 +115,14 @@
     {
         [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
         [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
+        maxCharsDiscuss = 45;
+        maxCharsCloud = 50;
     }
     else {
         [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        maxCharsDiscuss = 45;
+        maxCharsCloud = 50;
     }
     
     
@@ -167,9 +172,11 @@
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
         [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
+        
     }
     else {
         [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+        
     }
     
     //Add our instance of SwarmDrawView to swarmView
@@ -426,6 +433,24 @@
     
 }
 
+//UITextFieldDelegate Method, Max number of charachters user can type into text field
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == inputDiscussField) {
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > maxCharsDiscuss) ? NO : YES;
+    }
+    else if (textField == inputCloudField) {
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > maxCharsCloud) ? NO : YES;
+    }
+    else {
+        CLog("NO Data from textFieldDelegate");
+        return YES;
+    }
+}
+
+
+
 //***STK 8/7/12 NOT IMPLEMENTED
 -(IBAction) backgroundTapDiscuss:(id)sender{
     [self.inputDiscussField resignFirstResponder];
@@ -631,6 +656,8 @@
             //Load images for landscape view
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
+            maxCharsDiscuss = 75;
+            maxCharsCloud = 50;
             
             //Reset screen size of SwarmDrawView for landscape view
             CGRect screenRect = [mySwarmDrawView bounds];
@@ -647,6 +674,8 @@
             CGRect screenRect = [mySwarmDrawView bounds];
             [mySwarmDrawView setFrame:screenRect];
             [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
+            maxCharsDiscuss = 60;
+            maxCharsCloud = 50;
         }
         
     }
@@ -657,6 +686,8 @@
             //Load images for portrait view
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
+            maxCharsDiscuss = 45;
+            maxCharsCloud = 50;
             
             //Reset screen size of SwarmDrawView for portrait view
             CGRect screenRect = [mySwarmDrawView bounds];
@@ -667,6 +698,8 @@
             //Load images for portrait view
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
+            maxCharsDiscuss = 45;
+            maxCharsCloud = 50;
             
             //Reset screen size of SwarmDrawView for portrait view
             CGRect screenRect = [mySwarmDrawView bounds];
