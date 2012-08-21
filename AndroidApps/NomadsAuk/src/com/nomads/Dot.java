@@ -31,7 +31,7 @@ class Dot extends View {
 
 	private NomadsApp app;
 	private NSand sand;
-	private boolean pointerIsVisible;
+//	private boolean pointerIsVisible;
 
 	// private NGrain grain;
 
@@ -59,9 +59,9 @@ class Dot extends View {
 		myPaint.setAntiAlias(true);
 	}
 	
-	public void setPointerVisibility (boolean _v) {
-		pointerIsVisible = _v;
-	}
+//	public void setPointerVisibility (boolean _v) {
+//		pointerIsVisible = _v;
+//	}
 
 	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
@@ -143,7 +143,7 @@ class Dot extends View {
 		
 		float tempRad = getAnimatedRadius();
 		
-		if (pointerIsVisible) {
+		if (app.state().pointerIsVisible) {
 			c.drawCircle(xy[0], xy[1], tempRad, myPaint);
 		}
 

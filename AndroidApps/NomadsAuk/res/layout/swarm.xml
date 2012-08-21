@@ -114,14 +114,14 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:layout_below="@id/prompt"
-	    android:layout_above="@id/messageCloud"
+	    android:layout_above="@id/settingsLinearLayout"
         android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="50dp">
 	    <TextView
 	        android:id="@+id/chatWindow"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:paddingBottom="50dp"
 	        android:scrollbars="vertical"
 	        android:focusableInTouchMode="false" />
     </ScrollView>
@@ -132,8 +132,7 @@
 	    android:tag="trueDot"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/prompt"
-	    android:layout_above="@id/messageCloud" />
+	    android:layout_above="@id/settingsLinearLayout" />
 
 
     

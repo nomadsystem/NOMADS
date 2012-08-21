@@ -28,6 +28,7 @@ public class NCommandAuk {
     public static byte SET_CLOUD_SOUND_VOLUME = 24;
     public static byte SET_POINTER_TONE_STATUS = 25;
     public static byte SET_POINTER_TONE_VOLUME = 26;
+    public static byte SEND_CACHED_DISCUSS_STRING = 27;
     
     public static byte SEND_PROMPT_ON = 30;
     public static byte SEND_PROMPT_OFF = 31;
