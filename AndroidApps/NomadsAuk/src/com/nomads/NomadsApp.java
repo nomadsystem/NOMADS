@@ -28,13 +28,33 @@ public class NomadsApp extends Application {
 	private static NSand sand;
 	private NGrain grain;
 	private NomadsAppThread nThread;
+	private AppState appState = new AppState();
+	
 	private boolean connectionStatus = false;
 	private boolean touchDown = false;
 	private float[] xy, xytd;
-	private String currentPrompt, currentChatWindow;
 
 	public static NomadsApp getInstance() {
 		return singleton;
+	}
+	
+	public class AppState {
+		public boolean pointerIsVisible = false;
+		public boolean discussToggle = false;
+		public boolean discussMessageToggle = false;
+		public boolean cloudToggle = false;
+		public boolean cloudMessageToggle = false;
+		public boolean dropletsToggle = false;
+		public float dropletsVolume = 0.0f;
+		public boolean tonesToggle = false;
+		public float tonesVolume = 0.0f;
+		public boolean cloudTonesToggle = false;
+		public float cloudVolume = 0.0f;
+		public String currentPrompt, currentChatWindow;
+	}
+	
+	public AppState state () {
+		return appState;
 	}
 
 	@Override
@@ -47,6 +67,12 @@ public class NomadsApp extends Application {
 
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
+		
+		// set media volume to max
+		am.setStreamVolume(AudioManager.STREAM_MUSIC,
+				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+			    AudioManager.FLAG_SHOW_UI);
+
 		
 		// initialize xy coordinates in case of sound before any touches
 		xy = new float[2];
@@ -144,22 +170,6 @@ public class NomadsApp extends Application {
 	
 	public boolean pointerIsTouching () {
 		return touchDown;
-	}
-	
-	public void setCurrentPrompt (String _newPrompt) {
-		currentPrompt = _newPrompt;
-	}
-	
-	public String getCurrentPrompt () {
-		return currentPrompt;
-	}
-	
-	public void setCurrentChatWindow (String _newChatWindow) {
-		currentChatWindow = _newChatWindow;
-	}
-	
-	public String getCurrentChatWindow () {
-		return currentChatWindow;
 	}
 
 	// ========================================================
@@ -307,9 +317,9 @@ public class NomadsApp extends Application {
 		}
 	}
 	
-	public void setPointerVisibility (boolean _v) {
-		dot.setPointerVisibility (_v);
-	}
+//	public void setPointerVisibility (boolean _v) {
+//		dot.setPointerVisibility (_v);
+//	}
 	
 	public void cancelAllTextInput() {
 		if (swarm != null) {
