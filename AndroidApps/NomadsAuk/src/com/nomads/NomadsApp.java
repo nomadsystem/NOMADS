@@ -171,22 +171,6 @@ public class NomadsApp extends Application {
 	public boolean pointerIsTouching () {
 		return touchDown;
 	}
-	
-//	public void setCurrentPrompt (String _newPrompt) {
-//		currentPrompt = _newPrompt;
-//	}
-//	
-//	public String getCurrentPrompt () {
-//		return currentPrompt;
-//	}
-//	
-//	public void setCurrentChatWindow (String _newChatWindow) {
-//		currentChatWindow = _newChatWindow;
-//	}
-//	
-//	public String getCurrentChatWindow () {
-//		return currentChatWindow;
-//	}
 
 	// ========================================================
 	// AUDIO
