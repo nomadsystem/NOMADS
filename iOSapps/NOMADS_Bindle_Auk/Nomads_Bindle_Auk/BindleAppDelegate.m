@@ -35,6 +35,10 @@
     [[self window] setRootViewController:avc];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES]; //Prevents device from sleeping
+    
+    //Code to turn volume all the way up--needs MediaPlayer framework
+//    MPMusicPlayerController *musicPlayer = [MPMusicPlayerController applicationMusicPlayer];
+//    musicPlayer.volume = 1;
 
     //   self.window.backgroundColor = [UIColor whiteColor];
     
