@@ -17,7 +17,7 @@
 #import "SwarmDrawView.h"
 
 
-@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate>
+@interface AukViewController : UIViewController <SandDelegate, AVAudioPlayerDelegate, UIWebViewDelegate, UIAlertViewDelegate, UITextFieldDelegate>
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
@@ -41,6 +41,7 @@
     Boolean cloudSoundIsEnabled;
     int currentView;
     SwarmDrawView *mySwarmDrawView;
+    int maxCharsDiscuss, maxCharsCloud;
     
 }
 
