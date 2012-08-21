@@ -25,6 +25,7 @@ import android.media.MediaPlayer;
 //import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,9 +54,15 @@ public class Swarm extends Activity {
 	ImageButton buttonDiscuss, buttonCloud, buttonSettings;
 	EditText messageDiscuss, messageCloud;
 	AlertDialog.Builder alert;
-	private Handler tonesHandler, dropletsHandler;
+	private static Handler tonesHandler, dropletsHandler;
+	// tonesTimerHandler created below
 	
+	// time between tones
 	private int tonesDelay = 250;
+	// minimum amount of time between pitch changes
+	private static int tonesTimerDelay = 1000;
+	private static boolean tonesPlaybackLocked = false;
+	private int tonesSoundFileIndex;
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
@@ -290,12 +297,12 @@ public class Swarm extends Activity {
 			else if (grain.command == NCommandAuk.SET_DROPLET_STATUS) {
 				if (grain.bArray[0] == 0) {
 					Log.d("Swarm", "Setting Droplets to OFF");
-//					stopDroplets();
 					app.state().dropletsToggle = false;
+					stopDroplets();
 				} else if (grain.bArray[0] == 1) {
 					Log.d("Swarm", "Setting Droplets to ON");
-//					startDroplets();
 					app.state().dropletsToggle = true;
+					startDroplets();
 				}
 			}
 			
@@ -370,7 +377,7 @@ public class Swarm extends Activity {
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
 				Log.i("Swarm", "changing pointer volume for mPlayers");
-				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.2f;
+				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.3f;
 				float tonesVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
 				app.state().tonesVolume = tonesVolume;
@@ -621,20 +628,21 @@ public class Swarm extends Activity {
 //				mPPlaying[i] = true;
 
 				try {
-					// in case mPlayer is still somehow playing, stop it
-//					if (mPlayer[i].isPlaying())
-//						mPlayer[i].stop();
+					// only allow notes to change after 
+					if (!tonesPlaybackLocked) {
+						startTonesTimer();
+						tonesSoundFileIndex = (int) (app.getXY_td()[1] * (float)tonesFiles.length);
+						tonesPlaybackLocked = true;
+					}
 
 					// allows a previously played mPlayer to play again
 					tonesPlayers[i].reset();
 					
-					int soundFileIndex = (int) (app.getXY_td()[1] * (float)tonesFiles.length);
-					
 					Log.i("Swarm", "normalized Y value is: " + app.getXY_td()[1]);
-					Log.i("Swarm", "soundFileIndex is: " + soundFileIndex);
-					Log.i("Swarm", "soundFile is: " + tonesFiles[soundFileIndex]);
+					Log.i("Swarm", "soundFileIndex is: " + tonesSoundFileIndex);
+					Log.i("Swarm", "soundFile is: " + tonesFiles[tonesSoundFileIndex]);
 							
-					AssetFileDescriptor afd = context.getAssets().openFd("tones/" + tonesFiles[soundFileIndex]);
+					AssetFileDescriptor afd = context.getAssets().openFd("tones/" + tonesFiles[tonesSoundFileIndex]);
 					tonesPlayers[i].setDataSource(
 							afd.getFileDescriptor(),
 							afd.getStartOffset(),
@@ -721,13 +729,13 @@ public class Swarm extends Activity {
 
 	Runnable tonesRunnable = new Runnable() {
 		@Override
-		public void run() {
+		public void run() {			
 			if ( app.state().tonesToggle ) {
 //				Log.d("Swarm", "tonesToggle is true");
 				// sounds located in "tones" directory (get rid of this)
 				// play a sound from the tonesFiles array
 				playTones();
-				// updateStatus(); // change value of interval
+				// updateStatus(); // change value of interval?
 				tonesHandler.postDelayed(tonesRunnable, tonesDelay);
 			}
 		}
@@ -745,6 +753,29 @@ public class Swarm extends Activity {
 				// updateStatus(); // change value of interval
 				dropletsHandler.postDelayed(dropletsRunnable, getPlayInterval(dropletsRange, dropletsOffset));
 			}
+		}
+	};
+	
+	private static void startTonesTimer () {
+		tonesTimerRunnable.run();
+	}
+	
+	private static void stopTonesTimer () {
+		tonesTimerHandler.removeCallbacks(tonesTimerRunnable);
+	}
+	
+	static Runnable tonesTimerRunnable = new Runnable () {
+		@Override
+		public void run () {
+			tonesTimerHandler.sendMessageDelayed (tonesTimerHandler.obtainMessage(0), tonesTimerDelay);
+		}
+	};
+	
+	private static Handler tonesTimerHandler = new Handler () {
+		@Override
+		public void handleMessage(Message msg) {  
+			tonesPlaybackLocked = false;
+	    	stopTonesTimer ();
 		}
 	};
 
@@ -835,10 +866,8 @@ public class Swarm extends Activity {
 	public void pointerStatus (boolean _down) {
 		if (_down) {
 			startTones();
-			startDroplets();
 		} else {
 			stopTones();
-			stopDroplets();
 		}
 	}
 	
