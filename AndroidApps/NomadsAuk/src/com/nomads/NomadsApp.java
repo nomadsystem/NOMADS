@@ -33,7 +33,6 @@ public class NomadsApp extends Application {
 	private boolean connectionStatus = false;
 	private boolean touchDown = false;
 	private float[] xy, xytd;
-	private String currentPrompt, currentChatWindow;
 
 	public static NomadsApp getInstance() {
 		return singleton;
