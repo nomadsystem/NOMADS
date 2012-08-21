@@ -342,7 +342,7 @@
             NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
             const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
             int len = strlen(str);
-            printf("My String %s\n", str);
+     //       printf("My String %s\n", str);
             CGContextShowTextAtPoint (context, chatXLoc, chatYLoc, str, len);
             CLog("chatXLoc = %f, chatYLoc = %f", chatXLoc, chatYLoc);
             
