@@ -22,7 +22,6 @@ public final class R {
         public static final int swarmbuttonbg=0x7f020008;
     }
     public static final class id {
-        public static final int aukLogo=0x7f06000b;
         public static final int auklogo=0x7f060005;
         public static final int buttonCloud=0x7f060012;
         public static final int buttonDiscuss=0x7f060011;
@@ -32,6 +31,7 @@ public final class R {
         public static final int chatWindow=0x7f060016;
         public static final int chat_ScrollView=0x7f060015;
         public static final int connectButton=0x7f060007;
+        public static final int connectButtonLayout=0x7f06000b;
         public static final int connectionStatus=0x7f06000d;
         public static final int connectionStatusPre=0x7f06000c;
         public static final int dot=0x7f060017;
