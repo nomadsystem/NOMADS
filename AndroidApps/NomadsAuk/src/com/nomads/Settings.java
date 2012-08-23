@@ -50,6 +50,23 @@ public class Settings extends Activity {
 		setConnectedMessage(app.isConnected());
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.i("Settings", "is resumed");
+		// Connected message should be set set in Join
+		// setConnectedMessage(app.isConnected());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.i("Settings", "is paused");
+		// stopThread();
+	}
+	
+	// ========================================================
+
 	public void setConnectedMessage(boolean _connected) {
 		if (_connected) {
 			connectionStatus.setText(" Server: "
@@ -92,22 +109,5 @@ public class Settings extends Activity {
 		//
 		if (grain != null)
 			grain = null;
-	}
-
-	// ========================================================
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.i("Settings", "is resumed");
-		// Connected message should be set set in Join
-		// setConnectedMessage(app.isConnected());
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		Log.i("Settings", "is paused");
-		// stopThread();
 	}
 }

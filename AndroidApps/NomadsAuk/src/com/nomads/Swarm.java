@@ -7,7 +7,6 @@ package com.nomads;
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
-//import nomads.v210.NGlobals.GrainTarget;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 import java.io.IOException;
@@ -156,13 +155,8 @@ public class Swarm extends Activity {
 		// turn off ringer
 		app.phoneRingerState(false);
 		
-//		app.setGrainTarget(GrainTarget.SWARM);
-		
 		// restore current display
 		updateDisplay();
-		
-		// scroll to the bottom (newest messages) of chat window
-//		scrollText();
 		
 		// restore audio settings
 		updateAudio();
@@ -173,10 +167,9 @@ public class Swarm extends Activity {
 		Log.i("Swarm", "onPause()");
 		super.onPause();
 
-		// turn off all timed audio playback
+		// stop all audio playback
 		stopTones();
 		stopDroplets();
-		
 		if (cloudPlayer.isPlaying()) {
 			cloudPlayer.stop();
 		}
@@ -207,10 +200,6 @@ public class Swarm extends Activity {
 	protected void onRestart() {
 		Log.i("Swarm", "onRestart()");
 		super.onRestart();
-
-		Intent intent = new Intent(getApplicationContext(), Join.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		startActivity(intent);
 	}
 
 	@Override
@@ -377,7 +366,7 @@ public class Swarm extends Activity {
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
 				Log.i("Swarm", "changing pointer volume for mPlayers");
-				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.4f;
+				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.25f;
 				float tonesVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
 				app.state().tonesVolume = tonesVolume;
@@ -578,7 +567,7 @@ public class Swarm extends Activity {
 //	}
 
 	public void playRandomCloud () {
-		Log.i("Swarm", "playSingleRandomSoundFromBank() started");
+//		Log.i("Swarm", "playSingleRandomSoundFromBank() started");
 		try {
 			// if one Player is current playing, return
 			if (cloudPlayer.isPlaying())
@@ -597,7 +586,7 @@ public class Swarm extends Activity {
 			cloudPlayer.prepare();
 			// currentPlayer.setLooping(true);
 			// currentPlayer.seekTo(0);
-			Log.i("Swarm", "playing onePlayer...");
+//			Log.i("Swarm", "playing onePlayer...");
 			cloudPlayer.start();
 //			cloudPlayer.setOnCompletionListener(new OnCompletionListener() {
 //						@Override
@@ -620,7 +609,7 @@ public class Swarm extends Activity {
 	}
 	
 	public void playTones () {
-		Log.i("Swarm", "playSoundFromBankXY() started");
+//		Log.i("Swarm", "playSoundFromBankXY() started");
 
 		for (int i = 0; i < tonesPlayers.length; i++) {
 			if (!tonesPlayers[i].isPlaying() && tonesPlayers[i] != null) {
@@ -638,9 +627,9 @@ public class Swarm extends Activity {
 					// allows a previously played mPlayer to play again
 					tonesPlayers[i].reset();
 					
-					Log.i("Swarm", "normalized Y value is: " + app.getXY_td()[1]);
-					Log.i("Swarm", "soundFileIndex is: " + tonesSoundFileIndex);
-					Log.i("Swarm", "soundFile is: " + tonesFiles[tonesSoundFileIndex]);
+//					Log.i("Swarm", "normalized Y value is: " + app.getXY_td()[1]);
+//					Log.i("Swarm", "soundFileIndex is: " + tonesSoundFileIndex);
+//					Log.i("Swarm", "soundFile is: " + tonesFiles[tonesSoundFileIndex]);
 							
 					AssetFileDescriptor afd = context.getAssets().openFd("tones/" + tonesFiles[tonesSoundFileIndex]);
 					tonesPlayers[i].setDataSource(
@@ -651,7 +640,7 @@ public class Swarm extends Activity {
 					tonesPlayers[i].prepare();
 					// currentPlayer.setLooping(true);
 					// currentPlayer.seekTo(0);
-					Log.i("Swarm", "playing MediaPlayer instance #: " + i);
+//					Log.i("Swarm", "playing MediaPlayer instance #: " + i);
 					tonesPlayers[i].start();
 //					tonesPlayers[i]
 //							.setOnCompletionListener(new OnCompletionListener() {
@@ -682,7 +671,7 @@ public class Swarm extends Activity {
 	}
 	
 	public void playDroplets () {
-		Log.i("Swarm", "playSoundFromBankXYDynamic() started");
+//		Log.i("Swarm", "playSoundFromBankXYDynamic() started");
 
 		if (!dropletsPlayer.isPlaying() && dropletsPlayer != null) {
 //			Log.i("Swarm", "mPPlaying[" + i + "] = " + mPPlaying[i]);
@@ -696,9 +685,9 @@ public class Swarm extends Activity {
 				
 				int soundFileIndex = (int) (app.getXY()[1] * (float)dropletsFiles.length);
 				
-				Log.i("Swarm", "normalized Y value is: " + app.getXY()[1]);
-				Log.i("Swarm", "soundFileIndex is: " + soundFileIndex);
-				Log.i("Swarm", "soundFile is: " + dropletsFiles[soundFileIndex]);
+//				Log.i("Swarm", "normalized Y value is: " + app.getXY()[1]);
+//				Log.i("Swarm", "soundFileIndex is: " + soundFileIndex);
+//				Log.i("Swarm", "soundFile is: " + dropletsFiles[soundFileIndex]);
 						
 				AssetFileDescriptor afd = context.getAssets().openFd("droplets/" + dropletsFiles[soundFileIndex]);
 				dropletsPlayer.setDataSource(
@@ -830,9 +819,13 @@ public class Swarm extends Activity {
 //				Log.d("Swarm", "setting volume for mPlayer["+i+"] to: " + dropletsVolume);
 				tonesPlayers[i].setVolume(app.state().tonesVolume, app.state().tonesVolume);
 			}
-			dropletsPlayer.setVolume(app.state().dropletsVolume, app.state().dropletsVolume);
-			cloudPlayer.setVolume(app.state().cloudVolume, app.state().cloudVolume);
 		}
+		dropletsPlayer.setVolume(app.state().dropletsVolume, app.state().dropletsVolume);
+		cloudPlayer.setVolume(app.state().cloudVolume, app.state().cloudVolume);
+		
+		// start auto droplets if necessary
+		if (app.state().dropletsToggle)
+			startDroplets();
 	}
 
 	// ========================================================
@@ -845,14 +838,12 @@ public class Swarm extends Activity {
 				currentChatWindow = (_text + "\n");		// if new chat window, set...
 			} else {
 				currentChatWindow += (_text + "\n");	// otherwise, append
-				
-				// save current chatWindow text in case of device rotation ( see onResume() below )
-				app.state().currentChatWindow = currentChatWindow;
-				
-				chatWindow.setText( app.state().currentChatWindow );
-				
-				scrollText();
-			}
+			}				
+			// save current chatWindow text in case of device rotation ( see onResume() below )
+			app.state().currentChatWindow = currentChatWindow;
+			// get saved chat window from NomadsApp.appState
+			chatWindow.setText( app.state().currentChatWindow );
+			scrollText();
 		}
 	}
 	
