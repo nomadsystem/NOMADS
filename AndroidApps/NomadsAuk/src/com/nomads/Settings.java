@@ -40,23 +40,33 @@ public class Settings extends Activity {
 
 		setContentView(R.layout.settings);
 		connectionStatus = (TextView) findViewById(R.id.connectionStatus);
-//		nomadsLink = (TextView) findViewById(R.id.nomadsLink);
-//		nomadsLink.setMovementMethod(LinkMovementMethod.getInstance());
 		linkButton = (Button)findViewById(R.id.linkButton);
 		linkButton.setOnClickListener(linkListener);
-		// quitButton = (Button)findViewById(R.id.quitButton);
-		// quitButton.setOnClickListener(quitListener);
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.i("Settings", "is resumed");
+		
+		// inform user of connection status
 		setConnectedMessage(app.isConnected());
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.i("Settings", "is paused");
+		// stopThread();
+	}
+	
+	// ========================================================
+
 	public void setConnectedMessage(boolean _connected) {
 		if (_connected) {
-			connectionStatus.setText(" Server: "
-					+ app.getSand().getServerName() + "\n Port: "
-					+ app.getSand().getServerPort());
+			connectionStatus.setText("Connected to the Nomads server");
 		} else {
-			connectionStatus.setText("Not currently connected to the server.");
+			connectionStatus.setText("Not connected to the Nomads server.");
 		}
 	}
 
@@ -92,22 +102,5 @@ public class Settings extends Activity {
 		//
 		if (grain != null)
 			grain = null;
-	}
-
-	// ========================================================
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.i("Settings", "is resumed");
-		// Connected message should be set set in Join
-		// setConnectedMessage(app.isConnected());
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		Log.i("Settings", "is paused");
-		// stopThread();
 	}
 }
