@@ -22,30 +22,30 @@ public final class R {
         public static final int swarmbuttonbg=0x7f020008;
     }
     public static final class id {
-        public static final int aukLogo=0x7f07000b;
-        public static final int auklogo=0x7f070005;
-        public static final int buttonCloud=0x7f070012;
-        public static final int buttonDiscuss=0x7f070011;
-        public static final int buttonLinearLayout=0x7f070010;
-        public static final int buttonSettings=0x7f07000f;
-        public static final int cancel=0x7f070004;
-        public static final int chatWindow=0x7f070016;
-        public static final int chat_ScrollView=0x7f070015;
-        public static final int connectButton=0x7f070007;
-        public static final int connectionStatus=0x7f07000d;
-        public static final int connectionStatusPre=0x7f07000c;
-        public static final int dot=0x7f070017;
-        public static final int joinStatus=0x7f070006;
-        public static final int linkButton=0x7f070009;
-        public static final int message=0x7f070002;
-        public static final int messageCloud=0x7f070014;
-        public static final int messageDiscuss=0x7f070013;
-        public static final int nomadsInfo=0x7f07000a;
-        public static final int nomadsLinkLayout=0x7f070008;
-        public static final int ok=0x7f070003;
-        public static final int prompt=0x7f070001;
-        public static final int relativelayout=0x7f070000;
-        public static final int settingsLinearLayout=0x7f07000e;
+        public static final int auklogo=0x7f060005;
+        public static final int buttonCloud=0x7f060012;
+        public static final int buttonDiscuss=0x7f060011;
+        public static final int buttonLinearLayout=0x7f060010;
+        public static final int buttonSettings=0x7f06000f;
+        public static final int cancel=0x7f060004;
+        public static final int chatWindow=0x7f060016;
+        public static final int chat_ScrollView=0x7f060015;
+        public static final int connectButton=0x7f060007;
+        public static final int connectButtonLayout=0x7f06000b;
+        public static final int connectionStatus=0x7f06000d;
+        public static final int connectionStatusPre=0x7f06000c;
+        public static final int dot=0x7f060017;
+        public static final int joinStatus=0x7f060006;
+        public static final int linkButton=0x7f060009;
+        public static final int message=0x7f060002;
+        public static final int messageCloud=0x7f060014;
+        public static final int messageDiscuss=0x7f060013;
+        public static final int nomadsInfo=0x7f06000a;
+        public static final int nomadsLinkLayout=0x7f060008;
+        public static final int ok=0x7f060003;
+        public static final int prompt=0x7f060001;
+        public static final int relativelayout=0x7f060000;
+        public static final int settingsLinearLayout=0x7f06000e;
     }
     public static final class layout {
         public static final int customdialog=0x7f030000;
@@ -53,39 +53,36 @@ public final class R {
         public static final int settings=0x7f030002;
         public static final int swarm=0x7f030003;
     }
-    public static final class raw {
-        public static final int test=0x7f040000;
-    }
     public static final class string {
-        public static final int app_name=0x7f050001;
-        public static final int blank=0x7f050000;
-        public static final int cancel=0x7f05000e;
-        public static final int cloud=0x7f05000d;
-        public static final int connectButton=0x7f050005;
-        public static final int connected=0x7f050006;
-        public static final int connectionStatus=0x7f050010;
-        public static final int discuss=0x7f05000c;
-        public static final int hint=0x7f050007;
-        public static final int linkButton=0x7f050013;
-        public static final int login=0x7f050003;
-        public static final int loginPrompt=0x7f050004;
-        public static final int nomadsInfo=0x7f050011;
-        public static final int nomadsLink=0x7f050012;
-        public static final int quitButton=0x7f050014;
-        public static final int sendButton=0x7f050008;
-        public static final int settings=0x7f05000f;
-        public static final int test=0x7f050009;
-        public static final int testDroplets=0x7f05000b;
-        public static final int testTones=0x7f05000a;
-        public static final int welcome=0x7f050002;
+        public static final int app_name=0x7f040001;
+        public static final int blank=0x7f040000;
+        public static final int cancel=0x7f04000e;
+        public static final int cloud=0x7f04000d;
+        public static final int connectButton=0x7f040005;
+        public static final int connected=0x7f040006;
+        public static final int connectionStatus=0x7f040010;
+        public static final int discuss=0x7f04000c;
+        public static final int hint=0x7f040007;
+        public static final int linkButton=0x7f040013;
+        public static final int login=0x7f040003;
+        public static final int loginPrompt=0x7f040004;
+        public static final int nomadsInfo=0x7f040011;
+        public static final int nomadsLink=0x7f040012;
+        public static final int quitButton=0x7f040014;
+        public static final int sendButton=0x7f040008;
+        public static final int settings=0x7f04000f;
+        public static final int test=0x7f040009;
+        public static final int testDroplets=0x7f04000b;
+        public static final int testTones=0x7f04000a;
+        public static final int welcome=0x7f040002;
     }
     public static final class style {
         /**  <style name="AppTheme" parent="android:Theme.Light" /> 
          */
-        public static final int def=0x7f060000;
-        public static final int h1=0x7f060003;
-        public static final int h2=0x7f060004;
-        public static final int info=0x7f060001;
-        public static final int infoBlack=0x7f060002;
+        public static final int def=0x7f050000;
+        public static final int h1=0x7f050003;
+        public static final int h2=0x7f050004;
+        public static final int info=0x7f050001;
+        public static final int infoBlack=0x7f050002;
     }
 }

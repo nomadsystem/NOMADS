@@ -47,10 +47,6 @@ class Dot extends View {
 		// get NSand instance from Join
 		sand = app.getSand();
 
-		// starting position of dot
-		xy[0] = (float) (getWidth() * 0.5);
-		xy[1] = (float) (getHeight() * 0.5);
-
 		// backgroundPaint = new Paint();
 		// backgroundPaint.setColor(Color.BLUE);
 
@@ -62,6 +58,19 @@ class Dot extends View {
 //	public void setPointerVisibility (boolean _v) {
 //		pointerIsVisible = _v;
 //	}
+
+	// get dimensions of parent
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+	    int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+	    int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+	    
+	    // center the starting position of dot
+ 		xy[0] = (float) (parentWidth * 0.5);
+ 		xy[1] = (float) (parentHeight * 0.5);
+	}
 
 	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();

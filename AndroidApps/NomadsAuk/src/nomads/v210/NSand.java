@@ -62,7 +62,12 @@ public class NSand {
 			// get app id
 			appID = streamIn.readByte();
 		} catch (IOException ioe) {
-			Log.e("NSand.java", "getGrain: SAND write error");
+			Log.e("NSand.java", "getAppID: streamIn.readByte() error");
+			Log.e("NSand.java", ioe.toString());
+		}
+		catch (NullPointerException npe) {
+			Log.e("NSand.java", "getAppID: streamIn.readByte() error");
+			Log.e("NSand.java", npe.toString());
 		}
 		return appID; 
 	}
