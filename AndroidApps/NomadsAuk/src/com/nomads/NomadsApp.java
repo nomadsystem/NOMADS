@@ -267,22 +267,18 @@ public class NomadsApp extends Application {
 
 		public void run() {
 			while (singleton.isConnected()) {
-				// Log.i( "NomadsApp->Thread", "getThreadState() = " +
-				// getAppState() );
-				byte tByte = singleton.getSand().getAppID();
-//				Log.d("NomadsApp", "tByte == " + tByte);
 				try {
+					byte tByte = singleton.getSand().getAppID();
 					if (tByte != 0) {
-//						Log.e("NomadsApp", "GETTING GRAIN...");
 						singleton.grain = sand.getGrain(tByte);
-//						Log.e("NomadsApp", "GRAIN RECEIVED. handle.post STARTING...");
 						handle.sendMessage(handle.obtainMessage(1, singleton.grain));
-//						Log.e("NomadsApp", "handle: Message Sent.");
 					} else {
-						Log.e("NomadsApp", "tByte == 0");
+						Log.e("NomadsApp", "run(): tByte == 0");
+						handle.sendMessage(handle.obtainMessage(0));
 					}
 				} catch (NullPointerException npe) {		
 //					grain = null;
+					Log.e("NomadsApp", "run(): NPE");
 					handle.sendMessage(handle.obtainMessage(0));
 				}
 			}
@@ -295,7 +291,7 @@ public class NomadsApp extends Application {
 					singleton.swarm.parseGrain( (NGrain)_msg.obj );
 				}
 				else if (_msg.what == 0) {
-					Log.i("NomadsApp -> Thread", "run() -> grain == null; exiting.");
+					Log.e("NomadsApp -> Thread", "run() -> error receiving grain; exiting.");
 					if (singleton.settings != null) {
 						singleton.settings.finish();
 					}
