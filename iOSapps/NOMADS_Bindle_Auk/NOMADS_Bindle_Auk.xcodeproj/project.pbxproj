@@ -15,6 +15,7 @@
 		0BBB630015C4A377006CFEAB /* blue_ice_bg_320_480.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BBB62FF15C4A377006CFEAB /* blue_ice_bg_320_480.png */; };
 		0BBB630315C4B069006CFEAB /* chat_30_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BBB630115C4B069006CFEAB /* chat_30_30.png */; };
 		0BBB630415C4B069006CFEAB /* cloud_30_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BBB630215C4B069006CFEAB /* cloud_30_30.png */; };
+		0BCE986215E9B6090058AEF4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BCE986115E9B6090058AEF4 /* QuartzCore.framework */; };
 		F9139F1C15C1B5330093FA29 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9139F1B15C1B5330093FA29 /* AVFoundation.framework */; };
 		F9139F1E15C1B5D10093FA29 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = F9139F1D15C1B5D10093FA29 /* sounds */; };
 		F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91C77B715B70D0200C71BB1 /* UIKit.framework */; };
@@ -58,6 +59,7 @@
 		0BBB62FF15C4A377006CFEAB /* blue_ice_bg_320_480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_ice_bg_320_480.png; sourceTree = "<group>"; };
 		0BBB630115C4B069006CFEAB /* chat_30_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat_30_30.png; sourceTree = SOURCE_ROOT; };
 		0BBB630215C4B069006CFEAB /* cloud_30_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud_30_30.png; sourceTree = SOURCE_ROOT; };
+		0BCE986115E9B6090058AEF4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F9139F1B15C1B5330093FA29 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F9139F1D15C1B5D10093FA29 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = NOMADS_Bindle_Auk/sounds; sourceTree = "<group>"; };
 		F91C77B315B70D0200C71BB1 /* Auksalaq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auksalaq.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BCE986215E9B6090058AEF4 /* QuartzCore.framework in Frameworks */,
 				F9824CEB15CADD24004E86FD /* SystemConfiguration.framework in Frameworks */,
 				F9139F1C15C1B5330093FA29 /* AVFoundation.framework in Frameworks */,
 				F91C77B815B70D0200C71BB1 /* UIKit.framework in Frameworks */,
@@ -164,6 +167,7 @@
 		F91C77B615B70D0200C71BB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0BCE986115E9B6090058AEF4 /* QuartzCore.framework */,
 				F9824CE815CADD08004E86FD /* SystemConfiguration.framework */,
 				F9139F1B15C1B5330093FA29 /* AVFoundation.framework */,
 				F91C77B715B70D0200C71BB1 /* UIKit.framework */,
