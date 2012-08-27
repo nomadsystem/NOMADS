@@ -10,6 +10,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 #import "NSand.h"
 #import "NGrain.h"
 #import "BindleAppDelegate.h"
@@ -64,8 +65,8 @@
     int promptTextSize;
     float promptAlpha;
     float promptFadeInVal;
+    float promptFadeOutVal;
     float promptWaitTick;
-    float promptFadeOutTick;
     
     int discussTextSize;
 
@@ -83,6 +84,19 @@
     Boolean toneVolDone;
     int numRunTonePlayers;
     
+    Boolean discussChanged;
+    Boolean discussHasText;
+    
+    CGContextRef myLayerContext1;
+    CGContextRef myLayerContext2;
+
+    CGLayerRef   discussLayer;
+    CGLayerRef   pointerLayer;
+    CADisplayLink *displayLink;
+    
+    Boolean tonesTouchDone;
+    Boolean firstFade;
+    Boolean drawing;
 }
 
 @property (strong, retain) NSand *appSand;
