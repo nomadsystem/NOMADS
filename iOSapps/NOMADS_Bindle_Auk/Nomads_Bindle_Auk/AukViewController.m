@@ -46,6 +46,7 @@
     if (self) {
         [self.view bringSubviewToFront:aukView]; //Load the aukView
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+
     }
     
     return self;
@@ -178,7 +179,7 @@
         [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         
     }
-    
+
     //Add our instance of SwarmDrawView to swarmView
     [swarmView addSubview:mySwarmDrawView];
     //Set auto-resize parameters for SwarmDrawView
