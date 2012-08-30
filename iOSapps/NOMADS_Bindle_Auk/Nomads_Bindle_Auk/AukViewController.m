@@ -39,7 +39,6 @@
 @synthesize swarmView;
 @synthesize mySwarmDrawView;
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -661,6 +660,7 @@
             maxCharsCloud = 50;
             
             //Reset screen size of SwarmDrawView for landscape view
+            mySwarmDrawView->discussChanged = true;
             CGRect screenRect = [mySwarmDrawView bounds];
             [mySwarmDrawView setFrame:screenRect];
             [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_1024_768_IpadLandscape.png"]]];
@@ -668,6 +668,8 @@
         else {
             
             //Load images for landscape view
+            mySwarmDrawView->discussChanged = true;
+
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
             
@@ -685,6 +687,8 @@
         if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
         {
             //Load images for portrait view
+            mySwarmDrawView->discussChanged = true;
+
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             maxCharsDiscuss = 45;
@@ -697,6 +701,8 @@
         }
         else {
             //Load images for portrait view
+            mySwarmDrawView->discussChanged = true;
+
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
             maxCharsDiscuss = 45;
