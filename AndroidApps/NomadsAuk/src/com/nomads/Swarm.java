@@ -131,7 +131,7 @@ public class Swarm extends Activity {
 		prompt.setTypeface(type);
 		
 		// register client with server
-		register();
+		//register();
 		
 		// test scrolling - DELETE
 //		for(int i=0; i<50; i++) {

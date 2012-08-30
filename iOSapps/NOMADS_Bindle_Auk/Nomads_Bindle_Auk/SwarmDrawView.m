@@ -372,7 +372,7 @@
             //Sets position for discuss display text
             CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
             CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
-            CGFloat chatXLoc = (viewWidth * 0.1);
+            CGFloat chatXLoc = (viewWidth * 0.05);
             
             //Displays incoming discuss text in our app
             for (int i=([chatLines count]-1);i>=0;i--) {
