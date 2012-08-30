@@ -132,6 +132,8 @@
         firstFade = false;
         drawing = false;
         
+        dotMethod = 2;
+        
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate->appSand setDelegate:self];
@@ -445,11 +447,29 @@
             }                    
             
             sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
-            
-            CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+
             CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
-            CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[0]-(sizeOffset/2), yTrail[0]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
-            CGContextDrawPath(myLayerContext2, kCGPathFill);
+
+            int i = 0;
+            if (dotMethod == 1) {
+                CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+
+                CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize* dotSizeScaler)));
+                CGContextDrawPath(myLayerContext2, kCGPathFill);
+                // CGContextFillPath(context);
+                //CGContextStrokePath(myLayerContext2);
+            }
+            else if (dotMethod == 2) {
+                dotColor = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
+                
+                CGContextSetStrokeColorWithColor(myLayerContext2, [dotColor CGColor]);
+                CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
+                CGContextSetLineWidth(myLayerContext2, 15);
+                
+                CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
+                CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
+                CGContextStrokePath(myLayerContext2);
+            }
             
         }
         
@@ -631,41 +651,58 @@
                     }                    
                     
                     sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
-
-//                    UIColor *color = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
-
-                    CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                    
+                    
                     
                     // If successive dots are > 6px apart, draw one in between
                     if (1) {
                         if ((abs(xDiff) > 5) || (abs(yDiff) > 5)) {
                             CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
                             
-                            CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-xDiff/2-(sizeOffset/2), yTrail[i]-yDiff/2-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
-                            
-                            CGContextDrawPath(myLayerContext2, kCGPathFill);
-                            //     CGContextFillPath(context);
-                            //CGContextStrokePath(myLayerContext2);
-                        }
-                    }
+                            if (dotMethod == 1) {
+                                CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
 
-                    // DT another way to do it, works but have not folded into all drawing routines
-                    
-//                    CGContextSetStrokeColorWithColor(myLayerContext2, [color CGColor]);
-//                    CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
-//                    CGContextSetLineWidth(myLayerContext2, 15);
-//                    
-//                    CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
-//                    CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
-//                    CGContextStrokePath(myLayerContext2);
+                                CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-xDiff/2-(sizeOffset/2), yTrail[i]-yDiff/2-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                                CGContextDrawPath(myLayerContext2, kCGPathFill);
+                                //     CGContextFillPath(context);
+                                //CGContextStrokePath(myLayerContext2);
+                            }
+                            else if (dotMethod == 2) {
+                                dotColor = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
+                                
+                                CGContextSetStrokeColorWithColor(myLayerContext2, [dotColor CGColor]);
+                                CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
+                                CGContextSetLineWidth(myLayerContext2, 15);
+                                
+                                CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
+                                CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
+                                CGContextStrokePath(myLayerContext2);
+                            }
+                        }
+                    }    
                     
                     
                     CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
-                    CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
-                    CGContextDrawPath(myLayerContext2, kCGPathFill);
-//                    CGContextFillPath(myLayerContext2);
-//                    CGContextStrokePath(myLayerContext2);
-                    
+                    if (dotMethod == 1) {
+                        CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+
+                        CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                        CGContextDrawPath(myLayerContext2, kCGPathFill);
+                        //     CGContextFillPath(context);
+                        //CGContextStrokePath(myLayerContext2);
+                    }
+                    else if (dotMethod == 2) {
+                        dotColor = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
+                        
+                        CGContextSetStrokeColorWithColor(myLayerContext2, [dotColor CGColor]);
+                        CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
+                        CGContextSetLineWidth(myLayerContext2, 15);
+                        
+                        CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
+                        CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
+                        CGContextStrokePath(myLayerContext2);
+                    }
+
                     dotSize *= 0.95;
                 }
             } 
@@ -677,7 +714,7 @@
             [self setNeedsDisplay];
             
         });
-
+        
         // =======================================================
         
         
@@ -756,20 +793,36 @@
                 
                 dotRGBmult *= 0.9;
                 
-                    dotSizeScaler = normalSizeFact;
-                    my_ellipseR = (ellipseR * dotRGBmult);
-                    my_ellipseG = (ellipseG * dotRGBmult);
-                    my_ellipseB = (ellipseB * dotRGBmult);
-                    my_ellipseA = (ellipseA * dotRGBmult);
+                dotSizeScaler = normalSizeFact;
+                my_ellipseR = (ellipseR * dotRGBmult);
+                my_ellipseG = (ellipseG * dotRGBmult);
+                my_ellipseB = (ellipseB * dotRGBmult);
+                my_ellipseA = (ellipseA * dotRGBmult);
                 
                 sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
                 
-                CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
                 CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
-                CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
-                CGContextDrawPath(myLayerContext2, kCGPathFill);
-                CGContextFillPath(myLayerContext2);
-                CGContextStrokePath(myLayerContext2);
+                
+                
+                if (dotMethod == 1) {
+                    CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+
+                    CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                    CGContextDrawPath(myLayerContext2, kCGPathFill);
+                    //     CGContextFillPath(context);
+                    //CGContextStrokePath(myLayerContext2);
+                }
+                else if (dotMethod == 2) {
+                    dotColor = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
+                    
+                    CGContextSetStrokeColorWithColor(myLayerContext2, [dotColor CGColor]);
+                    CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
+                    CGContextSetLineWidth(myLayerContext2, 15);
+                    
+                    CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
+                    CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
+                    CGContextStrokePath(myLayerContext2);
+                }
                 
                 dotSize *= 0.95;
             }
