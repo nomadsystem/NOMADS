@@ -8,7 +8,7 @@ import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
 import nomads.v210.NGrain;
-import nomads.v210.NSand;
+//import nomads.v210.NSand;
 import java.io.IOException;
 import java.util.Random;
 import android.app.Activity;
@@ -44,8 +44,8 @@ public class Swarm extends Activity {
 	private NomadsApp app;
 	private MediaPlayer[] tonesPlayers;
 	private MediaPlayer dropletsPlayer, cloudPlayer;
-	private NSand sand;
-	private NGrain grain;
+//	private NSand sand;
+	private NGrain grain, sGrain;
 	private AssetManager assetManager;
 	final Context context = this;
 	ScrollView chatScrollView;
@@ -86,7 +86,7 @@ public class Swarm extends Activity {
 		app.setSwarm(this);
 
 		// get NSand instance from Join
-		sand = app.getSand();
+//		sand = app.getSand();
 		
 		// initialize assets
 		assetManager = context.getAssets();
@@ -222,8 +222,9 @@ public class Swarm extends Activity {
 		// Send the register byte to the Nomads server
 		byte[] registerByte = new byte[1];
 		registerByte[0] = 1;
-		sand.sendGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER,
+		sGrain = new NGrain(NAppIDAuk.OPERA_CLIENT, NCommandAuk.REGISTER,
 				NDataType.BYTE, 1, registerByte);
+		app.sendGrain(sGrain);
 	}
 
 	public void parseGrain(NGrain _grain) {
@@ -489,12 +490,12 @@ public class Swarm extends Activity {
 	            			byte[] discussMsg = value.getBytes();
 	            			// eventually use this:
 	            			// char[] discussMsg = value.toCharArray();
-	            			sand.sendGrain(
-	            					NAppIDAuk.OC_DISCUSS,
+	            			sGrain = new NGrain(NAppIDAuk.OC_DISCUSS,
 	            					NCommandAuk.SEND_MESSAGE,
 	            					NDataType.CHAR,
 	            					discussMsg.length,
 	            					discussMsg);
+	            			app.sendGrain(sGrain);
 	            			cancelAllTextInput();
 	                        return true;
 	                    default:
@@ -509,12 +510,13 @@ public class Swarm extends Activity {
 	            			String value = messageDiscuss.getText().toString();
 	            			Log.i("Swarm", "Cloud sent: " + value);
 	            			byte[] cloudMsg = value.getBytes();
-	            			sand.sendGrain(
+	            			sGrain = new NGrain(
 	            					NAppIDAuk.OC_CLOUD,
 	            					NCommandAuk.SEND_MESSAGE,
 	            					NDataType.CHAR,
 	            					cloudMsg.length,
 	            					cloudMsg);
+	            			app.sendGrain(sGrain);
 	            			if ( app.state().cloudTonesToggle && !cloudPlayer.isPlaying() )
 	            				playRandomCloud();
 	            			cancelAllTextInput();
@@ -543,7 +545,7 @@ public class Swarm extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				app.setConnectionStatus(false);
 				app.getSand().closeConnection();
-				sand = null;
+				app.closeSand();
 				app.finishAll();
 			}
 		});
