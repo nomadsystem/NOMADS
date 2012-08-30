@@ -149,86 +149,86 @@ public class NSand {
 		}
 	}
 
-	// SendGrain with Byte Array
-	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
-			byte[] bArray) {
-		NGlobals.lPrint("NSand.java: sendGrain: ... args ... bArray[]");
-		try {
-			// send app id
-			streamOut.writeByte(aID);
-			// send command
-			streamOut.writeByte(cmd);
-			// send data Type
-			streamOut.writeByte(dType);
-			// send data Length
-			streamOut.writeInt(dLen);
-
-			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
-			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
-			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
-			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
-
-			for (int i = 0; i < dLen; i++) {
-				streamOut.writeByte(bArray[i]);
-				NGlobals.lPrint("NSand.java: sendGrain: BYTE:  " + bArray[i]);
-			}
-		} catch (IOException ioe) {
-			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
-		}
-	}
-
-	// SendGrain with Int Array
-	public void sendGrain(byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
-		NGlobals.lPrint("NSand.java: sendGrain: ... args ... iArray[]");
-		try {
-			// send app id
-			streamOut.writeByte(aID);
-			// send command
-			streamOut.writeByte(cmd);
-			// send data Type
-			streamOut.writeByte(dType);
-			// send data Length
-			streamOut.writeInt(dLen);
-
-			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
-			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
-			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
-			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
-
-			for (int i = 0; i < dLen; i++) {
-				streamOut.writeInt(iArray[i]);
-			}
-		} catch (IOException ioe) {
-			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
-		}
-	}
-
-	// SendGrain with Float Array
-	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
-			float[] fArray) {
-		NGlobals.lPrint("NSand.java: sendGrain: ... args ... fArray[]");
-		try {
-			// send app id
-			streamOut.writeByte(aID);
-			// send command
-			streamOut.writeByte(cmd);
-			// send data Type
-			streamOut.writeByte(dType);
-			// send data Length
-			streamOut.writeInt(dLen);
-
-			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
-			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
-			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
-			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
-
-			for (int i = 0; i < dLen; i++) {
-				streamOut.writeFloat(fArray[i]);
-			}
-		} catch (IOException ioe) {
-			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
-		}
-	}
+//	// SendGrain with Byte Array
+//	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
+//			byte[] bArray) {
+//		NGlobals.lPrint("NSand.java: sendGrain: ... args ... bArray[]");
+//		try {
+//			// send app id
+//			streamOut.writeByte(aID);
+//			// send command
+//			streamOut.writeByte(cmd);
+//			// send data Type
+//			streamOut.writeByte(dType);
+//			// send data Length
+//			streamOut.writeInt(dLen);
+//
+//			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
+//			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
+//			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
+//			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
+//
+//			for (int i = 0; i < dLen; i++) {
+//				streamOut.writeByte(bArray[i]);
+//				NGlobals.lPrint("NSand.java: sendGrain: BYTE:  " + bArray[i]);
+//			}
+//		} catch (IOException ioe) {
+//			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
+//		}
+//	}
+//
+//	// SendGrain with Int Array
+//	public void sendGrain(byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+//		NGlobals.lPrint("NSand.java: sendGrain: ... args ... iArray[]");
+//		try {
+//			// send app id
+//			streamOut.writeByte(aID);
+//			// send command
+//			streamOut.writeByte(cmd);
+//			// send data Type
+//			streamOut.writeByte(dType);
+//			// send data Length
+//			streamOut.writeInt(dLen);
+//
+//			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
+//			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
+//			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
+//			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
+//
+//			for (int i = 0; i < dLen; i++) {
+//				streamOut.writeInt(iArray[i]);
+//			}
+//		} catch (IOException ioe) {
+//			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
+//		}
+//	}
+//
+//	// SendGrain with Float Array
+//	public void sendGrain(byte aID, byte cmd, byte dType, int dLen,
+//			float[] fArray) {
+//		NGlobals.lPrint("NSand.java: sendGrain: ... args ... fArray[]");
+//		try {
+//			// send app id
+//			streamOut.writeByte(aID);
+//			// send command
+//			streamOut.writeByte(cmd);
+//			// send data Type
+//			streamOut.writeByte(dType);
+//			// send data Length
+//			streamOut.writeInt(dLen);
+//
+//			NGlobals.lPrint("NSand.java: sendGrain: appID =" + aID);
+//			NGlobals.lPrint("NSand.java: sendGrain: commd =" + cmd);
+//			NGlobals.lPrint("NSand.java: sendGrain: dataType =" + dType);
+//			NGlobals.lPrint("NSand.java: sendGrain: dLen  =" + dLen);
+//
+//			for (int i = 0; i < dLen; i++) {
+//				streamOut.writeFloat(fArray[i]);
+//			}
+//		} catch (IOException ioe) {
+//			NGlobals.lPrint("NSand.java: sendGrain: SAND write error");
+//		}
+//	}
 
 	// ==============================================================
 	// getGrain()

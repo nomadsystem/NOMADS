@@ -7,7 +7,8 @@ package com.nomads;
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
-import nomads.v210.NSand;
+import nomads.v210.NGrain;
+//import nomads.v210.NSand;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -30,7 +31,8 @@ class Dot extends View {
 	// private Paint backgroundPaint;
 
 	private NomadsApp app;
-	private NSand sand;
+//	private NSand sand;
+	private NGrain sGrain;
 //	private boolean pointerIsVisible;
 
 	// private NGrain grain;
@@ -45,7 +47,7 @@ class Dot extends View {
 		app.setDot(this);
 
 		// get NSand instance from Join
-		sand = app.getSand();
+//		sand = app.getSand();
 
 		// backgroundPaint = new Paint();
 		// backgroundPaint.setColor(Color.BLUE);
@@ -102,12 +104,13 @@ class Dot extends View {
 				xyInt[1] = (int) (xyNorm[1] * 1000.0f);
 	
 				// send position of dot to server
-				sand.sendGrain(
+				sGrain = new NGrain(
 						NAppIDAuk.OC_POINTER,
 						NCommandAuk.SEND_SPRITE_XY,
 						NDataType.INT32,
 						2,
 						xyInt);
+    			app.sendGrain(sGrain);
 				break;
 				
 			case MotionEvent.ACTION_UP:
