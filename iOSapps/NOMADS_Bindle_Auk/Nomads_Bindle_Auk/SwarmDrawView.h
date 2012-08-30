@@ -70,7 +70,7 @@
     
     int discussTextSize;
 
-    Boolean discussStatus;
+    @public Boolean discussStatus;
     Boolean cloudStatus;
     Boolean pointerStatus;
     
@@ -103,6 +103,7 @@
 @property (strong, retain) BindleAppDelegate *appDelegate;
 @property (nonatomic) CGPoint myFingerPoint;
 @property (strong, nonatomic) NSString *prompt;
+
 
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand
 - (void)clearAll;
