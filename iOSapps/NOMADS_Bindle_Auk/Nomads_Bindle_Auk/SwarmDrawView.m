@@ -381,7 +381,7 @@
                 for (int i=([chatLines count]-1);i>=0;i--) {
                     @autoreleasepool {
                         
-                        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
+                        NSString *nsstr = [chatLines objectAtIndex:i]; //Incoming NSString
                         const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
                         int len = strlen(str);
                         //       printf("My String %s\n", str);
