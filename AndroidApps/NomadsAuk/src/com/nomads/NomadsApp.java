@@ -26,8 +26,10 @@ public class NomadsApp extends Application {
 	private Settings settings;
 //	private GrainTarget gT;
 	private static NSand sand;
-	private NGrain grain;
+	private NGrain grain, sGrain;
 	private NomadsAppThread nThread;
+	private NomadsSendThread sThread;
+//	private boolean sendThreadBlock = false;
 	private AppState appState = new AppState();
 	
 	private boolean connectionStatus = false;
@@ -64,6 +66,9 @@ public class NomadsApp extends Application {
 		super.onCreate();
 
 		singleton = this;
+		
+		// create a new static instance of NSand class
+//		newSand();
 
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
@@ -219,13 +224,17 @@ public class NomadsApp extends Application {
 	}
 
 	public void newSand() {
+		closeSand();
+
+		// create NSand instance
+		sand = new NSand();
+	}
+	
+	public void closeSand() {
 		if (sand != null) {
 			sand.closeConnection();
 			sand = null;
 		}
-
-		// create NSand instance
-		sand = new NSand();
 	}
 
 	// ========================================================
@@ -239,6 +248,13 @@ public class NomadsApp extends Application {
 			Log.i("NomadsApp", "Thread started.");
 		} else {
 			Log.i("NomadsApp", "startThread: thread != null.");
+		}
+		if (sThread == null) {
+			sThread = new NomadsSendThread();
+			sThread.start();
+			Log.i("NomadsApp", "sThread started.");
+		} else {
+			Log.i("NomadsApp", "startSendThread: thread != null.");
 		}
 	}
 
@@ -254,11 +270,49 @@ public class NomadsApp extends Application {
 		} else {
 			Log.i("NomadsApp", "stopThread: thread == null.");
 		}
+		if (sThread != null) {
+			Thread moribund = sThread;
+			sThread = null;
+			moribund.interrupt();
+			Log.i("NomadsApp", "NomadsSendThread stopped.");
+			// sand.close();
+			// sand.new Close().execute();
+			// Log.i("NomadsApp", "sand.close()");
+		} else {
+			Log.i("NomadsApp", "stopSendThread: thread == null.");
+		}
+	}
+	
+	public void sendGrain (NGrain _sGrain) {
+		sGrain = _sGrain;
 	}
 
 	// ========================================================
-	// Connection Thread
+	// Connection Threads
 	// ========================================================
+	
+	private static class NomadsSendThread extends Thread {
+		public NomadsSendThread() {
+		}
+
+		public void run() {
+			Log.e("NomadsApp", (singleton.sGrain != null) + " and " + (singleton.isConnected()));
+			while (singleton.isConnected()) {
+				if (singleton.sGrain != null) {
+					try {
+						Log.e("NomadsApp", "NomadsSendThread(): Attempting to send grain....");
+						// send bytes
+						sand.sendGrain(singleton.sGrain);
+					} catch (NullPointerException npe) {		
+	//					grain = null;
+						Log.e("NomadsApp", "sendGrain.run(): NPE");
+					}
+					
+					singleton.sGrain = null;
+				}
+			}
+		}
+	}
 
 	private static class NomadsAppThread extends Thread {
 		public NomadsAppThread() {
