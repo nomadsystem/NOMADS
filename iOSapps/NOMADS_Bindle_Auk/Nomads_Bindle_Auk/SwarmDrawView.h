@@ -97,6 +97,9 @@
     Boolean tonesTouchDone;
     Boolean firstFade;
     Boolean drawing;
+    
+    UIColor *dotColor;
+    int dotMethod;
 }
 
 @property (strong, retain) NSand *appSand;

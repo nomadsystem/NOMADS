@@ -45,7 +45,7 @@
     if (self) {
         [self.view bringSubviewToFront:aukView]; //Load the aukView
         currentView = 0; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
-
+        
     }
     
     return self;
@@ -178,7 +178,7 @@
         [mySwarmDrawView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
         
     }
-
+    
     //Add our instance of SwarmDrawView to swarmView
     [swarmView addSubview:mySwarmDrawView];
     //Set auto-resize parameters for SwarmDrawView
@@ -204,69 +204,79 @@
 //Method to determine internet reachability (general network connections)
 //Only called once on init
 -(BOOL)internetConnectionStatus {
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus internetStatus = [reachability currentReachabilityStatus];
-    
-    //If network is NOT reachable
-    if(internetStatus == NotReachable) {
-        CLog("internet status == NotReachable");
-        UIAlertView *errorView;
+    @autoreleasepool {
+        Reachability *reachability = [Reachability reachabilityForInternetConnection];
+        NetworkStatus internetStatus = [reachability currentReachabilityStatus];
         
-        errorView = [[UIAlertView alloc]
-                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
-                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
-                     delegate: self
-                     cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
-        
-        [errorView show];
-        //Calls alertView didDismissWithButtonIndex: on button press
-        return NO;
+        //If network is NOT reachable
+        if(internetStatus == NotReachable) {
+            CLog("internet status == NotReachable");
+            
+            
+            UIAlertView *errorView;
+            
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            
+            //Calls alertView didDismissWithButtonIndex: on button press
+            return NO;
+        }
+        else {
+            return YES;
+        }
     }
-    else {
-        return YES;
-    }
-    
 }
 
 //Method to determine change in network reachability (general network connections)
 -(void)reachabilityChanged:(NSNotification*)note
 {
-    Reachability * reach = [note object];
-    
-    
-    if([reach isReachable]) //If network is reachable
-    {
-        CLog(@"Notification Says Reachable");
-    }
-    else //if Network is unreachable
-    {
-        CLog(@"Notification Says UnReachable");
-        UIAlertView *errorView;
-        //Create error view (pop up window) for error message
-        errorView = [[UIAlertView alloc]
-                     initWithTitle: NSLocalizedString(@"Network error", @"Network error")
-                     message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
-                     delegate: self
-                     cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
+    @autoreleasepool {
         
-        [errorView show];
-        //Calls alertView didDismissWithButtonIndex: on button press
+        Reachability * reach = [note object];
+        
+        
+        if([reach isReachable]) //If network is reachable
+        {
+            CLog(@"Notification Says Reachable");
+        }
+        else //if Network is unreachable
+        {
+            CLog(@"Notification Says UnReachable");
+            UIAlertView *errorView;
+            //Create error view (pop up window) for error message
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            //Calls alertView didDismissWithButtonIndex: on button press
+        }
     }
 }
 
 //Method to handle networkConnectionError from NSand (delegate of NSand)
 - (void)networkConnectionError:(NSString *)ErrStr
 {
-    CLog("internet status == NotReachable");
-    UIAlertView *errorView;
-    
-    errorView = [[UIAlertView alloc]
-                 initWithTitle: NSLocalizedString(ErrStr,ErrStr)
-                 message: NSLocalizedString(@"Error connecting to NOMADS Server",ErrStr)
-                 delegate: self
-                 cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"SAND Network error") otherButtonTitles: nil];
-    
-    [errorView show];
+    @autoreleasepool {
+        
+        CLog("internet status == NotReachable");
+        UIAlertView *errorView;
+        
+        errorView = [[UIAlertView alloc]
+                     initWithTitle: NSLocalizedString(ErrStr,ErrStr)
+                     message: NSLocalizedString(@"Error connecting to NOMADS Server",ErrStr)
+                     delegate: self
+                     cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"SAND Network error") otherButtonTitles: nil];
+        
+        [errorView show];
+    }
 }
 
 //Method handles what to do when network errors are dismissed with the button
@@ -275,6 +285,7 @@
     if (buttonIndex == 0) {
         CLog("Alert button %i pressed", buttonIndex);
         
+        connectionLabel.text = @"Not Connected!";
         [moreInfoButton setHidden:YES]; //Hide the Leave button
         [joinNomadsButton setHidden:NO]; //Show the Join Button
         [self.view bringSubviewToFront:settingsView];
@@ -385,29 +396,34 @@
 
 // Takes us to infoView (web page about NOMADS)
 - (IBAction)settingsNavMoreInfoButton:(id)sender {
-    [settingsNavBarMoreInfoButton setEnabled:NO];
-    NSString *infoURL = @"http://nomads.music.virginia.edu";
-    NSURL *url = [NSURL URLWithString:infoURL];
-    NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
-    
-    [self.view bringSubviewToFront:infoViewNOMADS];
-    //  [infoViewNOMADS setUserInteractionEnabled:NO];
-    currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
-    
-    [self.infoViewNOMADS loadRequest:myLoadRequest];
+    @autoreleasepool {
+        [settingsNavBarMoreInfoButton setEnabled:NO];
+        NSString *infoURL = @"http://nomads.music.virginia.edu";
+        NSURL *url = [NSURL URLWithString:infoURL];
+        NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
+        
+        [self.view bringSubviewToFront:infoViewNOMADS];
+        //  [infoViewNOMADS setUserInteractionEnabled:NO];
+        currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+        
+        [self.infoViewNOMADS loadRequest:myLoadRequest];
+    }
 }
 
 - (IBAction)moreInfoButton:(id)sender {
-    [settingsNavBarMoreInfoButton setEnabled:NO];
-    NSString *infoURL = @"http://nomads.music.virginia.edu";
-    NSURL *url = [NSURL URLWithString:infoURL];
-    NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
-    
-    [self.view bringSubviewToFront:infoViewNOMADS];
-    //  [infoViewNOMADS setUserInteractionEnabled:NO];
-    currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
-    
-    [self.infoViewNOMADS loadRequest:myLoadRequest];
+    @autoreleasepool {
+        
+        [settingsNavBarMoreInfoButton setEnabled:NO];
+        NSString *infoURL = @"http://nomads.music.virginia.edu";
+        NSURL *url = [NSURL URLWithString:infoURL];
+        NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
+        
+        [self.view bringSubviewToFront:infoViewNOMADS];
+        //  [infoViewNOMADS setUserInteractionEnabled:NO];
+        currentView = 2; //0=aukView, 1=settingsView, 2=infoView (UIWebView)
+        
+        [self.infoViewNOMADS loadRequest:myLoadRequest];
+    }
 }
 
 // Auk view items ===============================================
@@ -435,17 +451,20 @@
 
 //UITextFieldDelegate Method, Max number of charachters user can type into text field
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField == inputDiscussField) {
-        NSUInteger newLength = [textField.text length] + [string length] - range.length;
-        return (newLength > maxCharsDiscuss) ? NO : YES;
-    }
-    else if (textField == inputCloudField) {
-        NSUInteger newLength = [textField.text length] + [string length] - range.length;
-        return (newLength > maxCharsCloud) ? NO : YES;
-    }
-    else {
-        CLog("NO Data from textFieldDelegate");
-        return YES;
+    @autoreleasepool {
+        
+        if (textField == inputDiscussField) {
+            NSUInteger newLength = [textField.text length] + [string length] - range.length;
+            return (newLength > maxCharsDiscuss) ? NO : YES;
+        }
+        else if (textField == inputCloudField) {
+            NSUInteger newLength = [textField.text length] + [string length] - range.length;
+            return (newLength > maxCharsCloud) ? NO : YES;
+        }
+        else {
+            CLog("NO Data from textFieldDelegate");
+            return YES;
+        }
     }
 }
 
@@ -462,27 +481,28 @@
 
 //Method to play CloudSound (from Cloud entry at end of Opera)
 -(void)playCloudSound {
-    
-    NSString *soundFile;
-    
-    soundFile = [NSString stringWithFormat:@"sounds/AuksalaqThoughtCloudSounds/AuksalaqThoughtCloud%d.mp3",fileNum];
-    
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
-    
-    CLog("URL: %@", url);
-    
-    NSError *error;
-    if (audioPlayer == nil) {
-        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        [audioPlayer setDelegate:self];
-        audioPlayer.numberOfLoops = 0;
+    @autoreleasepool {
+        NSString *soundFile;
+        
+        soundFile = [NSString stringWithFormat:@"sounds/AuksalaqThoughtCloudSounds/AuksalaqThoughtCloud%d.mp3",fileNum];
+        
+        NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
+        
+        CLog("URL: %@", url);
+        
+        NSError *error;
         if (audioPlayer == nil) {
-            CLog("Playback error: %@",[error description]);
-        }
-        else {
-            audioPlayer.volume = cloudSoundVolume;
-            CLog("noteVolume = %f", cloudSoundVolume);
-            [audioPlayer play];
+            audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+            [audioPlayer setDelegate:self];
+            audioPlayer.numberOfLoops = 0;
+            if (audioPlayer == nil) {
+                CLog("Playback error: %@",[error description]);
+            }
+            else {
+                audioPlayer.volume = cloudSoundVolume;
+                CLog("noteVolume = %f", cloudSoundVolume);
+                [audioPlayer play];
+            }
         }
     }
     
@@ -669,7 +689,7 @@
             
             //Load images for landscape view
             mySwarmDrawView->discussChanged = true;
-
+            
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_480_320.png"]]];
             
@@ -688,7 +708,7 @@
         {
             //Load images for portrait view
             mySwarmDrawView->discussChanged = true;
-
+            
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_768_1024_IpadPortrait.png"]]];
             maxCharsDiscuss = 45;
@@ -702,7 +722,7 @@
         else {
             //Load images for portrait view
             mySwarmDrawView->discussChanged = true;
-
+            
             [[self settingsView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
             [[self aukView] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue_ice_bg_320_480.png"]]];
             maxCharsDiscuss = 45;
