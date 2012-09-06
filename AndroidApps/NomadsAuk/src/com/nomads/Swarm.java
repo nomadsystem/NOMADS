@@ -42,6 +42,7 @@ import android.widget.TextView;
 
 public class Swarm extends Activity {
 	private NomadsApp app;
+//	private AudioManager am;
 	private MediaPlayer[] tonesPlayers;
 	private MediaPlayer dropletsPlayer, cloudPlayer;
 //	private NSand sand;
@@ -88,6 +89,9 @@ public class Swarm extends Activity {
 		// get NSand instance from Join
 //		sand = app.getSand();
 		
+		// get app's audio manager
+//		am = app.getAudioManager();
+		
 		// initialize assets
 		assetManager = context.getAssets();
 		try {
@@ -108,6 +112,9 @@ public class Swarm extends Activity {
 			
 		// media players now initialized in onResume()
 		// initializeMediaPlayers();
+		
+		// set device volume control to change media volume
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		// initialize UI
 		setContentView(R.layout.swarm);
@@ -131,7 +138,7 @@ public class Swarm extends Activity {
 		prompt.setTypeface(type);
 		
 		// register client with server
-		//register();
+		register();
 		
 		// test scrolling - DELETE
 //		for(int i=0; i<50; i++) {
@@ -148,6 +155,14 @@ public class Swarm extends Activity {
 		if (app.requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 			Log.d("Swarm", "onResume(): audio focus aquired.");
 		}
+		
+//		am = (AudioManager) getBaseContext().getSystemService(
+//				Context.AUDIO_SERVICE);
+//		
+//		// set media volume to max
+//		am.setStreamVolume(AudioManager.STREAM_MUSIC,
+//				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+//			    AudioManager.FLAG_SHOW_UI);
 
 		// create array of media players
 		initializeMediaPlayers();
@@ -344,7 +359,7 @@ public class Swarm extends Activity {
 
 			else if (grain.command == NCommandAuk.SET_DROPLET_VOLUME) {
 				Log.i("Swarm", "changing droplets volume for mPlayers (current same as pointer volume)");
-				double dropletsVolVal = ( (double) grain.iArray[0]) * 0.5f;
+				double dropletsVolVal = ( (double) grain.iArray[0]) * 0.7f;
 				float dropletsVolume = (float) (Math.pow(dropletsVolVal, 2) / 10000.0);
 				
 				app.state().dropletsVolume = dropletsVolume;
@@ -357,7 +372,7 @@ public class Swarm extends Activity {
 			
 			else if (grain.command == NCommandAuk.SET_CLOUD_SOUND_VOLUME) {
 				Log.i("Swarm", "changing volume for onePlayer");
-				double cloudVolVal = ( (double) grain.iArray[0] ) * 0.5f;
+				double cloudVolVal = ( (double) grain.iArray[0] ) * 0.7f;
 				float cloudVolume = (float) (Math.pow(cloudVolVal, 2) / 10000.0);
 				
 				app.state().cloudVolume = cloudVolume;
@@ -367,7 +382,7 @@ public class Swarm extends Activity {
 			
 			else if (grain.command == NCommandAuk.SET_POINTER_TONE_VOLUME) {
 				Log.i("Swarm", "changing pointer volume for mPlayers");
-				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.25f;
+				double pointerVolVal = ( (double) grain.iArray[0] ) * 0.6f;
 				float tonesVolume = (float) (Math.pow(pointerVolVal, 2) / 10000.0);
 				
 				app.state().tonesVolume = tonesVolume;

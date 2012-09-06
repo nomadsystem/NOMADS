@@ -84,5 +84,6 @@ public final class R {
         public static final int h2=0x7f050004;
         public static final int info=0x7f050001;
         public static final int infoBlack=0x7f050002;
+        public static final int prompt=0x7f050005;
     }
 }

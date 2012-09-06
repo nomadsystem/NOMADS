@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:gravity="center"
     android:background="#FFFFFF" >
     
 	<ImageView
@@ -11,61 +12,62 @@
         android:layout_height="fill_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:gravity="right"
         android:src="@drawable/auklogo_128tr"
         android:contentDescription="@string/welcome" />
-
-	<TextView
-	    android:id="@+id/joinStatus"
-	    style="@style/infoBlack"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="20dp"
-	    android:gravity="center"
-	    android:layout_toRightOf="@id/auklogo"
-	    android:text="@string/loginPrompt" />
 	
 	<LinearLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/connectButtonLayout"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:gravity="center"
-    	android:layout_toRightOf="@id/auklogo"
-    	android:layout_below="@id/joinStatus">
-		<Button
-		    android:id="@+id/connectButton"
-		    android:gravity="center"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/connectButton"
-		    android:visibility="gone" />
-	</LinearLayout>
-	
-	<TextView
-	    android:id="@+id/nomadsInfo"
-	    style="@style/infoBlack"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="20dp"
-	    android:gravity="center"
-	    android:layout_toRightOf="@id/auklogo"
-	    android:layout_below="@id/connectButtonLayout"
-	    android:text="@string/nomadsInfo" />
-	
-	<LinearLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/nomadsLinkLayout"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:gravity="center"
-    	android:layout_toRightOf="@id/auklogo"
-    	android:layout_below="@id/nomadsInfo">
-		<Button
-		    android:id="@+id/linkButton"
-		    android:gravity="center"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/linkButton" />
-	</LinearLayout>
+    	android:layout_width="wrap_content"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical"
+    	android:gravity="center">
 
-</RelativeLayout>
+		<TextView
+		    android:id="@+id/joinStatus"
+		    style="@style/infoBlack"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20dp"
+		    android:gravity="center"
+		    android:text="@string/loginPrompt" />
+		
+		<LinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center">
+			<Button
+			    android:id="@+id/connectButton"
+			    android:gravity="center"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="@string/connectButton"
+			    android:visibility="gone" />
+		</LinearLayout>
+		
+		<TextView
+		    android:id="@+id/nomadsInfo"
+		    style="@style/infoBlack"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20dp"
+		    android:gravity="center"
+		    android:text="@string/nomadsInfo" />
+		
+		<LinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/nomadsLinkLayout"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center">
+			<Button
+			    android:id="@+id/linkButton"
+			    android:gravity="center"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="@string/linkButton" />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

@@ -19,7 +19,7 @@ import android.util.Log;
 
 public class NomadsApp extends Application {
 	private static NomadsApp singleton;
-	AudioManager am;
+	private AudioManager am;
 	private Join join;
 	private Swarm swarm;
 	private Dot dot;
@@ -93,6 +93,10 @@ public class NomadsApp extends Application {
 	// ========================================================
 	// Getters / Setters
 	// ========================================================
+	
+	public AudioManager getAudioManager () {
+		return am;
+	}
 
 	public void setJoin(Join _j) {
 		join = _j;
