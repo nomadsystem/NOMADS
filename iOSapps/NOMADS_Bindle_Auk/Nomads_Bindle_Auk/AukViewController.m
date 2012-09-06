@@ -398,7 +398,7 @@
 - (IBAction)settingsNavMoreInfoButton:(id)sender {
     @autoreleasepool {
         [settingsNavBarMoreInfoButton setEnabled:NO];
-        NSString *infoURL = @"http://nomads.music.virginia.edu";
+        NSString *infoURL = @"http://nomads.music.virginia.edu/moreinfo.html";
         NSURL *url = [NSURL URLWithString:infoURL];
         NSURLRequest *myLoadRequest = [NSURLRequest requestWithURL:url];
         
