@@ -285,6 +285,7 @@
     if (buttonIndex == 0) {
         CLog("Alert button %i pressed", buttonIndex);
         
+        connectionLabel.text = @"Not Connected!";
         [moreInfoButton setHidden:YES]; //Hide the Leave button
         [joinNomadsButton setHidden:NO]; //Show the Join Button
         [self.view bringSubviewToFront:settingsView];
