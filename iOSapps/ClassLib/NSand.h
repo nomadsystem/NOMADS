@@ -58,6 +58,12 @@
                          DataLen:(int)dL
                          Uint8:(Byte *)myUint8s;
 
+- (void) sendWithGrainElts_AppID:(Byte)a
+                         Command:(Byte)c
+                        DataType:(Byte)dT
+                         DataLen:(int)dL
+                            Char: (Byte *)myChars;
+
 - (void) sendWithGrainElts_AppID:(Byte)a 
                          Command:(Byte)c 
                         DataType:(Byte)dT 
@@ -68,7 +74,7 @@
                          Command:(Byte)c 
                         DataType:(Byte)dT 
                          DataLen:(int)dL
-                         Float32:(int *)myFloat32s;
+                         Float32:(float *)myFloat32s;
 
 
 //- (NGrain) getGrain;
@@ -76,7 +82,6 @@
 //- (NGrain) getGrainElts_AppID: (Byte)appID;
 
 - (void) connect;
-- (void) close;
 
 @end
 
