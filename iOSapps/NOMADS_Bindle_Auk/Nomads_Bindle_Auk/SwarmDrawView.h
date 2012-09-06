@@ -114,8 +114,7 @@
 - (void)playDroplet;
 - (void)playTone;
 - (void)fadeInPrompt;
-- (void)fadeOutPromt;
-- (void)promptZeroTimer;
+- (void)fadeOutPrompt;
 
 @end
 

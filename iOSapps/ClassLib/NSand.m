@@ -49,10 +49,6 @@
     return self;
 }
 
-- (void) close
-{
-    
-}
 
 // Connect ===================================================================================
 
@@ -147,7 +143,7 @@
 {
     @autoreleasepool {
         
-        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum;
         
         //Byte appID
         appIDDatum = [self convertToByteToStreamOut:&a]; // appID
@@ -212,7 +208,7 @@
     @autoreleasepool {
         
         
-        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum;
         
         //Byte appID
         appIDDatum = [self convertToByteToStreamOut:&a]; // appID
@@ -280,7 +276,7 @@
 {
     @autoreleasepool {
         
-        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum;
         
         LLog(@"foo got i:  %d\n",a);
         
@@ -341,13 +337,13 @@
 - (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
                         DataType:(Byte)dT
-                        Dat7aLen:(int)dL
+                        DataLen:(int)dL
                          Float32:(float *)myFloat32s;
 {
     @autoreleasepool {
         
         
-        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum;
         
         LLog(@"foo got i:  %d\n",a);
         
@@ -447,7 +443,6 @@
                 int *iBuffer = NULL;       // int
                 uint32_t tInt=0;
                 float *fBuffer = NULL;     // float
-                float tFloat=0;
                 
                 if ([streamIn hasBytesAvailable]) {
                     
@@ -914,7 +909,7 @@
                                                           Command:(Byte)cmd
                                                          DataType:(Byte)dType
                                                           DataLen:(int)dLen
-                                                          Float32:(int *)fBuffer];
+                                                          Float32:(float *)fBuffer];
                                         [grain print];
                                         
                                         // send out to all our delgates
