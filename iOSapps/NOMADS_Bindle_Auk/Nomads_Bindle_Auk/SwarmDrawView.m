@@ -28,19 +28,19 @@
         viewHeight = viewRect.size.height;
         viewWidth = viewRect.size.width;
         
-//        CLog(@"viewHeight = %f", viewHeight);
-//        CLog(@"viewWidth = %f", viewWidth);
+        //        CLog(@"viewHeight = %f", viewHeight);
+        //        CLog(@"viewWidth = %f", viewWidth);
         
         //Scale for pointer output between 0-1000 (To become 0-1)
         viewHeightScale = (1000/viewHeight);
         viewWidthScale = (1000/viewWidth);
         
         
-//        CLog(@"viewHeightScale = %f", viewHeightScale);
-//        CLog(@"viewWidthScale = %f", viewWidthScale);
+        //        CLog(@"viewHeightScale = %f", viewHeightScale);
+        //        CLog(@"viewWidthScale = %f", viewWidthScale);
         
         // Init prompt text
-    
+        
         prompt = [NSString stringWithFormat:@""];
         promptAlpha = 0;
         
@@ -75,19 +75,19 @@
             xTrail[i]=(viewWidth * 0.5);
             yTrail[i]=(viewHeight * 0.5);
         }
-
+        
         ellipseR = 0.8;
         ellipseG = 0.0;
         ellipseB = 0.8;
         ellipseA = 0.8;
-
+        
         dotFlashEllipseR = 1.0;
         dotFlashEllipseG = 0.0;
         dotFlashEllipseB = 1.0;
         dotFlashEllipseA = 1.0;
-
+        
         dropFlash = NO; //Don't flash the dot
-
+        
         toneMovementVol = 0;
         //    CLog(@" brightness = %f ", brightness);
         //    CLog(@" brightDelta = %f ", brightDelta);
@@ -120,7 +120,7 @@
         
         //Init timer for prompt fading
         promptWaitTick = 0;
-      //  promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(initWaitPrompt) userInfo:nil repeats:YES];
+        //  promptWaitTimer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(initWaitPrompt) userInfo:nil repeats:YES];
         
         //Init initial status of Cloud/Discuss/Pointer
         cloudStatus = 0;
@@ -138,12 +138,12 @@
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate->appSand setDelegate:self];
         
-//       displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
-//        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+        //       displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
+        //        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
         
     }
     [self setUserInteractionEnabled:NO];
-
+    
     return self;
 }
 
@@ -152,7 +152,7 @@
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
     CLog(@"SwarmDrawView: Data Ready Handle\n");
-        
+    
     if (nil != inGrain) {
         
         // Set respective STATUS of various app components
@@ -177,9 +177,9 @@
                 discussHasText = true;
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self setNeedsDisplay];
+                    [self setNeedsDisplay];
                 });
-                }
+            }
         }
         
         if(inGrain->appID == CONDUCTOR_PANEL) {
@@ -204,14 +204,14 @@
                 if (inGrain->bArray[0] == 1) {
                     fileNumTones = 1;
                     toneCntrlOn = YES;
-   //                 [self playTone];
+                    //                 [self playTone];
                     CLog("SET_POINTER_TONE_STATUS = ON");
                     
                 }
                 else if (inGrain->bArray[0] == 0) {
                     toneCntrlOn = NO;
                     if (toneTimer)
-                    [toneTimer invalidate];
+                        [toneTimer invalidate];
                     CLog("SET_TONE_STATUS = OFF");
                 }
                 
@@ -239,9 +239,9 @@
                 pointerStatus = (Boolean)inGrain->bArray[0];
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self setNeedsDisplay];
+                    [self setNeedsDisplay];
                 });
-                }
+            }
             
             
             else if(inGrain->command == SEND_PROMPT_ON) {
@@ -274,9 +274,9 @@
             CLog(@"chatLines = %@", chatLines);
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self setNeedsDisplay];
+                [self setNeedsDisplay];
             });
-                
+            
         }
         
     }
@@ -289,155 +289,181 @@
 
 -(void)drawRect:(CGRect)rect
 {
-    // Need to recheck bounds in case of device rotation
-    viewRect = [self bounds];
-    viewHeight = viewRect.size.height;
-    viewWidth = viewRect.size.width;
-    
-    
-    //Scale for pointer output between 0-1000 (To become 0-1)
-    viewHeightScale = (1000/viewHeight);
-    viewWidthScale = (1000/viewWidth);
-    
-    //Set up our context
-    CGContextRef context = UIGraphicsGetCurrentContext();
-
-    
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-    {
-        promptTextSize = 50;
-    }
-    else {
-        promptTextSize = 30;
-    }
-    
-    // Prompt ======================================================
-    
-    //Set up drawing for prompt text
-    CGContextSetCharacterSpacing (context, 1);
-    CGContextSetTextDrawingMode (context, kCGTextFillStroke);
-    CGContextSetRGBFillColor (context, 1, 1, 1, promptAlpha);
-    CGContextSetRGBStrokeColor (context, 1, 1, 1, promptAlpha);
-    CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
-    
-    CGContextSetAllowsAntialiasing(context, YES);
-    CGContextSetShouldAntialias(context, YES);
-    CGContextSetShouldSmoothFonts(context, YES);
-    
-    // Display prompt Text
-    const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
-    int len = strlen(str); //get length of string
-    
-    
-    CGSize theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
-    
-    float centerX = (CGRectGetMidX(viewRect));
-    
-    while(theSize.width > (viewWidth*0.8)) {
-        promptTextSize--;
-        theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
-    }
-    
-    CGContextSelectFont (context,
-                         "Papyrus",
-                         promptTextSize,
-                         kCGEncodingMacRoman);
-    
-    CGContextShowTextAtPoint (context, centerX-((theSize.width * 1.1)/2.0), (viewHeight * 0.1), str, len);
-   // CLog("centerX = %f theSize.width = %f", centerX, theSize.width);
-    
-    // Discuss Display ======================================================
-    
-    // Set up and display discussion text
-    if (discussStatus) {
-        if (discussChanged) {
-            
-            if (discussLayer) {
-                CGLayerRelease(discussLayer);
-            }
-            discussLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
-            myLayerContext1 = CGLayerGetContext (discussLayer);
-
-            CGContextSetTextMatrix(myLayerContext1, CGAffineTransformMakeScale(1.0f, -1.0f));
-            CGContextSetAllowsAntialiasing(myLayerContext1, YES);
-            CGContextSetShouldAntialias(myLayerContext1, YES);
-            CGContextSetShouldSmoothFonts(myLayerContext1, YES);
-            
-            CGContextSelectFont (myLayerContext1,
-                                 "Helvetica-Light",
-                                 discussTextSize,
-                                 kCGEncodingMacRoman);
-            
-            CGContextSetRGBFillColor (myLayerContext1, 1.0, 1.0, 1.0, 1);
-            CGContextSetRGBStrokeColor (myLayerContext1, 1.0, 1.0, 1.0, 1);
-            
-            //Sets position for discuss display text
-            CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
-            CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
-            CGFloat chatXLoc = (viewWidth * 0.05);
-            
-            //Displays incoming discuss text in our app
-            for (int i=([chatLines count]-1);i>=0;i--) {
-                
-                NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
-                const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
-                int len = strlen(str);
-                //       printf("My String %s\n", str);
-                CGContextShowTextAtPoint (myLayerContext1, chatXLoc, chatYLoc, str, len);
-                CLog("chatXLoc = %f, chatYLoc = %f", chatXLoc, chatYLoc);
-                
-                chatYLoc -= chatSpace;
-            }
-            discussChanged = false;
-
+    @autoreleasepool {
+        
+        // Need to recheck bounds in case of device rotation
+        viewRect = [self bounds];
+        viewHeight = viewRect.size.height;
+        viewWidth = viewRect.size.width;
+        
+        
+        //Scale for pointer output between 0-1000 (To become 0-1)
+        viewHeightScale = (1000/viewHeight);
+        viewWidthScale = (1000/viewWidth);
+        
+        //Set up our context
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+        {
+            promptTextSize = 50;
         }
-    }
+        else {
+            promptTextSize = 30;
+        }
+        
+        // Prompt ======================================================
+        
+        //Set up drawing for prompt text
+        CGContextSetCharacterSpacing (context, 1);
+        CGContextSetTextDrawingMode (context, kCGTextFillStroke);
+        CGContextSetRGBFillColor (context, 1, 1, 1, promptAlpha);
+        CGContextSetRGBStrokeColor (context, 1, 1, 1, promptAlpha);
+        CGContextSetTextMatrix(context, CGAffineTransformMakeScale(1.0f, -1.0f));
+        
+        CGContextSetAllowsAntialiasing(context, YES);
+        CGContextSetShouldAntialias(context, YES);
+        CGContextSetShouldSmoothFonts(context, YES);
+        
+        // Display prompt Text
+        const char *str = [prompt cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+        int len = strlen(str); //get length of string
+        
+        
+        CGSize theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
+        
+        float centerX = (CGRectGetMidX(viewRect));
+        
+        while(theSize.width > (viewWidth*0.8)) {
+            promptTextSize--;
+            theSize = [prompt sizeWithFont:[UIFont fontWithName:@"Papyrus" size:promptTextSize]];
+        }
+        
+        CGContextSelectFont (context,
+                             "Papyrus",
+                             promptTextSize,
+                             kCGEncodingMacRoman);
+        
+        CGContextShowTextAtPoint (context, centerX-((theSize.width * 1.1)/2.0), (viewHeight * 0.1), str, len);
 
-    if (discussHasText) {
-        CGContextSaveGState(context);    
-        CGContextDrawLayerAtPoint (context, CGPointZero, discussLayer);
-        CGContextRestoreGState(context);
-    }
-    
-    
-    // The Dot ======================================================
-    // only draws if user not dragging/drawing
-    
-    if (pointerStatus) {
-        if (!drawing) {
-            
-            pointerLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
-            myLayerContext2 = CGLayerGetContext (pointerLayer);
-            
-            float dotRGBmult = 1;
-            float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
-            int xDiff, yDiff;
-            float sizeOffset;
-            float flashSizeFact = 1.15;
-            float normalSizeFact = 1.0;
-            
-            float dotSize;
-            //Change dot size based on device
-            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-            {
-                dotSize = 50;
-            }
-            else {
-                dotSize = 20;
-            }
-            
-            //Show the dot if the pointer is on
-            
-            dotRGBmult *= 0.9;
-            
-            if (dropFlash) { //If dot is flashing with droplets
-                dotSizeScaler = flashSizeFact;
-                my_ellipseR = (dotFlashEllipseR * dotRGBmult);
-                my_ellipseG = (dotFlashEllipseG * dotRGBmult);
-                my_ellipseB = (dotFlashEllipseB * dotRGBmult);
-                my_ellipseA = (dotFlashEllipseA * dotRGBmult);
+        // CLog("centerX = %f theSize.width = %f", centerX, theSize.width);
+        
+        // Discuss Display ======================================================
+        
+        // Set up and display discussion text
+        if (discussStatus) {
+            if (discussChanged) {
+                
+                if (discussLayer) {
+                    CGLayerRelease(discussLayer);
+                }
+                discussLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
+                myLayerContext1 = CGLayerGetContext (discussLayer);
+                
+                CGContextSetTextMatrix(myLayerContext1, CGAffineTransformMakeScale(1.0f, -1.0f));
+                CGContextSetAllowsAntialiasing(myLayerContext1, YES);
+                CGContextSetShouldAntialias(myLayerContext1, YES);
+                CGContextSetShouldSmoothFonts(myLayerContext1, YES);
+                
+                CGContextSelectFont (myLayerContext1,
+                                     "Helvetica-Light",
+                                     discussTextSize,
+                                     kCGEncodingMacRoman);
+                
+                CGContextSetRGBFillColor (myLayerContext1, 1.0, 1.0, 1.0, 1);
+                CGContextSetRGBStrokeColor (myLayerContext1, 1.0, 1.0, 1.0, 1);
+                
+                //Sets position for discuss display text
+                CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
+                CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
+                CGFloat chatXLoc = (viewWidth * 0.05);
+                
+                //Displays incoming discuss text in our app
+                for (int i=([chatLines count]-1);i>=0;i--) {
+                    @autoreleasepool {
+                        
+                        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
+                        const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
+                        int len = strlen(str);
+                        //       printf("My String %s\n", str);
+                        CGContextShowTextAtPoint (myLayerContext1, chatXLoc, chatYLoc, str, len);
+                        CLog("chatXLoc = %f, chatYLoc = %f", chatXLoc, chatYLoc);
+                        
+                        chatYLoc -= chatSpace;
+                    }
+                }
+                discussChanged = false;
                 
             }
+        }
+        
+        if (discussHasText) {
+            CGContextSaveGState(context);
+            CGContextDrawLayerAtPoint (context, CGPointZero, discussLayer);
+            CGContextRestoreGState(context);
+        }
+        
+        
+        // The Dot ======================================================
+        // only draws if user not dragging/drawing
+        
+        if (pointerStatus) {
+            if (!drawing) {
+                
+                if (pointerLayer) {
+                    CGLayerRelease(pointerLayer);
+                }
+                
+                pointerLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
+                myLayerContext2 = CGLayerGetContext (pointerLayer);
+                
+                float dotRGBmult = 1;
+                float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
+                int xDiff, yDiff;
+                float sizeOffset;
+                float flashSizeFact = 1.15;
+                float normalSizeFact = 1.0;
+                
+                float dotSize;
+                //Change dot size based on device
+                if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+                {
+                    dotSize = 50;
+                }
+                else {
+                    dotSize = 20;
+                }
+                
+                //Show the dot if the pointer is on
+                
+                dotRGBmult *= 0.9;
+                
+                if (dropFlash) { //If dot is flashing with droplets
+                    dotSizeScaler = flashSizeFact;
+                    my_ellipseR = (dotFlashEllipseR * dotRGBmult);
+                    my_ellipseG = (dotFlashEllipseG * dotRGBmult);
+                    my_ellipseB = (dotFlashEllipseB * dotRGBmult);
+                    my_ellipseA = (dotFlashEllipseA * dotRGBmult);
+                    
+                }
+                else {
+                    dotSizeScaler = normalSizeFact;
+                    my_ellipseR = (ellipseR * dotRGBmult);
+                    my_ellipseG = (ellipseG * dotRGBmult);
+                    my_ellipseB = (ellipseB * dotRGBmult);
+                    my_ellipseA = (ellipseA * dotRGBmult);
+                }
+                
+                sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
+                
+                CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[0]-(sizeOffset/2), yTrail[0]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                CGContextDrawPath(myLayerContext2, kCGPathFill);
+                
+            }
+<<<<<<< HEAD
             else {
                 dotSizeScaler = normalSizeFact;
                 my_ellipseR = (ellipseR * dotRGBmult);
@@ -470,25 +496,30 @@
                 CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
                 CGContextStrokePath(myLayerContext2);
             }
+=======
+>>>>>>> upstream/master
             
+            CGContextSaveGState(context);
+            CGContextDrawLayerAtPoint (context, CGPointZero, pointerLayer);
+            CGContextRestoreGState(context);
         }
+        // }
         
-        CGContextSaveGState(context);    
-        CGContextDrawLayerAtPoint (context, CGPointZero, pointerLayer);
-        CGContextRestoreGState(context);
-    }
-   // }
-    
-    //Sounds ======================================================
-    
-    //Droplets (Needs to be updated in case device orientation changes)
-    int numOfDroplets = 203;
-    float viewXGrid  = (viewWidth / 5);
-    float viewYGrid  = (viewHeight / numOfDroplets);
-    fileNumDroplets = (int)(myFingerPoint.y/viewYGrid);
-    currentTimerVal = (myFingerPoint.x/viewXGrid) + 4.0;
+        //Sounds ======================================================
+        
+        //Droplets (Needs to be updated in case device orientation changes)
+        int numOfDroplets = 203;
+        float viewXGrid  = (viewWidth / 5);
+        float viewYGrid  = (viewHeight / numOfDroplets);
+        fileNumDroplets = (int)(myFingerPoint.y/viewYGrid);
+        currentTimerVal = (myFingerPoint.x/viewXGrid) + 4.0;
+        
+        //CGContextFlush(UIGraphicsGetCurrentContext());
+      //  CGContextRelease(myLayerContext1);
+      //  CGContextRelease(myLayerContext2);
 
-    //CGContextFlush(UIGraphicsGetCurrentContext());
+    }
+
 }
 
 -(void)clearAll
@@ -501,7 +532,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-  //  maxTrails = 2;
+    //  maxTrails = 2;
     CGPoint loc;
     drawing = true;
     
@@ -522,7 +553,7 @@
             myFingerPoint.x = loc.x;
             myFingerPoint.y = loc.y;
         }
-
+        
         
         //Pointer Tones
         if (toneCntrlOn) {
@@ -539,12 +570,12 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self setNeedsDisplay];
+            [self setNeedsDisplay];
         });
-            
-
-//        [self playTone];
-
+        
+        
+        //        [self playTone];
+        
     }
 }
 
@@ -560,26 +591,26 @@
         maxTrails = 5;
         
         //This loop is for display purposes
+        
+        //Update linesInProcess with moved touches
+        for (t in touches) {
             
-            //Update linesInProcess with moved touches
-            for (t in touches) {
-                
-                //Update the point
-                loc = [t locationInView:self];
-                myFingerPoint.x = loc.x;
-                myFingerPoint.y = loc.y;
-                CLog(@"SWARM_X loc = %f", loc.x);
-                CLog(@"SWARM_Y loc = %f", loc.y);
-            }
-
+            //Update the point
+            loc = [t locationInView:self];
+            myFingerPoint.x = loc.x;
+            myFingerPoint.y = loc.y;
+            CLog(@"SWARM_X loc = %f", loc.x);
+            CLog(@"SWARM_Y loc = %f", loc.y);
+        }
+        
         // Code for drawing a png in place of "the DOT"
         
-//        CGRect myImageRect = CGRectMake(loc.x, loc.y, 20.0f, 20.0f); 
-//        UIImageView *myImage = [[UIImageView alloc] initWithFrame:myImageRect];
-//        [myImage setImage:[UIImage imageNamed:@"new_cog.png"]];
-//        myImage.opaque = YES; // explicitly opaque for performance
-//        [self addSubview:myImage];
-
+        //        CGRect myImageRect = CGRectMake(loc.x, loc.y, 20.0f, 20.0f);
+        //        UIImageView *myImage = [[UIImageView alloc] initWithFrame:myImageRect];
+        //        [myImage setImage:[UIImage imageNamed:@"new_cog.png"]];
+        //        myImage.opaque = YES; // explicitly opaque for performance
+        //        [self addSubview:myImage];
+        
         
         
         
@@ -587,60 +618,49 @@
         
         // DT attempt to draw dot independently of screen redraw
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-
-        if (1) {
-            //if (pointerLayer) {
-            //    CGLayerRelease(pointerLayer);
-            //}
-            CGContextRef context = UIGraphicsGetCurrentContext();
-
-            pointerLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
-            myLayerContext2 = CGLayerGetContext (pointerLayer);
             
-            
-            for(int i=maxTrails;i>0;i--) {
-                xTrail[i] = xTrail[i-1];
-                yTrail[i] = yTrail[i-1];
-            }
-            
-            xTrail[0] = myFingerPoint.x;
-            yTrail[0] = myFingerPoint.y;
-            
-            float dotSize;
-            //Change dot size based on device
-            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-            {
-                dotSize = 50;
-            }
-            else {
-                dotSize = 20;
-            }
-            
-            float dotRGBmult = 1;
-            float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
-            int xDiff, yDiff;
-            float sizeOffset;
-            float flashSizeFact = 1.15;
-            float normalSizeFact = 1.0;
-            
-            
-            //Display the dot
+            if (1) {
+                if (pointerLayer) {
+                    CGLayerRelease(pointerLayer);
+                }
+                CGContextRef context = UIGraphicsGetCurrentContext();
                 
-            for (int i=0; i<maxTrails; i++) {
-                if (i<(maxTrails-1)) {
-                    
-                    xDiff = xTrail[i]-xTrail[i+1];
-                    yDiff = yTrail[i]-yTrail[i+1];
-                    
-                    dotRGBmult *= 0.9;
-                    
-                    if (dropFlash) { //If dot is flashing with droplets
-                        dotSizeScaler = flashSizeFact;
-                        my_ellipseR = (dotFlashEllipseR * dotRGBmult);
-                        my_ellipseG = (dotFlashEllipseG * dotRGBmult);
-                        my_ellipseB = (dotFlashEllipseB * dotRGBmult);
-                        my_ellipseA = (dotFlashEllipseA * dotRGBmult);
+                pointerLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
+                myLayerContext2 = CGLayerGetContext (pointerLayer);
+                
+                
+                for(int i=maxTrails;i>0;i--) {
+                    xTrail[i] = xTrail[i-1];
+                    yTrail[i] = yTrail[i-1];
+                }
+                
+                xTrail[0] = myFingerPoint.x;
+                yTrail[0] = myFingerPoint.y;
+                
+                float dotSize;
+                //Change dot size based on device
+                if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+                {
+                    dotSize = 50;
+                }
+                else {
+                    dotSize = 20;
+                }
+                
+                float dotRGBmult = 1;
+                float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
+                int xDiff, yDiff;
+                float sizeOffset;
+                float flashSizeFact = 1.15;
+                float normalSizeFact = 1.0;
+                
+                
+                //Display the dot
+                
+                for (int i=0; i<maxTrails; i++) {
+                    if (i<(maxTrails-1)) {
                         
+<<<<<<< HEAD
                     }
                     else {
                         dotSizeScaler = normalSizeFact;
@@ -704,9 +724,71 @@
                     }
 
                     dotSize *= 0.95;
+=======
+                        xDiff = xTrail[i]-xTrail[i+1];
+                        yDiff = yTrail[i]-yTrail[i+1];
+                        
+                        dotRGBmult *= 0.9;
+                        
+                        if (dropFlash) { //If dot is flashing with droplets
+                            dotSizeScaler = flashSizeFact;
+                            my_ellipseR = (dotFlashEllipseR * dotRGBmult);
+                            my_ellipseG = (dotFlashEllipseG * dotRGBmult);
+                            my_ellipseB = (dotFlashEllipseB * dotRGBmult);
+                            my_ellipseA = (dotFlashEllipseA * dotRGBmult);
+                            
+                        }
+                        else {
+                            dotSizeScaler = normalSizeFact;
+                            my_ellipseR = (ellipseR * dotRGBmult);
+                            my_ellipseG = (ellipseG * dotRGBmult);
+                            my_ellipseB = (ellipseB * dotRGBmult);
+                            my_ellipseA = (ellipseA * dotRGBmult);
+                        }
+                        
+                        sizeOffset = (dotSize * flashSizeFact) - (dotSize * normalSizeFact);
+                        
+                        //                    UIColor *color = [UIColor colorWithRed:my_ellipseR green:my_ellipseG blue:my_ellipseB alpha:my_ellipseA];
+                        
+                        CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                        
+                        // If successive dots are > 6px apart, draw one in between
+                        if (1) {
+                            if ((abs(xDiff) > 5) || (abs(yDiff) > 5)) {
+                                CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                                
+                                CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-xDiff/2-(sizeOffset/2), yTrail[i]-yDiff/2-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                                
+                                CGContextDrawPath(myLayerContext2, kCGPathFill);
+                              //  CFRelease(myLayerContext2);
+                                //     CGContextFillPath(context);
+                                //CGContextStrokePath(myLayerContext2);
+                            }
+                        }
+                        
+                        // DT another way to do it, works but have not folded into all drawing routines
+                        
+                        //                    CGContextSetStrokeColorWithColor(myLayerContext2, [color CGColor]);
+                        //                    CGContextSetLineCap(myLayerContext2, kCGLineCapRound);
+                        //                    CGContextSetLineWidth(myLayerContext2, 15);
+                        //
+                        //                    CGContextMoveToPoint(myLayerContext2, xTrail[i]-1, yTrail[i]-1);
+                        //                    CGContextAddLineToPoint(myLayerContext2, xTrail[i], yTrail[i]);
+                        //                    CGContextStrokePath(myLayerContext2);
+                        
+                        
+                        CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
+                        CGContextAddEllipseInRect(myLayerContext2,(CGRectMake (xTrail[i]-(sizeOffset/2), yTrail[i]-(sizeOffset/2), dotSize*dotSizeScaler, dotSize*dotSizeScaler)));
+                        CGContextDrawPath(myLayerContext2, kCGPathFill);
+                        //                    CGContextFillPath(myLayerContext2);
+                        //                    CGContextStrokePath(myLayerContext2);
+                        
+                        dotSize *= 0.95;
+                    }
+>>>>>>> upstream/master
                 }
-            } 
-        }        
+              //  CGContextRelease(context);
+            }
         });
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -720,11 +802,11 @@
         
         
         
-//        dispatch_async(dispatch_get_main_queue(), ^(void) {
+        //        dispatch_async(dispatch_get_main_queue(), ^(void) {
         //This one sends the data
         int xy[2];
         //Update linesInProcess with moved touches
-
+        
         for (UITouch *t in touches) {
             
             //Update the point
@@ -733,11 +815,11 @@
             //STK Send out scaled values between 0-1000 (to become 0-1)
             xy[0] = (int) (loc.x * viewWidthScale);
             xy[1] = (int) (loc.y * viewHeightScale);
-
+            
         }
         //Send pointer data to NOMADS
         [appDelegate->appSand sendWithGrainElts_AppID:OC_POINTER Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
-//        });
+        //        });
     }
     
 }
@@ -752,22 +834,22 @@
         //      touchColor = 0.6;
         
     }
-
+    
     //Display the dot
-
+    
     if (1) {
-        //if (pointerLayer) {
-        //    CGLayerRelease(pointerLayer);
-        //}
+        if (pointerLayer) {
+            CGLayerRelease(pointerLayer);
+        }
         CGContextRef context = UIGraphicsGetCurrentContext();
         
         pointerLayer = CGLayerCreateWithContext (context, viewRect.size, NULL);
         myLayerContext2 = CGLayerGetContext (pointerLayer);
-
+        
         for(int i=1;i<maxTrails;i++) {
             xTrail[i] = xTrail[0];
             yTrail[i] = yTrail[0];
-        }    
+        }
         
         float dotSize;
         //Change dot size based on device
@@ -826,8 +908,8 @@
                 
                 dotSize *= 0.95;
             }
-        } 
-    }     
+        }
+    }
     
     numRunTonePlayers = 0;
     toneVolScaler = 0.05;
@@ -841,6 +923,7 @@
         [self setNeedsDisplay];
         
     });
+
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -861,16 +944,16 @@
     CLog("flashDot");
     dotSizeScaler = 1.0;
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
     });
     dropFlash = NO;
 }
 
 
 //- (void)initWaitPrompt {
-//    
+//
 //    CLog("zeroPrompt %2.2f\n",promptWaitTick);
-//    
+//
 //    promptWaitTick += 1;
 //    if (promptWaitTick > 1) {
 //        [promptWaitTimer invalidate];
@@ -904,7 +987,7 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
     });
     
 }
@@ -924,42 +1007,44 @@
         promptAlpha = 0;
     }
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
     });
-    }
+}
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     CLog("SDV: Audio finished playing");
     audioPlayerDroplet = nil;
- //   audioPlayerTone[tonePlayer] = nil;
+    //   audioPlayerTone[tonePlayer] = nil;
 }
 
 // Play the sound
 
 - (void)playDroplet
 {
-    
-    NSString *soundFile;
-    
-    soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNumDroplets];
-    
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
-    
-    CLog("URL: %@", url);
-
-    
-	NSError *error;
-    if (audioPlayerDroplet == nil) {
-        audioPlayerDroplet = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        [audioPlayerDroplet setDelegate:self];
-        audioPlayerDroplet.numberOfLoops = 0;
+    @autoreleasepool {
+        
+        NSString *soundFile;
+        
+        soundFile = [NSString stringWithFormat:@"sounds/GlacierSounds/%d.mp3",fileNumDroplets];
+        
+        NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], soundFile]];
+        
+        CLog("URL: %@", url);
+        
+        
+        NSError *error;
         if (audioPlayerDroplet == nil) {
-            CLog("SDV: Playback error: %@",[error description]);
-        }
-        else {
-            audioPlayerDroplet.volume = dropletVolume;
-            CLog("SDV: dropletVolume = %f", dropletVolume);
-            [audioPlayerDroplet play];
+            audioPlayerDroplet = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+            [audioPlayerDroplet setDelegate:self];
+            audioPlayerDroplet.numberOfLoops = 0;
+            if (audioPlayerDroplet == nil) {
+                CLog("SDV: Playback error: %@",[error description]);
+            }
+            else {
+                audioPlayerDroplet.volume = dropletVolume;
+                CLog("SDV: dropletVolume = %f", dropletVolume);
+                [audioPlayerDroplet play];
+            }
         }
     }
     
@@ -974,9 +1059,9 @@
     dotSizeScaler = 1.0;
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
     });
-        
+    
     dotFlashTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(flashDot) userInfo:nil repeats:NO];
 	
 	
@@ -990,6 +1075,7 @@
 
 -(void)playTone
 {
+    @autoreleasepool {
         
         NSString *soundFile;
         float tVol;
@@ -1001,7 +1087,7 @@
         CLog("URL: %@", url);
         
         toneVolScaler = 0.05;
-
+        
         CLog("SDV: toneVolScaler = %f", toneVolScaler);
         
         NSError *error;
@@ -1014,7 +1100,7 @@
             tonePlayer = 0;
             
         }
-        else 
+        else
             tonePlayer++;
         
         
@@ -1033,12 +1119,12 @@
         
         float xDiff = xTrail[0]-xTrail[1];
         float yDiff = yTrail[0]-yTrail[1];
-    
+        
         toneMovementVol = (abs(xDiff)+abs(yDiff))/10;
-
+        
         if (toneMovementVol < 1)
             toneMovementVol = 1;
-    
+        
         tVol = (float)(toneVolume * toneVolScaler * toneMovementVol);
         
         if (audioPlayerTone[tonePlayer] == nil) {
@@ -1048,9 +1134,10 @@
             CLog("SDV: toneVolume = %f", tVol);
             [audioPlayerTone[tonePlayer] play];
             audioPlayerTone[tonePlayer].volume = tVol;
-//            audioPlayerTone[tonePlayer].volume = 0;
+            //            audioPlayerTone[tonePlayer].volume = 0;
             
         }
+    }
 }
 
 
