@@ -67,7 +67,7 @@
         myFingerPoint.y = (CGRectGetMidY(viewRect));
         
         //Setup for Dot
-        maxTrails = 5; //Max number of dot trailers
+        maxTrails = 2; //Max number of dot trailers
         //Create array for X and Y trail coordinates
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
         yTrail = (int *)malloc(sizeof(int)*maxTrails);
@@ -418,7 +418,6 @@
                 
                 float dotRGBmult = 1;
                 float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
-                int xDiff, yDiff;
                 float sizeOffset;
                 float flashSizeFact = 1.15;
                 float normalSizeFact = 1.0;
