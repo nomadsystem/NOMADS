@@ -9,7 +9,7 @@
 <!-- Prompt -->
     <TextView
         android:id="@+id/prompt"
-        style="@style/h1"
+        style="@style/prompt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/blank"
@@ -83,32 +83,6 @@
 	    android:visibility="gone"
 	    android:singleLine="true"/>
 	
-<!-- Send buttons. DELETE? -->
-<!--     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/button2LinearLayout"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@id/message">
-	    <Button
-		    android:id="@+id/sendDiscuss"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/discuss"
-		    android:visibility="gone" />
-		<Button
-		    android:id="@+id/sendCloud"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/cloud"
-		    android:visibility="gone" />
-		<Button
-		    android:id="@+id/cancel"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/cancel"
-		    android:visibility="gone" />
-	</LinearLayout> -->
-	
 <!-- chat display -->
     <ScrollView android:id="@+id/chat_ScrollView"
         android:layout_width="fill_parent" 
@@ -120,6 +94,7 @@
         android:paddingBottom="50dp">
 	    <TextView
 	        android:id="@+id/chatWindow"
+	        style="@style/def"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:scrollbars="vertical"

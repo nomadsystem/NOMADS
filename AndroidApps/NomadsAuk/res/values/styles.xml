@@ -27,4 +27,8 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#CCF</item>
     </style>
+    <style name="prompt">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
 </resources>
