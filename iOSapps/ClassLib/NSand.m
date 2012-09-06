@@ -28,7 +28,7 @@
 - (void) setDelegate: (id<SandDelegate>) inDelegate
 {
     delegate[numDelegates] = inDelegate;
-    numDelegates++;    
+    numDelegates++;
     if (numDelegates > MAX_DELEGATES) {
         LLog(@"ERROR AppSand:setDelegate: only MAX_DELEGATES allowed SandDelegates\n");
         exit(1);
@@ -37,7 +37,7 @@
 
 //initialization function ===================================================================
 
-- (id)init 
+- (id)init
 {
     self = [super init]; //Here to get initialization from parent class first
     if (self) { //if we get that initialization, override it
@@ -77,118 +77,59 @@
 // sendWithGrain_AppID (for strings) =========================================================
 
 
-- (void) sendWithGrainElts_AppID:(Byte)a 
+- (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
                         DataType:(Byte)dT
                          DataLen:(int)dL
                           String:(NSString *)str;
 {
-    NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    //Byte appID 
-    appIDDatum = [self convertToByteToStreamOut:&a]; // appID
-    int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
-    if (-1 == aNum) {
-        LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
-    }
-    
-    //    Byte cmd = 1;
-    cmdDatum = [self convertToByteToStreamOut:&c]; // command
-    int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
-    if (-1 == cNum) {
-        LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
-    }
-    
-    //    Byte dataType = 1;
-    dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
-    int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
-    if (-1 == dTypeNum) {
-        LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
-    }
-    
-    //    dataLen = [inputMessageField.text length];
-    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
-    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
-    if (-1 == dLenNum) {
-        LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
-    }
-    
-    // If the data is a string or array of bytes, send like this
-    dDatum = [str dataUsingEncoding:NSUTF8StringEncoding];  // String
-    int dArrayNum = [streamOut write:(const uint8_t *)[dDatum bytes] maxLength: [dDatum length]];
-    if (-1 == dArrayNum) {
-        LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
-    }
-}
-
-
-- (void) sendWithGrainElts_AppID:(Byte)a 
-                         Command:(Byte)c
-                        DataType:(Byte)dT
-                         DataLen:(int)dL
-                          Uint8: (Byte *)myUint8s;
-{
-    NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    //Byte appID 
-    appIDDatum = [self convertToByteToStreamOut:&a]; // appID
-    int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
-    if (-1 == aNum) {
-        LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
-    }
-    
-    //    Byte cmd = 1;
-    cmdDatum = [self convertToByteToStreamOut:&c]; // command
-    int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
-    if (-1 == cNum) {
-        LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
-    }
-    
-    //    Byte dataType = 1;
-    dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
-    int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
-    if (-1 == dTypeNum) {
-        LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
-    }
-    
-    //    dataLen = [inputMessageField.text length];
-    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
-    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
-    if (-1 == dLenNum) {
-        LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
-    }
-    
-    // If the data is a string or array of bytes, send like this
-    for (int i=0;i<dL;i++) {
-        Byte myByte = myUint8s[i]; // dataLength
-        int dArrayNum = [streamOut write:(uint8_t *)&myByte maxLength:1];
+    @autoreleasepool {
+        
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        
+        //Byte appID
+        appIDDatum = [self convertToByteToStreamOut:&a]; // appID
+        int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
+        if (-1 == aNum) {
+            LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+        }
+        
+        //    Byte cmd = 1;
+        cmdDatum = [self convertToByteToStreamOut:&c]; // command
+        int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
+        if (-1 == cNum) {
+            LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+        }
+        
+        //    Byte dataType = 1;
+        dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
+        int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
+        if (-1 == dTypeNum) {
+            LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+        }
+        
+        //    dataLen = [inputMessageField.text length];
+        int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+        int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+        if (-1 == dLenNum) {
+            LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+        }
+        
+        // If the data is a string or array of bytes, send like this
+        dDatum = [str dataUsingEncoding:NSUTF8StringEncoding];  // String
+        int dArrayNum = [streamOut write:(const uint8_t *)[dDatum bytes] maxLength: [dDatum length]];
         if (-1 == dArrayNum) {
             LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
         }
@@ -196,66 +137,133 @@
             LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
         }
     }
-    
 }
 
-- (void) sendWithGrainElts_AppID:(Byte)a 
+- (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
                         DataType:(Byte)dT
                          DataLen:(int)dL
-                           Char: (Byte *)myChars;
+                           Uint8: (Byte *)myUint8s;
 {
-    NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    //Byte appID 
-    appIDDatum = [self convertToByteToStreamOut:&a]; // appID
-    int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
-    if (-1 == aNum) {
-        LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
-    }
-    
-    //    Byte cmd = 1;
-    cmdDatum = [self convertToByteToStreamOut:&c]; // command
-    int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
-    if (-1 == cNum) {
-        LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
-    }
-    
-    //    Byte dataType = 1;
-    dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
-    int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
-    if (-1 == dTypeNum) {
-        LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
-    }
-    
-    //    dataLen = [inputMessageField.text length];
-    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
-    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
-    if (-1 == dLenNum) {
-        LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
-    }
-    
-    // If the data is a string or array of bytes, send like this
-    for (int i=0;i<dL;i++) {
-        Byte myByte = myChars[i]; // dataLength
-        int dArrayNum = [streamOut write:(uint8_t *)&myByte maxLength:1];
-        if (-1 == dArrayNum) {
-            LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+    @autoreleasepool {
+        
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        
+        //Byte appID
+        appIDDatum = [self convertToByteToStreamOut:&a]; // appID
+        int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
+        if (-1 == aNum) {
+            LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
         }
         else {
-            LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+        }
+        
+        //    Byte cmd = 1;
+        cmdDatum = [self convertToByteToStreamOut:&c]; // command
+        int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
+        if (-1 == cNum) {
+            LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+        }
+        
+        //    Byte dataType = 1;
+        dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
+        int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
+        if (-1 == dTypeNum) {
+            LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+        }
+        
+        //    dataLen = [inputMessageField.text length];
+        int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+        int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+        if (-1 == dLenNum) {
+            LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+        }
+        
+        // If the data is a string or array of bytes, send like this
+        for (int i=0;i<dL;i++) {
+            Byte myByte = myUint8s[i]; // dataLength
+            int dArrayNum = [streamOut write:(uint8_t *)&myByte maxLength:1];
+            if (-1 == dArrayNum) {
+                LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+            }
+            else {
+                LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            }
+        }
+    }
+}
+
+- (void) sendWithGrainElts_AppID:(Byte)a
+                         Command:(Byte)c
+                        DataType:(Byte)dT
+                         DataLen:(int)dL
+                            Char: (Byte *)myChars;
+{
+    @autoreleasepool {
+        
+        
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        
+        //Byte appID
+        appIDDatum = [self convertToByteToStreamOut:&a]; // appID
+        int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
+        if (-1 == aNum) {
+            LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+        }
+        
+        //    Byte cmd = 1;
+        cmdDatum = [self convertToByteToStreamOut:&c]; // command
+        int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
+        if (-1 == cNum) {
+            LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+        }
+        
+        //    Byte dataType = 1;
+        dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
+        int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
+        if (-1 == dTypeNum) {
+            LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+        }
+        
+        //    dataLen = [inputMessageField.text length];
+        int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+        int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+        if (-1 == dLenNum) {
+            LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+        }
+        
+        // If the data is a string or array of bytes, send like this
+        for (int i=0;i<dL;i++) {
+            Byte myByte = myChars[i]; // dataLength
+            int dArrayNum = [streamOut write:(uint8_t *)&myByte maxLength:1];
+            if (-1 == dArrayNum) {
+                LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+            }
+            else {
+                LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            }
         }
     }
 }
@@ -264,132 +272,137 @@
 // sendWithGrain_AppID (for Ints) ====================================================
 
 
-- (void) sendWithGrainElts_AppID:(Byte)a 
+- (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
                         DataType:(Byte)dT
                          DataLen:(int)dL
-                         Int32:(int *)myInt32s;
+                           Int32:(int *)myInt32s;
 {
-    NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    LLog(@"foo got i:  %d\n",a);
-    
-    //Byte appID 
-    appIDDatum = [self convertToByteToStreamOut:&a]; // appID
-    int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
-    if (-1 == aNum) {
-        LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
-    }
-    
-    //    Byte cmd = 1;
-    cmdDatum = [self convertToByteToStreamOut:&c]; // command
-    int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
-    if (-1 == cNum) {
-        LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
-    }
-    
-    //    Byte dataType = 1;
-    dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
-    int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
-    if (-1 == dTypeNum) {
-        LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
-    }
-    
-    //    dataLen = [inputMessageField.text length];
-    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
-    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
-    if (-1 == dLenNum) {
-        LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
-    }
-    
-    // If the data is a string or array of bytes, send like this
-    for (int i=0;i<dL;i++) {
-        int int32BE = CFSwapInt32HostToBig(myInt32s[i]); // dataLength
-        int dArrayNum = [streamOut write:(uint8_t *)&int32BE maxLength:4];
-        if (-1 == dArrayNum) {
-            LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+    @autoreleasepool {
+        
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        
+        LLog(@"foo got i:  %d\n",a);
+        
+        //Byte appID
+        appIDDatum = [self convertToByteToStreamOut:&a]; // appID
+        int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
+        if (-1 == aNum) {
+            LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
         }
         else {
-            LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+        }
+        
+        //    Byte cmd = 1;
+        cmdDatum = [self convertToByteToStreamOut:&c]; // command
+        int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
+        if (-1 == cNum) {
+            LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+        }
+        
+        //    Byte dataType = 1;
+        dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
+        int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
+        if (-1 == dTypeNum) {
+            LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+        }
+        
+        //    dataLen = [inputMessageField.text length];
+        int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+        int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+        if (-1 == dLenNum) {
+            LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+        }
+        
+        // If the data is a string or array of bytes, send like this
+        for (int i=0;i<dL;i++) {
+            int int32BE = CFSwapInt32HostToBig(myInt32s[i]); // dataLength
+            int dArrayNum = [streamOut write:(uint8_t *)&int32BE maxLength:4];
+            if (-1 == dArrayNum) {
+                LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+            }
+            else {
+                LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            }
         }
     }
     
-    
 }
-- (void) sendWithGrainElts_AppID:(Byte)a 
+- (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
                         DataType:(Byte)dT
                         Dat7aLen:(int)dL
-                           Float32:(float *)myFloat32s;
+                         Float32:(float *)myFloat32s;
 {
-    NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
-    
-    LLog(@"foo got i:  %d\n",a);
-    
-    //Byte appID 
-    appIDDatum = [self convertToByteToStreamOut:&a]; // appID
-    int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
-    if (-1 == aNum) {
-        LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
-    }
-    
-    //    Byte cmd = 1;
-    cmdDatum = [self convertToByteToStreamOut:&c]; // command
-    int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
-    if (-1 == cNum) {
-        LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
-    }
-    
-    //    Byte dataType = 1;
-    dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
-    int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
-    if (-1 == dTypeNum) {
-        LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
-    }
-    
-    //    dataLen = [inputMessageField.text length];
-    int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
-    int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
-    if (-1 == dLenNum) {
-        LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
-    }
-    else {
-        LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
-    }
-    
-    // If the data is a string or array of bytes, send like this
-    for (int i=0;i<dL;i++) {
-        float float32BE = CFSwapInt32HostToBig(myFloat32s[i]); // dataLength
-        int dArrayNum = [streamOut write:(uint8_t *)&float32BE maxLength:4];
-        if (-1 == dArrayNum) {
-            LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+    @autoreleasepool {
+        
+        
+        NSData *appIDDatum, *cmdDatum, *dTypeDatum, *dDatum;
+        
+        LLog(@"foo got i:  %d\n",a);
+        
+        //Byte appID
+        appIDDatum = [self convertToByteToStreamOut:&a]; // appID
+        int aNum = [streamOut write:(const uint8_t *)[appIDDatum bytes] maxLength: [appIDDatum length]];
+        if (-1 == aNum) {
+            LLog(@"NSand: Error writing appID to stream %@: %@", streamOut, [streamOut streamError]);
         }
         else {
-            LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            LLog(@"NSand: Wrote %i bytes to stream %@.", aNum, streamOut);
+        }
+        
+        //    Byte cmd = 1;
+        cmdDatum = [self convertToByteToStreamOut:&c]; // command
+        int cNum = [streamOut write:(const uint8_t *)[cmdDatum bytes] maxLength: [cmdDatum length]];
+        if (-1 == cNum) {
+            LLog(@"NSand: Error writing Command to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+        }
+        
+        //    Byte dataType = 1;
+        dTypeDatum = [self convertToByteToStreamOut:&dT]; // dataType
+        int dTypeNum = [streamOut write:(const uint8_t *)[dTypeDatum bytes] maxLength: [dTypeDatum length]];
+        if (-1 == dTypeNum) {
+            LLog(@"NSand: Error writing Data Type to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dTypeNum, streamOut);
+        }
+        
+        //    dataLen = [inputMessageField.text length];
+        int dataLenBE = CFSwapInt32HostToBig(dL);   // dataLength
+        int dLenNum = [streamOut write:(uint8_t *)&dataLenBE maxLength:4];
+        if (-1 == dLenNum) {
+            LLog(@"NSand: Error writing Data Length to stream %@: %@", streamOut, [streamOut streamError]);
+        }
+        else {
+            LLog(@"NSand: Wrote %i bytes to stream %@.", dLenNum, streamOut);
+        }
+        
+        // If the data is a string or array of bytes, send like this
+        for (int i=0;i<dL;i++) {
+            float float32BE = CFSwapInt32HostToBig(myFloat32s[i]); // dataLength
+            int dArrayNum = [streamOut write:(uint8_t *)&float32BE maxLength:4];
+            if (-1 == dArrayNum) {
+                LLog(@"NSand: Error writing Data Array to stream %@: %@", streamOut, [streamOut streamError]);
+            }
+            else {
+                LLog(@"NSand: Wrote %i bytes to stream %@.", dArrayNum, streamOut);
+            }
         }
     }
-    
     
 }
 
@@ -408,7 +421,7 @@
             
 		case NSStreamEventHasBytesAvailable:
 			LLog(@"NSAND: NSStreamHasBytesAvailable\n");
-
+            
             if (theStream == streamIn) {
 				
 				
@@ -461,7 +474,7 @@
                                             }
                                         }
                                     }
-
+                                    
                                 }
                                 remBufRead = len;
                                 
@@ -477,19 +490,19 @@
                                 else if (remBufRead > 0) {
                                     
                                     // It's a fresh new buffer, start from the top
-                                    if (cachedNextReadMode == 0) {   
+                                    if (cachedNextReadMode == 0) {
                                         readMode = 1;
                                     }
                                     // It's bytes left over from a previous SAND grain read, pick up where we left off
                                     else {
-                                        readMode = cachedNextReadMode;  
+                                        readMode = cachedNextReadMode;
                                     }
                                 }
                                 break;
                                 
-                                // MODE 1:  read the appId next 
+                                // MODE 1:  read the appId next
                                 
-                            case 1:                              
+                            case 1:
                                 appID = readBuf[readPtr++];
                                 LLog(@"NSAND:  streamin read appID = %d\n",appID);
                                 remBufRead--;
@@ -502,7 +515,7 @@
                                 
                                 // MODE 2:  read the cmd next
                                 
-                            case 2:                                                              
+                            case 2:
                                 cmd = readBuf[readPtr++];
                                 LLog(@"NSAND:  streamin read cmd = %d\n",cmd);
                                 
@@ -530,7 +543,7 @@
                                 
                                 // MODE 4:  read the dLen next
                                 
-                            case 4:                              
+                            case 4:
                                 dLenT = (readBuf[readPtr++] << 24) & 0xFF;
                                 dLenT += (readBuf[readPtr++] << 16) & 0xFF;
                                 dLenT += (readBuf[readPtr++] << 8) & 0xFF;
@@ -549,7 +562,7 @@
                                 
                                 // MODE 5:  read the main data
                                 
-                            case 5:                                                              
+                            case 5:
                                 
                                 // CHAR -----------------------------------------------------------------------------------------
                                 
@@ -566,7 +579,7 @@
                                     
                                     LLog(@"NSAND:  reading CHARS\n");
                                     
-                                    // There's more data to read but we didn't get it all in this network read buffer, 
+                                    // There's more data to read but we didn't get it all in this network read buffer,
                                     //   read in _remBufRead_ bytes
                                     if (bufSandDiff < 0) {
                                         LLog(@"NSAND:  bufSandDiff < 0\n");
@@ -598,25 +611,28 @@
                                         
                                         // We've read in all our string data
                                         //    create NSMutableString from temp string buf
-                                        NSMutableString *output = [[NSMutableString alloc] initWithBytes:cBuffer length:dLen encoding:NSUTF8StringEncoding];
-                                        
-                                        LLog(@"NSAND:  read CHARS = %@\n",output);
-                                        
-                                        grain = [[NGrain alloc] init];
-                                        [grain setGrainElts_AppID:appID 
-                                                          Command:(Byte)cmd
-                                                         DataType:(Byte)dType 
-                                                          DataLen:(int)dLen
-                                                           String:(NSString *)output];
-                                        [grain print];
-                                        
-                                        // send out to all our delgates
-                                        for (int x=0;x<numDelegates;x++) {
-                                            if (self->delegate[x] != nil) {
-                                                [self->delegate[x] dataReadyHandle:grain];
+                                        @autoreleasepool {
+                                            
+                                            NSMutableString *output = [[NSMutableString alloc] initWithBytes:cBuffer length:dLen encoding:NSUTF8StringEncoding];
+                                            
+                                            LLog(@"NSAND:  read CHARS = %@\n",output);
+                                            
+                                            grain = [[NGrain alloc] init];
+                                            [grain setGrainElts_AppID:appID
+                                                              Command:(Byte)cmd
+                                                             DataType:(Byte)dType
+                                                              DataLen:(int)dLen
+                                                               String:(NSString *)output];
+                                            [grain print];
+                                            
+                                            // send out to all our delgates
+                                            for (int x=0;x<numDelegates;x++) {
+                                                if (self->delegate[x] != nil) {
+                                                    [self->delegate[x] dataReadyHandle:grain];
+                                                }
                                             }
                                         }
-
+                                        free(cBuffer);
                                         cBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -636,7 +652,7 @@
                                             readMode = 1;
                                             //  Send out notifications to all our delegates =============================================================
                                             
-
+                                            
                                             
                                         }
                                         
@@ -658,7 +674,7 @@
                                     
                                     LLog(@"NSAND:  reading UINT8s\n");
                                     
-                                    // There's more data to read but we didn't get it all in this network read buffer, 
+                                    // There's more data to read but we didn't get it all in this network read buffer,
                                     //   read in _remBufRead_ bytes
                                     if (bufSandDiff < 0) {
                                         LLog(@"NSAND:  bufSandDiff < 0\n");
@@ -693,20 +709,20 @@
                                         LLog(@"NSAND:  read UINT8s\n");
                                         
                                         grain = [[NGrain alloc] init];
-                                        [grain setGrainElts_AppID:appID 
+                                        [grain setGrainElts_AppID:appID
                                                           Command:(Byte)cmd
-                                                         DataType:(Byte)dType 
+                                                         DataType:(Byte)dType
                                                           DataLen:(int)dLen
                                                             Uint8:(uint8_t *)uBuffer];
                                         [grain print];
-
+                                        
                                         // send out to all our delgates
                                         for (int x=0;x<numDelegates;x++) {
                                             if (self->delegate[x] != nil) {
                                                 [self->delegate[x] dataReadyHandle:grain];
                                             }
                                         }
-
+                                        free(uBuffer);
                                         uBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -723,7 +739,7 @@
                                         // We've reached the end of our data for this SAND grain, but there's more in the buffer
                                         //     set read mode to appID and read in the rest
                                         else {
-
+                                            
                                             
                                             readMode = 1;
                                         }
@@ -746,7 +762,7 @@
                                     
                                     LLog(@"NSAND:  reading CHARS\n");
                                     
-                                    // There's more data to read but we didn't get it all in this network read buffer, 
+                                    // There's more data to read but we didn't get it all in this network read buffer,
                                     //   read in _remBufRead_ bytes
                                     if (bufSandDiff < 0) {
                                         LLog(@"NSAND:  bufSandDiff < 0\n");
@@ -760,7 +776,7 @@
                                             
                                             LLog(@"NSAND:  streamin read int = %d\n",tInt);
                                             
-                                            iBuffer[writePtr] = tInt;    
+                                            iBuffer[writePtr] = tInt;
                                             writePtr++;
                                             remSandRead -= 4;
                                             remBufRead -= 4;
@@ -784,7 +800,7 @@
                                             
                                             LLog(@"NSAND:  streamin read int = %d\n",tInt);
                                             
-                                            iBuffer[writePtr] = tInt;    
+                                            iBuffer[writePtr] = tInt;
                                             writePtr++;
                                             remSandRead -= 4;
                                             remBufRead -= 4;
@@ -794,20 +810,21 @@
                                         // We've read in all our char data
                                         
                                         grain = [[NGrain alloc] init];
-                                        [grain setGrainElts_AppID:appID 
+                                        [grain setGrainElts_AppID:appID
                                                           Command:(Byte)cmd
-                                                         DataType:(Byte)dType 
+                                                         DataType:(Byte)dType
                                                           DataLen:(int)dLen
                                                             Int32:(int *)iBuffer];
                                         [grain print];
-
+                                        
                                         // send out to all our delgates
                                         for (int x=0;x<numDelegates;x++) {
                                             if (self->delegate[x] != nil) {
                                                 [self->delegate[x] dataReadyHandle:grain];
                                             }
                                         }
-
+                                        
+                                        free(iBuffer);
                                         iBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -845,7 +862,7 @@
                                     
                                     LLog(@"NSAND:  reading CHARS\n");
                                     
-                                    // There's more data to read but we didn't get it all in this network read buffer, 
+                                    // There's more data to read but we didn't get it all in this network read buffer,
                                     //   read in _remBufRead_ bytes
                                     if (bufSandDiff < 0) {
                                         LLog(@"NSAND:  bufSandDiff < 0\n");
@@ -859,7 +876,7 @@
                                             
                                             LLog(@"NSAND:  streamin read int = %d\n",tInt);
                                             
-                                            fBuffer[writePtr] = (float)tInt;    
+                                            fBuffer[writePtr] = (float)tInt;
                                             writePtr++;
                                             remSandRead -= 4;
                                             remBufRead -= 4;
@@ -883,7 +900,7 @@
                                             
                                             LLog(@"NSAND:  streamin read int = %d\n",tInt);
                                             
-                                            fBuffer[writePtr] = tInt;    
+                                            fBuffer[writePtr] = tInt;
                                             writePtr++;
                                             remSandRead -= 4;
                                             remBufRead -= 4;
@@ -893,20 +910,20 @@
                                         // We've read in all our char data
                                         
                                         grain = [[NGrain alloc] init];
-                                        [grain setGrainElts_AppID:appID 
+                                        [grain setGrainElts_AppID:appID
                                                           Command:(Byte)cmd
-                                                         DataType:(Byte)dType 
+                                                         DataType:(Byte)dType
                                                           DataLen:(int)dLen
                                                           Float32:(int *)fBuffer];
                                         [grain print];
-
+                                        
                                         // send out to all our delgates
                                         for (int x=0;x<numDelegates;x++) {
                                             if (self->delegate[x] != nil) {
                                                 [self->delegate[x] dataReadyHandle:grain];
                                             }
                                         }
-
+                                        free(fBuffer);
                                         fBuffer = NULL;
                                         
                                         // See if there's more data in the buffer to read through
@@ -928,29 +945,34 @@
                                         
                                     }
                                 }
-                                
+//                                free(cBuffer);
+//                                free(uBuffer);
+//                                free(fBuffer);
+//                                free(iBuffer);
                                 break;
-
+                                
                             default:
                                 LLog(@"NSAND read WARNING - readMode:  %d\n",readMode);
                                 break;
+                             
+                                
                                 
                         }     // switch (readMode)
                         
                     }  // while (doneReading == false)
-
+                    
                     //  Send out notifications to all our delegates =============================================================
                     
-//                    for (int x=0;x<numDelegates;x++) {
-//                        if (self->delegate[x] != nil) {
-//                            [self->delegate[x] dataReadyHandle:grain];
-//                        }
-//                    }
-
+                    //                    for (int x=0;x<numDelegates;x++) {
+                    //                        if (self->delegate[x] != nil) {
+                    //                            [self->delegate[x] dataReadyHandle:grain];
+                    //                        }
+                    //                    }
+                    
                 } // if [streamIn hasBytesAvailable]
             } 
             break;
-
+            
         case NSStreamEventErrorOccurred:
             LLog(@"NSAND : ERROR - NSStreamEventError\n");
             // send out to all our delgates
@@ -966,7 +988,7 @@
                     }
                 }
             }
-
+            
             break;
             
         case NSStreamEventEndEncountered:
@@ -977,7 +999,7 @@
             //    [theStream release];
             theStream = nil;
             break;
-
+            
         case NSStreamEventHasSpaceAvailable:
             LLog(@"NSAND : NSStreamEventHasSpaceAvailable\n");
             break;
@@ -986,15 +1008,17 @@
             LLog(@"NSand WARNING - Unknown stream event");
             break;
     }
-
+    
 }
 
 
 - (NSData*) convertToByteToStreamOut : (Byte*) myByte 
-{ 
-    NSMutableData *outData = [NSMutableData dataWithCapacity:1]; 
-    [outData appendBytes:myByte length:1];
-    return outData;
+{
+    @autoreleasepool {
+        NSMutableData *outData = [NSMutableData dataWithCapacity:1];
+        [outData appendBytes:myByte length:1];
+        return outData;
+    }
 }
 
 
