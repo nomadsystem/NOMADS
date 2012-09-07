@@ -14,7 +14,7 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>ic_launcher.png</string>
+				<string>Default.png</string>
 				<string>auklogo_57.png</string>
 				<string>auklogo_72_iPad.png</string>
 				<string>auklogo_114_iPhoneRetina.png</string>
@@ -31,7 +31,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.imrg.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.imrg.auksalaq</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
