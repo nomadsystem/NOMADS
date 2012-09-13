@@ -3,8 +3,6 @@
 // Paul Turowski. 2012.08.08
 
 package com.nomads;
-
-//import nomads.v210.NGlobals.GrainTarget;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 import android.annotation.TargetApi;
@@ -24,12 +22,10 @@ public class NomadsApp extends Application {
 	private Swarm swarm;
 	private Dot dot;
 	private Settings settings;
-//	private GrainTarget gT;
 	private static NSand sand;
 	private NGrain grain, sGrain;
 	private NomadsAppThread nThread;
 	private NomadsSendThread sThread;
-//	private boolean sendThreadBlock = false;
 	private AppState appState = new AppState();
 	
 	private boolean connectionStatus = false;
@@ -61,14 +57,11 @@ public class NomadsApp extends Application {
 
 	@Override
 	public void onCreate() {
-		Log.i("NomadsApp", "onCreate()");
+//		Log.i("NomadsApp", "onCreate()");
 
 		super.onCreate();
 
 		singleton = this;
-		
-		// create a new static instance of NSand class
-//		newSand();
 
 		am = (AudioManager) getBaseContext().getSystemService(
 				Context.AUDIO_SERVICE);
@@ -86,8 +79,6 @@ public class NomadsApp extends Application {
 		xy[1] = 0.5f;
 		xytd[0] = 0.5f;
 		xytd[1] = 0.5f;
-		
-//		currentPrompt = currentChatWindow = null;
 	}
 
 	// ========================================================
@@ -125,11 +116,6 @@ public class NomadsApp extends Application {
 		return connectionStatus;
 	}
 
-//	public void setGrainTarget(GrainTarget _target) {
-//		Log.i("NomadsApp", "setGrainTarget(): " + _target);
-//		gT = _target;
-//	}
-
 	public void phoneRingerState(boolean on) {
 		if (on) {
 			// set device ringer to normal mode
@@ -139,7 +125,7 @@ public class NomadsApp extends Application {
 			am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 		}
 
-		Log.d("NomadsApp", "ringer state was set to: " + on);
+//		Log.d("NomadsApp", "ringer state was set to: " + on);
 	}
 	
 	// set xy position
@@ -153,15 +139,12 @@ public class NomadsApp extends Application {
 	
 	// set xy position on touch down
 	public void setXY_td(float[] _xytd) {
-//		for (int i=0; i<_xytd.length; i++) {
-//			xytd[i] = _xytd[i];
-//		}
 		System.arraycopy(_xytd, 0, xytd, 0, _xytd.length);
-		Log.d("NomadsApp", "xytd[1] set to: " + xytd[1]);
+//		Log.d("NomadsApp", "xytd[1] set to: " + xytd[1]);
 	}
 	
 	public float[] getXY_td() {
-		Log.d("NomadsApp", "getXY_td(): Y value returned: " + xytd[1]);
+//		Log.d("NomadsApp", "getXY_td(): Y value returned: " + xytd[1]);
 		return xytd;
 	}
 	
@@ -169,10 +152,10 @@ public class NomadsApp extends Application {
 		touchDown = _td;
 		if (touchDown) {
 			cancelAllTextInput();
-			Log.i("NomadsApp", "Touch is down.");
+//			Log.i("NomadsApp", "Touch is down.");
 			swarm.pointerStatus(true);
 		} else {
-			Log.i("NomadsApp", "Touch is up.");
+//			Log.i("NomadsApp", "Touch is up.");
 			swarm.pointerStatus(false);
 		}
 	}
@@ -249,16 +232,16 @@ public class NomadsApp extends Application {
 		if (nThread == null) {
 			nThread = new NomadsAppThread();
 			nThread.start();
-			Log.i("NomadsApp", "Thread started.");
+//			Log.i("NomadsApp", "Thread started.");
 		} else {
-			Log.i("NomadsApp", "startThread: thread != null.");
+//			Log.i("NomadsApp", "startThread: thread != null.");
 		}
 		if (sThread == null) {
 			sThread = new NomadsSendThread();
 			sThread.start();
-			Log.i("NomadsApp", "sThread started.");
+//			Log.i("NomadsApp", "sThread started.");
 		} else {
-			Log.i("NomadsApp", "startSendThread: thread != null.");
+//			Log.i("NomadsApp", "startSendThread: thread != null.");
 		}
 	}
 
@@ -267,23 +250,17 @@ public class NomadsApp extends Application {
 			Thread moribund = nThread;
 			nThread = null;
 			moribund.interrupt();
-			Log.i("NomadsApp", "NomadsAppThread stopped.");
-			// sand.close();
-			// sand.new Close().execute();
-			// Log.i("NomadsApp", "sand.close()");
+//			Log.i("NomadsApp", "NomadsAppThread stopped.");
 		} else {
-			Log.i("NomadsApp", "stopThread: thread == null.");
+//			Log.i("NomadsApp", "stopThread: thread == null.");
 		}
 		if (sThread != null) {
 			Thread moribund = sThread;
 			sThread = null;
 			moribund.interrupt();
-			Log.i("NomadsApp", "NomadsSendThread stopped.");
-			// sand.close();
-			// sand.new Close().execute();
-			// Log.i("NomadsApp", "sand.close()");
+//			Log.i("NomadsApp", "NomadsSendThread stopped.");
 		} else {
-			Log.i("NomadsApp", "stopSendThread: thread == null.");
+//			Log.i("NomadsApp", "stopSendThread: thread == null.");
 		}
 	}
 	
@@ -300,15 +277,13 @@ public class NomadsApp extends Application {
 		}
 
 		public void run() {
-			Log.e("NomadsApp", (singleton.sGrain != null) + " and " + (singleton.isConnected()));
 			while (singleton.isConnected()) {
 				if (singleton.sGrain != null) {
 					try {
-						Log.e("NomadsApp", "NomadsSendThread(): Attempting to send grain....");
+//						Log.i("NomadsApp", "NomadsSendThread(): Attempting to send grain....");
 						// send bytes
 						sand.sendGrain(singleton.sGrain);
-					} catch (NullPointerException npe) {		
-	//					grain = null;
+					} catch (NullPointerException npe) {
 						Log.e("NomadsApp", "sendGrain.run(): NPE");
 					}
 					
@@ -331,7 +306,7 @@ public class NomadsApp extends Application {
 						singleton.grain = sand.getGrain(tByte);
 						handle.sendMessage(handle.obtainMessage(1, singleton.grain));
 					} else {
-						Log.e("NomadsApp", "run(): tByte == 0");
+//						Log.i("NomadsApp", "run(): tByte == 0");
 						handle.sendMessage(handle.obtainMessage(0));
 					}
 				} catch (NullPointerException npe) {		
@@ -371,10 +346,6 @@ public class NomadsApp extends Application {
 		}
 	}
 	
-//	public void setPointerVisibility (boolean _v) {
-//		dot.setPointerVisibility (_v);
-//	}
-	
 	public void cancelAllTextInput() {
 		if (swarm != null) {
 			swarm.cancelAllTextInput();
@@ -404,17 +375,17 @@ public class NomadsApp extends Application {
 
 		if (settings != null) {
 			settings.finish();
-			Log.i("NomadsApp", "Settings Activity finished.");
+//			Log.i("NomadsApp", "Settings Activity finished.");
 		}
 		
 		if (swarm != null) {
 			swarm.finish();
-			Log.i("NomadsApp", "Swarm Activity finished.");
+//			Log.i("NomadsApp", "Swarm Activity finished.");
 		}
 		
 		if (join != null) {
 			join.finish();
-			Log.i("NomadsApp", "Join Activity finished.");
+//			Log.i("NomadsApp", "Join Activity finished.");
 		}
 	}
 }

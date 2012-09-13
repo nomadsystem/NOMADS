@@ -12,6 +12,6 @@ public class NomadsWebView extends Activity {
 		super.onCreate(savedInstanceState);
 		webview = new WebView(this);
 		setContentView(webview);
-		webview.loadUrl("http://nomads.music.virginia.edu");
+		webview.loadUrl("http://nomads.music.virginia.edu/moreinfo.html");
 	}
 }
