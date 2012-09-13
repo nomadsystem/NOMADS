@@ -3,42 +3,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:gravity="center_vertical"
     android:background="@drawable/background">
-	
-	<TextView
-	    android:id="@+id/connectionStatusPre"
-	    style="@style/h2"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:gravity="center"
-	    android:layout_marginBottom="10dp"
-	    android:text="@string/connectionStatus" />
 	
 	<TextView
 	    android:id="@+id/connectionStatus"
 	    style="@style/def"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/connectionStatusPre"
 	    android:gravity="center"
 	    android:text="" />
-	
-	<TextView
-	    android:id="@+id/nomadsInfo"
-	    style="@style/info"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="20dp"
-	    android:layout_below="@id/connectionStatus"
-	    android:text="@string/nomadsInfo" />
 	    
 	<LinearLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/nomadsLinkLayout"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
-    	android:layout_below="@id/nomadsInfo"
+    	android:layout_below="@id/connectionStatus"
     	android:gravity="center">
 		<Button
 		    android:id="@+id/linkButton"

@@ -144,6 +144,10 @@ public class Swarm extends Activity {
 		// restore current display
 		updateDisplay();
 		
+		// start surfaceView thread (if not already running)
+		if (app.dot != null)
+			app.dot.surfaceThreadRestart();
+		
 		// restore audio settings
 		updateAudio();
 	}
@@ -168,6 +172,10 @@ public class Swarm extends Activity {
 
 		// turn ringer back on (?)
 		// app.phoneRingerState(true);
+		
+		// stop surfaceView thread (if already running)
+		if (app.dot != null)
+			app.dot.surfaceThreadStop();
 	}
 
 	@Override
@@ -684,7 +692,8 @@ public class Swarm extends Activity {
 			if ( app.state().dropletsToggle ) {
 				// play a sound from the dropletsFiles array
 				playDroplets();
-				app.dropAnimation();
+				if (app.dot != null)
+					app.dot.animateGrow();
 				dropletsHandler.postDelayed(dropletsRunnable, getPlayInterval(dropletsRange, dropletsOffset));
 			}
 		}
