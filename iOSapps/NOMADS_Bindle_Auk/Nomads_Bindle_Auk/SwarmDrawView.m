@@ -109,7 +109,7 @@
         
         
         //Init for Audio
-        toneVolScaler = 0.05;
+        toneVolScaler = 0.3;
         tonePlayer = 0;
         toneVolDone = false;
         numRunTonePlayers = 0;
@@ -376,12 +376,12 @@
                 CGFloat chatSpace = (viewHeight/numChatLines) * 0.5;
                 CGFloat chatYLoc = ((viewHeight-chatSpace) - (viewHeight * 0.1));
                 CGFloat chatXLoc = (viewWidth * 0.05);
-                
+            
                 //Displays incoming discuss text in our app
                 for (int i=([chatLines count]-1);i>=0;i--) {
                     @autoreleasepool {
                         
-                        NSString *nsstr = [chatLines objectAtIndex:i];; //Incoming NSString
+                        NSString *nsstr = [chatLines objectAtIndex:i]; //Incoming NSString
                         const char *str = [nsstr cStringUsingEncoding:NSUTF8StringEncoding]; //convert to c-string
                         int len = strlen(str);
                         //       printf("My String %s\n", str);
@@ -550,7 +550,7 @@
     
     //If the pointer is enabled
     if (pointerStatus) {
-        maxTrails = 5;
+        maxTrails = 2;
         
         //This loop is for display purposes
         
@@ -650,7 +650,7 @@
                         CGContextSetRGBFillColor(myLayerContext2, my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
                         
                         // If successive dots are > 6px apart, draw one in between
-                        if (1) {
+                        if (0) {
                             if ((abs(xDiff) > 5) || (abs(yDiff) > 5)) {
                                 CLog("R = %f G = %f B = %f A = %F", my_ellipseR, my_ellipseG, my_ellipseB, my_ellipseA);
                                 
@@ -759,7 +759,6 @@
         
         float dotRGBmult = 1;
         float my_ellipseR,my_ellipseG, my_ellipseB, my_ellipseA;
-        int xDiff, yDiff;
         float sizeOffset;
         float flashSizeFact = 1.15;
         float normalSizeFact = 1.0;
