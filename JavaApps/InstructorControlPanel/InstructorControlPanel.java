@@ -114,12 +114,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
         try {
             discussURL = new URL(user + "GroupDiscuss");
             cloudURL = new URL(user + "CloudDisplay");   
-	    	pollURL = new URL(user + "instructor/PollStudent");       
+	    	pollURL = new URL(user + "PollPrompt");       
 	    	pollDisplayURL = new URL(user + "PollDisplay");                  	
 	    	discussPromptURL = new URL(user +  "GroupDiscussPrompt");                  	
 	    	cloudPromptURL = new URL(user + "CloudPrompt");                  	
-	//    	soundDisplayURL = new URL("http://nomads.music.virginia.edu" + user +  "instructor/sequencer");
-	//    	soundSwarmDisplayURL = new URL("http://nomads.music.virginia.edu" + user + "instructor/SoundSwarm/");
+	    //	soundDisplayURL = new URL("sequencer");
+	    	soundSwarmDisplayURL = new URL(user + "SoundSwarmDisplay");
 			uGroovePromptURL = new URL(user + "UnityGroovePrompt");       
 	    	uGrooveDisplayURL = new URL(user + "UnityGrooveStudent");
         }
