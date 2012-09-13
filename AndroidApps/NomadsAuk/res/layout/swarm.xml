@@ -6,6 +6,13 @@
     android:background="@drawable/background"
     android:keepScreenOn="true">
     
+<!-- pointer; custom view -->
+    <com.nomads.Dot
+	    android:id="@+id/dot"
+	    android:tag="trueDot"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"/>
+    
 <!-- Prompt -->
     <TextView
         android:id="@+id/prompt"
@@ -84,7 +91,8 @@
 	    android:singleLine="true"/>
 	
 <!-- chat display -->
-    <ScrollView android:id="@+id/chat_ScrollView"
+    <com.nomads.ScrollViewNoTouch
+        android:id="@+id/chat_ScrollView"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:layout_below="@id/prompt"
@@ -99,18 +107,8 @@
 	        android:layout_height="wrap_content"
 	        android:scrollbars="vertical"
 	        android:focusableInTouchMode="false" />
-    </ScrollView>
-    
-<!-- pointer; custom view -->
-    <com.nomads.Dot
-	    android:id="@+id/dot"
-	    android:tag="trueDot"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@id/settingsLinearLayout" />
+    </com.nomads.ScrollViewNoTouch>
 
-
-    
 <!--     <Button
         android:id="@+id/buttonAudioTest1"
         android:layout_width="wrap_content"

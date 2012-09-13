@@ -8,18 +8,19 @@ import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
 import nomads.v210.NGrain;
-//import nomads.v210.NSand;
-
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
+//import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
-class Dot extends View {
+public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	private static final float RADIUS = 30;
 	private static final float RADIUS_MAX = 90;
 	private float radCurrent = RADIUS;
@@ -28,38 +29,109 @@ class Dot extends View {
 	private float[] xyNorm = new float[2];
 	private int[] xyInt = new int[2];
 	private Paint myPaint;
-	// private Paint backgroundPaint;
 
 	private NomadsApp app;
-//	private NSand sand;
 	private NGrain sGrain;
-//	private boolean pointerIsVisible;
-
-	// private NGrain grain;
+	private DotThread dThread;
+	private Bitmap scaledBG;
 
 	public Dot(Context _context, AttributeSet _attrs) {
 		super(_context, _attrs);
+		getHolder().addCallback(this);
+		dThread = new DotThread(getHolder(), this);
 
-//		app = (NomadsApp) context.getApplicationContext();
 		app = NomadsApp.getInstance();
 		
 		// send reference of Swarm to NomadsApp
 		app.setDot(this);
-
-		// get NSand instance from Join
-//		sand = app.getSand();
-
-		// backgroundPaint = new Paint();
-		// backgroundPaint.setColor(Color.BLUE);
 
 		myPaint = new Paint();
 		myPaint.setColor(Color.WHITE);
 		myPaint.setAntiAlias(true);
 	}
 	
-//	public void setPointerVisibility (boolean _v) {
-//		pointerIsVisible = _v;
-//	}
+	public void surfaceCreated(SurfaceHolder holder) {
+		Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+		float scale = (float)background.getHeight()/(float)getHeight();
+	    int newWidth = Math.round(background.getWidth()/scale);
+	    int newHeight = Math.round(background.getHeight()/scale);
+	    scaledBG = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
+
+		dThread.setRunning(true);
+        dThread.start();
+	}
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		boolean retry = true;
+        dThread.setRunning(false);
+        while (retry) {
+            try {
+            	dThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                // we will try it again and again...
+            }
+        }
+	}
+	
+	@Override
+    public void onDraw(Canvas canvas) {
+		float tempRad = getAnimatedRadius();
+		
+		if ( dThread.isRunning() ) {
+			// draw the background
+			canvas.drawBitmap(scaledBG, 0, 0, null);
+			
+			if (app.state().pointerIsVisible) {
+				canvas.drawCircle(xy[0], xy[1], tempRad, myPaint);
+			}
+		}
+    }
+	
+	class DotThread extends Thread {
+        private SurfaceHolder surfaceHolder;
+        private Dot dot;
+        private boolean running = false;
+ 
+        public DotThread(SurfaceHolder _surfaceHolder, Dot _dot) {
+            surfaceHolder = _surfaceHolder;
+            dot = _dot;
+        }
+ 
+        public void setRunning(boolean _run) {
+        	running = _run;
+        }
+        
+        public boolean isRunning() {
+        	return running;
+        }
+ 
+        @Override
+        public void run() {
+            Canvas c;
+            while (running) {
+                c = null;
+                try {
+                    c = surfaceHolder.lockCanvas(null);
+                    synchronized (surfaceHolder) {
+                        dot.onDraw(c);
+                    }
+                } finally {
+                    // do this in a finally so that if an exception is thrown
+                    // during the above, we don't leave the Surface in an
+                    // inconsistent state
+                    if (c != null) {
+                    	surfaceHolder.unlockCanvasAndPost(c);
+                    }
+                }
+            }
+        }
+    }
 
 	// get dimensions of parent
 	@Override
@@ -81,23 +153,21 @@ class Dot extends View {
 //		Log.d("Dot", "getWidth(): " + this.getWidth() + "getHeight(): " + this.getHeight());
 		
 		// clip touch coordinates to view dimensions
-		if (event.getX() >= 0.0 && event.getX() <= this.getWidth())
 			xy[0] = event.getX();
-		if (event.getY() >= 0.0 && event.getY() <= this.getHeight())
 			xy[1] = event.getY();
 		xyNorm[0] = xy[0] / this.getWidth();
 		xyNorm[1] = xy[1] / this.getHeight();
 		
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
-				Log.i("Dot", "ACTION_DOWN");
+//				Log.i("Dot", "ACTION_DOWN");
 				app.setXY_td(xyNorm);
-				Log.i("Dot", "app.setXY_td(): Y value: " + xyNorm[1]);
+//				Log.i("Dot", "app.setXY_td(): Y value: " + xyNorm[1]);
 				app.setTouchDown(true);
 				break;
 				
 			case MotionEvent.ACTION_MOVE:
-				Log.i("Dot", "ACTION_MOVE");			
+//				Log.i("Dot", "ACTION_MOVE");		
 				app.setXY(xyNorm);
 				
 				xyInt[0] = (int) (xyNorm[0] * 1000.0f);
@@ -114,9 +184,9 @@ class Dot extends View {
 				break;
 				
 			case MotionEvent.ACTION_UP:
-				Log.i("Dot", "ACTION_UP");
+//				Log.i("Dot", "ACTION_UP");
 			case MotionEvent.ACTION_CANCEL:
-				Log.i("Dot", "ACTION_CANCEL");
+//				Log.i("Dot", "ACTION_CANCEL");
 				app.setTouchDown(false);
 			default:
 					break;
@@ -145,21 +215,5 @@ class Dot extends View {
 	
 	public void animateGrow () {
 		dropGrow = true;
-	}
-
-	public void draw(Canvas c) {
-		// draw the dot
-		// int width = canvas.getWidth();
-		// int height = canvas.getHeight();
-		// canvas.drawRect(0, 0, width, height, backgroundPaint);
-		
-		float tempRad = getAnimatedRadius();
-		
-		if (app.state().pointerIsVisible) {
-			c.drawCircle(xy[0], xy[1], tempRad, myPaint);
-		}
-
-		// need to invalidate in custom view class only
-		invalidate();
 	}
 }
