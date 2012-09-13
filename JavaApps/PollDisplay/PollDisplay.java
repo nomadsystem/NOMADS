@@ -15,7 +15,7 @@ import java.io.*;
 import netscape.javascript.*;
 import java.text.DecimalFormat;
 import java.awt.RenderingHints;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 public class PollDisplay extends JApplet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 

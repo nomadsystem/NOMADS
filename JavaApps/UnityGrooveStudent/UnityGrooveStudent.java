@@ -12,7 +12,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import netscape.javascript.*;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 import com.softsynth.jsyn.*;
 

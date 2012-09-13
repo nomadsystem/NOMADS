@@ -16,7 +16,7 @@ public class NSand
 	private DataInputStream  streamIn   = null;
 	private DataOutputStream streamOut = null;    
         private String    serverName = NGlobals.serverName;
-	private int       serverPort = NGlobals.serverPortDT;
+	private int       serverPort = NGlobals.serverPortSK;
 
 	// Maybe yes to these
 	URL imgWebBase, webBase;
