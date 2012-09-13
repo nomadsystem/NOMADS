@@ -125,7 +125,7 @@ public class NomadsApp extends Application {
 			am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 		}
 
-		Log.d("NomadsApp", "ringer state was set to: " + on);
+//		Log.d("NomadsApp", "ringer state was set to: " + on);
 	}
 	
 	// set xy position
@@ -140,11 +140,11 @@ public class NomadsApp extends Application {
 	// set xy position on touch down
 	public void setXY_td(float[] _xytd) {
 		System.arraycopy(_xytd, 0, xytd, 0, _xytd.length);
-		Log.d("NomadsApp", "xytd[1] set to: " + xytd[1]);
+//		Log.d("NomadsApp", "xytd[1] set to: " + xytd[1]);
 	}
 	
 	public float[] getXY_td() {
-		Log.d("NomadsApp", "getXY_td(): Y value returned: " + xytd[1]);
+//		Log.d("NomadsApp", "getXY_td(): Y value returned: " + xytd[1]);
 		return xytd;
 	}
 	

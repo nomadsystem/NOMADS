@@ -83,9 +83,13 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 		float tempRad = getAnimatedRadius();
 		
-		if ( app.state().pointerIsVisible && dThread.isRunning() ) {
-			canvas.drawBitmap(scaledBG, 0, 0, null); // draw the background
-			canvas.drawCircle(xy[0], xy[1], tempRad, myPaint);
+		if ( dThread.isRunning() ) {
+			// draw the background
+			canvas.drawBitmap(scaledBG, 0, 0, null);
+			
+			if (app.state().pointerIsVisible) {
+				canvas.drawCircle(xy[0], xy[1], tempRad, myPaint);
+			}
 		}
     }
 	
