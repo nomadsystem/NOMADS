@@ -9,10 +9,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-//import android.net.Uri;
 import android.os.Bundle;
-//import android.text.method.LinkMovementMethod;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,10 +27,9 @@ public class Settings extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("Settings", "onCreate()");
+//		Log.i("Settings", "onCreate()");
 		super.onCreate(savedInstanceState);
 
-//		app = (NomadsApp) getApplicationContext();
 		app = NomadsApp.getInstance();
 
 		// send reference of Swarm to NomadsApp
@@ -47,7 +44,7 @@ public class Settings extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i("Settings", "is resumed");
+//		Log.i("Settings", "is resumed");
 		
 		// inform user of connection status
 		setConnectedMessage(app.isConnected());
@@ -56,8 +53,7 @@ public class Settings extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.i("Settings", "is paused");
-		// stopThread();
+//		Log.i("Settings", "is paused");
 	}
 	
 	// ========================================================
@@ -78,7 +74,6 @@ public class Settings extends Activity {
 		 @Override
 		 public void onClick(View v) {
 			 // use this to open web page in another browser (can also use text link in Strings.xml)
-			 // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://nomads.music.virginia.edu"));
 			 Intent intent = new Intent(getApplicationContext(), NomadsWebView.class);
 			 startActivity(intent);
 		 }
@@ -89,17 +84,14 @@ public class Settings extends Activity {
 	// ========================================================
 
 	public void parseGrain(NGrain _grain) {
-		Log.d("Settings", "parseGrain(): grain received");
+//		Log.d("Settings", "parseGrain(): grain received");
 
 		if (grain == null) {
-			Log.d("Settings", "parseGrain(): grain is null");
+//			Log.d("Settings", "parseGrain(): grain is null");
 			return;
 		}
 		grain = _grain;
 
-		// String msg = new String(grain.bArray);
-		// Log.i("Swarm", msg);
-		//
 		if (grain != null)
 			grain = null;
 	}

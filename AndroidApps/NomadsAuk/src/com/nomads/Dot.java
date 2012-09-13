@@ -8,8 +8,6 @@ import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
 import nomads.v210.NGrain;
-//import nomads.v210.NSand;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
+//import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -42,17 +40,10 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().addCallback(this);
 		dThread = new DotThread(getHolder(), this);
 
-//		app = (NomadsApp) context.getApplicationContext();
 		app = NomadsApp.getInstance();
 		
 		// send reference of Swarm to NomadsApp
 		app.setDot(this);
-
-		// get NSand instance from Join
-//		sand = app.getSand();
-
-		// backgroundPaint = new Paint();
-		// backgroundPaint.setColor(Color.BLUE);
 
 		myPaint = new Paint();
 		myPaint.setColor(Color.WHITE);
@@ -72,10 +63,7 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-		// TODO Auto-generated method stub
-		
-	}
+			int height) {}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
@@ -168,14 +156,14 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 		
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
-				Log.i("Dot", "ACTION_DOWN");
+//				Log.i("Dot", "ACTION_DOWN");
 				app.setXY_td(xyNorm);
-				Log.i("Dot", "app.setXY_td(): Y value: " + xyNorm[1]);
+//				Log.i("Dot", "app.setXY_td(): Y value: " + xyNorm[1]);
 				app.setTouchDown(true);
 				break;
 				
 			case MotionEvent.ACTION_MOVE:
-				Log.i("Dot", "ACTION_MOVE");			
+//				Log.i("Dot", "ACTION_MOVE");		
 				app.setXY(xyNorm);
 				
 				xyInt[0] = (int) (xyNorm[0] * 1000.0f);
@@ -192,9 +180,9 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 				break;
 				
 			case MotionEvent.ACTION_UP:
-				Log.i("Dot", "ACTION_UP");
+//				Log.i("Dot", "ACTION_UP");
 			case MotionEvent.ACTION_CANCEL:
-				Log.i("Dot", "ACTION_CANCEL");
+//				Log.i("Dot", "ACTION_CANCEL");
 				app.setTouchDown(false);
 			default:
 					break;
