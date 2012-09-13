@@ -121,6 +121,7 @@ public class Swarm extends Activity {
 		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
 		chatWindow = (TextView) findViewById(R.id.chatWindow);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
+		chatWindow.getParent().requestDisallowInterceptTouchEvent(true);
 		buttonDiscuss = (ImageButton) findViewById(R.id.buttonDiscuss);
 		buttonDiscuss.setOnClickListener(discussListener);
 		buttonCloud = (ImageButton) findViewById(R.id.buttonCloud);
