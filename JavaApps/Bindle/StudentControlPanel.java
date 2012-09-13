@@ -72,7 +72,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
             discussURL = new URL(user + "GroupDiscuss");
             cloudURL = new URL(user +  "CloudDiscuss");   
 			pollURL = new URL(user + "PollStudent");       
-           	soundURL = new URL(user + "Sound");
+           	soundURL = new URL(user + "SoundSwarm");
             pointURL = new URL(user +  "Pointer");
 			uGrooveURL = new URL(user + "UnityGrooveStudent");
         }
