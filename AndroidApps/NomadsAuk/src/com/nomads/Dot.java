@@ -11,6 +11,8 @@ import nomads.v210.NGrain;
 //import nomads.v210.NSand;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,6 +35,7 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	private NomadsApp app;
 	private NGrain sGrain;
 	private DotThread dThread;
+	private Bitmap scaledBG;
 
 	public Dot(Context _context, AttributeSet _attrs) {
 		super(_context, _attrs);
@@ -57,6 +60,12 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	public void surfaceCreated(SurfaceHolder holder) {
+		Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+		float scale = (float)background.getHeight()/(float)getHeight();
+	    int newWidth = Math.round(background.getWidth()/scale);
+	    int newHeight = Math.round(background.getHeight()/scale);
+	    scaledBG = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
+
 		dThread.setRunning(true);
         dThread.start();
 	}
@@ -87,7 +96,7 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 		float tempRad = getAnimatedRadius();
 		
 		if ( app.state().pointerIsVisible && dThread.isRunning() ) {
-			canvas.drawColor(Color.BLACK);
+			canvas.drawBitmap(scaledBG, 0, 0, null); // draw the background
 			canvas.drawCircle(xy[0], xy[1], tempRad, myPaint);
 		}
     }
