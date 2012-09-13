@@ -86,7 +86,7 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 		float tempRad = getAnimatedRadius();
 		
-		if (app.state().pointerIsVisible) {
+		if ( app.state().pointerIsVisible && dThread.isRunning() ) {
 			canvas.drawColor(Color.BLACK);
 			canvas.drawCircle(xy[0], xy[1], tempRad, myPaint);
 		}
@@ -104,6 +104,10 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
  
         public void setRunning(boolean _run) {
         	running = _run;
+        }
+        
+        public boolean isRunning() {
+        	return running;
         }
  
         @Override
