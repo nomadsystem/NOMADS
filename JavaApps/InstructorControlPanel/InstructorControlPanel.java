@@ -15,7 +15,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	
 	// Change to your directory
 	// for production version, just use "/"
-	String user = new String("http://nomads.music.virginia.edu/turowski/NOMADS/JavaApps/");
+	String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
 
 	NSand instructorControlPanelSand;
 	private NomadsAppThread nThread;
@@ -113,7 +113,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
         try {
             discussURL = new URL(user + "GroupDiscuss");
-            cloudURL = new URL(user + "CloudDiscuss");   
+            cloudURL = new URL(user + "CloudDisplay");   
 	    	pollURL = new URL(user + "instructor/PollStudent");       
 	    	pollDisplayURL = new URL(user + "PollDisplay");                  	
 	    	discussPromptURL = new URL(user +  "GroupDiscussPrompt");                  	
