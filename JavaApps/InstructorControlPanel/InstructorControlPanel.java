@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 public class InstructorControlPanel extends JApplet  implements  ActionListener {
 	

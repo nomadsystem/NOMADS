@@ -13,7 +13,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.*;
 import java.util.*;
 import java.lang.*;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 public class CloudDiscuss extends JApplet implements ActionListener, KeyListener {   
 

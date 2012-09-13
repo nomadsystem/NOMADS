@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 
 public class StudentControlPanel extends JApplet  implements  ActionListener {
 	// Change to your directory
 	// for production version, just use "/"
-	String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
+	String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
 	
 	NSand studentControlPanelSand;
 	private NomadsAppThread nThread;
@@ -121,10 +121,10 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 		pointImgFocus=getImage(getCodeBase( ),"sandPointerButtonMouse.png");
 		pointImgOff=getImage(getCodeBase( ),"sandPointerButtonBlurOff.png");
 		
-		uGrooveImg=getImage(getCodeBase( ),"buttons/unityGrooveButton.png");
-		uGrooveImgOn=getImage(getCodeBase( ),"buttons/unityGrooveButtonOn.png");
-		uGrooveImgFocus=getImage(getCodeBase( )," buttons/unityGrooveButtonMouse.png");
-		uGrooveImgOff=getImage(getCodeBase( ),"buttons/unityGrooveButtonBlur.png");
+		uGrooveImg=getImage(getCodeBase( ),"unityGrooveButton.png");
+		uGrooveImgOn=getImage(getCodeBase( ),"unityGrooveButtonOn.png");
+		uGrooveImgFocus=getImage(getCodeBase( )," unityGrooveButtonMouse.png");
+		uGrooveImgOff=getImage(getCodeBase( ),"unityGrooveButtonBlur.png");
 
 		
 		joinIcon = new ImageIcon(joinImg);
