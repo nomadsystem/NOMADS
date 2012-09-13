@@ -6,7 +6,7 @@ import java.net.*;
 import java.text.*;
 import javax.swing.*;
 
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 public class SoundSwarm extends JApplet implements MouseListener,
 						   MouseMotionListener {

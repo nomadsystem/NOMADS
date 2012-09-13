@@ -15,7 +15,7 @@ import java.io.*;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import netscape.javascript.*;
-import nomads.v210_auk.*;
+import nomads.v210.*;
 
 public class CloudDisplay extends Applet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 
