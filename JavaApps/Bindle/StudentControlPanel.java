@@ -203,61 +203,73 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
     	NGlobals.cPrint("StudentControlPanel -> handle()");
     	
     	NGrain grain;
-		grain = studentControlPanelSand.getGrain();
-		grain.print(); //prints grain data to console
-		String input = new String(grain.bArray);
+
+	grain = studentControlPanelSand.getGrain();
+	
+	grain.print(); //prints grain data to console
+	
+	byte tByte = new byte[grain.dataLen];
+	byte tCmd = grain.command;
+	String input = new String(grain.bArray);
     	
-		if (input.equals("DISABLE_DISCUSS_BUTTON")) {
-			discussButton.removeActionListener (this);
-			discussButton.setIcon(new ImageIcon(discussImgOff));
-			NGlobals.cPrint("discuss DISABLED");
-		}
-		else if (input.equals("ENABLE_DISCUSS_BUTTON")) {
-			discussButton.addActionListener (this);
-			discussButton.setIcon(new ImageIcon(discussImg));
-			NGlobals.cPrint("discuss ENABLED");
-		}
-		else if (input.equals("DISABLE_CLOUD_BUTTON")) {
-			cloudButton.removeActionListener (this);
-			cloudButton.setIcon(new ImageIcon(cloudImgOff));
-		}
-		else if (input.equals("ENABLE_CLOUD_BUTTON")) {
-			cloudButton.addActionListener (this);
-			cloudButton.setIcon(new ImageIcon(cloudImg));
-		}
-		else if (input.equals("DISABLE_POLL_BUTTON")) {
-			pollButton.removeActionListener (this);
-			pollButton.setIcon(new ImageIcon(pollImgOff));
-		}
-		else if (input.equals("ENABLE_POLL_BUTTON")) {
-			pollButton.addActionListener (this);
-			pollButton.setIcon(new ImageIcon(pollImg));
-		}
-		else if (input.equals("DISABLE_SOUND_BUTTON")) {
-			soundButton.removeActionListener (this);
-			soundButton.setIcon(new ImageIcon(soundImgOff));
-		}
-		else if (input.equals("ENABLE_SOUND_BUTTON")) {
-			soundButton.addActionListener (this);
-			soundButton.setIcon(new ImageIcon(soundImg));
-		}
-		else if (input.equals("DISABLE_POINTER_BUTTON")) {
-			pointButton.removeActionListener (this);
-			pointButton.setIcon(new ImageIcon(pointImgOff));
-		}
-		else if (input.equals("ENABLE_POINTER_BUTTON")) {
-			pointButton.addActionListener (this);
-			pointButton.setIcon(new ImageIcon(pointImg));
-		}
-		else if (input.equals("DISABLE_UGROOVE_BUTTON")) {
-			uGrooveButton.removeActionListener (this);
-			uGrooveButton.setIcon(new ImageIcon(uGrooveImgOff));
-		}
-		else if (input.equals("ENABLE_UGROOVE_BUTTON")) {
-			uGrooveButton.addActionListener (this);
-			uGrooveButton.setIcon(new ImageIcon(uGrooveImg));
-		}
+	if (tCmd == NCommand.SET_DISCUSS_STATUS) {
+	    if (tByte == 0) {
+		discussButton.removeActionListener (this);
+		discussButton.setIcon(new ImageIcon(discussImgOff));
+		NGlobals.cPrint("discuss DISABLED");
+	    }
+	    else if (tByte == 1) {
+		discussButton.addActionListener (this);
+		discussButton.setIcon(new ImageIcon(discussImg));
+		NGlobals.cPrint("discuss ENABLED");
+	    }
 	}
+
+	// DT:  stopped here
+
+	else if (tCmd == NCommand.SET_CLOUD_STATUS) {
+	    cloudButton.removeActionListener (this);
+	    cloudButton.setIcon(new ImageIcon(cloudImgOff));
+	}
+
+
+	else if (input.equals("ENABLE_CLOUD_BUTTON")) {
+	    cloudButton.addActionListener (this);
+	    cloudButton.setIcon(new ImageIcon(cloudImg));
+	}
+	else if (input.equals("DISABLE_POLL_BUTTON")) {
+	    pollButton.removeActionListener (this);
+	    pollButton.setIcon(new ImageIcon(pollImgOff));
+	}
+	else if (input.equals("ENABLE_POLL_BUTTON")) {
+	    pollButton.addActionListener (this);
+	    pollButton.setIcon(new ImageIcon(pollImg));
+	}
+	else if (input.equals("DISABLE_SOUND_BUTTON")) {
+	    soundButton.removeActionListener (this);
+	    soundButton.setIcon(new ImageIcon(soundImgOff));
+	}
+	else if (input.equals("ENABLE_SOUND_BUTTON")) {
+	    soundButton.addActionListener (this);
+	    soundButton.setIcon(new ImageIcon(soundImg));
+	}
+	else if (input.equals("DISABLE_POINTER_BUTTON")) {
+	    pointButton.removeActionListener (this);
+	    pointButton.setIcon(new ImageIcon(pointImgOff));
+	}
+	else if (input.equals("ENABLE_POINTER_BUTTON")) {
+	    pointButton.addActionListener (this);
+	    pointButton.setIcon(new ImageIcon(pointImg));
+	}
+	else if (input.equals("DISABLE_UGROOVE_BUTTON")) {
+	    uGrooveButton.removeActionListener (this);
+	    uGrooveButton.setIcon(new ImageIcon(uGrooveImgOff));
+	}
+	else if (input.equals("ENABLE_UGROOVE_BUTTON")) {
+	    uGrooveButton.addActionListener (this);
+	    uGrooveButton.setIcon(new ImageIcon(uGrooveImg));
+	}
+    }
     
     public void actionPerformed(ActionEvent ae)
     {
