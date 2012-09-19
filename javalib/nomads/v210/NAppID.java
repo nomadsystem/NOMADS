@@ -10,8 +10,8 @@ public class NAppID {
     public static byte SERVER = 0;
     public static byte INSTRUCTOR_PANEL = 1;
     public static byte C_INSTRUCTOR_PANEL = 2;
-    public static byte STUDENT_PANEL = 3;
-    public static byte C_STUDENT_PANEL = 4;
+//    public static byte STUDENT_PANEL = 3; ****STK Depricated in favor of Bindle
+//    public static byte C_STUDENT_PANEL = 4;
     public static byte CENSOR = 5;
     public static byte MONITOR = 6;
     public static byte BINDLE = 7;

@@ -145,11 +145,16 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
 
 	public synchronized void handle()
 	{	
-		int incCmd, incNBlocks, incDType, incDLen;
+		int incNBlocks, incDType, incDLen;
 		int i,j;
 		int incIntData[] = new int[1000];
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
@@ -159,29 +164,34 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 
 		grain = discussSand.getGrain();
 		grain.print(); //prints grain data to console
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		String msg = new String(grain.bArray);
 
-		if (grain.appID == NAppID.DISCUSS_PROMPT) {
+		if (incAppID == NAppID.DISCUSS_PROMPT && incCmd == NCommand.SEND_MESSAGE) {
 			topic.setText(msg);
 			tempString = new String(msg);
 			topic.setForeground(Color.BLACK);
 			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 		}
 		// Disable discuss when the student panel button is off
-		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
-				speak.setEnabled(false);
-				topic.setText("Discuss Disabled");
-				chatWindow.setText("");
-			}
-			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
-				speak.setEnabled(true);
-				topic.setText(tempString);
-			}			
+		else if (incAppID == NAppID.INSTRUCTOR_PANEL && incCmd == NCommand.SET_DISCUSS_STATUS) {
+				if (grain.bArray[0] == 0) {
+					speak.setEnabled(false);
+					topic.setText("Discuss Disabled");
+					chatWindow.setText("");
+				}
+				else if (grain.bArray[0] == 1) {
+					speak.setEnabled(true);
+					topic.setText(tempString);
+				}		
 		}
-		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
-			chatWindow.append(msg + "\n");
-			input.requestFocus();
+		
+		else if (incAppID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				chatWindow.append(msg + "\n");
+				input.requestFocus();
+			}
 		}
 		else {
 			grain = null;
