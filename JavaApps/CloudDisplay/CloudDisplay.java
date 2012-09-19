@@ -215,6 +215,11 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		cloudSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}	
 
 
@@ -299,6 +304,7 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 		String temp,tAlpha,thread,input, tTest, text;
 		int THREAD_ID;
 		float xput,yput;
+		
 
 		//Unused for Sand class ****STK 6/14/12
 //		int incCmd, incNBlocks, incDType, incDLen;
@@ -309,6 +315,8 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 
 		grain = cloudSand.getGrain();
 		grain.print(); //prints grain data to console
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		text = new String(grain.bArray);
 
 		quad=0;
@@ -328,7 +336,7 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 
 		// ========= CLOUD INPUT ============================================
 
-		if (grain.appID == NAppID.CLOUD_CHAT) {
+		if (incAppID == NAppID.CLOUD_CHAT && incCmd == NCommand.SEND_MESSAGE) {
 
 			NGlobals.cPrint("CLOUD_CHAT\n");
 

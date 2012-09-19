@@ -128,36 +128,40 @@ public class CloudDiscuss extends JApplet implements ActionListener, KeyListener
 		
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		cloudSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 	}
 
 
 	public void handle()
 	{	
-		int incCmd, incNBlocks, incDType, incDLen;
 		int i,j;
-		int incIntData[] = new int[1000];
-		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 		NGrain grain;
 
 		NGlobals.cPrint("CloudDiscuss -> handle()");
 
 		grain = cloudSand.getGrain();
 		grain.print(); //prints grain data to console
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		String msg = new String(grain.bArray);
 
-		if (grain.appID == NAppID.CLOUD_PROMPT) {
+		if (incAppID == NAppID.CLOUD_PROMPT && incCmd == NCommand.SEND_CLOUD_PROMPT) {
 			topic.setText(msg);
 			tempString = new String(msg);
 			topic.setForeground(Color.BLACK);
 			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 		}
-		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-			if (msg.equals("DISABLE_CLOUD_BUTTON")) {
+		else if (incAppID == NAppID.INSTRUCTOR_PANEL && incCmd == NCommand.SET_CLOUD_STATUS) {
+			if (grain.bArray[0] == 0) {
 				speak.setEnabled(false);
 				topic.setText("Cloud Disabled");
 			}
-			else if (msg.equals("ENABLE_CLOUD_BUTTON")) {
+			else if (grain.bArray[0] == 1) {
 				speak.setEnabled(true);
 				topic.setText(tempString);
 			}

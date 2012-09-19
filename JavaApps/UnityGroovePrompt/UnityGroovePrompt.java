@@ -41,10 +41,6 @@ public class UnityGroovePrompt extends JApplet
 	JToggleButton   synthOn;
 	JToggleButton	synthEnabled;
 	JLabel		stateLabel;
-
-	String nullString = "0";
-	int tLen = nullString.length();
-	byte noByte[] = nullString.getBytes();//To create one byte with a value of 0, perhaps better way to deal with this? ****STK 6/20/12
 	
 
 	
@@ -63,6 +59,10 @@ public class UnityGroovePrompt extends JApplet
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 		NGlobals.cPrint("UG: NThread Created");
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
 
 	public void createButtons(Container pane) 
@@ -172,25 +172,33 @@ public class UnityGroovePrompt extends JApplet
 				if (abstractButton == synthEnabled) {
 					if (selected && !enabled) {
 						enabled = true;
+						byte d[] = new byte[1];
+						d[0] = 1;
 						//Sending data
-						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_ENABLE, (byte)NDataType.BYTE, tLen, noByte );
+						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_ENABLE_STATUS, (byte)NDataType.UINT8, 1, d );
 						NGlobals.cPrint("UG: SYNTH_ENABLE");
 					}
 					else if (!selected && enabled) {
 						enabled = false;
-						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_DISABLE, (byte)NDataType.BYTE, tLen, noByte );
+						byte d[] = new byte[1];
+						d[0] = 0;
+						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_ENABLE_STATUS, (byte)NDataType.UINT8, 1, d );
 						NGlobals.cPrint("UG: SYNTH_DISABLE");
 					}
 				}
 				else if (abstractButton == synthOn) {
 					if (selected && !started) {
 						started = true;
-						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_START, (byte)NDataType.BYTE, tLen, noByte  );
+						byte d[] = new byte[1];
+						d[0] = 1;
+						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_START_STOP, (byte)NDataType.UINT8, 1, d  );
 						NGlobals.cPrint("UG: SYNTH_START");
 					}
 					else if (!selected && started) {
 						started = false;
-						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_STOP, (byte)NDataType.BYTE, tLen, noByte  );
+						byte d[] = new byte[1];
+						d[0] = 0;
+						uGrooveSand.sendGrain((byte)NAppID.INSTRUCT_EMRG_SYNTH_PROMPT, (byte)NCommand.SYNTH_START_STOP, (byte)NDataType.UINT8, 1, d  );
 						NGlobals.cPrint("UG: SYNTH_STOP");
 					}
 	
