@@ -168,7 +168,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		byte incCmd = grain.command;
 		String msg = new String(grain.bArray);
 
-		if (incAppID == NAppID.DISCUSS_PROMPT && incCmd == NCommand.SEND_MESSAGE) {
+		if (incAppID == NAppID.DISCUSS_PROMPT && incCmd == NCommand.SEND_DISCUSS_PROMPT) {
 			topic.setText(msg);
 			tempString = new String(msg);
 			topic.setForeground(Color.BLACK);

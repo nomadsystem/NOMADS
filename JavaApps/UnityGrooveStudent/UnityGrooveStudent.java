@@ -159,6 +159,10 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 		NGlobals.cPrint("UG: NThread Created");
+		byte d[] = new byte[1];
+		d[0] = 0;
+		uGrooveSand.sendGrain((byte)NAppID.STUD_EMRG_SYNTH, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
 		setupSynth();
 	}
 
@@ -272,26 +276,27 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 		if (incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
 			NGlobals.cPrint("UGStudent: Got message from UGPrompt");
 
-			if (incCmd == NCommand.SYNTH_ENABLE) {
-				loopButton.setEnabled(true);
-				stopButton.setEnabled(true);
-				//		plusButton.setEnabled(true);
-				//		minusButton.setEnabled(true);
+			if (incCmd == NCommand.SYNTH_ENABLE_STATUS) {
+				if (grain.bArray[0] == 1) {
+					loopButton.setEnabled(true);
+					stopButton.setEnabled(true);
+				}
+				else if (grain.bArray[0] == 0) {
+					loopButton.setEnabled(false);
+					stopButton.setEnabled(false);
+				}
 			}
-			else if (incCmd == NCommand.SYNTH_DISABLE) {
-				loopButton.setEnabled(false);
-				stopButton.setEnabled(false);
-				//		plusButton.setEnabled(false);
-				//		minusButton.setEnabled(false);
-			}
-			else if (incCmd == NCommand.SYNTH_START) {
-				//run();
-				setRun(true);
-			}
-			else if (incCmd == NCommand.SYNTH_STOP) {
-				envPlayer.envelopePort.clear();
-				envPlayer.envelopePort.queue( envData, 3, 1 );  // queue release
-				setRun(false);
+			
+			else if (incCmd == NCommand.SYNTH_START_STOP) {
+				if (grain.bArray[0] == 1) {
+					//run();
+					setRun(true);
+				}
+				else if (grain.bArray[0] == 0) {
+					envPlayer.envelopePort.clear();
+					envPlayer.envelopePort.queue( envData, 3, 1 );  // queue release
+					setRun(false);
+				}
 			}
 		}
 
