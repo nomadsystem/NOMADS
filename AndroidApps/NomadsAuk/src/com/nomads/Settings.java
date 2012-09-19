@@ -60,9 +60,9 @@ public class Settings extends Activity {
 
 	public void setConnectedMessage(boolean _connected) {
 		if (_connected) {
-			connectionStatus.setText("Connected to the Nomads server");
+			connectionStatus.setText("Connected to the NOMADS!");
 		} else {
-			connectionStatus.setText("Not connected to the Nomads server.");
+			connectionStatus.setText("Not connected to the NOMADS.");
 		}
 	}
 

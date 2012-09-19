@@ -52,14 +52,5 @@
 		    android:layout_height="wrap_content"
 		    android:text="@string/linkButton" />
 	</LinearLayout>
-	
-	<TextView
-	    android:id="@+id/nomadsInfo"
-	    style="@style/infoBlack"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@id/nomadsLinkLayout"
-	    android:text="@string/nomadsInfo" />
 
 </RelativeLayout>

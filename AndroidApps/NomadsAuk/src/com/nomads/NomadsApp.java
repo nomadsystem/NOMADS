@@ -20,7 +20,7 @@ public class NomadsApp extends Application {
 	private AudioManager am;
 	private Join join;
 	private Swarm swarm;
-	private Dot dot;
+	public Dot dot;
 	private Settings settings;
 	private static NSand sand;
 	private NGrain grain, sGrain;
@@ -339,12 +339,6 @@ public class NomadsApp extends Application {
 	}
 	
 	// ========================================================
-	
-	public void dropAnimation () {
-		if (dot != null) {
-			dot.animateGrow();
-		}
-	}
 	
 	public void cancelAllTextInput() {
 		if (swarm != null) {

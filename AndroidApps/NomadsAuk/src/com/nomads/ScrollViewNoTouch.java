@@ -10,11 +10,13 @@ public class ScrollViewNoTouch extends ScrollView {
 		super(context, attrs);
 	}
 
+	// pass all touches
 	public boolean onTouchEvent(MotionEvent ev) {
 		return false;
 	}
-
+	
+	// intercept touches from children
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		return false;
+		return true;
 	}
 }
