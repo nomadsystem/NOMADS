@@ -80,7 +80,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	String text;
 
-	String response = "";  // DISPLAY
 	int typeOfQuestionSubmitted = 0;
 
 	// used for totaling purposes for yes no format
@@ -440,19 +439,14 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 		byte incAppID = grain.appID;
 		byte incCmd = grain.command;
-		//		currentQuestionType = incCmd;
-		String s = new String(grain.bArray); //the incoming question ****STK 6/18/12
+		
 
 		NGlobals.cPrint("handle() =========================================================================================");
 
 			temp = "";
-			response = s;  // DISPLAY
 			resp = 0;
 
 			NGlobals.cPrint("PD: Inside pollDisplay handle");
-
-			NGlobals.cPrint("PD: s " + s);
-			NGlobals.cPrint("PD: response " + s);
 
 
 			//get question from teacher poll app, and type of question submitted
@@ -495,7 +489,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 				NGlobals.cPrint("PD: typeOfQuestionSubmitted " + typeOfQuestionSubmitted);
 				NGlobals.cPrint("PD: _--------------------");
-				response = s; // DISPLAY
+//				response = s; // DISPLAY
 
 				NGlobals.cPrint("PD: setting poll question for POLL DISPLAY");
 				// Set question on display here
@@ -505,13 +499,14 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 			//get results from student poll apps
 			else if (incAppID == NAppID.STUDENT_POLL) {	 		 
 				NGlobals.cPrint("PD: Getting Message from Student Poll");
+				int response =  grain.iArray[0];
 
 				// YESNO ============================================================----------
 				if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
 					NGlobals.cPrint("PD: SP: YES-NO ----------------------------------------------------------");
 					pType = pollType.YESNO;
 
-					if (response.equalsIgnoreCase("yes"))  {
+					if (response == 1)  {
 						NGlobals.cPrint("PD: yes came in");
 						yesTotal++;
 
@@ -568,7 +563,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 						NGlobals.cPrint("PD: yesTotal " + yesTotal);
 					}
 
-					if (response.equalsIgnoreCase("no")) {
+					if (response == 0) {
 						NGlobals.cPrint("PD: no came in");
 						noTotal++;
 
@@ -690,7 +685,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 					pType = pollType.TEN;
 
 					NGlobals.cPrint("PD: SP: 1-to-10 ----------------------------------------------------------");
-					resp = Integer.parseInt(response); // DISPLAY
+					resp = response; // DISPLAY
 					tVal = colVals[resp];
 					tVal++;
 					colVals[resp] = tVal;
@@ -747,7 +742,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 			}
 
 
-			NGlobals.cPrint("PD: response " + response);  // DISPLAY
 			NGlobals.cPrint("PD: resp " + resp);
 			NGlobals.cPrint("PD: Running total " + runningTotal);
 			NGlobals.cPrint("PD: count " + count);

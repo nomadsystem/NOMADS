@@ -38,7 +38,6 @@ public class PollPrompt extends JApplet implements ActionListener
 	NSand pollSand;
 	private NomadsAppThread nThread;
 
-	String response = "";
 	String typeOfQuestionSubmitted = "";
 
 	// used for totaling purposes for yes no format
@@ -174,18 +173,19 @@ public class PollPrompt extends JApplet implements ActionListener
 		grain.print(); //prints grain data to console
 		byte incAppID = grain.appID;
 		byte incCmd = grain.command;
-		String response = new String(grain.bArray);
+		
 
 		if (incAppID == NAppID.STUDENT_POLL) {
+			int response = grain.iArray[0];
 			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)	// Replace with QUESTION_TYPE_YES_NO)
 			{
-				if (response.equalsIgnoreCase("yes")) //eventually may want to convert these to commands
+				if (response == 1) //eventually may want to convert these to commands
 				{
 					NGlobals.cPrint("PP:yes came in");
 					yesTotal++;
 					NGlobals.cPrint("PP:yesTotal " + yesTotal);
 				}
-				if (response.equalsIgnoreCase("no"))
+				if (response  == 0)
 				{
 					NGlobals.cPrint("PP:no came in");
 					noTotal++;
@@ -229,7 +229,7 @@ public class PollPrompt extends JApplet implements ActionListener
 			//parse 1 to 10 results
 			else if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)	// Replace with QUESTION_TYPE_ONE_TO_TEN)
 			{
-				resp = Integer.parseInt(response); //May need to deal with gettng results as an int or string ****STK 6/15/12
+				resp = response; //May need to deal with gettng results as an int or string ****STK 6/15/12
 				runningTotal += resp;
 				count++;
 				
