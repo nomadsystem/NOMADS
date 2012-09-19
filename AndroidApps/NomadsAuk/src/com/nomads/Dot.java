@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 //import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -33,7 +34,8 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	private NomadsApp app;
 	private NGrain sGrain;
 	private DotThread dThread;
-	private Bitmap scaledBG;
+	private boolean running = false;
+	private Bitmap background, scaledBG;
 
 	public Dot(Context _context, AttributeSet _attrs) {
 		super(_context, _attrs);
@@ -50,14 +52,34 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 		myPaint.setAntiAlias(true);
 	}
 	
+	public void surfaceThreadRestart () {
+		if (!running) {
+			Log.i("Dot", "surfaceThreadStart()");
+			running = true;
+			dThread = new DotThread(getHolder(), this);
+		}
+	}
+	
+	public void surfaceThreadStop () {
+		Log.i("Dot", "surfaceThreadStop()");
+		if (running) {
+			boolean retry = true;
+	        running = false;
+	        while (retry) {
+	            try {
+	            	dThread.join();
+	                retry = false;
+	            } catch (InterruptedException e) {
+	                // we will try it again and again...
+	            }
+	        }
+		}
+	}
+	
 	public void surfaceCreated(SurfaceHolder holder) {
-		Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
-		float scale = (float)background.getHeight()/(float)getHeight();
-	    int newWidth = Math.round(background.getWidth()/scale);
-	    int newHeight = Math.round(background.getHeight()/scale);
-	    scaledBG = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
-
-		dThread.setRunning(true);
+		background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+	    scaledBG = Bitmap.createScaledBitmap(background, this.getWidth(), this.getHeight(), true);
+	    running = true;
         dThread.start();
 	}
 
@@ -67,23 +89,14 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		boolean retry = true;
-        dThread.setRunning(false);
-        while (retry) {
-            try {
-            	dThread.join();
-                retry = false;
-            } catch (InterruptedException e) {
-                // we will try it again and again...
-            }
-        }
+		surfaceThreadStop();
 	}
 	
 	@Override
     public void onDraw(Canvas canvas) {
 		float tempRad = getAnimatedRadius();
 		
-		if ( dThread.isRunning() ) {
+		if (running) {
 			// draw the background
 			canvas.drawBitmap(scaledBG, 0, 0, null);
 			
@@ -96,19 +109,10 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	class DotThread extends Thread {
         private SurfaceHolder surfaceHolder;
         private Dot dot;
-        private boolean running = false;
  
         public DotThread(SurfaceHolder _surfaceHolder, Dot _dot) {
             surfaceHolder = _surfaceHolder;
             dot = _dot;
-        }
- 
-        public void setRunning(boolean _run) {
-        	running = _run;
-        }
-        
-        public boolean isRunning() {
-        	return running;
         }
  
         @Override
