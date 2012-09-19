@@ -120,6 +120,11 @@ public class DiscussPrompt extends JApplet implements ActionListener
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		discussSand.sendGrain((byte)NAppID.DISCUSS_PROMPT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+		
 	}
 
 
