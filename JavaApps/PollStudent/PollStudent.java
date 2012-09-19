@@ -135,26 +135,23 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
-
+		byte d[] = new byte[1];
+		d[0] = 0;
+		pollSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
-
-
-
 
 
 	//read poll information from teacherpoll app
 	public void handle()    {
 		int i,j;
-		int appID, incCmd, incDType, incDLen;
-		int incIntData[] = new int[1000];
-		byte incByteData[] = new byte[1000];  
+
 		NGrain grain;
 
 		grain = pollSand.getGrain();
 		grain.print(); //prints grain data to console
 
-		appID = grain.appID;
-		incCmd = grain.command;
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
 
 		NGlobals.cPrint("****************");
@@ -162,7 +159,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 		NGlobals.cPrint("Student Poll Command = " + incCmd);
 		NGlobals.cPrint("Student Poll toBePosed = " + toBePosed);
 
-		if (appID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
+		if (incAppID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
 
 			if (incCmd == NCommand.VOTE) {
 				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO) {
@@ -209,7 +206,7 @@ public class PollStudent extends JApplet implements ItemListener, ActionListener
 
 
 		//if this string was sent from the teacher poll
-		if (appID == NAppID.TEACHER_POLL)
+		if (incAppID == NAppID.TEACHER_POLL)
 		{	 
 
 

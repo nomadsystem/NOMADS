@@ -14,7 +14,10 @@ public class NCommand {
     public static byte SET_MOSAIC_STATUS = 14; 
     public static byte SET_SWARM_STATUS = 15; 
     public static byte SET_UGROOVE_STATUS = 16; 
-
+    
+    public static byte SEND_DISCUSS_PROMPT = 20;
+    public static byte SEND_CLOUD_PROMPT = 21;
+    public static byte SEND_POLL_PROMPT = 22;
 
     public static byte QUESTION_TYPE_YES_NO = 31;
     public static byte QUESTION_TYPE_ONE_TO_TEN = 32;

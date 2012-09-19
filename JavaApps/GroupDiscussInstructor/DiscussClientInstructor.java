@@ -42,6 +42,8 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 	JLabel title, topic, spa1, spa2, spa3, spa5;
 	Font titleFont, topicFont;
 
+	String tempString = "";   
+	
 	//background color for the whole applet
 	Color BG = new Color(158,55,33);      
 
@@ -157,7 +159,7 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 
 	public void handle()
 	{	
-		int incCmd, incNBlocks, incDType, incDLen;
+		int incNBlocks, incDType, incDLen;
 		int i,j;
 		int incIntData[] = new int[1000];
 		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
@@ -167,29 +169,34 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 
 		grain = discussSand.getGrain();
 		grain.print(); //prints grain data to console
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		String msg = new String(grain.bArray);
 
-		if (grain.appID == NAppID.DISCUSS_PROMPT) {
+		if (incAppID == NAppID.DISCUSS_PROMPT && incCmd == NCommand.SEND_DISCUSS_PROMPT) {
 			topic.setText(msg);
-			String tempString = new String(msg);
+			tempString = new String(msg);
 			topic.setForeground(Color.BLACK);
 			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 		}
 		// Disable discuss when the student panel button is off
-		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
-				speak.setEnabled(false);
-				topic.setText("Discuss Disabled");
-				chatWindow.setText("");
+		//****STK Commented out, we don't want to disable the instructor discuss
+//		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
+//			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
+//				speak.setEnabled(false);
+//				topic.setText("Discuss Disabled");
+//				chatWindow.setText("");
+//			}
+//			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
+//				speak.setEnabled(true);
+//				topic.setText(msg);
+//			}			
+//		}
+		else if (incAppID == NAppID.WEB_CHAT || incAppID == NAppID.SERVER){
+			if (incCmd == NCommand.SEND_MESSAGE) {
+				chatWindow.append(msg + "\n");
+				input.requestFocus();
 			}
-			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
-				speak.setEnabled(true);
-				topic.setText(msg);
-			}			
-		}
-		else if (grain.appID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
-			chatWindow.append(msg + "\n");
-			input.requestFocus();
 		}
 		else {
 			grain = null;

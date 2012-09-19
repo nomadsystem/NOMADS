@@ -239,7 +239,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("cloud DISABLED");
 				}
 				else if (tByte == 1) {
-					cloudButton.removeActionListener (this);
+					cloudButton.addActionListener (this);
 					cloudButton.setIcon(new ImageIcon(cloudImg));
 					NGlobals.cPrint("cloud ENABLED");
 				}
@@ -318,7 +318,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("cloud DISABLED");
 				}
 				else if (tByte == 1) {
-					cloudButton.removeActionListener (this);
+					cloudButton.addActionListener (this);
 					cloudButton.setIcon(new ImageIcon(cloudImg));
 					NGlobals.cPrint("cloud ENABLED");
 				}

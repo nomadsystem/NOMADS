@@ -118,6 +118,11 @@ public class CloudPrompt extends JApplet implements ActionListener
 		
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		
+		byte d[] = new byte[1];
+		d[0] = 0;
+
+		cloudSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
 
 	public void handle()
@@ -135,7 +140,7 @@ public class CloudPrompt extends JApplet implements ActionListener
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			cloudSand.sendGrain((byte)NAppID.CLOUD_PROMPT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			cloudSand.sendGrain((byte)NAppID.CLOUD_PROMPT, (byte)NCommand.SEND_CLOUD_PROMPT, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 
 			// The data 
@@ -157,7 +162,7 @@ public class CloudPrompt extends JApplet implements ActionListener
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			cloudSand.sendGrain((byte)NAppID.CLOUD_PROMPT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			cloudSand.sendGrain((byte)NAppID.CLOUD_PROMPT, (byte)NCommand.SEND_CLOUD_PROMPT, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 
 			// The data 

@@ -156,25 +156,27 @@ public class PollPrompt extends JApplet implements ActionListener
 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
+		byte d[] = new byte[1];
+		d[0] = 0;
+		pollSand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
 
 	public void handle()
 	{
 		
-		int incCmd, incDType, incDLen;
 		int i,j;
-		int incIntData[] = new int[1000];
-		byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
+
 		NGrain grain;
 
 		NGlobals.cPrint("PollPrompt -> handle()");
 
 		grain = pollSand.getGrain();
 		grain.print(); //prints grain data to console
-		incCmd = grain.command;
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 		String response = new String(grain.bArray);
 
-		if (grain.appID == NAppID.STUDENT_POLL) {
+		if (incAppID == NAppID.STUDENT_POLL) {
 			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)	// Replace with QUESTION_TYPE_YES_NO)
 			{
 				if (response.equalsIgnoreCase("yes")) //eventually may want to convert these to commands
