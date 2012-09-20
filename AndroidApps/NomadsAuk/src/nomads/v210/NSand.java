@@ -19,7 +19,7 @@ public class NSand {
 	private DataInputStream streamIn = null;
 	private DataOutputStream streamOut = null;
 	private String serverName = NGlobals.serverName;
-	private int serverPort = NGlobals.serverPortPT;
+	private int serverPort = NGlobals.serverPortDT;
 
 	public NSand() {
 	}
