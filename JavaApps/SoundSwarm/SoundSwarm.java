@@ -41,11 +41,9 @@ public class SoundSwarm extends JApplet implements MouseListener,
 	swarmSand = new NSand(); 
 	swarmSand.connect();
 
-	String tString = new String("SOUND_SWARM:REGISTER");
-	int tLen = tString.length();
-	byte[] tStringAsBytes = tString.getBytes();
-
-	swarmSand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.LOGIN, (byte)NDataType.BYTE, tLen, tStringAsBytes);
+	byte d[] = new byte[1];
+	d[0] = 0;
+	swarmSand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d);
 
 	nThread = new NomadsAppThread(this);
 	nThread.start();
@@ -138,7 +136,6 @@ public class SoundSwarm extends JApplet implements MouseListener,
 		int[] xy = new int[2];
 		xy[0] = new_mx;
 		xy[1] = new_my;
-
 
 		swarmSand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT, 2, xy);
 

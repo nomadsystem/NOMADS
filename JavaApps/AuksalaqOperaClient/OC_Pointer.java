@@ -14,7 +14,6 @@ import nomads.v210_auk.*;
 import com.softsynth.jsyn.*;
 
 
-
 public class OC_Pointer extends JPanel implements Runnable
 {
 	

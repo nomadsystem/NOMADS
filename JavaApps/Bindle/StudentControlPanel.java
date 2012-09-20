@@ -8,9 +8,13 @@ import nomads.v210.*;
 
 
 public class StudentControlPanel extends JApplet  implements  ActionListener {
-	// Change to your directory
-	// for production version, just use "/"
-	String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
+
+	// Change appropriate directory 
+        // TODO:  use -D_$USER directive in makefile
+
+	String user = new String("http://nomads.music.virginia.edu/classroom/JavaApps/");
+	// String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
+	// String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
 
 	NSand studentControlPanelSand;
 	private NomadsAppThread nThread;
@@ -72,8 +76,8 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 			discussURL = new URL(user + "GroupDiscuss");
 			cloudURL = new URL(user +  "CloudDiscuss");   
 			pollURL = new URL(user + "PollStudent");       
-			soundURL = new URL(user + "SoundSwarm");
-			pointURL = new URL(user +  "Pointer");
+			soundURL = new URL(user + "SoundMosaic");
+			pointURL = new URL(user +  "SoundSwarm");
 			uGrooveURL = new URL(user + "UnityGrooveStudent");
 		}
 
@@ -239,7 +243,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("cloud DISABLED");
 				}
 				else if (tByte == 1) {
-					cloudButton.removeActionListener (this);
+					cloudButton.addActionListener (this);
 					cloudButton.setIcon(new ImageIcon(cloudImg));
 					NGlobals.cPrint("cloud ENABLED");
 				}
@@ -318,7 +322,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("cloud DISABLED");
 				}
 				else if (tByte == 1) {
-					cloudButton.removeActionListener (this);
+					cloudButton.addActionListener (this);
 					cloudButton.setIcon(new ImageIcon(cloudImg));
 					NGlobals.cPrint("cloud ENABLED");
 				}
