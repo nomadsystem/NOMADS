@@ -489,7 +489,7 @@ public class Swarm extends Activity {
 	                switch (keyCode) {
 	                    case KeyEvent.KEYCODE_DPAD_CENTER:
 	                    case KeyEvent.KEYCODE_ENTER:
-	            			String value = messageDiscuss.getText().toString();
+	            			String value = messageCloud.getText().toString();
 	            			Log.i("Swarm", "Cloud sent: " + value);
 	            			byte[] cloudMsg = value.getBytes();
 	            			sGrain = new NGrain(

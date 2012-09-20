@@ -19,7 +19,7 @@ public class Settings extends Activity {
 	NomadsApp app;
 
 	TextView connectionStatus, nomadsLink;
-	Button linkButton, quitButton;
+	Button linkButton, backButton;
 	String connectedMessage;
 	final Context context = this;
 	AlertDialog.Builder alert;
@@ -39,6 +39,8 @@ public class Settings extends Activity {
 		connectionStatus = (TextView) findViewById(R.id.connectionStatus);
 		linkButton = (Button)findViewById(R.id.linkButton);
 		linkButton.setOnClickListener(linkListener);
+		backButton = (Button)findViewById(R.id.settingsBackButton);
+		backButton.setOnClickListener(backListener);
 	}
 
 	@Override
@@ -76,6 +78,13 @@ public class Settings extends Activity {
 			 // use this to open web page in another browser (can also use text link in Strings.xml)
 			 Intent intent = new Intent(getApplicationContext(), NomadsWebView.class);
 			 startActivity(intent);
+		 }
+	 };
+	 
+	 Button.OnClickListener backListener = new Button.OnClickListener(){
+		 @Override
+		 public void onClick(View v) {
+			 finish();
 		 }
 	 };
 

@@ -28,5 +28,18 @@
 		    android:layout_height="wrap_content"
 		    android:text="@string/linkButton" />
 	</LinearLayout>
+	
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/nomadsBackLayout"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true">
+		<Button
+		    android:id="@+id/settingsBackButton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/backButton" />
+	</LinearLayout>
 
 </RelativeLayout>
