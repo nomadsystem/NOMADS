@@ -468,7 +468,7 @@ public class Swarm extends Activity {
 	                    case KeyEvent.KEYCODE_DPAD_CENTER:
 	                    case KeyEvent.KEYCODE_ENTER:
 	                    	String value = messageDiscuss.getText().toString();
-//	            			Log.i("Swarm->Discuss", "value = " + value);
+	            			Log.i("Swarm->Discuss", "value = " + value);
 	            			byte[] discussMsg = value.getBytes();
 	            			// eventually use this:
 	            			// char[] discussMsg = value.toCharArray();
@@ -490,7 +490,7 @@ public class Swarm extends Activity {
 	                    case KeyEvent.KEYCODE_DPAD_CENTER:
 	                    case KeyEvent.KEYCODE_ENTER:
 	            			String value = messageDiscuss.getText().toString();
-//	            			Log.i("Swarm", "Cloud sent: " + value);
+	            			Log.i("Swarm", "Cloud sent: " + value);
 	            			byte[] cloudMsg = value.getBytes();
 	            			sGrain = new NGrain(
 	            					NAppIDAuk.OC_CLOUD,
