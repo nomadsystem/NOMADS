@@ -15,6 +15,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+
+// TEST COMMENT
+
 public class NomadsApp extends Application {
 	private static NomadsApp singleton;
 	private AudioManager am;
