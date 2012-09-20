@@ -12,7 +12,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -48,7 +47,8 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 		app.setDot(this);
 
 		myPaint = new Paint();
-		myPaint.setColor(Color.WHITE);
+		// cc (204) for red. blue. alpha; 0 for green
+		myPaint.setColor(0xCCCC00CC);
 		myPaint.setAntiAlias(true);
 	}
 	
