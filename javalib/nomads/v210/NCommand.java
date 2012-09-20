@@ -29,4 +29,7 @@ public class NCommand {
 
     public static byte SEND_SPRITE_XY = 51;  // SoundSwarm
     public static byte SEND_THREAD_ID = 52;
+
+    public static byte GET_SOUNDFILE_LIST = 61;  // Sequencer/Mosaic
+
 }
