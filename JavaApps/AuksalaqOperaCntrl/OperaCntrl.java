@@ -333,7 +333,7 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 
-		operaSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+		operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 	}	
 
