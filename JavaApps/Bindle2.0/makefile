@@ -5,16 +5,19 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
+	JoinPanel.java\
         StudentControlPanel.java\
         DiscussClientPanel.java\
         CloudDiscussPanel.java\
         PollStudentPanel.java\
-        SoundSwarmPanel.java\
+        SandPointerPanel.java\
+	SoundMosaicPanel.java\
         UnityGroovePanel.java\
-        colorBox.java
-        
+        colorBox.java\
 
-default: classes myliblink
+
+
+default: classes myliblink comlink jar
 
 topliblink:
 	rm -f ./nomads
@@ -23,6 +26,13 @@ topliblink:
 myliblink:
 	rm -f ./nomads
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
+
+comlink:
+	rm -f ./com
+	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
+
+jar:
+	jar cf StudentControlPanel.jar *.class
 
 classes: $(CLASSES:.java=.class)
 

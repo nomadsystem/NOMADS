@@ -52,7 +52,7 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 	int green = (int)0;
 	int blue = (int)255/2;
 
-	JButton     loopButton;
+	JButton     startButton;
 	JButton		plusButton;
 	JButton		minusButton;
 	JButton		stopButton;
@@ -176,14 +176,14 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 		buttonWrapper.setLayout(new FlowLayout(FlowLayout.CENTER));
 		buttonWrapper.setBackground(Color.black);
 
-		loopButton = new JButton("Start");
+		startButton = new JButton("Start");
 
-		loopButton.addActionListener(this);
+		startButton.addActionListener(this);
 
 		stopButton = new JButton("Stop");
 		stopButton.addActionListener(this);
 
-		buttonWrapper.add( loopButton );
+		buttonWrapper.add( startButton );
 		buttonWrapper.add( stopButton );
 
 		JPanel controls = new JPanel();
@@ -278,11 +278,11 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 
 			if (incCmd == NCommand.SYNTH_ENABLE_STATUS) {
 				if (grain.bArray[0] == 1) {
-					loopButton.setEnabled(true);
+					startButton.setEnabled(true);
 					stopButton.setEnabled(true);
 				}
 				else if (grain.bArray[0] == 0) {
-					loopButton.setEnabled(false);
+					startButton.setEnabled(false);
 					stopButton.setEnabled(false);
 				}
 			}
@@ -358,9 +358,10 @@ public class UnityGrooveStudent extends JApplet implements ActionListener, Runna
 	{
 		Object obj = ae.getSource();
 
-		if( obj == loopButton )
+		if( obj == startButton )
 		{
 			// Start units.
+		    NGlobals.cPrint("uGROOVE start");
 			setRun(true);
 		}
 
