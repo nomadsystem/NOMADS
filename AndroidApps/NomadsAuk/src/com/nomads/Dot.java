@@ -14,7 +14,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 //import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -54,14 +53,14 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void surfaceThreadRestart () {
 		if (!running) {
-			Log.i("Dot", "surfaceThreadStart()");
+//			Log.i("Dot", "surfaceThreadStart()");
 			running = true;
 			dThread = new DotThread(getHolder(), this);
 		}
 	}
 	
 	public void surfaceThreadStop () {
-		Log.i("Dot", "surfaceThreadStop()");
+//		Log.i("Dot", "surfaceThreadStop()");
 		if (running) {
 			boolean retry = true;
 	        running = false;
