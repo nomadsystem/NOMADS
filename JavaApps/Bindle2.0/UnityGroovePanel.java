@@ -34,7 +34,7 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 	int green = (int)0;
 	int blue = (int)255/2;
 
-	JButton     loopButton;
+	JButton     startButton;
 	JButton		plusButton;
 	JButton		minusButton;
 	JButton		stopButton;
@@ -111,7 +111,6 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 			envPlayer.start();
 
 			// Synchronize Java display to make buttons appear.
-			getParent().validate();
 			getToolkit().sync();
 
 		} catch(SynthException e) {
@@ -136,6 +135,7 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 		createButtons();
 
 		setupSynth();
+		start();
 	}
 
 	public void createButtons() 
@@ -148,14 +148,14 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 		buttonWrapper.setLayout(new FlowLayout(FlowLayout.CENTER));
 		buttonWrapper.setBackground(Color.black);
 
-		loopButton = new JButton("Start");
+		startButton = new JButton("Start");
 
-		loopButton.addActionListener(this);
+		startButton.addActionListener(this);
 
 		stopButton = new JButton("Stop");
 		stopButton.addActionListener(this);
 
-		buttonWrapper.add( loopButton );
+		buttonWrapper.add( startButton );
 		buttonWrapper.add( stopButton );
 
 		JPanel controls = new JPanel();
@@ -250,11 +250,11 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 //
 //			if (incCmd == NCommand.SYNTH_ENABLE_STATUS) {
 //				if (grain.bArray[0] == 1) {
-//					loopButton.setEnabled(true);
+//					startButton.setEnabled(true);
 //					stopButton.setEnabled(true);
 //				}
 //				else if (grain.bArray[0] == 0) {
-//					loopButton.setEnabled(false);
+//					startButton.setEnabled(false);
 //					stopButton.setEnabled(false);
 //				}
 //			}
@@ -330,10 +330,11 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 	{
 		Object obj = ae.getSource();
 
-		if( obj == loopButton )
+		if( obj == startButton )
 		{
 			// Start units.
-			setRun(true);
+		    NGlobals.cPrint("uGROOVE start");
+		    setRun(true);
 		}
 
 		else if( obj == plusButton )
@@ -410,6 +411,8 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 			envPlayer.envelopePort.clear();
 			envPlayer.envelopePort.queue( envData, 3, 1 );  // queue release	
 			setRun(false);
+		    NGlobals.cPrint("uGROOVE stop");
+
 			//Start units.
 			//lineOut.stop();
 			//mixer.stop();
