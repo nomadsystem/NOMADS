@@ -257,6 +257,10 @@ public class Swarm extends Activity {
 					app.state().discussToggle = true;
 					updateDisplay();
 				}
+			} else if (grain.command == NCommandAuk.SET_DISCUSS_DISPLAY_STATUS) {
+				if (grain.bArray[0] == 0) {
+					chatWindow.setText( "" );
+				}
 			}
 
 			else if (grain.command == NCommandAuk.SET_CLOUD_STATUS) {
@@ -468,7 +472,7 @@ public class Swarm extends Activity {
 	                    case KeyEvent.KEYCODE_DPAD_CENTER:
 	                    case KeyEvent.KEYCODE_ENTER:
 	                    	String value = messageDiscuss.getText().toString();
-	            			Log.i("Swarm->Discuss", "value = " + value);
+//	            			Log.i("Swarm->Discuss", "message = " + value);
 	            			byte[] discussMsg = value.getBytes();
 	            			// eventually use this:
 	            			// char[] discussMsg = value.toCharArray();
@@ -490,7 +494,7 @@ public class Swarm extends Activity {
 	                    case KeyEvent.KEYCODE_DPAD_CENTER:
 	                    case KeyEvent.KEYCODE_ENTER:
 	            			String value = messageCloud.getText().toString();
-	            			Log.i("Swarm", "Cloud sent: " + value);
+//	            			Log.i("Swarm->Cloud", "message: " + value);
 	            			byte[] cloudMsg = value.getBytes();
 	            			sGrain = new NGrain(
 	            					NAppIDAuk.OC_CLOUD,
