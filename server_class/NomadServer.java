@@ -25,12 +25,12 @@ public class NomadServer implements Runnable {
     long nowT,appT,diffT,lagT;
 
     //Instance variables to store values that the server will give to new clients
-    private static byte _DISCUSS_STATUS = 0;
-    private static byte _CLOUD_STATUS = 0;
-    private static byte _POLL_STATUS = 0;
-    private static byte _MOSAIC_STATUS = 0;
-    private static byte _SWARM_STATUS = 0;
-    private static byte _UGROOVE_STATUS = 0;
+    private static byte _DISCUSS_STATUS = 1;
+    private static byte _CLOUD_STATUS = 1;
+    private static byte _POLL_STATUS = 1;
+    private static byte _MOSAIC_STATUS = 1;
+    private static byte _SWARM_STATUS = 1;
+    private static byte _UGROOVE_STATUS = 1;
 
     int iDay;
     FileOutputStream out; // declare a file output object
@@ -52,7 +52,7 @@ public class NomadServer implements Runnable {
 	idList[NAppID.SERVER] = new String("SERVER");
 	idList[NAppID.INSTRUCTOR_PANEL] = new String("INSTRUCTOR_PANEL");
 	idList[NAppID.BINDLE] = new String("STUDENT_BINDLE");
-	idList[NAppID.WEB_CHAT] = new String("GROUP_DISCUSS");
+	idList[NAppID.DISCUSS] = new String("GROUP_DISCUSS");
 	idList[NAppID.DISCUSS_PROMPT] = new String("DISCUSS_PROMPT");
 	idList[NAppID.INSTRUCTOR_DISCUSS] = new String("INSTRUCTOR_DISCUSS");
 	idList[NAppID.LOGIN] = new String("JOIN");
