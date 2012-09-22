@@ -19,8 +19,6 @@ public class NAppID {
 
     public static byte TEXT_CHAT = 30;
     
-    public static byte LOGIN = 40;
-
     public static byte CLOUD_DISPLAY = 50;
     public static byte CLOUD_CHAT = 52;
     public static byte CLOUD_PROMPT = 54;

@@ -51,11 +51,10 @@ public class NomadServer implements Runnable {
 
 	idList[NAppID.SERVER] = new String("SERVER");
 	idList[NAppID.INSTRUCTOR_PANEL] = new String("INSTRUCTOR_PANEL");
-	idList[NAppID.BINDLE] = new String("STUDENT_BINDLE");
-	idList[NAppID.DISCUSS] = new String("GROUP_DISCUSS");
+	idList[NAppID.BINDLE] = new String("BINDLE");
+	idList[NAppID.DISCUSS] = new String("DISCUSS");
 	idList[NAppID.DISCUSS_PROMPT] = new String("DISCUSS_PROMPT");
 	idList[NAppID.INSTRUCTOR_DISCUSS] = new String("INSTRUCTOR_DISCUSS");
-	idList[NAppID.LOGIN] = new String("JOIN");
 	idList[NAppID.CLOUD_DISPLAY] = new String("CLOUD_DISPLAY");
 	idList[NAppID.CLOUD_CHAT] = new String("CLOUD_CHAT");
 	idList[NAppID.CLOUD_PROMPT] = new String("CLOUD_PROMPT");
@@ -201,6 +200,7 @@ public class NomadServer implements Runnable {
 
 	// Print out at the SERVER level
 	NGlobals.sPrint("appID: " + incAppID);
+	NGlobals.sPrint("appID(): " + printID((byte)incAppID));
 	NGlobals.sPrint("command: " + incAppCmd);
 	NGlobals.sPrint("dataType: " + incAppDataType);
 	NGlobals.sPrint("dataLen: " + incAppDataLen);
@@ -256,6 +256,8 @@ public class NomadServer implements Runnable {
 		// Log the client in
 		String tString = new String(myGrain.bArray);
 		NGlobals.sPrint("Got username: " + tString);
+
+		// add USER NAME to clients[] lookup array
 		clients[tCNum].setUser(tString);
 
 		// Set new login status 
@@ -277,6 +279,8 @@ public class NomadServer implements Runnable {
 
 	// Kick -------------------------------------------------------------------------------------
 
+	// TODO this message should go back to the Bindle login app, or some kind of status screen
+
 	// X:  if you're not the LOGIN app providing the correct info, you get booted here
 	if (tLoginStatus == false) {
 	    NGlobals.sPrint("   WARNING:  client THREAD NOT logged in.");
@@ -295,9 +299,11 @@ public class NomadServer implements Runnable {
 
 	IP = currentClient.getIP();
 
-
 	// 1.5: INIT =================================================================================================================
 	currentClient = clients[tCNum];
+
+	// If you are THE INSTRUCTOR PANEL -------------------------------------
+
 	if ((currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
 
 	    NGlobals.lPrint("  Sending button states to Instructor Panel from SERVER.");
@@ -316,6 +322,9 @@ public class NomadServer implements Runnable {
 	}
 
 	currentClient = clients[tCNum];
+
+	// If you are THE BINDLE -----------------------------------------------
+
 	if ((currentClient.getAppID() == NAppID.BINDLE) && (currentClient.getButtonInitStatus() == 0)) {
 
 	    NGlobals.lPrint("  Sending button states to Bindle from SERVER.");
@@ -352,7 +361,6 @@ public class NomadServer implements Runnable {
 	    // NGlobals.lPrint("  Sending " + tempString + " to MONITOR client [" + cNum + "] from SERVER")
 	}
 
-
 	// 2 ---- WRITE -----------------------------------------------------------------
 	// ------------------------------------------------------------------------------
 
@@ -367,13 +375,15 @@ public class NomadServer implements Runnable {
 
 	NGlobals.sPrint("===== WRITING =====");
 
-	// Sound SWARM Routing Logic ==========================================================================R
-
-	// TODO:  send 3 ints instead, 1st int is the THREAD_ID
 	if (incAppCmd != NCommand.REGISTER) {
 
+	    // TODO:  put this into a mysql database
+
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL) {
-		//EXAMPLE:
+
+		// INSTRUCTOR PANEL sending button status 
+
+		// update button status variables
 		if (incAppCmd == NCommand.SET_DISCUSS_STATUS) {
 		    _DISCUSS_STATUS = myGrain.bArray[0];
 		}
@@ -393,12 +403,14 @@ public class NomadServer implements Runnable {
 		    _UGROOVE_STATUS = myGrain.bArray[0];
 		}
 
+		// send button status to clients
 		for (int c = 0; c < clientCount; c++) {
 		    // Get the client off the master list
 		    currentClient = clients[c];
 
 		    // send data to ===> INSTRUCTOR PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-		    if (currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL) {
+
+		    if ((currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL) && (currentClient.getThreadID() != THREAD_ID)) {
 
 			//Set button states
 			if (incAppCmd == NCommand.SET_DISCUSS_STATUS) {
@@ -442,7 +454,6 @@ public class NomadServer implements Runnable {
 		    // send data to ===> STUDENT PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		    if (currentClient.getAppID() == NAppID.BINDLE) {
 
-						
 			//Set button states
 			if (incAppCmd == NCommand.SET_DISCUSS_STATUS) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
@@ -482,59 +493,83 @@ public class NomadServer implements Runnable {
 			}
 		    }
 		}	
-	    }	
-			
-			
-	    //****STK PUT OTHER INCOMING APP IDs
-			
-	    // incoming appID ===> SOUND SWARM - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    if (incAppID == NAppID.SOUND_SWARM) {
-		for (int c = 0; c < clientCount; c++) {
-		    // Get the client off the master list
-		    currentClient = clients[c];
-
-		    if (currentClient.getAppID() == NAppID.SOUND_SWARM_DISPLAY) {
-			NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
-			int[] x = new int[1];
-			x[0] = THREAD_ID;
-			currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
-			NGlobals.sPrint("Sending SOUND_SWARM: x/y coordinates\n");
-			currentClient.threadSand.sendGrain(myGrain);
-			myGrain.print();
-		    }
-
-		}
 	    }
+	}
 
-	    // GENERIC Logic =============================================================
-	    //    -for each client SEND ALL DATA
+	// =========== MAIN ROUTING LOGIC ============================================================
+	// ===========================================================================================
+	// ===========================================================================================
+	
+	// =============== DISCUSS CLIENTS ====================
+	
+	if ((incAppID == NAppID.DISCUSS) || (incAppID == NAppID.INSTRUCTOR_DISCUSS)) {
 
-	    else {
-		NGlobals.sPrint("===> sending PASSTHROUGH network data");
-		for (int c = 0; c < clientCount; c++) {
-
-		    // Get the client off the master list
-		    currentClient = clients[c];
-		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
-
-		    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
-
-
-		    myGrain.print();
-		    // Write the data out
+	    for (int c = 0; c < clientCount; c++) {
+		// Get the client off the master list
+		currentClient = clients[c];
+		if ((currentClient.getAppID() == NAppID.BINDLE) || (currentClient.getAppID() == NAppID.INSTRUCTOR_DISCUSS)) {
+		    NGlobals.sPrint("Sending BINDLE:DISCUSS (" + THREAD_ID + " to ---> DISCUSS/INSTRUCTOR_DISCUSS");
 		    currentClient.threadSand.sendGrain(myGrain);
-
-		}   
-		// END --------------------------------------------------------------------
-		NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
-
-		// Free up memory
-		if (myGrain != null) {
-		    myGrain = null;
 		}
 	    }
 	}
+
+
+
+	// incoming appID ===> SOUND SWARM - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	if (incAppID == NAppID.SOUND_SWARM) {
+	    for (int c = 0; c < clientCount; c++) {
+		// Get the client off the master list
+		currentClient = clients[c];
+
+		if (currentClient.getAppID() == NAppID.SOUND_SWARM_DISPLAY) {
+		    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+		    int[] x = new int[1];
+		    x[0] = THREAD_ID;
+		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
+		    NGlobals.sPrint("Sending SOUND_SWARM: x/y coordinates\n");
+		    currentClient.threadSand.sendGrain(myGrain);
+		    myGrain.print();
+		}
+
+	    }
+	}
+
+	// BROADCAST MODE =============================================================
+	// 
+	// - disabled, swap comments below to re-enable
+	// - NOTE: better to add specific logic as per above
+	//
+
+	// else {  // this enables BROADCAST MODE
+
+	else if (false) {   // this disables BROADCAST MODE 
+
+	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
+	    for (int c = 0; c < clientCount; c++) {
+
+		// Get the client off the master list
+		currentClient = clients[c];
+		NGlobals.sPrint("===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+
+		// Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
+
+
+		myGrain.print();
+		// Write the data out
+		currentClient.threadSand.sendGrain(myGrain);
+
+	    }   
+	    // END --------------------------------------------------------------------
+	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + printID((byte)myGrain.appID));
+
+	    // Free up memory
+	    if (myGrain != null) {
+		myGrain = null;
+	    }
+	}
     }
+
     // =====================================================================================================
     // END main data routing code --- handle() fn
     // =====================================================================================================

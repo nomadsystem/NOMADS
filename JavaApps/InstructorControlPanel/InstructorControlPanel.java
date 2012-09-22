@@ -13,13 +13,12 @@ import nomads.v210.*;
 
 public class InstructorControlPanel extends JApplet  implements  ActionListener {
 
-
 	// Change appropriate directory 
         // TODO:  use -D_$USER directive in makefile
 
-	String user = new String("http://nomads.music.virginia.edu/classroom/JavaApps/");
+	// String user = new String("http://nomads.music.virginia.edu/classroom/JavaApps/");
 	// String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
-	// String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
+	String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
 
 
 	NSand instructorControlPanelSand;
