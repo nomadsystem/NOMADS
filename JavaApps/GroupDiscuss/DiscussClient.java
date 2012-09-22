@@ -149,7 +149,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 		byte d[] = new byte[1];
 		d[0] = 0;
 
-		discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+		discussSand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}
 
 	public synchronized void handle()
@@ -187,7 +187,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 				}		
 		}
 		
-		else if (incAppID == NAppID.WEB_CHAT || grain.appID == NAppID.SERVER){
+		else if (incAppID == NAppID.DISCUSS || grain.appID == NAppID.SERVER){
 			if (incCmd == NCommand.SEND_MESSAGE) {
 				chatWindow.append(msg + "\n");
 				input.requestFocus();
@@ -218,7 +218,7 @@ public class DiscussClient extends JApplet implements ActionListener, KeyListene
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			discussSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 
 			// The data 
 			NGlobals.cPrint("sending:  (" + tLen + ") of this data type");

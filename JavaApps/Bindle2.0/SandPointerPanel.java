@@ -16,9 +16,10 @@ public class SandPointerPanel extends JApplet implements MouseListener,
     int mx, my; // recent mouse coords
     int personnum;
     boolean isMouseDraggingBox = false;
+    NSand mySand;
 
-    public void init() {
-
+    public void init(NSand inSand) {
+	mySand = inSand;
 
 	byte d[] = new byte[1];
 	d[0] = 0;
