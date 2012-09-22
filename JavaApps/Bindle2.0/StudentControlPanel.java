@@ -69,10 +69,6 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 
 	public NomadsAppThread(StudentControlPanel _client) {
 	    client = _client;
-	    // Connect
-	    studentControlPanelSand = new NSand();
-	    studentControlPanelSand.connect();
-	    NGlobals.lPrint("Student Control Panel Thread -> connected");
 	}
 
 	public void run() {			
@@ -96,15 +92,20 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	Container content = getContentPane();
 	content.setBackground(Color.black);
 
+	// Connect
+	studentControlPanelSand = new NSand();
+	studentControlPanelSand.connect();
+	byte d[] = new byte[1];
+	d[0] = 1;
+	studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
+	NGlobals.lPrint("Student Control Panel Thread -> connected");
+
 	//FRAME STUFF for pop up windows===========================================================
 	//Group Discuss Frame
 
 	myJoinPanel = new JoinPanel();
-	myJoinPanel.init();
-
-	myDiscussClientPanel = new DiscussClientPanel();
-	myDiscussClientPanel.init();
-
+	myJoinPanel.init(studentControlPanelSand);
 	joinFrame = new JFrame("Join");
 	//Could add window listener here if we wanted to
 	joinFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -113,7 +114,8 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	joinFrame.pack();
 	//    joinFrame.setVisible(true);
 
-
+	myDiscussClientPanel = new DiscussClientPanel();
+	myDiscussClientPanel.init(studentControlPanelSand);
 	discussFrame = new JFrame("Group Discuss");
 	//Could add window listener here if we wanted to
 	discussFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -125,7 +127,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	    
 	//Thought Cloud Frame
 	myCloudDiscussPanel = new CloudDiscussPanel();
-	myCloudDiscussPanel.init();
+	myCloudDiscussPanel.init(studentControlPanelSand);
 	cloudFrame = new JFrame("Thought Cloud");
 	//Could add window listener here if we wanted to
 	cloudFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -136,7 +138,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
   		
 	//Poll Frame
 	myPollStudentPanel = new PollStudentPanel();
-	myPollStudentPanel.init();
+	myPollStudentPanel.init(studentControlPanelSand);
 	pollFrame = new JFrame("Poll Aura");
 	//Could add window listener here if we wanted to
 	pollFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -147,7 +149,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
   		
 	//SoundMosaic Frame
 	mySoundMosaicPanel = new SoundMosaicPanel();
-	mySoundMosaicPanel.init();
+	mySoundMosaicPanel.init(studentControlPanelSand);
 	soundMosaicFrame = new JFrame("Sound Mosaic");
 	//Could add window listener here if we wanted to
 	soundMosaicFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -158,7 +160,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 
 	//SandPointer Frame
 	mySandPointerPanel = new SandPointerPanel();
-	mySandPointerPanel.init();
+	mySandPointerPanel.init(studentControlPanelSand);
 	sandPointerFrame = new JFrame("Sand Pointer");
 	//Could add window listener here if we wanted to
 	sandPointerFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -169,7 +171,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
   		
 	//UGroove Frame
 	myUnityGroovePanel = new UnityGroovePanel();
-	myUnityGroovePanel.init();
+	myUnityGroovePanel.init(studentControlPanelSand);
 	uGrooveFrame = new JFrame("Unity Groove");
 	//Could add window listener here if we wanted to
 	uGrooveFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -178,9 +180,6 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	//uGrooveFrame.getContentPane().add(myUnityGroovePanel);
 	uGrooveFrame.getContentPane().add(myUnityGroovePanel);
 	uGrooveFrame.pack();
-		
-		
-		
 		
 	try {
 	    joinURL = new URL(user + "Join");
@@ -196,11 +195,8 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	}
 
 	//Code below starts thread (connects), sends register byte
-	byte d[] = new byte[1];
-	d[0] = 0;
 	nThread = new NomadsAppThread(this);
 	nThread.start();
-	studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
     }
 
 
@@ -490,6 +486,11 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 		}
 	    }
 	}
+
+	if (incAppID == NAppID.DISCUSS) {
+	    myDiscussClientPanel.handle(grain);
+	}
+
 
     }
 
