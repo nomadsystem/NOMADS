@@ -2,7 +2,7 @@
   NOMADS Poll Student v.210
   Revised/cleaned, 6/15/2012, Steven Kemper
   Integrating NOMADSApp class
-*/
+ */
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,977 +16,977 @@ import nomads.v210.*;
 public class PollStudentPanel extends JPanel implements ItemListener, ActionListener
 {
 
-    JCheckBox one, two, three, four, five, six, seven, eight, nine, ten;
-    JCheckBox yes, no;
-    JLabel question, title;
-    JPanel oneToTen, wholeThing;
+	JCheckBox one, two, three, four, five, six, seven, eight, nine, ten;
+	JCheckBox yes, no;
+	JLabel question, title;
+	JPanel oneToTen, wholeThing;
 
-    // background color for applet
-    Color BG = new Color(191, 140, 44);
-    Color BG2 = new Color(145, 106, 65);
+	// background color for applet
+	Color BG = new Color(191, 140, 44);
+	Color BG2 = new Color(145, 106, 65);
 
-    int currentQuestionType = 0;
+	int currentQuestionType = 0;
 
-    //just for gui making purposes, delete later
-    String q = "";
+	//just for gui making purposes, delete later
+	String q = "";
 
-    // A through E also new method that should have been used initially
-    JCheckBox[] ateBox;
-    String [] numBoxLetter;
+	// A through E also new method that should have been used initially
+	JCheckBox[] ateBox;
+	String [] numBoxLetter;
 
-    NSand mySand;
+	NSand mySand;
 
-    public void init(NSand inSand)
-    {
-	mySand = inSand;
-	int i;
-	// topmost container. It will hold wholeThing, which is the applet
-	setLayout(new BorderLayout());		
+	public void init(NSand inSand)
+	{
+		mySand = inSand;
+		int i;
+		// topmost container. It will hold wholeThing, which is the applet
+		setLayout(new BorderLayout());		
 
-	//the whole applet
-	wholeThing = new JPanel (new GridLayout(4,1));
-	wholeThing.setBackground(BG2);
+		//the whole applet
+		wholeThing = new JPanel (new GridLayout(4,1));
+		wholeThing.setBackground(BG2);
 
-	// holds the selection options for one to ten questions, and yes no options
-	oneToTen = new JPanel(new FlowLayout());
+		// holds the selection options for one to ten questions, and yes no options
+		oneToTen = new JPanel(new FlowLayout());
 
-	question = new JLabel("", JLabel.CENTER);
-	// question.setBackground(BG2);
+		question = new JLabel("", JLabel.CENTER);
+		// question.setBackground(BG2);
 
-	//placeholder for app title
-	title = new JLabel("<html><h1 style='color:black;font-size:125%'>NOMADS Poll</h1></html>", JLabel.CENTER);
+		//placeholder for app title
+		title = new JLabel("<html><h1 style='color:black;font-size:125%'>NOMADS Poll</h1></html>", JLabel.CENTER);
 
-	numBoxLetter = new String[5];
-	ateBox = new JCheckBox[5];
+		numBoxLetter = new String[5];
+		ateBox = new JCheckBox[5];
 
-	numBoxLetter[0] = "a";
-	numBoxLetter[1] = "b";
-	numBoxLetter[2] = "c";
-	numBoxLetter[3] = "d";
-	numBoxLetter[4] = "e";
+		numBoxLetter[0] = "a";
+		numBoxLetter[1] = "b";
+		numBoxLetter[2] = "c";
+		numBoxLetter[3] = "d";
+		numBoxLetter[4] = "e";
 
-	for (i=0;i<5;i++) {
-	    ateBox[i] = new JCheckBox(numBoxLetter[i]);
-	    ateBox[i].addActionListener(this);
+		for (i=0;i<5;i++) {
+			ateBox[i] = new JCheckBox(numBoxLetter[i]);
+			ateBox[i].addActionListener(this);
+
+		}
+
+		//placeholder for bottom of grid layout
+
+		//one to ten options 
+		one = new JCheckBox("1");
+		two = new JCheckBox("2");
+		three = new JCheckBox("3");
+		four = new JCheckBox("4");
+		five = new JCheckBox("5");
+		six = new JCheckBox("6");
+		seven = new JCheckBox("7");
+		eight = new JCheckBox("8");
+		nine = new JCheckBox("9");
+		ten = new JCheckBox("10");
+
+		//yes no options
+		yes = new JCheckBox("Yes");
+		no = new JCheckBox("No");
+
+		// listeners
+		one.addActionListener(this);
+		two.addActionListener(this);
+		three.addActionListener(this);
+		four.addActionListener(this);
+		five.addActionListener(this);
+		six.addActionListener(this);
+		seven.addActionListener(this);
+		eight.addActionListener(this);
+		nine.addActionListener(this);
+		ten.addActionListener(this);		
+
+		yes.addActionListener(this);
+		no.addActionListener(this);
+
+		//oneToTen holds the options
+
+		oneToTen.setBackground(BG2);
+
+		wholeThing.add(title);
+		wholeThing.add(question);
+		wholeThing.add(oneToTen);
+
+		add(wholeThing, BorderLayout.CENTER);
 
 	}
 
-	//placeholder for bottom of grid layout
 
-	//one to ten options 
-	one = new JCheckBox("1");
-	two = new JCheckBox("2");
-	three = new JCheckBox("3");
-	four = new JCheckBox("4");
-	five = new JCheckBox("5");
-	six = new JCheckBox("6");
-	seven = new JCheckBox("7");
-	eight = new JCheckBox("8");
-	nine = new JCheckBox("9");
-	ten = new JCheckBox("10");
+	//read poll information from teacherpoll app
+	public synchronized void handle(NGrain inGrain)    {
+		int i,j;
 
-	//yes no options
-	yes = new JCheckBox("Yes");
-	no = new JCheckBox("No");
+		NGrain grain;
 
-	// listeners
-	one.addActionListener(this);
-	two.addActionListener(this);
-	three.addActionListener(this);
-	four.addActionListener(this);
-	five.addActionListener(this);
-	six.addActionListener(this);
-	seven.addActionListener(this);
-	eight.addActionListener(this);
-	nine.addActionListener(this);
-	ten.addActionListener(this);		
+		grain = inGrain;
+		grain.print(); //prints grain data to console
 
-	yes.addActionListener(this);
-	no.addActionListener(this);
+		byte incAppID = grain.appID;
+		byte incCmd = grain.command;
 
-	//oneToTen holds the options
+		NGlobals.cPrint("****************");
+		NGlobals.cPrint("Student Poll handle method");
+		NGlobals.cPrint("Student Poll Command = " + incCmd);
 
-	oneToTen.setBackground(BG2);
+		if (incAppID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
 
-	wholeThing.add(title);
-	wholeThing.add(question);
-	wholeThing.add(oneToTen);
+			if (incCmd == NCommand.VOTE) {
+				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO) {
+					yes.setEnabled(true);
+					no.setEnabled(true);
 
-	add(wholeThing, BorderLayout.CENTER);
+					yes.setSelected(false);
+					no.setSelected(false);
 
-    }
+					oneToTen.revalidate();
+					oneToTen.repaint();
+				}
+				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
+					one.setEnabled(true);
+					two.setEnabled(true);
+					three.setEnabled(true);
+					four.setEnabled(true);
+					five.setEnabled(true);
+					six.setEnabled(true);
+					seven.setEnabled(true);
+					eight.setEnabled(true);
+					nine.setEnabled(true);
+					ten.setEnabled(true);
 
+					one.setSelected(false);
+					two.setSelected(false);
+					three.setSelected(false);
+					four.setSelected(false);
+					five.setSelected(false);
+					six.setSelected(false);
+					seven.setSelected(false);
+					eight.setSelected(false);
+					nine.setSelected(false);
+					ten.setSelected(false);
 
-    //	//read poll information from teacherpoll app
-    //	public void handle()    {
-    //		int i,j;
-    //
-    //		NGrain grain;
-    //
-    //		grain = pollSand.getGrain();
-    //		grain.print(); //prints grain data to console
-    //
-    //		byte incAppID = grain.appID;
-    //		byte incCmd = grain.command;
-    //
-    //		NGlobals.cPrint("****************");
-    //		NGlobals.cPrint("Student Poll handle method");
-    //		NGlobals.cPrint("Student Poll Command = " + incCmd);
-    //
-    //		if (incAppID == NAppID.INSTRUCTOR_PANEL) { //Instructor Panel not Yet Implemented ****STK 6/18/12
-    //
-    //			if (incCmd == NCommand.VOTE) {
-    //				if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO) {
-    //					yes.setEnabled(true);
-    //					no.setEnabled(true);
-    //
-    //					yes.setSelected(false);
-    //					no.setSelected(false);
-    //
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //				}
-    //				if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
-    //					one.setEnabled(true);
-    //					two.setEnabled(true);
-    //					three.setEnabled(true);
-    //					four.setEnabled(true);
-    //					five.setEnabled(true);
-    //					six.setEnabled(true);
-    //					seven.setEnabled(true);
-    //					eight.setEnabled(true);
-    //					nine.setEnabled(true);
-    //					ten.setEnabled(true);
-    //
-    //					one.setSelected(false);
-    //					two.setSelected(false);
-    //					three.setSelected(false);
-    //					four.setSelected(false);
-    //					five.setSelected(false);
-    //					six.setSelected(false);
-    //					seven.setSelected(false);
-    //					eight.setSelected(false);
-    //					nine.setSelected(false);
-    //					ten.setSelected(false);
-    //
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //				}
-    //
-    //				//refresh the gui
-    //
-    //			}
-    //		}
-    //
-    //
-    //		//if this string was sent from the teacher poll
-    //		if (incAppID == NAppID.TEACHER_POLL)
-    //		{	 
-    //
-    //
-    //			//set the question type ===========================================--------------
-    //
-    //			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++	
-    //			{
-    //				NGlobals.cPrint("Student Poll: Got A-E Question");
-    //				if (currentQuestionType == 0)
-    //				{
-    //					// gui is blank
-    //					// add the options
-    //					for(i=0;i<5;i++) {
-    //						oneToTen.add(ateBox[i]);
-    //						ateBox[i].setEnabled(true);
-    //						ateBox[i].setSelected(false);
-    //					}
-    //					NGlobals.cPrint("Student Poll AEQ: Adding A-E Buttons");
-    //
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
-    //				}
-    //
-    //				else if (currentQuestionType == incCmd) //Question type is already set...
-    //				{
-    //					// gui is already set to display yes no question type
-    //
-    //					for(i=0;i<5;i++) {
-    //						//	oneToTen.add(ateBox[i]);
-    //						ateBox[i].setEnabled(true);
-    //						ateBox[i].setSelected(false);
-    //					}
-    //					NGlobals.cPrint("Student Poll AEQ: Already has question Adding A-E Buttons");
-    //					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
-    //				}
-    //
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
-    //				{
-    //					// out with the old
-    //					oneToTen.remove(one);
-    //					oneToTen.remove(two);
-    //					oneToTen.remove(three);
-    //					oneToTen.remove(four);
-    //					oneToTen.remove(five);
-    //					oneToTen.remove(six);
-    //					oneToTen.remove(seven);
-    //					oneToTen.remove(eight);
-    //					oneToTen.remove(nine);
-    //					oneToTen.remove(ten);
-    //
-    //					// in with the new
-    //
-    //					for(i=0;i<5;i++) {
-    //						oneToTen.add(ateBox[i]);
-    //						ateBox[i].setEnabled(true);
-    //						ateBox[i].setSelected(false);
-    //					}
-    //					NGlobals.cPrint("Student Poll AEQ: Removing 1-10, Adding A-E Buttons");
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
-    //				}
-    //
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
-    //				{
-    //					// out with the old
-    //					oneToTen.remove(yes);
-    //					oneToTen.remove(no);
-    //
-    //					// in with the new      	 	 		
-    //					for(i=0;i<5;i++) {
-    //						oneToTen.add(ateBox[i]);
-    //						ateBox[i].setEnabled(true);
-    //						ateBox[i].setSelected(false);
-    //					}
-    //					NGlobals.cPrint("Student Poll AEQ: Removing Yes/No, Adding A-E Buttons");
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType =  NCommand.QUESTION_TYPE_A_TO_E;
-    //				}
-    //
-    //			}
-    //
-    //
-    //			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  {// +++++++++++++++++++++++++++
-    //				NGlobals.cPrint("Student Poll: Got Yes/No question");
-    //				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
-    //
-    //				if (currentQuestionType == 0)
-    //				{
-    //					// gui is blank
-    //					// add the options
-    //					oneToTen.add(yes);
-    //					oneToTen.add(no);
-    //
-    //					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
-    //
-    //					yes.setEnabled(true);
-    //					no.setEnabled(true);
-    //
-    //					// refresh the options
-    //					yes.setSelected(false);
-    //					no.setSelected(false);
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
-    //				}
-    //
-    //				else if (currentQuestionType == incCmd)
-    //				{
-    //					// gui is already set to display yes no question type
-    //
-    //					// refresh the options
-    //					yes.setEnabled(true);
-    //					no.setEnabled(true);
-    //					yes.setSelected(false);
-    //					no.setSelected(false);
-    //					NGlobals.cPrint("Student Poll YNQ: keeping buttons that are already there");
-    //					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
-    //
-    //				}
-    //
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
-    //				{
-    //					// out with the old
-    //					oneToTen.remove(one);
-    //					oneToTen.remove(two);
-    //					oneToTen.remove(three);
-    //					oneToTen.remove(four);
-    //					oneToTen.remove(five);
-    //					oneToTen.remove(six);
-    //					oneToTen.remove(seven);
-    //					oneToTen.remove(eight);
-    //					oneToTen.remove(nine);
-    //					oneToTen.remove(ten);
-    //					NGlobals.cPrint("Student Poll YNQ: Removing 1-10 Buttons");
-    //
-    //					// in with the new
-    //					oneToTen.add(yes);
-    //					oneToTen.add(no);
-    //					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
-    //
-    //					// refresh the options
-    //					yes.setEnabled(true);
-    //					no.setEnabled(true);
-    //					yes.setSelected(false);
-    //					no.setSelected(false);
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
-    //				}
-    //
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
-    //
-    //					// out with the old
-    //					for(i=0;i<5;i++) {
-    //						oneToTen.remove(ateBox[i]);
-    //					}
-    //					NGlobals.cPrint("Student Poll YNQ: Removing A-E Buttons");
-    //
-    //					// in with the new
-    //					oneToTen.add(yes);
-    //					oneToTen.add(no);
-    //					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
-    //
-    //					// refresh the options
-    //					yes.setEnabled(true);
-    //					no.setEnabled(true);
-    //					yes.setSelected(false);
-    //					no.setSelected(false);
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
-    //				}
-    //
-    //			}
-    //
-    //			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  {// +++++++++++++++++++++++++++
-    //				NGlobals.cPrint("Student Poll: Got 1-10 question");
-    //				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
-    //
-    //				if (currentQuestionType == 0)
-    //				{
-    //					// gui is blank
-    //					// add the options
-    //					oneToTen.add(one);
-    //					oneToTen.add(two);
-    //					oneToTen.add(three);
-    //					oneToTen.add(four);
-    //					oneToTen.add(five);
-    //					oneToTen.add(six);
-    //					oneToTen.add(seven);
-    //					oneToTen.add(eight);
-    //					oneToTen.add(nine);
-    //					oneToTen.add(ten);
-    //					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
-    //
-    //					// refresh the options
-    //					one.setEnabled(true);
-    //					two.setEnabled(true);
-    //					three.setEnabled(true);
-    //					four.setEnabled(true);
-    //					five.setEnabled(true);
-    //					six.setEnabled(true);
-    //					seven.setEnabled(true);
-    //					eight.setEnabled(true);
-    //					nine.setEnabled(true);
-    //					ten.setEnabled(true);
-    //
-    //					one.setSelected(false);
-    //					two.setSelected(false);
-    //					three.setSelected(false);
-    //					four.setSelected(false);
-    //					five.setSelected(false);
-    //					six.setSelected(false);
-    //					seven.setSelected(false);
-    //					eight.setSelected(false);
-    //					nine.setSelected(false);
-    //					ten.setSelected(false);	
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-    //				}
-    //
-    //				else if (currentQuestionType == incCmd)
-    //				{
-    //					// gui is already set to display scale of one to ten question
-    //
-    //					// refresh the options
-    //					one.setEnabled(true);
-    //					two.setEnabled(true);
-    //					three.setEnabled(true);
-    //					four.setEnabled(true);
-    //					five.setEnabled(true);
-    //					six.setEnabled(true);
-    //					seven.setEnabled(true);
-    //					eight.setEnabled(true);
-    //					nine.setEnabled(true);
-    //					ten.setEnabled(true);
-    //
-    //					one.setSelected(false);
-    //					two.setSelected(false);
-    //					three.setSelected(false);
-    //					four.setSelected(false);
-    //					five.setSelected(false);
-    //					six.setSelected(false);
-    //					seven.setSelected(false);
-    //					eight.setSelected(false);
-    //					nine.setSelected(false);
-    //					ten.setSelected(false);	
-    //					NGlobals.cPrint("Student Poll OTQ: 1-10 Buttons already there");
-    //					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-    //				}
-    //
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
-    //				{
-    //					// out with the old
-    //					oneToTen.remove(yes);
-    //					oneToTen.remove(no);
-    //					NGlobals.cPrint("Student Poll OTQ: Removing Y/N Buttons");
-    //					// in with the new
-    //					oneToTen.add(one);
-    //					oneToTen.add(two);
-    //					oneToTen.add(three);
-    //					oneToTen.add(four);
-    //					oneToTen.add(five);
-    //					oneToTen.add(six);
-    //					oneToTen.add(seven);
-    //					oneToTen.add(eight);
-    //					oneToTen.add(nine);
-    //					oneToTen.add(ten);
-    //
-    //					// refresh the options
-    //					one.setEnabled(true);
-    //					two.setEnabled(true);
-    //					three.setEnabled(true);
-    //					four.setEnabled(true);
-    //					five.setEnabled(true);
-    //					six.setEnabled(true);
-    //					seven.setEnabled(true);
-    //					eight.setEnabled(true);
-    //					nine.setEnabled(true);
-    //					ten.setEnabled(true); 
-    //
-    //					one.setSelected(false);
-    //					two.setSelected(false);
-    //					three.setSelected(false);
-    //					four.setSelected(false);
-    //					five.setSelected(false);
-    //					six.setSelected(false);
-    //					seven.setSelected(false);
-    //					eight.setSelected(false);
-    //					nine.setSelected(false);
-    //					ten.setSelected(false);	
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-    //				}
-    //				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
-    //
-    //					// out with the old
-    //					for(i=0;i<5;i++) {
-    //						oneToTen.remove(ateBox[i]);
-    //					}
-    //					NGlobals.cPrint("Student Poll OTQ: Removing A-E Buttons");
-    //
-    //					// in with the new
-    //					oneToTen.add(one);
-    //					oneToTen.add(two);
-    //					oneToTen.add(three);
-    //					oneToTen.add(four);
-    //					oneToTen.add(five);
-    //					oneToTen.add(six);
-    //					oneToTen.add(seven);
-    //					oneToTen.add(eight);
-    //					oneToTen.add(nine);
-    //					oneToTen.add(ten);
-    //					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
-    //
-    //					// refresh the options
-    //					one.setEnabled(true);
-    //					two.setEnabled(true);
-    //					three.setEnabled(true);
-    //					four.setEnabled(true);
-    //					five.setEnabled(true);
-    //					six.setEnabled(true);
-    //					seven.setEnabled(true);
-    //					eight.setEnabled(true);
-    //					nine.setEnabled(true);
-    //					ten.setEnabled(true); 
-    //
-    //					one.setSelected(false);
-    //					two.setSelected(false);
-    //					three.setSelected(false);
-    //					four.setSelected(false);
-    //					five.setSelected(false);
-    //					six.setSelected(false);
-    //					seven.setSelected(false);
-    //					eight.setSelected(false);
-    //					nine.setSelected(false);
-    //					ten.setSelected(false);	
-    //
-    //					//refresh the gui
-    //					oneToTen.revalidate();
-    //					oneToTen.repaint();
-    //
-    //					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-    //				}
-    //			}	
-    //			if (incAppID == NAppID.TEACHER_POLL && incCmd == NCommand.SEND_POLL_PROMPT) {
-    //				String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
-    //				//set the question to be posed
-    //				question.setText("<html><h2 style='color:black;font-size:125%'>" + toBePosed + "</h2></html>");
-    //				NGlobals.cPrint("Setting toBePosed to: " + toBePosed);
-    //			}
-    //			
-    //		}
-    //		else
-    //		{
-    //			NGlobals.cPrint("PollStudent says extraneous information");
-    //		}
-    //		NGlobals.cPrint("Leaving PollStudent handle method");      	 
-    //	}
+					oneToTen.revalidate();
+					oneToTen.repaint();
+				}
+
+				//refresh the gui
+
+			}
+		}
 
 
-    // to make the compiler happy
-    public void itemStateChanged(java.awt.event.ItemEvent ie){
-    }
+		//if this string was sent from the teacher poll
+		if (incAppID == NAppID.TEACHER_POLL)
+		{	 
 
-    public void actionPerformed(java.awt.event.ActionEvent ae)
-    {
-	int i;
-	// changed to byte, removed subsequent casting **PT 6/26/12
-	byte tCommand = 0;
-	int dLen = 1;
-	Object source = ae.getSource();
 
-	int turnOff = 0; //Allows re-voting (turnOff = 0) 
+			//set the question type ===========================================--------------
 
-	for (i=0;i<5;i++) {
-	    if (source == ateBox[i]) {
-		ateBox[i].setSelected(true);
-	    }
-	    else {
-		ateBox[i].setSelected(false);
-	    }
-	    ateBox[i].setEnabled(false);
+			if (incCmd == NCommand.QUESTION_TYPE_A_TO_E)  // +++++++++++++++++++++++++++	
+			{
+				NGlobals.cPrint("Student Poll: Got A-E Question");
+				if (currentQuestionType == 0)
+				{
+					// gui is blank
+					// add the options
+					for(i=0;i<5;i++) {
+						oneToTen.add(ateBox[i]);
+						ateBox[i].setEnabled(true);
+						ateBox[i].setSelected(false);
+					}
+					NGlobals.cPrint("Student Poll AEQ: Adding A-E Buttons");
+
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
+				}
+
+				else if (currentQuestionType == incCmd) //Question type is already set...
+				{
+					// gui is already set to display yes no question type
+
+					for(i=0;i<5;i++) {
+						//	oneToTen.add(ateBox[i]);
+						ateBox[i].setEnabled(true);
+						ateBox[i].setSelected(false);
+					}
+					NGlobals.cPrint("Student Poll AEQ: Already has question Adding A-E Buttons");
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
+				}
+
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
+				{
+					// out with the old
+					oneToTen.remove(one);
+					oneToTen.remove(two);
+					oneToTen.remove(three);
+					oneToTen.remove(four);
+					oneToTen.remove(five);
+					oneToTen.remove(six);
+					oneToTen.remove(seven);
+					oneToTen.remove(eight);
+					oneToTen.remove(nine);
+					oneToTen.remove(ten);
+
+					// in with the new
+
+					for(i=0;i<5;i++) {
+						oneToTen.add(ateBox[i]);
+						ateBox[i].setEnabled(true);
+						ateBox[i].setSelected(false);
+					}
+					NGlobals.cPrint("Student Poll AEQ: Removing 1-10, Adding A-E Buttons");
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_A_TO_E;
+				}
+
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
+				{
+					// out with the old
+					oneToTen.remove(yes);
+					oneToTen.remove(no);
+
+					// in with the new      	 	 		
+					for(i=0;i<5;i++) {
+						oneToTen.add(ateBox[i]);
+						ateBox[i].setEnabled(true);
+						ateBox[i].setSelected(false);
+					}
+					NGlobals.cPrint("Student Poll AEQ: Removing Yes/No, Adding A-E Buttons");
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType =  NCommand.QUESTION_TYPE_A_TO_E;
+				}
+
+			}
+
+
+			if (incCmd == NCommand.QUESTION_TYPE_YES_NO)  {// +++++++++++++++++++++++++++
+				NGlobals.cPrint("Student Poll: Got Yes/No question");
+				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
+
+				if (currentQuestionType == 0)
+				{
+					// gui is blank
+					// add the options
+					oneToTen.add(yes);
+					oneToTen.add(no);
+
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
+
+					yes.setEnabled(true);
+					no.setEnabled(true);
+
+					// refresh the options
+					yes.setSelected(false);
+					no.setSelected(false);
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
+				}
+
+				else if (currentQuestionType == incCmd)
+				{
+					// gui is already set to display yes no question type
+
+					// refresh the options
+					yes.setEnabled(true);
+					no.setEnabled(true);
+					yes.setSelected(false);
+					no.setSelected(false);
+					NGlobals.cPrint("Student Poll YNQ: keeping buttons that are already there");
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
+
+				}
+
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_ONE_TO_TEN)
+				{
+					// out with the old
+					oneToTen.remove(one);
+					oneToTen.remove(two);
+					oneToTen.remove(three);
+					oneToTen.remove(four);
+					oneToTen.remove(five);
+					oneToTen.remove(six);
+					oneToTen.remove(seven);
+					oneToTen.remove(eight);
+					oneToTen.remove(nine);
+					oneToTen.remove(ten);
+					NGlobals.cPrint("Student Poll YNQ: Removing 1-10 Buttons");
+
+					// in with the new
+					oneToTen.add(yes);
+					oneToTen.add(no);
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
+
+					// refresh the options
+					yes.setEnabled(true);
+					no.setEnabled(true);
+					yes.setSelected(false);
+					no.setSelected(false);
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
+				}
+
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
+
+					// out with the old
+					for(i=0;i<5;i++) {
+						oneToTen.remove(ateBox[i]);
+					}
+					NGlobals.cPrint("Student Poll YNQ: Removing A-E Buttons");
+
+					// in with the new
+					oneToTen.add(yes);
+					oneToTen.add(no);
+					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
+
+					// refresh the options
+					yes.setEnabled(true);
+					no.setEnabled(true);
+					yes.setSelected(false);
+					no.setSelected(false);
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_YES_NO;
+				}
+
+			}
+
+			if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)  {// +++++++++++++++++++++++++++
+				NGlobals.cPrint("Student Poll: Got 1-10 question");
+				NGlobals.cPrint("Student Poll: Current Question Type: " + currentQuestionType);
+
+				if (currentQuestionType == 0)
+				{
+					// gui is blank
+					// add the options
+					oneToTen.add(one);
+					oneToTen.add(two);
+					oneToTen.add(three);
+					oneToTen.add(four);
+					oneToTen.add(five);
+					oneToTen.add(six);
+					oneToTen.add(seven);
+					oneToTen.add(eight);
+					oneToTen.add(nine);
+					oneToTen.add(ten);
+					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
+
+					// refresh the options
+					one.setEnabled(true);
+					two.setEnabled(true);
+					three.setEnabled(true);
+					four.setEnabled(true);
+					five.setEnabled(true);
+					six.setEnabled(true);
+					seven.setEnabled(true);
+					eight.setEnabled(true);
+					nine.setEnabled(true);
+					ten.setEnabled(true);
+
+					one.setSelected(false);
+					two.setSelected(false);
+					three.setSelected(false);
+					four.setSelected(false);
+					five.setSelected(false);
+					six.setSelected(false);
+					seven.setSelected(false);
+					eight.setSelected(false);
+					nine.setSelected(false);
+					ten.setSelected(false);	
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				}
+
+				else if (currentQuestionType == incCmd)
+				{
+					// gui is already set to display scale of one to ten question
+
+					// refresh the options
+					one.setEnabled(true);
+					two.setEnabled(true);
+					three.setEnabled(true);
+					four.setEnabled(true);
+					five.setEnabled(true);
+					six.setEnabled(true);
+					seven.setEnabled(true);
+					eight.setEnabled(true);
+					nine.setEnabled(true);
+					ten.setEnabled(true);
+
+					one.setSelected(false);
+					two.setSelected(false);
+					three.setSelected(false);
+					four.setSelected(false);
+					five.setSelected(false);
+					six.setSelected(false);
+					seven.setSelected(false);
+					eight.setSelected(false);
+					nine.setSelected(false);
+					ten.setSelected(false);	
+					NGlobals.cPrint("Student Poll OTQ: 1-10 Buttons already there");
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				}
+
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_YES_NO)
+				{
+					// out with the old
+					oneToTen.remove(yes);
+					oneToTen.remove(no);
+					NGlobals.cPrint("Student Poll OTQ: Removing Y/N Buttons");
+					// in with the new
+					oneToTen.add(one);
+					oneToTen.add(two);
+					oneToTen.add(three);
+					oneToTen.add(four);
+					oneToTen.add(five);
+					oneToTen.add(six);
+					oneToTen.add(seven);
+					oneToTen.add(eight);
+					oneToTen.add(nine);
+					oneToTen.add(ten);
+
+					// refresh the options
+					one.setEnabled(true);
+					two.setEnabled(true);
+					three.setEnabled(true);
+					four.setEnabled(true);
+					five.setEnabled(true);
+					six.setEnabled(true);
+					seven.setEnabled(true);
+					eight.setEnabled(true);
+					nine.setEnabled(true);
+					ten.setEnabled(true); 
+
+					one.setSelected(false);
+					two.setSelected(false);
+					three.setSelected(false);
+					four.setSelected(false);
+					five.setSelected(false);
+					six.setSelected(false);
+					seven.setSelected(false);
+					eight.setSelected(false);
+					nine.setSelected(false);
+					ten.setSelected(false);	
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				}
+				else if (currentQuestionType == NCommand.QUESTION_TYPE_A_TO_E) {
+
+					// out with the old
+					for(i=0;i<5;i++) {
+						oneToTen.remove(ateBox[i]);
+					}
+					NGlobals.cPrint("Student Poll OTQ: Removing A-E Buttons");
+
+					// in with the new
+					oneToTen.add(one);
+					oneToTen.add(two);
+					oneToTen.add(three);
+					oneToTen.add(four);
+					oneToTen.add(five);
+					oneToTen.add(six);
+					oneToTen.add(seven);
+					oneToTen.add(eight);
+					oneToTen.add(nine);
+					oneToTen.add(ten);
+					NGlobals.cPrint("Student Poll OTQ: Adding 1-10 Buttons");
+
+					// refresh the options
+					one.setEnabled(true);
+					two.setEnabled(true);
+					three.setEnabled(true);
+					four.setEnabled(true);
+					five.setEnabled(true);
+					six.setEnabled(true);
+					seven.setEnabled(true);
+					eight.setEnabled(true);
+					nine.setEnabled(true);
+					ten.setEnabled(true); 
+
+					one.setSelected(false);
+					two.setSelected(false);
+					three.setSelected(false);
+					four.setSelected(false);
+					five.setSelected(false);
+					six.setSelected(false);
+					seven.setSelected(false);
+					eight.setSelected(false);
+					nine.setSelected(false);
+					ten.setSelected(false);	
+
+					//refresh the gui
+					oneToTen.revalidate();
+					oneToTen.repaint();
+
+					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+				}
+			}	
+			if (incAppID == NAppID.TEACHER_POLL && incCmd == NCommand.SEND_POLL_PROMPT) {
+				String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
+				//set the question to be posed
+				question.setText("<html><h2 style='color:black;font-size:125%'>" + toBePosed + "</h2></html>");
+				NGlobals.cPrint("Setting toBePosed to: " + toBePosed);
+			}
+
+		}
+		else
+		{
+			NGlobals.cPrint("PollStudent says extraneous information");
+		}
+		NGlobals.cPrint("Leaving PollStudent handle method");      	 
 	}
 
-	if (source == yes)
-	    {
-		yes.setSelected(true);
-		no.setSelected(false);
-		//Disable after you choose
-		yes.setEnabled(false);
-		no.setEnabled(false);
 
-		//show results with color
+	// to make the compiler happy
+	public void itemStateChanged(java.awt.event.ItemEvent ie){
+	}
 
-		tCommand = NCommand.QUESTION_TYPE_YES_NO;
-		int[] answer = new int[1];
-		answer[0] = 1;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending Yes");
-	    }
+	public void actionPerformed(java.awt.event.ActionEvent ae)
+	{
+		int i;
+		// changed to byte, removed subsequent casting **PT 6/26/12
+		byte tCommand = 0;
+		int dLen = 1;
+		Object source = ae.getSource();
 
-	if (source == no)
-	    {
-		yes.setSelected(false);
-		no.setSelected(true);
-		//Disable after you choose
-		yes.setEnabled(false);
-		no.setEnabled(false);
-		//show results with color
+		int turnOff = 0; //Allows re-voting (turnOff = 0) 
 
-		tCommand = NCommand.QUESTION_TYPE_YES_NO;
-		//    char[] tStringAsChars = tString.toCharArray();
-		int[] answer = new int[1];
-		answer[0] = 0;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending No");
-	    }
-
-	if (source == one)
-	    {
-		one.setSelected(true);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
+		for (i=0;i<5;i++) {
+			if (source == ateBox[i]) {
+				ateBox[i].setSelected(true);
+			}
+			else {
+				ateBox[i].setSelected(false);
+			}
+			ateBox[i].setEnabled(false);
 		}
 
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 1;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 1");
-	    }
+		if (source == yes)
+		{
+			yes.setSelected(true);
+			no.setSelected(false);
+			//Disable after you choose
+			yes.setEnabled(false);
+			no.setEnabled(false);
 
-	if (source == two)
-	    {
-		one.setSelected(false);
-		two.setSelected(true);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
+			//show results with color
 
-		//show understanding with color
-
-		if (turnOff == 1) {
-
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
+			tCommand = NCommand.QUESTION_TYPE_YES_NO;
+			int[] answer = new int[1];
+			answer[0] = 1;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending Yes");
 		}
 
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 2;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 2");
+		if (source == no)
+		{
+			yes.setSelected(false);
+			no.setSelected(true);
+			//Disable after you choose
+			yes.setEnabled(false);
+			no.setEnabled(false);
+			//show results with color
 
-	    }
-
-	if (source == three)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(true);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
+			tCommand = NCommand.QUESTION_TYPE_YES_NO;
+			//    char[] tStringAsChars = tString.toCharArray();
+			int[] answer = new int[1];
+			answer[0] = 0;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending No");
 		}
 
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 3;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 3");
+		if (source == one)
+		{
+			one.setSelected(true);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
 
 
-	    }
 
-	if (source == four)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(true);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
+			//show understanding with color
 
-		//show understanding with color
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
 
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
-		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 4;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 4");
-
-
-	    }
-
-	if (source == five)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(true);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
-		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 5;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 5");
-
-
-	    }
-
-	if (source == six)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(true);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
-		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 6;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 6");
-
-	    }
-
-	if (source == seven)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(true);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
-		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 7;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 7");
-
-	    }
-
-	if (source == eight)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(true);
-		nine.setSelected(false);
-		ten.setSelected(false);
-
-		//show understanding with color
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
-		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 8;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 8");
-
-	    }
-
-	if (source == nine)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(true);
-		ten.setSelected(false);
-
-
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 1;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 1");
 		}
 
-		//show understanding with color
+		if (source == two)
+		{
+			one.setSelected(false);
+			two.setSelected(true);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
 
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 9;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 9");
+			//show understanding with color
 
-	    }
+			if (turnOff == 1) {
 
-	if (source == ten)
-	    {
-		one.setSelected(false);
-		two.setSelected(false);
-		three.setSelected(false);
-		four.setSelected(false);
-		five.setSelected(false);
-		six.setSelected(false);
-		seven.setSelected(false);
-		eight.setSelected(false);
-		nine.setSelected(false);
-		ten.setSelected(true);
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
 
-		//show understanding with color
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 2;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 2");
 
-		if (turnOff == 1) {
-		    one.setEnabled(false);
-		    two.setEnabled(false);
-		    three.setEnabled(false);
-		    four.setEnabled(false);
-		    five.setEnabled(false);
-		    six.setEnabled(false);
-		    seven.setEnabled(false);
-		    eight.setEnabled(false);
-		    nine.setEnabled(false);
-		    ten.setEnabled(false);
 		}
-		tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
-		int[] answer = new int[1];
-		answer[0] = 10;
-		//			pollSand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
-		NGlobals.cPrint("Sending 10");
 
-	    }		  		
-    }	
+		if (source == three)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(true);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 3;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 3");
+
+
+		}
+
+		if (source == four)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(true);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 4;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 4");
+
+
+		}
+
+		if (source == five)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(true);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 5;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 5");
+
+
+		}
+
+		if (source == six)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(true);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 6;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 6");
+
+		}
+
+		if (source == seven)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(true);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 7;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 7");
+
+		}
+
+		if (source == eight)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(true);
+			nine.setSelected(false);
+			ten.setSelected(false);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 8;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 8");
+
+		}
+
+		if (source == nine)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(true);
+			ten.setSelected(false);
+
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+
+			//show understanding with color
+
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 9;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 9");
+
+		}
+
+		if (source == ten)
+		{
+			one.setSelected(false);
+			two.setSelected(false);
+			three.setSelected(false);
+			four.setSelected(false);
+			five.setSelected(false);
+			six.setSelected(false);
+			seven.setSelected(false);
+			eight.setSelected(false);
+			nine.setSelected(false);
+			ten.setSelected(true);
+
+			//show understanding with color
+
+			if (turnOff == 1) {
+				one.setEnabled(false);
+				two.setEnabled(false);
+				three.setEnabled(false);
+				four.setEnabled(false);
+				five.setEnabled(false);
+				six.setEnabled(false);
+				seven.setEnabled(false);
+				eight.setEnabled(false);
+				nine.setEnabled(false);
+				ten.setEnabled(false);
+			}
+			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
+			int[] answer = new int[1];
+			answer[0] = 10;
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			NGlobals.cPrint("Sending 10");
+
+		}		  		
+	}	
 }
