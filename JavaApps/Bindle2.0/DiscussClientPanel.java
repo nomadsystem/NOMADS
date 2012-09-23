@@ -1,5 +1,4 @@
 /*
-  NOMADS Group Discuss v.210
   Revised/cleaned, 6/12/2012, Steven Kemper
   Integrating NOMADSApp class
 */
