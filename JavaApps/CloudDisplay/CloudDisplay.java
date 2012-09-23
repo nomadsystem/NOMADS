@@ -219,7 +219,7 @@ public class CloudDisplay extends Applet implements MouseListener, MouseMotionLi
 		byte d[] = new byte[1];
 		d[0] = 0;
 
-		cloudSand.sendGrain((byte)NAppID.WEB_CHAT, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+		cloudSand.sendGrain((byte)NAppID.CLOUD_DISPLAY, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	}	
 
 

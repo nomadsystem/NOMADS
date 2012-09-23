@@ -116,7 +116,7 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 		xy[0] = new_mx;
 		xy[1] = new_my;
 
-		// swarmSand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT, 2, xy);
+		mySand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT, 2, xy);
 
 		// xxx	streamOut.writeByte(NSand.appID.STUDENT_SAND_POINTER);
 		// xxx streamOut.writeUTF(towrite);
@@ -144,9 +144,13 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 	
 	
 	
-    public void handle() {
+    public void handle(NGrain inGrain) {
 
-
+    	NGrain grain;
+        
+    	NGlobals.cPrint("SandPointerClient -> handle()");
+        
+    	grain = inGrain;
 
     }
 	
