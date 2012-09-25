@@ -1,6 +1,6 @@
-// NOMADS
-// Instructor Control Panel
-
+//
+// NOMADS Instructor Control Panel
+//
 
 import java.net.*;
 import javax.swing.*;
@@ -33,49 +33,83 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
     JButton joinButton, discussButton, cloudButton,  pollButton, uGrooveButton;
     JButton discussDisplayButton, cloudDisplayButton, pollDisplayButton, uGrooveDisplayButton;
     JButton discussPromptButton, cloudPromptButton, pollPromptButton, uGroovePromptButton;
-    JButton mosaicButton, soundDisplayButton;
-    JButton swarmButton, pointDisplayButton, pointPropmtButton;
+    JButton mosaicButton, mosaicDisplayButton;
+    JButton pointerButton, pointerDisplayButton, pointerPropmtButton;
     JLabel blankButton, blankButton2;
+
     Image discussPromptImg, discussDisplayImg, discussImgOn, discussImgOff;
     Image cloudPromptImg, cloudDisplayImg, cloudImgOn, cloudImgOff;
     Image pollPromptImg, pollDisplayImg, pollImgOn, pollImgOff;
-    Image soundDisplayImg, soundPromptImg, soundImgOn, soundImgOff;
+    Image mosaicImgOff, mosaicImgOn, mosaicPromptImg, mosaicDisplayImg;
+    Image pointerDisplayImg, pointerPromptImg, pointerImgOn, pointerImgOff;
     Image uGroovePromptImg, uGrooveDisplayImg, uGrooveImgOff, uGrooveImgOn;
-    Image pointImgOff, pointImgOn, pointPromptImg, pointDisplayImg;
 
     ImageIcon discussIcon, discussPromptIcon, discussDisplayIcon;
     ImageIcon cloudIcon, cloudPromptIcon, cloudDisplayIcon;
     ImageIcon pollIcon, pollPromptIcon, pollDisplayIcon;
     ImageIcon uGrooveIcon, uGroovePromptIcon, uGrooveDisplayIcon;
-    ImageIcon mosaicIcon, soundDisplayIcon, swarmIcon, pointDisplayIcon, icon;
-    ImageIcon discussIconOn, pollIconOn, cloudIconOn, mosaicIconOn, swarmIconOn, uGrooveIconOn;
+    ImageIcon mosaicIcon, mosaicerDisplayIcon;
+    ImageIcon pointerIcon, pointerDisplayIcon;
+    ImageIcon icon;
+
+    ImageIcon discussIconOn, pollIconOn, cloudIconOn, mosaicIconOn, pointerIconOn, uGrooveIconOn;
+    ImageIcon discussIconOff, pollIconOff, cloudIconOff, mosaicIconOff, pointerIconOff, uGrooveIconOff;
 
     GridLayout buttonGridLayout = new GridLayout(6,3,0,0); //3rd value was set to 5
 
-    int discussOnOff, cloudOnOff, pollOnOff, mosaicOnOff, swarmOnOff, uGrooveOnOff; //*****STK variables store current state of button	
+    int discussOnOff, cloudOnOff, pollOnOff, mosaicOnOff, pointerOnOff, uGrooveOnOff; //*****STK variables store current state of button	
 
     JPanel butPanel = new JPanel();
     JPanel logoPanel;
     JLabel imageLabel;
-    URL discussURL;
-    URL cloudURL;
-    URL soundDisplayURL;
-    URL pollURL;
-    URL pollDisplayURL;
-    URL cloudPromptURL;
+
     URL discussPromptURL;
-    URL soundSwarmDisplayURL;
+    URL discussDisplayURL;
+    URL cloudPromptURL;
+    URL cloudDisplayURL;
+    URL pollPromptURL;
+    URL pollDisplayURL;
+    URL mosaicDisplayURL;
+    URL pointerDisplayURL;
     URL uGroovePromptURL;
     URL uGrooveDisplayURL;
 
-    // v2.0
+    // begin v2.0 panels and frames --------------
+
     InstructorGroupDiscuss myInstructorGroupDiscussPanel;
     JFrame instructorGroupDiscussFrame;
+
     GroupDiscussPrompt myGroupDiscussPromptPanel;
     JFrame groupDiscussPromptFrame;
-    //    PollPrmpt myPollPrmptPanel;
-    // JFrame pollPromptFrame;
 
+    PollPrompt myPollPromptPanel;
+    JFrame pollPromptFrame;
+
+    // CloudPrompt myCloudPromptPanel;
+    // JFrame cloudPromptFrame;
+
+    // CloudDisplay myCloudDisplayPanel;
+    // JFrame cloudDisplayFrame;
+
+
+
+    // PollDisplay myPollDisplayPanel;
+    // JFrame pollDisplayFrame;
+
+    // MosaicDisplay myMosaicDisplayPanel;
+    // JFrame mosaciDisplayFrame;
+
+    // PointerDisplay myPointerDisplayPanel;
+    // JFrame pointerDisplayFrame;
+
+    // UnityGrooveDisplay myUnityGrooveDisplayPanel;
+    // JFrame unityGrooveDisplayFrame;
+
+    // UnityGroovePrompt myUnityGroovePromptPanel;
+    // JFrame unityGroovePromptFrame;
+
+    // end v2.0 panels and frames ----------------
+    
 
     private class NomadsAppThread extends Thread {
 	InstructorControlPanel client; //Replace with current class name
@@ -101,7 +135,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	int cloudOnOff = 0;
 	int pollOnOff = 0;
 	int mosaicOnOff = 0;
-	int swarmOnOff = 0;
+	int pointerOnOff = 0;
 	int uGrooveOnOff = 0;
 
 	//============================= MENU BAR BEGIN ==============================
@@ -125,13 +159,13 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	try {
 	    // discussPromptURL = new URL(user +  "GroupDiscussPrompt");                  	
-	    // discussURL = new URL(user + "GroupDiscussInstructor");
-	    cloudURL = new URL(user + "CloudDisplay");   
-	    pollURL = new URL(user + "PollPrompt");       
-	    pollDisplayURL = new URL(user + "PollDisplay");                  	
+	    // discussDisplayURL = new URL(user + "GroupDiscussInstructor");
 	    cloudPromptURL = new URL(user + "CloudPrompt");                  	
-	    soundDisplayURL = new URL(user + "SoundMosaicInstructor");
-	    soundSwarmDisplayURL = new URL(user + "SoundSwarmDisplay");
+	    cloudDisplayURL = new URL(user + "CloudDisplay");   
+	    pollPromptURL = new URL(user + "PollPrompt");       
+	    pollDisplayURL = new URL(user + "PollDisplay");                  	
+	    mosaicDisplayURL = new URL(user + "MosaicInstructor");
+	    pointerDisplayURL = new URL(user + "SandPointerDisplay");
 	    uGroovePromptURL = new URL(user + "UnityGroovePrompt");       
 	    uGrooveDisplayURL = new URL(user + "UnityGrooveStudent");
 	}
@@ -149,10 +183,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
     }
 
+    // button setup function -----------------------------------------------------------------------
+
     public void setupButtons() {
 	int w,h;
 	w = (int)(240*0.7);
 	h = (int)(57*0.9);
+
+	// Images --------------------------------
+	
 	discussImgOff=getImage(getCodeBase( ),"buttons/InstructDiscussOff.png");
 	discussImgOn=getImage(getCodeBase( ),"buttons/InstructDiscussOn.png");
 	discussPromptImg=getImage(getCodeBase(), "buttons/InstructDiscussPrompt.png");
@@ -168,28 +207,36 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	pollPromptImg=getImage(getCodeBase(), "buttons/InstructPollPrompt.png");
 	pollDisplayImg=getImage(getCodeBase(), "buttons/InstructPollDisplay.png ");
 
-	//****** Need to change these buttons to new images STK 3_23_10
-	soundImgOff=getImage(getCodeBase( ), "buttons/InstructSoundOff.png"); //InstructSoundOff.png
-	soundImgOn=getImage(getCodeBase( ),"buttons/InstructSoundOn.png");
-	soundPromptImg=getImage(getCodeBase( ),"buttons/InstructSoundPrompt.png");
-	soundDisplayImg=getImage(getCodeBase( ),"buttons/InstructSoundDisplay.png"); 
+	mosaicImgOff=getImage(getCodeBase( ), "buttons/InstructSoundOff.png"); //InstructSoundOff.png
+	mosaicImgOn=getImage(getCodeBase( ),"buttons/InstructSoundOn.png");
+	mosaicPromptImg=getImage(getCodeBase( ),"buttons/InstructSoundPrompt.png");
+	mosaicDisplayImg=getImage(getCodeBase( ),"buttons/InstructSoundDisplay.png"); 
 
-	pointImgOff=getImage(getCodeBase( ), "buttons/InstructPointerOff.png"); //
-	pointImgOn=getImage(getCodeBase( ),"buttons/InstructPointerOn.png");
-	pointPromptImg=getImage(getCodeBase( ),"buttons/InstructPointerPrompt.png");
-	pointDisplayImg=getImage(getCodeBase( ),"buttons/InstructPointerDisplay.png");
+	pointerImgOff=getImage(getCodeBase( ), "buttons/InstructPointerOff.png"); //
+	pointerImgOn=getImage(getCodeBase( ),"buttons/InstructPointerOn.png");
+	pointerPromptImg=getImage(getCodeBase( ),"buttons/InstructPointerPrompt.png");
+	pointerDisplayImg=getImage(getCodeBase( ),"buttons/InstructPointerDisplay.png");
 
 	uGrooveImgOff=getImage(getCodeBase( ), "buttons/InstructUnityOff.png"); // FIX THESE NAMES 
 	uGrooveImgOn=getImage(getCodeBase( ),"buttons/InstructUnityOn.png");
 	uGroovePromptImg=getImage(getCodeBase( ),"buttons/InstructUnityPrompt.png");
 	uGrooveDisplayImg=getImage(getCodeBase( ),"buttons/InstructUnityDisplay.png");
 
-	discussIcon = new ImageIcon(discussImgOff);
-	cloudIcon = new ImageIcon(cloudImgOff);
-	pollIcon = new ImageIcon(pollImgOff);
-	mosaicIcon = new ImageIcon(soundImgOff);
-	swarmIcon = new ImageIcon(pointImgOff);
-	uGrooveIcon = new ImageIcon(uGrooveImgOff);
+	// Icons ---------------------------------
+
+	discussIconOn = new ImageIcon(discussImgOn);
+	cloudIconOn = new ImageIcon(cloudImgOn);
+	pollIconOn = new ImageIcon(pollImgOn);
+	mosaicIconOn = new ImageIcon(mosaicImgOn);
+	pointerIconOn = new ImageIcon(pointerImgOn);
+	uGrooveIconOn = new ImageIcon(uGrooveImgOn);
+
+	discussIconOff = new ImageIcon(discussImgOff);
+	cloudIconOff = new ImageIcon(cloudImgOff);
+	pollIconOff = new ImageIcon(pollImgOff);
+	mosaicIconOff = new ImageIcon(mosaicImgOff);
+	pointerIconOff = new ImageIcon(pointerImgOff);
+	uGrooveIconOff = new ImageIcon(uGrooveImgOff);
 
 	discussPromptIcon = new ImageIcon(discussPromptImg); //STK 1_29_10
 	discussDisplayIcon = new ImageIcon(discussDisplayImg);
@@ -199,21 +246,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	pollDisplayIcon = new ImageIcon(pollDisplayImg);
 	uGroovePromptIcon = new ImageIcon(uGroovePromptImg); 
 
-	soundDisplayIcon = new ImageIcon(soundDisplayImg);
-	pointDisplayIcon = new ImageIcon(pointDisplayImg);
+	pointerDisplayIcon = new ImageIcon(pointerDisplayImg);
+	pointerDisplayIcon = new ImageIcon(pointerDisplayImg);
+
 	uGrooveDisplayIcon = new ImageIcon(uGrooveDisplayImg);
 
-	discussIconOn = new ImageIcon(discussImgOn);
-	cloudIconOn = new ImageIcon(cloudImgOn);
-	pollIconOn = new ImageIcon(pollImgOn);
-	mosaicIconOn = new ImageIcon(soundImgOn);
-	swarmIconOn = new ImageIcon(pointImgOn);
-	uGrooveIconOn = new ImageIcon(uGrooveImgOn);
+	// on/off button basics ------------------
 
 	discussButton = new JButton( discussIcon );
 	discussButton.setMargin(new Insets(0, 0, 0, 0));
-	discussButton.addActionListener( this );
-	discussButton.setPressedIcon(new ImageIcon(discussImgOn));
 
 	cloudButton = new JButton( cloudIcon );
 	cloudButton.setMargin(new Insets(0,0,0,0));
@@ -224,20 +265,21 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	mosaicButton = new JButton( mosaicIcon);
 	mosaicButton.setMargin(new Insets(0,0,0,0));
 
-	swarmButton = new JButton( swarmIcon );
-	swarmButton.setMargin(new Insets(0,0,0,0));
+	pointerButton = new JButton( pointerIcon );
+	pointerButton.setMargin(new Insets(0,0,0,0));
 
 	uGrooveButton = new JButton( uGrooveIcon);
 	uGrooveButton.setMargin(new Insets(0,0,0,0));
 
-	// Set up button specifics + actions + set class pointers ------------------------------------------
-	
-	// Discuss Prompt
+	// Set up button specifics + actions + set class pointers ----------------------------------
+	//
+	// v2.0 frame/panel instantiation code below
+
+	// Discuss Prompt ------------------------
 
 	myGroupDiscussPromptPanel = new GroupDiscussPrompt();
 	myGroupDiscussPromptPanel.init(instructorControlPanelSand);
 	groupDiscussPromptFrame = new JFrame("Discuss Prompt");
-	//Could add window listener here if we wanted to
 	groupDiscussPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	groupDiscussPromptFrame.setLocationRelativeTo(null);
 	groupDiscussPromptFrame.setPreferredSize(new Dimension(750,200));
@@ -249,102 +291,102 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	discussPromptButton.setBorderPainted(false);
 	discussPromptButton.addActionListener( this );
 
-	// Instructor Discuss
+	// Instructor Discuss (display) ----------
 
 	myInstructorGroupDiscussPanel = new InstructorGroupDiscuss();
 	myInstructorGroupDiscussPanel.init(instructorControlPanelSand);
 	instructorGroupDiscussFrame = new JFrame("Discussion");
-	//Could add window listener here if we wanted to
 	instructorGroupDiscussFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	instructorGroupDiscussFrame.setLocationRelativeTo(null);
 	instructorGroupDiscussFrame.setPreferredSize(new Dimension(800,600));
 	instructorGroupDiscussFrame.getContentPane().add(myInstructorGroupDiscussPanel);
 	instructorGroupDiscussFrame.pack();
 
-
-
 	discussDisplayButton = new JButton ( discussDisplayIcon );
 	discussDisplayButton.setMargin(new Insets(0,0,0,0));
+	discussDisplayButton.setBorderPainted(false);
 	discussDisplayButton.addActionListener( this );
 
-	cloudPromptButton = new JButton ( cloudPromptIcon );
-	cloudPromptButton.setMargin(new Insets(0,0,0,0));
-	cloudDisplayButton = new JButton ( cloudDisplayIcon );
-	cloudDisplayButton.setMargin(new Insets(0,0,0,0));
+	// Poll Prompt ---------------------------
+
+	myPollPromptPanel = new PollPrompt();
+	myPollPromptPanel.init(instructorControlPanelSand);
+	pollPromptFrame = new JFrame("Discuss Prompt");
+	pollPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	pollPromptFrame.setLocationRelativeTo(null);
+	pollPromptFrame.setPreferredSize(new Dimension(750,200));
+	pollPromptFrame.getContentPane().add(myPollPromptPanel);
+	pollPromptFrame.pack();
 
 	pollPromptButton = new JButton ( pollPromptIcon );
 	pollPromptButton.setMargin(new Insets(0,0,0,0));
+	pollPromptButton.setBorderPainted(false);
+	pollPromptButton.addActionListener( this );
+
+	// these still need to be 2.0 ified ------
+
+	cloudPromptButton = new JButton ( cloudPromptIcon );
+	cloudPromptButton.setMargin(new Insets(0,0,0,0));
+	cloudPromptButton.setBorderPainted(false);
+	cloudPromptButton.addActionListener( this );
+
+	cloudDisplayButton = new JButton ( cloudDisplayIcon );
+	cloudDisplayButton.setMargin(new Insets(0,0,0,0));
+	cloudDisplayButton.setBorderPainted(false);
+	cloudDisplayButton.addActionListener( this );
 
 	pollDisplayButton = new JButton ( pollDisplayIcon );
 	pollDisplayButton.setMargin(new Insets(0,0,0,0));
+	pollDisplayButton.setBorderPainted(false);
+	pollDisplayButton.addActionListener( this );
 
-	soundDisplayButton = new JButton ( soundDisplayIcon );
-	soundDisplayButton.setMargin(new Insets(0,0,0,0));
+	pointerDisplayButton = new JButton ( pointerDisplayIcon );
+	pointerDisplayButton.setMargin(new Insets(0,0,0,0));
+	pointerDisplayButton.setBorderPainted(false);
+	pointerDisplayButton.addActionListener( this );
 
-	//	pointPromptButton = new JButton ( pointPromptIcon );
-	//	pointPromptButton.setMargin(new Insets(0,0,0,0));
-	pointDisplayButton = new JButton ( pointDisplayIcon );
-	pointDisplayButton.setMargin(new Insets(0,0,0,0));
-
-	//	uGroovePromptButton = new JButton ( "uGroove Prompt" ); //replace with uGroovePromptIcon
 	uGroovePromptButton = new JButton ( uGroovePromptIcon ); 
 	uGroovePromptButton.setMargin(new Insets(0,0,0,0));
-	//	uGroovePromptButton.setForeground(Color.WHITE);
-	//	uGrooveDisplayButton = new JButton ( "uGroove Display" ); //replace with uGrooveDisplayIcon
+	uGroovePromptButton.setBorderPainted(false);
+	uGroovePromptButton.addActionListener( this );
 
-	uGrooveDisplayButton = new JButton ( uGrooveDisplayIcon);
-	uGrooveDisplayButton.setMargin(new Insets(0,0,0,0));
-	//	uGrooveDisplayButton.setForeground(Color.WHITE);
+	uGrooveDisplayButton = new JButton ( uGrooveDisplayIcon ); 
+	uGroovePromptButton.setMargin(new Insets(0,0,0,0));
+	uGrooveDisplayButton.setBorderPainted(false);
+	uGrooveDisplayButton.addActionListener( this );
+
 
 	//Need to make a "blank" button for the grid layout to be happy
 	blankButton = new JLabel( "" );
 	blankButton2 = new JLabel( "" );
 
+	// on/off buttons
+
 	discussButton.setBorderPainted(false);
-	discussDisplayButton.setBorderPainted(false);
+	discussButton.addActionListener( this );
+	discussButton.setPressedIcon(new ImageIcon(discussImgOn));
 
 	cloudButton.setBorderPainted(false);
-	cloudPromptButton.setBorderPainted(false);
-	cloudDisplayButton.setBorderPainted(false);
-
-	pollButton.setBorderPainted(false);
-	pollPromptButton.setBorderPainted(false);
-	pollDisplayButton.setBorderPainted(false);
-
-	mosaicButton.setBorderPainted(false);
-	soundDisplayButton.setBorderPainted(false);
-
-	swarmButton.setBorderPainted(false);
-	pointDisplayButton.setBorderPainted(false);
-
-	uGrooveButton.setBorderPainted(false);
-	uGroovePromptButton.setBorderPainted(false);
-	uGrooveDisplayButton.setBorderPainted(false);
-
-
-
 	cloudButton.addActionListener( this );
 	cloudButton.setPressedIcon(new ImageIcon(cloudImgOn));
-	cloudPromptButton.addActionListener( this );
-	cloudDisplayButton.addActionListener( this );
 
+	pollButton.setBorderPainted(false);
 	pollButton.addActionListener( this );
 	pollButton.setPressedIcon(new ImageIcon(pollImgOn));
-	pollPromptButton.addActionListener( this );
-	pollDisplayButton.addActionListener( this );
 
+	mosaicButton.setBorderPainted(false);
 	mosaicButton.addActionListener( this );
-	mosaicButton.setPressedIcon(new ImageIcon(soundImgOn));
-	soundDisplayButton.addActionListener( this );
+	mosaicButton.setPressedIcon(new ImageIcon(mosaicImgOn));
 
-	swarmButton.addActionListener( this );
-	swarmButton.setPressedIcon(new ImageIcon(pointImgOn));
-	pointDisplayButton.addActionListener( this );
+	pointerButton.setBorderPainted(false);
+	pointerButton.addActionListener( this );
+	pointerButton.setPressedIcon(new ImageIcon(pointerImgOn));
 
+	uGrooveButton.setBorderPainted(false);
 	uGrooveButton.addActionListener( this );
 	uGrooveButton.setPressedIcon(new ImageIcon(uGrooveImgOn)); //UN COMMENT ME WHEN WE GET THE uGROOVE FILES
-	uGroovePromptButton.addActionListener( this );
-	uGrooveDisplayButton.addActionListener( this );
+
+	// add the buttons to "button panel" screen --------
 
 	butPanel.setBackground(Color.black);
 	butPanel.add( discussButton, buttonGridLayout );
@@ -358,14 +400,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	butPanel.add( pollDisplayButton, buttonGridLayout );
 	butPanel.add( mosaicButton, buttonGridLayout );
 	butPanel.add( blankButton, buttonGridLayout );
-	butPanel.add( soundDisplayButton, buttonGridLayout);
-	butPanel.add( swarmButton, buttonGridLayout );
+	butPanel.add( pointerDisplayButton, buttonGridLayout);
+	butPanel.add( pointerButton, buttonGridLayout );
 	butPanel.add( blankButton2, buttonGridLayout );
-	butPanel.add( pointDisplayButton, buttonGridLayout );
+	butPanel.add( pointerDisplayButton, buttonGridLayout );
 	butPanel.add( uGrooveButton, buttonGridLayout );
 	butPanel.add( uGroovePromptButton, buttonGridLayout );
 	butPanel.add( uGrooveDisplayButton, buttonGridLayout );
 
+	// add the "button panel" to the window ------------
 
 	add (butPanel);
     }
@@ -382,6 +425,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	NGlobals.cPrint("InstructorControlPanel -> handle()");
 
 	NGrain grain;
+	byte tByte;
 	grain = instructorControlPanelSand.getGrain();
 	grain.print(); //prints grain data to console
 
@@ -389,67 +433,74 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	byte tCmd = grain.command;
 	String input = new String(grain.bArray);
 
-	// Buttons --------------------------------------------------------------
+	if (grain.dataType == NDataType.CHAR || grain.dataType == NDataType.UINT8) {
+	    tByte = grain.bArray[0];
+	    NGlobals.cPrint("INSTRUCTOR PANEL RCVD CMD: " + tCmd + " w/ BYTE: " + tByte);
+	}
+	else {
+	    tByte = 0;
+	}
+	    
 
-	if (input.equals("DISABLE_DISCUSS_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_DISCUSS_BUTTON");
-	    discussButton.setIcon(discussIcon);
-	    discussOnOff = 0;
-	}
-	else if( input.equals("ENABLE_DISCUSS_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_DISCUSS_BUTTON");
-	    discussButton.setIcon(discussIconOn);
-	    discussOnOff = 1;
-	}	
-	else if (input.equals("DISABLE_CLOUD_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_CLOUD_BUTTON");
-	    cloudButton.setIcon(cloudIcon);
-	    cloudOnOff = 0;
-	}
-	else if ( input.equals("ENABLE_CLOUD_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_CLOUD_BUTTON");
-	    cloudButton.setIcon(cloudIconOn);
-	    cloudOnOff = 1;
-	}
-	else if (input.equals("DISABLE_POLL_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_POLL_BUTTON");			
-	    pollButton.setIcon(pollIcon);
-	    pollOnOff = 0;
-	}
-	else if ( input.equals("ENABLE_POLL_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_POLL_BUTTON");			
-	    pollButton.setIcon(pollIconOn);
-	    pollOnOff = 1;
-	}
-	else if (input.equals("DISABLE_SOUND_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_SOUND_BUTTON");			
-	    mosaicButton.setIcon(mosaicIcon);
-	    mosaicOnOff = 0;
-	}
-	else if ( input.equals("ENABLE_SOUND_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_SOUND_BUTTON");			
-	    mosaicButton.setIcon(mosaicIconOn);
-	    mosaicOnOff = 1;
-	}
-	else if (input.equals("DISABLE_POINTER_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_POINTER_BUTTON");	
-	    swarmButton.setIcon(swarmIcon);
-	    swarmOnOff = 0;
-	}
-	else if ( input.equals("ENABLE_POINTER_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_POINTER_BUTTON");
-	    swarmButton.setIcon(swarmIconOn);
-	    swarmOnOff = 1;
-	}
-	else if (input.equals("DISABLE_UGROOVE_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "DISABLE_UGROOVE_BUTTON");
-	    uGrooveButton.setIcon(uGrooveIcon);
-	    uGrooveOnOff = 0;
-	}
-	else if ( input.equals("ENABLE_UGROOVE_BUTTON")) {
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "ENABLE_UGROOVE_BUTTON");
-	    uGrooveButton.setIcon(uGrooveIconOn);
-	    uGrooveOnOff = 1;
+	// Buttons --------------------------------------------------------------
+	
+	if (incAppID == NAppID.SERVER) {   // TODO:  may need to change this to NAppID.INSTRUCTOR_PANEL
+	    
+	    if (tCmd == NCommand.SET_DISCUSS_STATUS) {
+		discussOnOff = (int)tByte;
+		if (tByte == 0) {
+		    discussButton.setIcon(discussIconOff);
+		}
+		else if (tByte == 1) {
+		    discussButton.setIcon(discussIconOn);
+		}
+	    }	    
+	    else if (tCmd == NCommand.SET_CLOUD_STATUS) {
+		cloudOnOff = (int)tByte;
+		if (tByte == 0) {
+		    cloudButton.setIcon(cloudIcon);
+		}
+		else if (tByte == 1) {
+		    cloudButton.setIcon(cloudIconOn);
+		}
+	    }
+	    else if (tCmd == NCommand.SET_POLL_STATUS) {
+		pollOnOff = (int)tByte;
+		if (tByte == 0) {
+		    pollButton.setIcon(pollIcon);
+		}
+		else if (tByte == 1) {
+		    pollButton.setIcon(pollIconOn);
+		}
+	    }
+	    else if (tCmd == NCommand.SET_MOSAIC_STATUS) {
+		mosaicOnOff = (int)tByte;
+		if (tByte == 0) {
+		    mosaicButton.setIcon(mosaicIcon);
+		}
+		else if (tByte == 1) {
+		    mosaicButton.setIcon(mosaicIconOn);
+		}
+	    }
+	    
+	    else if (tCmd == NCommand.SET_SWARM_STATUS) {
+		pointerOnOff = (int)tByte;
+		if (tByte == 0) {
+		    pointerButton.setIcon(pointerIcon);
+		}
+		else if (tByte == 1) {
+		    pointerButton.setIcon(pointerIconOn);
+		}
+	    }
+	    else if (tCmd == NCommand.SET_UGROOVE_STATUS) {
+		uGrooveOnOff = (int)tByte;
+		if (tByte == 0) {
+		    uGrooveButton.setIcon(uGrooveIcon);
+		}
+		else if (tByte == 1) {
+		    uGrooveButton.setIcon(uGrooveIconOn);
+		}
+	    }
 	}
 	
 	// end buttons ----------------------------
@@ -546,19 +597,19 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 						 tByte);
 	}
 
-	else if( source == swarmButton ) {	
-	    if ( swarmOnOff == 0) {
-		swarmButton.setIcon(swarmIconOn);
-		swarmOnOff = 1;
+	else if( source == pointerButton ) {	
+	    if ( pointerOnOff == 0) {
+		pointerButton.setIcon(pointerIconOn);
+		pointerOnOff = 1;
 	    }      
-	    else if ( swarmOnOff == 1) {
-		swarmButton.setIcon(swarmIcon);
-		swarmOnOff = 0;
+	    else if ( pointerOnOff == 1) {
+		pointerButton.setIcon(pointerIcon);
+		pointerOnOff = 0;
 	    }
-	    tByte[0] = (byte)swarmOnOff;
-	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "SET_SWARM_STATUS: " + swarmOnOff);
+	    tByte[0] = (byte)pointerOnOff;
+	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "SET_POINTER_STATUS: " + pointerOnOff);
 	    instructorControlPanelSand.sendGrain(NAppID.INSTRUCTOR_PANEL,
-						 NCommand.SET_SWARM_STATUS,
+						 NCommand.SET_POINTER_STATUS,
 						 NDataType.UINT8,
 						 1,
 						 tByte);
@@ -585,7 +636,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	// END ------ ON/OFF buttons ------------------------------------
 
-	// Launch sub apps v 2.0 ---------------------------------------
+	// Launch sub apps v2.0 ---------------------------------------
 
 	else if( source == discussPromptButton ) {
 	    groupDiscussPromptFrame.setVisible(true);
@@ -600,13 +651,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	}
 
-
 	else if( source == cloudDisplayButton ) {
-	    getAppletContext().showDocument(cloudURL,"CloudDisplay");
+	    getAppletContext().showDocument(cloudDisplayURL,"CloudDisplay");
 	}	
 
 	else if( source == pollPromptButton ) {
-	    getAppletContext().showDocument(pollURL,"PollPrompt"); 	
+	    getAppletContext().showDocument(pollPromptURL,"PollPrompt"); 	
 	}	
 
 	else if( source == pollDisplayButton ) {
@@ -618,12 +668,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	    getAppletContext().showDocument(cloudPromptURL,"CloudPrompt"); 	
 	}
 
-	else if( source == soundDisplayButton ) {
-	    getAppletContext().showDocument(soundDisplayURL,"Sound Mosaic"); 	
+	else if( source == mosaicDisplayButton ) {
+	    getAppletContext().showDocument(mosaicDisplayURL,"Sound Mosaic"); 	
 	}
 
-	else if( source == pointDisplayButton ) {
-	    getAppletContext().showDocument(soundSwarmDisplayURL,"Sound Swarm"); 	
+	else if( source == pointerDisplayButton ) {
+	    getAppletContext().showDocument(pointerDisplayURL,"Sand Pointer"); 	
 	}
 
 	else if( source == uGroovePromptButton ) {
