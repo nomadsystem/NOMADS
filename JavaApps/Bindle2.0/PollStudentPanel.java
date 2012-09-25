@@ -555,7 +555,7 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 					currentQuestionType = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 				}
 			}	
-			if (incAppID == NAppID.TEACHER_POLL && incCmd == NCommand.SEND_POLL_PROMPT) {
+			if (incAppID == NAppID.TEACHER_POLL) {
 				String toBePosed = new String(grain.bArray); //the incoming question ****STK 6/18/12
 				//set the question to be posed
 				question.setText("<html><h2 style='color:black;font-size:125%'>" + toBePosed + "</h2></html>");
@@ -608,7 +608,7 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			tCommand = NCommand.QUESTION_TYPE_YES_NO;
 			int[] answer = new int[1];
 			answer[0] = 1;
-			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT32, dLen, answer );
 			NGlobals.cPrint("Sending Yes");
 		}
 
@@ -625,7 +625,7 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			//    char[] tStringAsChars = tString.toCharArray();
 			int[] answer = new int[1];
 			answer[0] = 0;
-			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT32, dLen, answer );
 			NGlobals.cPrint("Sending No");
 		}
 
@@ -698,7 +698,7 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;
 			int[] answer = new int[1];
 			answer[0] = 2;
-			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT, dLen, answer );
+			mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT32, dLen, answer );
 			NGlobals.cPrint("Sending 2");
 
 		}

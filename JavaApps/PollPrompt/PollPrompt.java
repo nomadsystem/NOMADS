@@ -275,7 +275,7 @@ public class PollPrompt extends JApplet implements ActionListener
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			pollSand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			pollSand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 

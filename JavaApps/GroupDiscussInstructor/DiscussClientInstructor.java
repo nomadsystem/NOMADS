@@ -179,6 +179,7 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 			topic.setForeground(Color.BLACK);
 			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 		}
+
 		// Disable discuss when the student panel button is off
 		//****STK Commented out, we don't want to disable the instructor discuss
 //		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
@@ -192,7 +193,7 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 //				topic.setText(msg);
 //			}			
 //		}
-		else if (incAppID == NAppID.WEB_CHAT || incAppID == NAppID.SERVER){
+		else if (incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.SERVER){
 			if (incCmd == NCommand.SEND_MESSAGE) {
 				chatWindow.append(msg + "\n");
 				input.requestFocus();
@@ -222,7 +223,7 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 
@@ -262,7 +263,7 @@ public class DiscussClientInstructor extends JApplet implements ActionListener, 
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
 
-			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 
