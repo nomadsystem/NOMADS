@@ -146,7 +146,7 @@ public class DiscussPrompt extends JApplet implements ActionListener
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			discussSand.sendGrain((byte)NAppID.DISCUSS_PROMPT, (byte)NCommand.SEND_DISCUSS_PROMPT, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.DISCUSS_PROMPT, (byte)NCommand.SEND_DISCUSS_PROMPT, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 
@@ -167,7 +167,7 @@ public class DiscussPrompt extends JApplet implements ActionListener
 			int tLen = tString.length();
 			//    char[] tStringAsChars = tString.toCharArray();
 			byte[] tStringAsBytes = tString.getBytes();
-			discussSand.sendGrain((byte)NAppID.DISCUSS_PROMPT, (byte)NCommand.SEND_DISCUSS_PROMPT, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+			discussSand.sendGrain((byte)NAppID.DISCUSS_PROMPT, (byte)NCommand.SEND_DISCUSS_PROMPT, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 			// The data 

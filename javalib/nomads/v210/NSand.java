@@ -60,9 +60,8 @@ public class NSand
 			NGlobals.lPrint("dLen  =" + myGrain.dataLen);
 
 			// send data
-			if (myGrain.dataType == NDataType.BYTE) {
-				NGlobals.lPrint("data[] = BYTE (Deprecated, use CHAR or UINT8)");
-
+			if (myGrain.dataType == NDataType.CHAR) {
+				NGlobals.lPrint("data[] = CHAR");
 				for (int i=0; i<myGrain.dataLen; i++) {
 					streamOut.writeByte(myGrain.bArray[i]);
 				}
@@ -75,24 +74,10 @@ public class NSand
 				}
 			}
 
-			else if (myGrain.dataType == NDataType.INT) {
-				NGlobals.lPrint("data[] = INT (Deprecated, use INT32)");
-				for (int i=0; i<myGrain.dataLen; i++) {
-					streamOut.writeInt(myGrain.iArray[i]);
-				}
-			}
-
 			else if (myGrain.dataType == NDataType.INT32) {
 				NGlobals.lPrint("data[] = INT32");
 				for (int i=0; i<myGrain.dataLen; i++) {
 					streamOut.writeInt(myGrain.iArray[i]);
-				}
-			}
-
-			else if (myGrain.dataType == NDataType.FLOAT) {
-				NGlobals.lPrint("data[] = FLOAT (Deprecated, use FLOAT32)");
-				for (int i=0; i<myGrain.dataLen; i++) {
-					streamOut.writeFloat(myGrain.fArray[i]);
 				}
 			}
 
