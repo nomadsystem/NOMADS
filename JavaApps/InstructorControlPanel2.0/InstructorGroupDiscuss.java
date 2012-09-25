@@ -1,8 +1,6 @@
-/*
-  NOMADS Group Discuss (Instructor) v.210
-  Revised/cleaned, 6/14/2012, Steven Kemper
-  Integrating NOMADSApp class
-*/
+//
+//  NOMADS Group Discuss (Instructor)
+//
 
 import java.net.*;
 import java.io.*;
@@ -15,7 +13,7 @@ import java.util.*;
 import java.lang.*;
 import nomads.v210.*;
 
-public class GrpDiscussIn extends JApplet implements ActionListener, KeyListener {   
+public class InstructorGroupDiscuss extends JApplet implements ActionListener, KeyListener {   
 
     JTextArea chatWindow;
     JScrollPane spane;
@@ -49,7 +47,7 @@ public class GrpDiscussIn extends JApplet implements ActionListener, KeyListener
     public void init(NSand inSand)
     { //daniel's swingin' code
 
-	NGlobals.cPrint("GrpDiscussIn->init(sand)");
+	NGlobals.cPrint("InstructorGroupDiscuss->init(sand)");
 
 	mySand = inSand;
 	//topmost container. It will hold wholeThing, which is the applet

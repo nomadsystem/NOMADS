@@ -1,8 +1,6 @@
-/*
-  NOMADS Group Discuss Prompt v.210
-  Revised/cleaned, 6/14/2012, Steven Kemper
-  Integrating NOMADSApp class
-*/
+//
+//  NOMADS Group Discuss Prompt 
+//
 
 import java.net.*;
 import java.io.*;
@@ -16,7 +14,7 @@ import nomads.v210.*;
 
 // writes bytes and strings seperately
 
-public class GrpDiscussPrmpt extends JApplet implements ActionListener
+public class GroupDiscussPrompt extends JApplet implements ActionListener
 {
 
     String temp = "";
@@ -111,7 +109,7 @@ public class GrpDiscussPrmpt extends JApplet implements ActionListener
 
     public void handle()
     {
-	//Not implemented for GrpDiscussPrmpt ****STK 6/14/12
+	//Not implemented for GroupDiscussPrompt ****STK 6/14/12
     }
 
     public void actionPerformed(java.awt.event.ActionEvent ae)
