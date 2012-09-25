@@ -5,8 +5,8 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	GrpDiscussIn.java \
-	GrpDiscussPrmpt.java \
+	GroupDiscussPrompt.java \
+	InstructorGroupDiscuss.java \
 	InstructorControlPanel.java 
 
 default: classes myliblink

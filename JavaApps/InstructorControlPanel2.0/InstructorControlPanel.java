@@ -1,6 +1,5 @@
 // NOMADS
 // Instructor Control Panel
-// Revised, 2012.06.21, Paul Turowski
 
 
 import java.net.*;
@@ -70,10 +69,10 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
     URL uGrooveDisplayURL;
 
     // v2.0
-    GrpDiscussIn myGrpDiscussInPanel;
-    JFrame grpDiscussInFrame;
-    GrpDiscussPrmpt myGrpDiscussPrmptPanel;
-    JFrame grpDiscussPrmptFrame;
+    InstructorGroupDiscuss myInstructorGroupDiscussPanel;
+    JFrame instructorGroupDiscussFrame;
+    GroupDiscussPrompt myGroupDiscussPromptPanel;
+    JFrame groupDiscussPromptFrame;
     //    PollPrmpt myPollPrmptPanel;
     // JFrame pollPromptFrame;
 
@@ -235,15 +234,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	
 	// Discuss Prompt
 
-	myGrpDiscussPrmptPanel = new GrpDiscussPrmpt();
-	myGrpDiscussPrmptPanel.init(instructorControlPanelSand);
-	grpDiscussPrmptFrame = new JFrame("Discuss Prompt");
+	myGroupDiscussPromptPanel = new GroupDiscussPrompt();
+	myGroupDiscussPromptPanel.init(instructorControlPanelSand);
+	groupDiscussPromptFrame = new JFrame("Discuss Prompt");
 	//Could add window listener here if we wanted to
-	grpDiscussPrmptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	grpDiscussPrmptFrame.setLocationRelativeTo(null);
-	grpDiscussPrmptFrame.setPreferredSize(new Dimension(750,200));
-	grpDiscussPrmptFrame.getContentPane().add(myGrpDiscussPrmptPanel);
-	grpDiscussPrmptFrame.pack();
+	groupDiscussPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	groupDiscussPromptFrame.setLocationRelativeTo(null);
+	groupDiscussPromptFrame.setPreferredSize(new Dimension(750,200));
+	groupDiscussPromptFrame.getContentPane().add(myGroupDiscussPromptPanel);
+	groupDiscussPromptFrame.pack();
 
 	discussPromptButton = new JButton ( discussPromptIcon ); //STK 1_29_10
 	discussPromptButton.setMargin(new Insets(0, 0, 0, 0));
@@ -252,15 +251,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	// Instructor Discuss
 
-	myGrpDiscussInPanel = new GrpDiscussIn();
-	myGrpDiscussInPanel.init(instructorControlPanelSand);
-	grpDiscussInFrame = new JFrame("Discussion");
+	myInstructorGroupDiscussPanel = new InstructorGroupDiscuss();
+	myInstructorGroupDiscussPanel.init(instructorControlPanelSand);
+	instructorGroupDiscussFrame = new JFrame("Discussion");
 	//Could add window listener here if we wanted to
-	grpDiscussInFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	grpDiscussInFrame.setLocationRelativeTo(null);
-	grpDiscussInFrame.setPreferredSize(new Dimension(800,600));
-	grpDiscussInFrame.getContentPane().add(myGrpDiscussInPanel);
-	grpDiscussInFrame.pack();
+	instructorGroupDiscussFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	instructorGroupDiscussFrame.setLocationRelativeTo(null);
+	instructorGroupDiscussFrame.setPreferredSize(new Dimension(800,600));
+	instructorGroupDiscussFrame.getContentPane().add(myInstructorGroupDiscussPanel);
+	instructorGroupDiscussFrame.pack();
 
 
 
@@ -457,7 +456,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	// Send to DISCUSS ------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
-	    myGrpDiscussInPanel.handle(grain);
+	    myInstructorGroupDiscussPanel.handle(grain);
 	}
 	
 
@@ -589,12 +588,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	// Launch sub apps v 2.0 ---------------------------------------
 
 	else if( source == discussPromptButton ) {
-	    grpDiscussPrmptFrame.setVisible(true);
+	    groupDiscussPromptFrame.setVisible(true);
 	    // getAppletContext().showDocument(discussPromptURL,"DiscussPrompt"); 	
 	}
 
 	else if( source == discussDisplayButton ) {
-	    grpDiscussInFrame.setVisible(true);
+	    instructorGroupDiscussFrame.setVisible(true);
 	    // xxx
 	    // getAppletContext().showDocument(discussURL,"CloudPrompt"); 	
 	    
