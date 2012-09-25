@@ -329,7 +329,10 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 		byte tByte = grain.bArray[0];
 		String input = new String(grain.bArray);
 
+		// Set various BUTTON states as sent by the SERVER
+
 		if (incAppID == NAppID.SERVER) {
+
 			if (tCmd == NCommand.SET_DISCUSS_STATUS) {
 				if (tByte == 0) {
 					discussButton.removeActionListener (this);
@@ -406,7 +409,9 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("UGroove ENABLED");
 				}
 			}
-		}
+		}  // end BUTTON states from SERVER
+
+		// Set various BUTTON states as sent by the INSTRUCTOR PANEL
 
 		if (incAppID == NAppID.INSTRUCTOR_PANEL) { 
 			if (tCmd == NCommand.SET_DISCUSS_STATUS) {
@@ -485,29 +490,35 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 					NGlobals.cPrint("UGroove ENABLED");
 				}
 			}
-		}
+		}  // end SET BUTTON states from INSTRUCTOR PANEL
 
-
-		//Pass incoming grain to each app
-		//***STK: We need to send all of these AppID's to DiscussClientPanel, right?
-		if (incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT || incAppID == NAppID.INSTRUCTOR_PANEL) {
+		// Send to DISCUSS ----------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
 			myDiscussClientPanel.handle(grain);
 		}
-		if (incAppID == NAppID.CLOUD_PROMPT || incAppID == NAppID.INSTRUCTOR_PANEL) {
+
+		// Send to CLOUD DISCUSS ----------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_PROMPT) {
 			myCloudDiscussPanel.handle(grain);
 		}
-		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.TEACHER_POLL) {
+
+		// Send to POLL ----------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.TEACHER_POLL || incAppID == NAppID.POLL_PROMPT) {
 			myPollStudentPanel.handle(grain);
 		}
-		//****STK: Sound Mosaic Panel needs message format upgraded from strings...
-//		if (incAppID == NAppID.INSTRUCTOR_PANEL ) {
-//			mySoundMosaicPanel.handle(grain);
-//		}
-		//****STK: Currently not implemented as we are not passing any data to SandPointer
-//		if (incAppID == NAppID.INSTRUCTOR_PANEL) {
-//			myPollStudentPanel.handle(grain);
-//		}
-		if (incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
+
+		// Send to SEQUENCER/MOSAIC ----------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.INSTRUCTOR_SEQUENCER) {
+		    //	mySoundMosaicPanel.handle(grain);
+		}
+
+		// Send to SWARM/POINTER ---------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+		    //	mySandPointerPanel.handle(grain);
+		}
+
+		// Send to UNITY GROOVE ----------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
 			myUnityGroovePanel.handle(grain);
 		}
 	}

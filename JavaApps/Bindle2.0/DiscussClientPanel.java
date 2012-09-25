@@ -155,7 +155,9 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	    }		
 	}
     		
-	else if (incAppID == NAppID.DISCUSS || grain.appID == NAppID.SERVER){
+	else if (incAppID == NAppID.DISCUSS || 
+		 incAppID == NAppID.INSTRUCTOR_DISCUSS ||
+		 grain.appID == NAppID.SERVER){
 	    if (incCmd == NCommand.SEND_MESSAGE) {
 		chatWindow.append(msg + "\n");
 		input.requestFocus();
