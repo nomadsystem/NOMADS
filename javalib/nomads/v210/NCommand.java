@@ -12,6 +12,7 @@ public class NCommand {
     public static byte SET_CLOUD_STATUS = 12; 
     public static byte SET_POLL_STATUS = 13; 
     public static byte SET_MOSAIC_STATUS = 14; 
+    public static byte SET_POINTER_STATUS = 15;  // DT: these still need to be fixed, much already cleaned 
     public static byte SET_SWARM_STATUS = 15; 
     public static byte SET_UGROOVE_STATUS = 16; 
     
