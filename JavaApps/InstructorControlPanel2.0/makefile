@@ -7,7 +7,8 @@ include ../makefile.conf
 CLASSES = \
 	GroupDiscussPrompt.java \
 	InstructorGroupDiscuss.java \
-	PollPrompt.java \
+	CloudPrompt.java \
+	CloudDisplay.java \
 	InstructorControlPanel.java 
 
 default: classes myliblink
