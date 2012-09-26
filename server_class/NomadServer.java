@@ -25,12 +25,12 @@ public class NomadServer implements Runnable {
     long nowT,appT,diffT,lagT;
 
     //Instance variables to store values that the server will give to new clients
-    private static byte _DISCUSS_STATUS = 1;
-    private static byte _CLOUD_STATUS = 1;
-    private static byte _POLL_STATUS = 1;
-    private static byte _MOSAIC_STATUS = 1;
-    private static byte _SWARM_STATUS = 1;
-    private static byte _UGROOVE_STATUS = 1;
+    private static byte _DISCUSS_STATUS = 0;
+    private static byte _CLOUD_STATUS = 0;
+    private static byte _POLL_STATUS = 0;
+    private static byte _MOSAIC_STATUS = 0;
+    private static byte _SWARM_STATUS = 0;
+    private static byte _UGROOVE_STATUS = 0;
 
     int iDay;
     FileOutputStream out; // declare a file output object
@@ -303,32 +303,11 @@ public class NomadServer implements Runnable {
 	// 1.5: INIT =================================================================================================================
 	currentClient = clients[tCNum];
 
-	// If you are THE INSTRUCTOR PANEL -------------------------------------
+	// If you are THE BINDLE or the INSTRUCTOR_PANEL -----------------------------------------------
 
-	if ((currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
+	if (((currentClient.getAppID() == NAppID.BINDLE) || (currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL)) && (currentClient.getButtonInitStatus() == 0)) {
 
-	    NGlobals.lPrint("  Sending button states to Instructor Panel from SERVER.");
-	    byte d[] = new byte[1];
-	    int ix[] = new int[1];
-
-	    //SAMPLE CODE FROM AUK SERVER
-	    //			d[0] = _DISCUSS_STATUS;
-	    //			currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.SET_DISCUSS_STATUS, NDataType.UINT8, 1, d);
-	    //			NGlobals.lPrint("_DISCUSS_STATUS: " + d[0]);
-
-	    currentClient.setButtonInitStatus((byte)1);
-	    // tempString = new String("CNT:" + clientCount);
-	    // clients[cNum].send((byte)NAppID.MONITOR, tempString);
-	    // NGlobals.lPrint("  Sending " + tempString + " to MONITOR client [" + cNum + "] from SERVER")
-	}
-
-	currentClient = clients[tCNum];
-
-	// If you are THE BINDLE -----------------------------------------------
-
-	if ((currentClient.getAppID() == NAppID.BINDLE) && (currentClient.getButtonInitStatus() == 0)) {
-
-	    NGlobals.lPrint("  Sending button states to Bindle from SERVER.");
+	    NGlobals.lPrint("  Sending button states to Bindle / Instructor Panel from SERVER.");
 	    byte d[] = new byte[1];
 	    int ix[] = new int[1];
 
