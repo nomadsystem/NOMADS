@@ -75,7 +75,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	String text;
 	int guesser,rGuess,cGuess;
 
-	Image offScreen;
+	BufferedImage offScreen;
 	Graphics2D offScreenGrp;
 	Image player;
 
@@ -154,11 +154,17 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 
 		randNum = new Random();
 
-		width = getSize().width;
-		height = getSize().height;
+		width = 800;
+		height = 800;
 
-		offScreen = createImage(width,height);
+
+		offScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		if (offScreen == null) {
+		    NGlobals.cPrint("ERROR:  could not create offscreen image");
+		    return;
+		}
 		offScreenGrp = (Graphics2D) offScreen.getGraphics();
+
 //		backgroundImg = getImage(imgWebBase,"SandDunes1_950x650.jpg");
 
 		offScreenGrp.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

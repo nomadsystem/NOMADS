@@ -48,7 +48,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	ImageIcon cloudIcon, cloudPromptIcon, cloudDisplayIcon;
 	ImageIcon pollIcon, pollPromptIcon, pollDisplayIcon;
 	ImageIcon uGrooveIcon, uGroovePromptIcon, uGrooveDisplayIcon;
-	ImageIcon mosaicIcon, mosaicerDisplayIcon;
+	ImageIcon mosaicIcon, mosaicDisplayIcon;
 	ImageIcon pointerIcon, pointerDisplayIcon;
 	ImageIcon icon;
 
@@ -93,12 +93,11 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	CloudDisplay myCloudDisplayPanel;
 	JFrame cloudDisplayFrame;
 	
-//	PollPrompt myPollPromptPanel;
-//	JFrame pollPromptFrame;
+	PollPrompt myPollPromptPanel;
+	JFrame pollPromptFrame;
 
-
-	// PollDisplay myPollDisplayPanel;
-	// JFrame pollDisplayFrame;
+	PollDisplay myPollDisplayPanel;
+	JFrame pollDisplayFrame;
 
 	// MosaicDisplay myMosaicDisplayPanel;
 	// JFrame mosaciDisplayFrame;
@@ -191,6 +190,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		setupButtons( );
 
 		instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
 	}
 
 	// button setup function -----------------------------------------------------------------------
@@ -250,34 +250,43 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 		discussPromptIcon = new ImageIcon(discussPromptImg); //STK 1_29_10
 		discussDisplayIcon = new ImageIcon(discussDisplayImg);
+
 		cloudPromptIcon = new ImageIcon(cloudPromptImg); //STK 1_29_10
 		cloudDisplayIcon = new ImageIcon(cloudDisplayImg);
+
 		pollPromptIcon = new ImageIcon(pollPromptImg); //STK 1_29_10
 		pollDisplayIcon = new ImageIcon(pollDisplayImg);
+
+		pointerDisplayIcon = new ImageIcon(pointerDisplayImg);
+		mosaicDisplayIcon = new ImageIcon(mosaicDisplayImg);
+
 		uGroovePromptIcon = new ImageIcon(uGroovePromptImg); 
-
-		pointerDisplayIcon = new ImageIcon(pointerDisplayImg);
-		pointerDisplayIcon = new ImageIcon(pointerDisplayImg);
-
 		uGrooveDisplayIcon = new ImageIcon(uGrooveDisplayImg);
+
 
 		// on/off button basics ------------------
 
+		discussIcon = new ImageIcon(discussImgOff);
 		discussButton = new JButton( discussIcon );
 		discussButton.setMargin(new Insets(0, 0, 0, 0));
 
+		cloudIcon = new ImageIcon(cloudImgOff);
 		cloudButton = new JButton( cloudIcon );
 		cloudButton.setMargin(new Insets(0,0,0,0));
 
+		pollIcon = new ImageIcon(pollImgOff);
 		pollButton = new JButton( pollIcon );
 		pollButton.setMargin(new Insets(0,0,0,0));
 
+		mosaicIcon = new ImageIcon(mosaicImgOff);
 		mosaicButton = new JButton( mosaicIcon);
 		mosaicButton.setMargin(new Insets(0,0,0,0));
 
+		pointerIcon = new ImageIcon(pointerImgOff);
 		pointerButton = new JButton( pointerIcon );
 		pointerButton.setMargin(new Insets(0,0,0,0));
 
+		uGrooveIcon = new ImageIcon(uGrooveImgOff);
 		uGrooveButton = new JButton( uGrooveIcon);
 		uGrooveButton.setMargin(new Insets(0,0,0,0));
 
@@ -339,10 +348,10 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		myCloudDisplayPanel.init(instructorControlPanelSand);
 		//Have to perform this method here, can't do it in JPanel
 		myCloudDisplayPanel.backgroundImg = getImage(imgWebBase,"SandDunes1_950x650.jpg");
-		cloudDisplayFrame = new JFrame("Discuss Prompt");
+		cloudDisplayFrame = new JFrame("Cloud");
 		cloudDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		cloudDisplayFrame.setLocationRelativeTo(null);
-		cloudDisplayFrame.setPreferredSize(new Dimension(750,200));
+		cloudDisplayFrame.setPreferredSize(new Dimension(800,800));
 		cloudDisplayFrame.getContentPane().add(myCloudDisplayPanel);
 		cloudDisplayFrame.pack();
 		
@@ -353,32 +362,49 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		
 		// Poll Prompt ---------------------------
 
-//		myPollPromptPanel = new PollPrompt();
-//		myPollPromptPanel.init(instructorControlPanelSand);
-//		pollPromptFrame = new JFrame("Discuss Prompt");
-//		pollPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//		pollPromptFrame.setLocationRelativeTo(null);
-//		pollPromptFrame.setPreferredSize(new Dimension(750,200));
-//		pollPromptFrame.getContentPane().add(myPollPromptPanel);
-//		pollPromptFrame.pack();
+		myPollPromptPanel = new PollPrompt();
+		myPollPromptPanel.init(instructorControlPanelSand);
+		pollPromptFrame = new JFrame("Poll Prompt");
+		pollPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		pollPromptFrame.setLocationRelativeTo(null);
+		pollPromptFrame.setPreferredSize(new Dimension(750,200));
+		pollPromptFrame.getContentPane().add(myPollPromptPanel);
+		pollPromptFrame.pack();
 
 		pollPromptButton = new JButton ( pollPromptIcon );
 		pollPromptButton.setMargin(new Insets(0,0,0,0));
 		pollPromptButton.setBorderPainted(false);
 		pollPromptButton.addActionListener( this );
 
-		// these still need to be 2.0 ified ------
+		// Poll Display ---------------------------
 
+		myPollDisplayPanel = new PollDisplay();
+		myPollDisplayPanel.init(instructorControlPanelSand);
+		pollDisplayFrame = new JFrame("NOMADS Poll");
+		pollDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		pollDisplayFrame.setLocationRelativeTo(null);
+		pollDisplayFrame.setPreferredSize(new Dimension(800,800));
+		pollDisplayFrame.getContentPane().add(myPollDisplayPanel);
+		pollDisplayFrame.pack();
 
 		pollDisplayButton = new JButton ( pollDisplayIcon );
 		pollDisplayButton.setMargin(new Insets(0,0,0,0));
 		pollDisplayButton.setBorderPainted(false);
 		pollDisplayButton.addActionListener( this );
 
+		// these still need to be 2.0 ified ------
+
 		pointerDisplayButton = new JButton ( pointerDisplayIcon );
 		pointerDisplayButton.setMargin(new Insets(0,0,0,0));
 		pointerDisplayButton.setBorderPainted(false);
 		pointerDisplayButton.addActionListener( this );
+
+
+		mosaicDisplayButton = new JButton ( mosaicDisplayIcon );
+		mosaicDisplayButton.setMargin(new Insets(0,0,0,0));
+		mosaicDisplayButton.setBorderPainted(false);
+		mosaicDisplayButton.addActionListener( this );
+
 
 		uGroovePromptButton = new JButton ( uGroovePromptIcon ); 
 		uGroovePromptButton.setMargin(new Insets(0,0,0,0));
@@ -435,8 +461,9 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		butPanel.add( pollDisplayButton, buttonGridLayout );
 		butPanel.add( mosaicButton, buttonGridLayout );
 		butPanel.add( blankButton, buttonGridLayout );
-		butPanel.add( pointerDisplayButton, buttonGridLayout);
+		butPanel.add( mosaicDisplayButton, buttonGridLayout);
 		butPanel.add( pointerButton, buttonGridLayout );
+		butPanel.add( pointerDisplayButton, buttonGridLayout);
 		butPanel.add( blankButton2, buttonGridLayout );
 		butPanel.add( pointerDisplayButton, buttonGridLayout );
 		butPanel.add( uGrooveButton, buttonGridLayout );
@@ -542,6 +569,11 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 		// Send to DISCUSS ------------------------
 		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
+			myInstructorGroupDiscussPanel.handle(grain);
+		}
+
+		// Send to DISCUSS ------------------------
+		else if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
 			myInstructorGroupDiscussPanel.handle(grain);
 		}
 
@@ -691,16 +723,18 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		}
 		
 		else if( source == cloudDisplayButton ) {
-			cloudPromptFrame.setVisible(true);
+			cloudDisplayFrame.setVisible(true);
 		//	getAppletContext().showDocument(cloudDisplayURL,"CloudDisplay");
 		}	
 
 		else if( source == pollPromptButton ) {
-			getAppletContext().showDocument(pollPromptURL,"PollPrompt"); 	
+			pollPromptFrame.setVisible(true);
+		    //			getAppletContext().showDocument(pollPromptURL,"PollPrompt"); 	
 		}	
 
 		else if( source == pollDisplayButton ) {
-			getAppletContext().showDocument(pollDisplayURL,"PollDisplay"); 	
+			pollDisplayFrame.setVisible(true);
+		    // getAppletContext().showDocument(pollDisplayURL,"PollDisplay"); 	
 		}
 
 

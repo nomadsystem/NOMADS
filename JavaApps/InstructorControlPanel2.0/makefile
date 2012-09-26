@@ -9,6 +9,8 @@ CLASSES = \
 	InstructorGroupDiscuss.java \
 	CloudPrompt.java \
 	CloudDisplay.java \
+	PollPrompt.java \
+	PollDisplay.java \
 	InstructorControlPanel.java 
 
 default: classes myliblink
