@@ -105,11 +105,13 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	// PointerDisplay myPointerDisplayPanel;
 	// JFrame pointerDisplayFrame;
 
-	// UnityGrooveDisplay myUnityGrooveDisplayPanel;
-	// JFrame unityGrooveDisplayFrame;
+	 UnityGroovePrompt myUnityGroovePromptPanel;
+	 JFrame unityGroovePromptFrame;
+	
+	 UnityGroovePanel myUnityGrooveDisplayPanel;
+	 JFrame unityGrooveDisplayFrame;
 
-	// UnityGroovePrompt myUnityGroovePromptPanel;
-	// JFrame unityGroovePromptFrame;
+	
 
 	// end v2.0 panels and frames ----------------
 
@@ -391,7 +393,36 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		pollDisplayButton.setMargin(new Insets(0,0,0,0));
 		pollDisplayButton.setBorderPainted(false);
 		pollDisplayButton.addActionListener( this );
+		 
+		myUnityGroovePromptPanel = new UnityGroovePrompt();
+		myUnityGroovePromptPanel.init(instructorControlPanelSand);
+		unityGroovePromptFrame = new JFrame("NOMADS Poll");
+		unityGroovePromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		unityGroovePromptFrame.setLocationRelativeTo(null);
+		unityGroovePromptFrame.setPreferredSize(new Dimension(400,200));
+		unityGroovePromptFrame.getContentPane().add(myUnityGroovePromptPanel);
+		unityGroovePromptFrame.pack();
+		
+		uGroovePromptButton = new JButton ( uGroovePromptIcon ); 
+		uGroovePromptButton.setMargin(new Insets(0,0,0,0));
+		uGroovePromptButton.setBorderPainted(false);
+		uGroovePromptButton.addActionListener( this );
+		
+		myUnityGrooveDisplayPanel = new UnityGroovePanel();
+		myUnityGrooveDisplayPanel.init(instructorControlPanelSand);
+		unityGrooveDisplayFrame = new JFrame("NOMADS Poll");
+		unityGrooveDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		unityGrooveDisplayFrame.setLocationRelativeTo(null);
+		unityGrooveDisplayFrame.setPreferredSize(new Dimension(500,500));
+		unityGrooveDisplayFrame.getContentPane().add(myUnityGrooveDisplayPanel);
+		unityGrooveDisplayFrame.pack();
 
+		uGrooveDisplayButton = new JButton ( uGrooveDisplayIcon ); 
+		uGroovePromptButton.setMargin(new Insets(0,0,0,0));
+		uGrooveDisplayButton.setBorderPainted(false);
+		uGrooveDisplayButton.addActionListener( this );
+		
+		
 		// these still need to be 2.0 ified ------
 
 		pointerDisplayButton = new JButton ( pointerDisplayIcon );
@@ -405,16 +436,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		mosaicDisplayButton.setBorderPainted(false);
 		mosaicDisplayButton.addActionListener( this );
 
-
-		uGroovePromptButton = new JButton ( uGroovePromptIcon ); 
-		uGroovePromptButton.setMargin(new Insets(0,0,0,0));
-		uGroovePromptButton.setBorderPainted(false);
-		uGroovePromptButton.addActionListener( this );
-
-		uGrooveDisplayButton = new JButton ( uGrooveDisplayIcon ); 
-		uGroovePromptButton.setMargin(new Insets(0,0,0,0));
-		uGrooveDisplayButton.setBorderPainted(false);
-		uGrooveDisplayButton.addActionListener( this );
+		
 
 
 		//Need to make a "blank" button for the grid layout to be happy
@@ -573,10 +595,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		}
 
 		// Send to DISCUSS ------------------------
-		else if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
 			myInstructorGroupDiscussPanel.handle(grain);
 		}
-
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
+			myUnityGrooveDisplayPanel.handle(grain);
+		}
 
 	}
 
@@ -748,11 +772,13 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		}
 
 		else if( source == uGroovePromptButton ) {
-			getAppletContext().showDocument(uGroovePromptURL,"Unity Groove Prompt"); 	
+			 unityGroovePromptFrame.setVisible(true);
+			//getAppletContext().showDocument(uGroovePromptURL,"Unity Groove Prompt"); 	
 		}
 
 		else if( source == uGrooveDisplayButton ) {
-			getAppletContext().showDocument(uGrooveDisplayURL,"Unity Groove Display"); 	
+			unityGrooveDisplayFrame.setVisible(true);
+			//getAppletContext().showDocument(uGrooveDisplayURL,"Unity Groove Display"); 	
 		}
 
 		else if ( source == pollMenu_VoteAgain ) {

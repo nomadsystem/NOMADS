@@ -11,9 +11,12 @@ CLASSES = \
 	CloudDisplay.java \
 	PollPrompt.java \
 	PollDisplay.java \
+	UnityGroovePrompt.java\
+	UnityGroovePanel.java\
+	colorBox.java\
 	InstructorControlPanel.java 
 
-default: classes myliblink
+default: classes myliblink comlink
 
 topliblink:
 	rm -f ./nomads
@@ -22,6 +25,10 @@ topliblink:
 myliblink:
 	rm -f ./nomads
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
+	
+comlink:
+	rm -f ./com
+	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
 
 classes: $(CLASSES:.java=.class)
 
