@@ -12,14 +12,6 @@ import nomads.v210.*;
 
 public class InstructorControlPanel extends JApplet  implements  ActionListener {
 
-	// Change appropriate directory 
-	// TODO:  use -D_$USER directive in makefile
-
-	// String user = new String("http://nomads.music.virginia.edu/classroom/JavaApps/");
-	String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
-	//String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
-
-
 	NSand instructorControlPanelSand;
 	private NomadsAppThread nThread;
 
@@ -99,11 +91,11 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	PollDisplay myPollDisplayPanel;
 	JFrame pollDisplayFrame;
 
-	// MosaicDisplay myMosaicDisplayPanel;
-	// JFrame mosaciDisplayFrame;
+	SoundMosaicDisplay myMosaicDisplayPanel;
+	JFrame mosaicDisplayFrame;
 
-	// PointerDisplay myPointerDisplayPanel;
-	// JFrame pointerDisplayFrame;
+	SandPointerDisplay myPointerDisplayPanel;
+	JFrame pointerDisplayFrame;
 
 	 UnityGroovePrompt myUnityGroovePromptPanel;
 	 JFrame unityGroovePromptFrame;
@@ -134,8 +126,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		}
 	}
 
-
-	public void init( ) {
+	public void init() {
 		int discussOnOff = 0;
 		int cloudOnOff = 0;
 		int pollOnOff = 0;
@@ -162,20 +153,20 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		content.setBackground(Color.black);
 		setJMenuBar(menuBar);
 
-		try {
-			// discussPromptURL = new URL(user +  "GroupDiscussPrompt");                  	
-			// discussDisplayURL = new URL(user + "GroupDiscussInstructor");
-			cloudPromptURL = new URL(user + "CloudPrompt");                  	
-			cloudDisplayURL = new URL(user + "CloudDisplay");   
-			pollPromptURL = new URL(user + "PollPrompt");       
-			pollDisplayURL = new URL(user + "PollDisplay");                  	
-			mosaicDisplayURL = new URL(user + "MosaicInstructor");
-			pointerDisplayURL = new URL(user + "SandPointerDisplay");
-			uGroovePromptURL = new URL(user + "UnityGroovePrompt");       
-			uGrooveDisplayURL = new URL(user + "UnityGrooveStudent");
-		}
-		catch (MalformedURLException e) {
-		}
+		// try {
+		// 	// discussPromptURL = new URL(user +  "GroupDiscussPrompt");                  	
+		// 	// discussDisplayURL = new URL(user + "GroupDiscussInstructor");
+		// 	// cloudPromptURL = new URL(user + "CloudPrompt");                  	
+		// 	// cloudDisplayURL = new URL(user + "CloudDisplay");   
+		// 	// pollPromptURL = new URL(user + "PollPrompt");       
+		// 	// pollDisplayURL = new URL(user + "PollDisplay");                  	
+		// 	// mosaicDisplayURL = new URL(user + "MosaicInstructor");
+		// 	// pointerDisplayURL = new URL(user + "SandPointerDisplay");
+		// 	// uGroovePromptURL = new URL(user + "UnityGroovePrompt");       
+		// 	// uGrooveDisplayURL = new URL(user + "UnityGrooveStudent");
+		// }
+		// catch (MalformedURLException e) {
+		// }
 		imgPrefix = "http://nomads.music.virginia.edu/images/";
 
 		try { 
@@ -393,10 +384,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		pollDisplayButton.setMargin(new Insets(0,0,0,0));
 		pollDisplayButton.setBorderPainted(false);
 		pollDisplayButton.addActionListener( this );
-		 
+
+		// Unity Groove Panel ---------------------------		 
+
 		myUnityGroovePromptPanel = new UnityGroovePrompt();
 		myUnityGroovePromptPanel.init(instructorControlPanelSand);
-		unityGroovePromptFrame = new JFrame("NOMADS Poll");
+		unityGroovePromptFrame = new JFrame("Unity Groove Control");
 		unityGroovePromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		unityGroovePromptFrame.setLocationRelativeTo(null);
 		unityGroovePromptFrame.setPreferredSize(new Dimension(400,200));
@@ -408,9 +401,11 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		uGroovePromptButton.setBorderPainted(false);
 		uGroovePromptButton.addActionListener( this );
 		
+		// Unity Groove "display" -----------------------
+
 		myUnityGrooveDisplayPanel = new UnityGroovePanel();
 		myUnityGrooveDisplayPanel.init(instructorControlPanelSand);
-		unityGrooveDisplayFrame = new JFrame("NOMADS Poll");
+		unityGrooveDisplayFrame = new JFrame("Unity Groove");
 		unityGrooveDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		unityGrooveDisplayFrame.setLocationRelativeTo(null);
 		unityGrooveDisplayFrame.setPreferredSize(new Dimension(500,500));
@@ -422,24 +417,39 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		uGrooveDisplayButton.setBorderPainted(false);
 		uGrooveDisplayButton.addActionListener( this );
 		
-		
-		// these still need to be 2.0 ified ------
+		// Sand Pointer ------------------
+
+		myPointerDisplayPanel = new SandPointerDisplay();
+		myPointerDisplayPanel.init(instructorControlPanelSand);
+		pointerDisplayFrame = new JFrame("Sand Pointer");
+		pointerDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		pointerDisplayFrame.setLocationRelativeTo(null);
+		pointerDisplayFrame.setPreferredSize(new Dimension(800,800));
+		pointerDisplayFrame.getContentPane().add(myPointerDisplayPanel);
+		pointerDisplayFrame.pack();
 
 		pointerDisplayButton = new JButton ( pointerDisplayIcon );
 		pointerDisplayButton.setMargin(new Insets(0,0,0,0));
 		pointerDisplayButton.setBorderPainted(false);
 		pointerDisplayButton.addActionListener( this );
+		
+		// Sound Mosaic ------------------
 
+		myMosaicDisplayPanel = new SoundMosaicDisplay();
+		myMosaicDisplayPanel.init(instructorControlPanelSand);
+		mosaicDisplayFrame = new JFrame("Sound Mosaic");
+		mosaicDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		mosaicDisplayFrame.setLocationRelativeTo(null);
+		mosaicDisplayFrame.setPreferredSize(new Dimension(1100,700));
+		mosaicDisplayFrame.getContentPane().add(myMosaicDisplayPanel);
+		mosaicDisplayFrame.pack();
 
 		mosaicDisplayButton = new JButton ( mosaicDisplayIcon );
 		mosaicDisplayButton.setMargin(new Insets(0,0,0,0));
 		mosaicDisplayButton.setBorderPainted(false);
 		mosaicDisplayButton.addActionListener( this );
 
-		
-
-
-		//Need to make a "blank" button for the grid layout to be happy
+		// "blank" button for the grid layout to be happy
 		blankButton = new JLabel( "" );
 		blankButton2 = new JLabel( "" );
 
@@ -485,7 +495,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		butPanel.add( blankButton, buttonGridLayout );
 		butPanel.add( mosaicDisplayButton, buttonGridLayout);
 		butPanel.add( pointerButton, buttonGridLayout );
-		butPanel.add( pointerDisplayButton, buttonGridLayout);
 		butPanel.add( blankButton2, buttonGridLayout );
 		butPanel.add( pointerDisplayButton, buttonGridLayout );
 		butPanel.add( uGrooveButton, buttonGridLayout );
@@ -761,14 +770,14 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		    // getAppletContext().showDocument(pollDisplayURL,"PollDisplay"); 	
 		}
 
-
-
 		else if( source == mosaicDisplayButton ) {
-			getAppletContext().showDocument(mosaicDisplayURL,"Sound Mosaic"); 	
+		    mosaicDisplayFrame.setVisible(true);
+		    // getAppletContext().showDocument(mosaicDisplayURL,"Sound Mosaic"); 	
 		}
 
 		else if( source == pointerDisplayButton ) {
-			getAppletContext().showDocument(pointerDisplayURL,"Sand Pointer"); 	
+			pointerDisplayFrame.setVisible(true);
+			//			getAppletContext().showDocument(pointerDisplayURL,"Sand Pointer"); 	
 		}
 
 		else if( source == uGroovePromptButton ) {
