@@ -14,6 +14,8 @@ CLASSES = \
 	UnityGroovePrompt.java\
 	UnityGroovePanel.java\
 	colorBox.java\
+	SandPointerDisplay.java\
+	SoundMosaicDisplay.java\
 	InstructorControlPanel.java 
 
 default: classes myliblink comlink
@@ -25,7 +27,7 @@ topliblink:
 myliblink:
 	rm -f ./nomads
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
-	
+
 comlink:
 	rm -f ./com
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .

@@ -11,12 +11,6 @@ import com.softsynth.jsyn.*;
 
 public class StudentControlPanel extends JApplet  implements  ActionListener {
 
-	// Change appropriate directory 
-	// TODO:  use -D_$USER directive in makefile
-
-	// String user = new String("http://nomads.music.virginia.edu/classroom/JavaApps/");
-	String user = new String("http://nomads.music.virginia.edu/kemper/NOMADS/JavaApps/");
-	// String user = new String("http://nomads.music.virginia.edu/topper/NOMADS/JavaApps/");
 
 	NSand studentControlPanelSand;
 	private NomadsAppThread nThread;
@@ -50,13 +44,13 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	JFrame uGrooveFrame = null;
 
 	public Graphics g; 
-	URL joinURL;
-	URL discussURL;
-	URL cloudURL;
-	URL soundURL;
-	URL pollURL;
-	URL pointURL;
-	URL uGrooveURL;
+	// URL joinURL;
+	// URL discussURL;
+	// URL cloudURL;
+	// URL soundURL;
+	// URL pollURL;
+	// URL pointURL;
+	// URL uGrooveURL;
 
 	int soundOn = 0;
 
@@ -181,18 +175,18 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 		uGrooveFrame.getContentPane().add(myUnityGroovePanel);
 		uGrooveFrame.pack();
 
-		try {
-			joinURL = new URL(user + "Join");
-			discussURL = new URL(user + "GroupDiscuss");
-			cloudURL = new URL(user +  "CloudDiscuss");   
-			pollURL = new URL(user + "PollStudent");       
-			soundURL = new URL(user + "SoundMosaic");
-			pointURL = new URL(user +  "SandPointer");
-			uGrooveURL = new URL(user + "UnityGrooveStudent");
-		}
+		// try {
+		// 	joinURL = new URL(user + "Join");
+		// 	discussURL = new URL(user + "GroupDiscuss");
+		// 	cloudURL = new URL(user +  "CloudDiscuss");   
+		// 	pollURL = new URL(user + "PollStudent");       
+		// 	soundURL = new URL(user + "SoundMosaic");
+		// 	pointURL = new URL(user +  "SandPointer");
+		// 	uGrooveURL = new URL(user + "UnityGrooveStudent");
+		// }
 
-		catch (MalformedURLException e) {
-		}
+		// catch (MalformedURLException e) {
+		// }
 
 		//Code below starts thread (connects), sends register byte
 		nThread = new NomadsAppThread(this);
