@@ -603,10 +603,32 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 			myInstructorGroupDiscussPanel.handle(grain);
 		}
 
-		// Send to DISCUSS ------------------------
+		// Send to CLOUD DISPLAY------------------------
 		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
-			myInstructorGroupDiscussPanel.handle(grain);
+			myCloudDisplayPanel.handle(grain);
 		}
+		
+		// Send to POLL PROMPT------------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
+			myPollPromptPanel.handle(grain);
+		}
+		
+		// Send to POLL DISPLAY------------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
+			myPollDisplayPanel.handle(grain);
+		}
+		
+		// Send to SOUND MOSAIC DISPLAY------------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_SEQUENCER ||incAppID == NAppID.TEACHER_POLL ) {
+			myMosaicDisplayPanel.handle(grain);
+		}
+		
+		// Send to SAND POINTER DISPLAY------------------------
+		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_SEQUENCER ||incAppID == NAppID.SOUND_SWARM ) {
+			myPointerDisplayPanel.handle(grain);
+		}
+
+		// Send to UNITY GROOVE DISPLAY------------------------
 		if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
 			myUnityGrooveDisplayPanel.handle(grain);
 		}
