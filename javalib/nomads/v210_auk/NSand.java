@@ -229,7 +229,7 @@ public class NSand
 		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
 
 	    }
 
@@ -242,7 +242,7 @@ public class NSand
 		    NGlobals.lPrint("UINT8:  " + bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with UINT8s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with UINT8s");
 	    }
 
 	    //Int Array
@@ -254,7 +254,7 @@ public class NSand
 		    NGlobals.lPrint("INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
 
 	    }
 
@@ -268,7 +268,7 @@ public class NSand
 		    NGlobals.lPrint("INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INT32s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with INT32s");
 	    }
 
 	    //Float Array
@@ -280,7 +280,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
 	    }
 
 	    //Float Array 32
@@ -292,7 +292,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 	    else {
@@ -302,7 +302,7 @@ public class NSand
 	catch(IOException ioe) {  
 	    System.out.println("SAND write error");
 	}
-	System.out.println("NSand:getGrain: returning grain\n");
+	NGlobals.lPrint("NSand:getGrain: returning grain\n");
 
 	return grain;
     }
@@ -338,7 +338,7 @@ public class NSand
 		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
 
 	    }
 
@@ -351,7 +351,7 @@ public class NSand
 		    NGlobals.lPrint("UINT8:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with UINT8s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with UINT8s");
 	    }
 
 	    //Int Array
@@ -363,7 +363,7 @@ public class NSand
 		    NGlobals.lPrint("INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with INTs (Deprecated, use INT32)");
 
 	    }
 
@@ -376,7 +376,7 @@ public class NSand
 		    NGlobals.lPrint("INT32:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INT32s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with INT32s");
 	    }
 
 	    //Float Array
@@ -388,7 +388,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
+		NGlobals.lPrint("NSand:getGrain: creating grain with FLOATs (Deprecated, use FLOAT32)");
 	    }
 
 	    //Float Array 32
@@ -400,7 +400,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+		NGlobals.lPrint("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 	    else {
@@ -409,7 +409,7 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    NGlobals.lPrint("SAND write error");
 	}
 	return grain;
     }

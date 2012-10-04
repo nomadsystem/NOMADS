@@ -38,6 +38,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     NSand operaSand;
     private NomadsAppThread nThread;
 
+    int skipper = 0;
+    int maxSkip = 1;
     Random randNum;
     int numOscs = 0;
 
@@ -816,7 +818,11 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
 		    //	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
-		    repaint();
+		    if (skipper == 0)
+			repaint();
+		    skipper++;
+		    if (skipper > maxSkip)
+			skipper = 0;
 		}
 	    }
 	}
