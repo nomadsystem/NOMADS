@@ -567,7 +567,7 @@ public class NomadServer implements Runnable {
 
 			// incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-			if (incAppID == NAppID.OC_POINTER && (_POINTER_STATUS == 1)) {
+			if ((incAppID == NAppID.OC_POINTER || incAppID == NAppID.JOC_POINTER) && (_POINTER_STATUS == 1)) {
 				if (incAppCmd == NCommand.SEND_SPRITE_XY) {
 
 					for (int c = 0; c < clientCount; c++) {
