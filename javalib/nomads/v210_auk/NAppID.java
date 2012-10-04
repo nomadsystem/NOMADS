@@ -11,10 +11,12 @@ public class NAppID {
     public static Byte CONDUCTOR_PANEL = 1;
     public static Byte OPERA_MAIN = 2;
     public static Byte OPERA_CLIENT = 3;
+    public static Byte OPERA_CLIENT = 33;
     public static Byte OC_DISCUSS = 4; //OC= Opera Client
     public static Byte OC_CLOUD = 5;
     public static Byte OC_LOGIN = 6;
     public static Byte OC_POINTER = 7;
+    public static Byte JOC_POINTER = 77;
     // public static Byte CLOUD_PROMPT = 8;
     // public static Byte DISCUSS_PROMPT = 9;
     public static Byte DISCUSS_TOPIC = 10;
