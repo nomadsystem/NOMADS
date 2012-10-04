@@ -39,7 +39,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     private NomadsAppThread nThread;
 
     int skipper = 0;
-    int maxSkip = 1;
+    int maxSkip = 5;
     Random randNum;
     int numOscs = 0;
 
@@ -716,10 +716,116 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	}
 
-	// ========= Pointer ============================================
+	// ========= Pointer (regular) ============================================
 
 	else if (incAppID == NAppID.OC_POINTER) {
 	    NGlobals.cPrint("OMP: OC_POINTER\n");
+	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
+		THREAD_ID = grain.iArray[0];
+		x = grain.iArray[1];
+		y = grain.iArray[2];
+		NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+
+		makeSynth(THREAD_ID);
+
+		NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
+
+		freq = (float)x;
+		amp = (float)(y/1000);
+
+		//				float fx = (float)(x+1000)/(float)2000;
+		//				float fy = (float)(y+1000)/(float)2000;
+		//
+		//				x = (int)(fx*width);
+		//				y = (int)(fy*height);
+				
+		scaledX = (int)(x * origXScaler);
+		scaledY = (int)(y * origYScaler);
+		x = scaledX;
+		y = scaledY;
+
+		NGlobals.cPrint("OMP: x = " + x);
+		//		amp = 1;
+		NGlobals.cPrint("OMP: y = " + y);
+		NGlobals.cPrint("OMP: scaledX = " + scaledX);
+		//		amp = 1;
+		NGlobals.cPrint("OMP: scaledY = " + scaledY);
+
+		//if (x > 900)
+		//	x = 900;
+		//				xput = (float)(x/0.5);
+		xput = x;
+		if (xput < 50)
+		    xput = 50;
+		if (xput > 900)
+		    xput = 900;
+
+		//if (y > 900)
+		//	y = 900;
+
+		//			yput = (float)((y/0.5));
+		yput = y;
+		if (yput < 0)
+		    yput = 0;
+		if (yput > 900)
+		    yput = 900;
+
+
+		//=============== STK code to get H value for frequency =======================
+
+		double myX, myY, myH_Sqr;
+		double myH;		
+
+
+		if (isOsc[THREAD_ID]) {
+		    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+
+		    sprites[THREAD_ID].x = x;
+		    sprites[THREAD_ID].y = y;
+
+		    if (x >= origX)
+			myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+		    else 
+			myX = (double)(origX - x);
+
+		    if (posY >= y)
+			myY = (double)(y - origY);
+		    else
+			myY = (double)(origY - y);
+
+		    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+
+
+		    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+		    myH = Math.sqrt(myH_Sqr); //distance from center
+		    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+		    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+		    tFreq = (float)myH * 4.0;
+
+		    if (tFreq > 22050.0)
+			tFreq = 22050.0;
+
+		    if (tFreq < 20.0)
+			tFreq = 20.0;
+
+		    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+		    data[THREAD_ID][1] = tFreq;
+		    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
+		    envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+		    envPlayer[THREAD_ID].envelopePort.clear();
+		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+		    repaint();
+		}
+	    }
+	}
+
+	// ========= Pointer (Java based) ============================================
+
+	else if (incAppID == NAppID.JOC_POINTER) {
+	    NGlobals.cPrint("OMP: JOC_POINTER\n");
 	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
 		THREAD_ID = grain.iArray[0];
 		x = grain.iArray[1];
