@@ -178,7 +178,7 @@ public class Dot extends SurfaceView implements SurfaceHolder.Callback {
 	
 				// send position of dot to server
 				sGrain = new NGrain(
-						NAppIDAuk.OC_POINTER,
+						NAppIDAuk.JOC_POINTER,
 						NCommandAuk.SEND_SPRITE_XY,
 						NDataType.INT32,
 						2,

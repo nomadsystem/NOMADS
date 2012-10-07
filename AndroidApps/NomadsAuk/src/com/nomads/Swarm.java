@@ -62,7 +62,10 @@ public class Swarm extends Activity {
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
-	private String currentPrompt, currentChatWindow;
+	private String currentPrompt;
+	private String currentChatWindow;
+//	private String[] currentChatWindow;
+//	private int numChatLines = 15;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -789,6 +792,11 @@ public class Swarm extends Activity {
 	
 	private void appendText(String _text) {
 		if (chatWindow != null) {
+//			for (int i=(numChatLines-1);i>0;i--) {
+//				currentChatWindow[i] = currentChatWindow[i-1];
+//			}
+//			currentChatWindow[0] = _text;
+			
 			if (currentChatWindow == null) {
 				currentChatWindow = (_text + "\n");		// if new chat window, set...
 			} else {

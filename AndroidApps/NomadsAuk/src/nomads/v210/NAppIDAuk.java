@@ -9,6 +9,7 @@ public class NAppIDAuk {
 	public static byte OC_CLOUD = 5;
 	public static byte OC_LOGIN = 6;
 	public static byte OC_POINTER = 7;
+	public static byte JOC_POINTER = 77;
 //  public static byte CLOUD_PROMPT = 8;
 //  public static byte DISCUSS_PROMPT = 9;
 	public static byte DISCUSS_TOPIC = 10;
