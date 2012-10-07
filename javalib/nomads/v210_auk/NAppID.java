@@ -15,6 +15,7 @@ public class NAppID {
     public static Byte OC_CLOUD = 5;
     public static Byte OC_LOGIN = 6;
     public static Byte OC_POINTER = 7;
+    public static Byte JOC_POINTER = 77;
     // public static Byte CLOUD_PROMPT = 8;
     // public static Byte DISCUSS_PROMPT = 9;
     public static Byte DISCUSS_TOPIC = 10;
