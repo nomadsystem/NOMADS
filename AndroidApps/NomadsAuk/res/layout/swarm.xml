@@ -99,6 +99,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         android:paddingTop="65dp"
+        android:paddingBottom="20dp"
         android:paddingRight="50dp">
 	    <TextView
 	        android:id="@+id/chatWindow"
