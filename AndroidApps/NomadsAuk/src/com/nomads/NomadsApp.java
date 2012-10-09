@@ -3,6 +3,7 @@
 // Paul Turowski. 2012.08.08
 
 package com.nomads;
+import nomads.v210.NGlobals;
 import nomads.v210.NGrain;
 import nomads.v210.NSand;
 import android.annotation.TargetApi;
@@ -48,7 +49,8 @@ public class NomadsApp extends Application {
 		public float tonesVolume = 0.0f;
 		public boolean cloudTonesToggle = false;
 		public float cloudVolume = 0.0f;
-		public String currentPrompt, currentChatWindow;
+		public String currentPrompt;
+		public String[] currentChatWindow = new String[NGlobals.numChatLines];
 	}
 	
 	public AppState state () {
