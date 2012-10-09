@@ -98,6 +98,8 @@
         android:layout_height="wrap_content"
 	    android:layout_above="@id/settingsLinearLayout"
         android:paddingBottom="50dp"
+        android:paddingTop="65dp"
+        android:layout_marginRight="50dp"
         android:focusableInTouchMode="false">
     </com.nomads.TextViewNoTouch>
 
