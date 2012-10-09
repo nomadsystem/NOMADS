@@ -91,23 +91,15 @@
 	    android:singleLine="true"/>
 	
 <!-- chat display -->
-    <com.nomads.ScrollViewNoTouch
-        android:id="@+id/chat_ScrollView"
+    <com.nomads.TextViewNoTouch
+        android:id="@+id/chatWindow"
+        style="@style/def"
         android:layout_width="fill_parent" 
-        android:layout_height="fill_parent"
-        android:layout_below="@id/prompt"
+        android:layout_height="wrap_content"
 	    android:layout_above="@id/settingsLinearLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
-        android:paddingBottom="50dp">
-	    <TextView
-	        android:id="@+id/chatWindow"
-	        style="@style/def"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:scrollbars="vertical"
-	        android:focusableInTouchMode="false" />
-    </com.nomads.ScrollViewNoTouch>
+        android:paddingBottom="50dp"
+        android:focusableInTouchMode="false">
+    </com.nomads.TextViewNoTouch>
 
 <!--     <Button
         android:id="@+id/buttonAudioTest1"

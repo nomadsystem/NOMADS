@@ -63,9 +63,9 @@ public class Swarm extends Activity {
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
 	private String currentPrompt;
-	private String currentChatWindow;
-//	private String[] currentChatWindow;
-//	private int numChatLines = 15;
+//	private String currentChatWindow;
+	private int numChatLines = 15;
+	private String[] currentChatWindow = new String[numChatLines];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class Swarm extends Activity {
 
 		// initialize UI
 		setContentView(R.layout.swarm);
-		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
+//		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
 		chatWindow = (TextView) findViewById(R.id.chatWindow);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		chatWindow.getParent().requestDisallowInterceptTouchEvent(true);
@@ -378,7 +378,6 @@ public class Swarm extends Activity {
 				String msg = new String(grain.bArray);
 //				Log.d("Swarm", "Discuss message received: " + msg);
 				appendText(msg);
-//				Log.d("Discuss", "ChatWindow: " + msg);
 			}
 		}
 // handle received cloud messages?
@@ -790,23 +789,32 @@ public class Swarm extends Activity {
 	// Display Methods
 	// ========================================================
 	
+	// handles discuss messages received from server
 	private void appendText(String _text) {
+		Log.d("Swarm", "Discuss message received: " + _text);
+		String tempString = "";
 		if (chatWindow != null) {
-//			for (int i=(numChatLines-1);i>0;i--) {
-//				currentChatWindow[i] = currentChatWindow[i-1];
-//			}
-//			currentChatWindow[0] = _text;
+			for (int i=0; i<numChatLines-1; i++) {
+//				if (currentChatWindow[i] != null)
+					currentChatWindow[i] = currentChatWindow[i+1];
+			}
+			currentChatWindow[numChatLines-1] = _text;
 			
-			if (currentChatWindow == null) {
-				currentChatWindow = (_text + "\n");		// if new chat window, set...
-			} else {
-				currentChatWindow += (_text + "\n");	// otherwise, append
-			}				
+			for (int j=0; j<numChatLines; j++) {
+				if (currentChatWindow[j] == null)
+					tempString += "\n";
+				else
+					tempString += currentChatWindow[j] + "\n";
+			}
+			
 			// save current chatWindow text in case of device rotation ( see onResume() below )
-			app.state().currentChatWindow = currentChatWindow;
+			app.state().currentChatWindow = tempString;
+			
 			// get saved chat window from NomadsApp.appState
 			chatWindow.setText( app.state().currentChatWindow );
-			scrollText();
+				
+			// no longer needed, revise xml file
+//			scrollText();
 		}
 	}
 	
@@ -836,16 +844,16 @@ public class Swarm extends Activity {
 	}
 	
 	// scroll the textview to view latest messages
-	private void scrollText () {
-//		Log.d("Swarm", "scrollText()");
-		
-	    chatScrollView.post(new Runnable() {
-	        public void run() {
-	            chatScrollView.fullScroll(View.FOCUS_DOWN);
-	        }
-	    });
-
-	}
+//	private void scrollText () {
+////		Log.d("Swarm", "scrollText()");
+//		
+//	    chatScrollView.post(new Runnable() {
+//	        public void run() {
+//	            chatScrollView.fullScroll(View.FOCUS_DOWN);
+//	        }
+//	    });
+//
+//	}
 	
 	int convertVisibility (boolean _b) {
 		int vis = 0;
