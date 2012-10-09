@@ -7,6 +7,7 @@ package com.nomads;
 import nomads.v210.NAppIDAuk;
 import nomads.v210.NCommandAuk;
 import nomads.v210.NDataType;
+import nomads.v210.NGlobals;
 import nomads.v210.NGrain;
 import java.io.IOException;
 import java.util.Random;
@@ -62,7 +63,10 @@ public class Swarm extends Activity {
 	private int dropletsRange = 5000;
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
-	private String currentPrompt, currentChatWindow;
+	private String currentPrompt;
+//	private String currentChatWindow;
+//	private int numChatLines = 30;
+	private String[] currentChatWindow = new String[NGlobals.numChatLines];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -375,7 +379,6 @@ public class Swarm extends Activity {
 				String msg = new String(grain.bArray);
 //				Log.d("Swarm", "Discuss message received: " + msg);
 				appendText(msg);
-//				Log.d("Discuss", "ChatWindow: " + msg);
 			}
 		}
 // handle received cloud messages?
@@ -787,18 +790,44 @@ public class Swarm extends Activity {
 	// Display Methods
 	// ========================================================
 	
+	void updateDisplay() {
+		buttonDiscuss.setVisibility( convertVisibility(app.state().discussToggle) );
+		buttonCloud.setVisibility( convertVisibility(app.state().cloudToggle) );
+		messageDiscuss.setVisibility( convertVisibility(app.state().discussMessageToggle) );
+		messageCloud.setVisibility( convertVisibility(app.state().cloudMessageToggle) );
+		
+		// restore prompt message
+		prompt.setText( app.state().currentPrompt );
+		
+		String tempString = "";
+		// restore chat window and scroll to the newest message
+		chatWindow.setText("");
+		for (int i=0; i<app.state().currentChatWindow.length; i++) {
+			tempString += app.state().currentChatWindow[i] + "\n";
+		}
+		chatWindow.setText(tempString);
+		
+		scrollText();
+	}
+	
+	// handles discuss messages received from server
 	private void appendText(String _text) {
+		Log.d("Swarm", "Discuss message received: " + _text);
+		
+		// save current chatWindow text in case of device rotation ( see onResume() below )
+		System.arraycopy(app.state().currentChatWindow, 0, currentChatWindow, 0, NGlobals.numChatLines);
+//		String tempString = "";
 		if (chatWindow != null) {
-			if (currentChatWindow == null) {
-				currentChatWindow = (_text + "\n");		// if new chat window, set...
-			} else {
-				currentChatWindow += (_text + "\n");	// otherwise, append
-			}				
+			for (int i=0; i<NGlobals.numChatLines-1; i++) {
+				currentChatWindow[i] = currentChatWindow[i+1];
+			}
+			currentChatWindow[NGlobals.numChatLines-1] = _text;
+			
 			// save current chatWindow text in case of device rotation ( see onResume() below )
-			app.state().currentChatWindow = currentChatWindow;
-			// get saved chat window from NomadsApp.appState
-			chatWindow.setText( app.state().currentChatWindow );
-			scrollText();
+			System.arraycopy(currentChatWindow, 0, app.state().currentChatWindow, 0, NGlobals.numChatLines);
+			
+			// update chat window & scroll
+			updateDisplay();
 		}
 	}
 	
@@ -847,18 +876,5 @@ public class Swarm extends Activity {
 			vis = View.GONE;
 		
 		return vis;
-	}
-	
-	void updateDisplay() {
-		buttonDiscuss.setVisibility( convertVisibility(app.state().discussToggle) );
-		buttonCloud.setVisibility( convertVisibility(app.state().cloudToggle) );
-		messageDiscuss.setVisibility( convertVisibility(app.state().discussMessageToggle) );
-		messageCloud.setVisibility( convertVisibility(app.state().cloudMessageToggle) );
-		
-		// restore prompt message if device is rotated
-		prompt.setText( app.state().currentPrompt );
-		
-		// restore chat window and scroll to the newest message if device is rotated
-		chatWindow.setText( app.state().currentChatWindow );
 	}
 }

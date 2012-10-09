@@ -47,4 +47,6 @@ public class NGlobals {
     	SWARM,
     	SETTINGS
     }
+    
+    public static int numChatLines = 15;
 }
