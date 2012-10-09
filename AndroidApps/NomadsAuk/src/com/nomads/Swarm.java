@@ -104,7 +104,7 @@ public class Swarm extends Activity {
 
 		// initialize UI
 		setContentView(R.layout.swarm);
-//		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
+		chatScrollView = (ScrollView) findViewById(R.id.chat_ScrollView);
 		chatWindow = (TextView) findViewById(R.id.chatWindow);
 		chatWindow.setMovementMethod(new ScrollingMovementMethod());
 		chatWindow.getParent().requestDisallowInterceptTouchEvent(true);
@@ -813,8 +813,7 @@ public class Swarm extends Activity {
 			// get saved chat window from NomadsApp.appState
 			chatWindow.setText( app.state().currentChatWindow );
 				
-			// no longer needed, revise xml file
-//			scrollText();
+			scrollText();
 		}
 	}
 	
@@ -844,16 +843,16 @@ public class Swarm extends Activity {
 	}
 	
 	// scroll the textview to view latest messages
-//	private void scrollText () {
-////		Log.d("Swarm", "scrollText()");
-//		
-//	    chatScrollView.post(new Runnable() {
-//	        public void run() {
-//	            chatScrollView.fullScroll(View.FOCUS_DOWN);
-//	        }
-//	    });
-//
-//	}
+	private void scrollText () {
+//		Log.d("Swarm", "scrollText()");
+		
+	    chatScrollView.post(new Runnable() {
+	        public void run() {
+	            chatScrollView.fullScroll(View.FOCUS_DOWN);
+	        }
+	    });
+
+	}
 	
 	int convertVisibility (boolean _b) {
 		int vis = 0;

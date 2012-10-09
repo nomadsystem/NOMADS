@@ -91,7 +91,28 @@
 	    android:singleLine="true"/>
 	
 <!-- chat display -->
-    <com.nomads.TextViewNoTouch
+	<com.nomads.ScrollViewNoTouch
+        android:id="@+id/chat_ScrollView"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:layout_below="@id/prompt"
+	    android:layout_above="@id/settingsLinearLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="50dp"
+        android:paddingTop="65dp"
+        android:layout_marginRight="50dp">
+	    <TextView
+	        android:id="@+id/chatWindow"
+	        style="@style/def"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:scrollbars="vertical"
+	        android:focusableInTouchMode="false" />
+    </com.nomads.ScrollViewNoTouch>
+
+
+<!--     <com.nomads.TextViewNoTouch
         android:id="@+id/chatWindow"
         style="@style/def"
         android:layout_width="fill_parent" 
@@ -101,7 +122,7 @@
         android:paddingTop="65dp"
         android:layout_marginRight="50dp"
         android:focusableInTouchMode="false">
-    </com.nomads.TextViewNoTouch>
+    </com.nomads.TextViewNoTouch> -->
 
 <!--     <Button
         android:id="@+id/buttonAudioTest1"
