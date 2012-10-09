@@ -791,7 +791,7 @@ public class Swarm extends Activity {
 	
 	// handles discuss messages received from server
 	private void appendText(String _text) {
-		Log.d("Swarm", "Discuss message received: " + _text);
+//		Log.d("Swarm", "Discuss message received: " + _text);
 		String tempString = "";
 		if (chatWindow != null) {
 			for (int i=0; i<numChatLines-1; i++) {
@@ -875,5 +875,7 @@ public class Swarm extends Activity {
 		
 		// restore chat window and scroll to the newest message if device is rotated
 		chatWindow.setText( app.state().currentChatWindow );
+		
+		scrollText();
 	}
 }
