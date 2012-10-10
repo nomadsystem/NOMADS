@@ -23,6 +23,7 @@ public class NCommand {
     public static byte SEND_SPRITE_THREAD_XY = 20;  // SoundSwarm
     public static byte SEND_SPRITE_XY = 21;  // SoundSwarm
     public static byte SET_SYNTH_VOLUME = 22;
+
     
     public static byte SET_CLOUD_SOUND_STATUS = 23;
     public static byte SET_CLOUD_SOUND_VOLUME = 24;
@@ -30,6 +31,7 @@ public class NCommand {
     public static byte SET_POINTER_TONE_VOLUME = 26;
     public static byte SEND_CACHED_DISCUSS_STRING = 27;
 
+    public static byte DELETE_SPRITE = 99;
 
     
     public static byte SEND_PROMPT_ON = 30;
