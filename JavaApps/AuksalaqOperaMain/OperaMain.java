@@ -49,7 +49,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     int     MAX_THREADS = 100000;
     int oscNum[];
-    Boolean            isOsc[];
+    int tOscNum[];
+    Boolean            oscCheck[];
     LineOut            lineOut;
     int                lineOutType;
     BusReader          myBusReader;
@@ -121,6 +122,24 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     Sprite sprites[];
 
+    Sprite tSprite;
+
+    public synchronized Boolean isOsc(int i) {
+	return oscCheck[i];
+    }
+
+    public synchronized void deleteOsc(int i) {
+	oscCheck[i] = false;
+    }
+
+    public synchronized void deleteSprite(int i) {
+	sprites[i] = null;
+    }
+
+    public synchronized Sprite getSprite(int i) {
+	return sprites[i];
+    }
+
     //  static final double MAX_MOD_DEPTH = 500.0;
 
     public class HistoElt {
@@ -179,6 +198,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     int curCell;
     int cellCtr;
     int cellSlots[];
+
+    Thread runner;
 
     public static void main(String args[])
     {
@@ -268,7 +289,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	pointerColors[6] = new Color(255, 255, 255, alpha);
 	pointerColors[7] = new Color(255, 255, 255, alpha);
     }
-
 
     public void init()
     {  	
@@ -426,8 +446,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	addMouseMotionListener(this);
 
 	sprites = new Sprite[MAX_THREADS];
-	isOsc = new Boolean[MAX_THREADS];
+	oscCheck = new Boolean[MAX_THREADS];
 	oscNum = new int[MAX_THREADS];
+	tOscNum = new int[MAX_THREADS];
+
 	data  = new double[MAX_THREADS][];
 
 	for (i=0;i<numChatLines;i++) {
@@ -435,7 +457,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	}
 
 	for (i=0;i<MAX_THREADS;i++) {
-	    isOsc[i] = false;
+	    oscCheck[i] = false;
 	}
 
 	try
@@ -476,8 +498,31 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	d[0] = 0;
 	operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	repaint();
+	redraw();
     }	
+
+    public void deleteSynth(int threadNum) {
+
+	deleteSprite(threadNum);
+	// sprites[threadNum] = null;
+	deleteOsc(threadNum);
+	// oscCheck[threadNum] = false;
+	envPlayer[threadNum].stop();
+	int j=0;
+
+	for (int i=0;i<numOscs;i++) {
+	    int tNum = 	oscNum[i];
+	    if (sprites[tNum] != null) {
+		tOscNum[j] = oscNum[i];
+		j++;
+	    }
+	}
+
+	numOscs--;
+	for (int i=0;i<numOscs;i++) {
+	    oscNum[i] = tOscNum[i];
+	}
+    }
 
     public void makeSynth(int threadNum) {
 
@@ -487,7 +532,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	randStartFreq = new Random();
 	int tStartFreq = randStartFreq.nextInt(8);
 	NGlobals.cPrint("tstartFreq = " + tStartFreq);
-	if (!isOsc[threadNum]) {
+
+
+	if (!isOsc(threadNum)) {
 
 	    sprites[threadNum] = new Sprite();
 	    sprites[threadNum].x = width / 2 - 20;
@@ -502,8 +549,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    myNoiseSwarm[threadNum] = new NoiseSwarm();
-	    envPlayer[threadNum] = new EnvelopePlayer();
+	    if (myNoiseSwarm[threadNum] == null) {
+		myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    }
+	    if (envPlayer[threadNum] == null) {
+		envPlayer[threadNum] = new EnvelopePlayer();
+	    }
 
 	    for (int i=0;i<numOscs;i++) {
 		tNum = oscNum[i];
@@ -522,7 +573,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    data[threadNum][1] = (startFreq[tStartFreq]); //frequency
 	    NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
 
-	    envData[threadNum] = new SynthEnvelope( 1 );
+	    if (envData[threadNum] == null) {
+		envData[threadNum] = new SynthEnvelope( 1 );
+	    }
 	    envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
 
 	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
@@ -534,7 +587,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    envPlayer[threadNum].start();
 	    myNoiseSwarm[threadNum].start();
 	    myBusWriter[threadNum].start();
-	    isOsc[threadNum] = true;
+	    oscCheck[threadNum] = true;
 	    envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
 
 	}
@@ -613,7 +666,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    my = new_my;
 
 
-	    repaint();
+	    redraw();
 	    e.consume();
 	}
     }
@@ -650,30 +703,39 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd);
 	NGlobals.cPrint("...");
 
+	if (incAppID == NAppID.SERVER) {
+	    if (grain.command == NCommand.DELETE_SPRITE) {
+		THREAD_ID = grain.iArray[0];
+		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
+		deleteSynth(THREAD_ID);
+	    }
+	    
+	}
+
 
 	// CONDUCTOR PANEL ================================================================================
 
-	if (incAppID == NAppID.CONDUCTOR_PANEL) {
+	else if (incAppID == NAppID.CONDUCTOR_PANEL) {
 
 
 	    if (incCmd == NCommand.SET_DISCUSS_ALPHA) {
 		chatA = grain.iArray[0];
 		setChatColors(chatA);
 		NGlobals.cPrint("Setting ChA to " + chatA);
-		repaint();
+		redraw();
 	    }
 
 	    else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
 		cloudA = grain.iArray[0];;
 		setCloudColors(cloudA);
 		NGlobals.cPrint("Setting ClA to " + cloudA);
-		repaint();
+		redraw();
 	    }
 	    else if (incCmd == NCommand.SET_POINTER_ALPHA) {
 		pointerA = grain.iArray[0];;
 		setPointerColors(pointerA);
 		NGlobals.cPrint("Setting PtA to " + pointerA);
-		repaint();
+		redraw();
 	    }
 	    else if (incCmd == NCommand.SET_CLOUD_DISPLAY_STATUS) {  // Cloud reset
 		if(grain.bArray[0] == 0) {
@@ -684,7 +746,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    //     histoGram.remove(i);
 		    // }
 		    NGlobals.cPrint("Resetting cloud...\n");
-		    repaint();
+		    redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_DISCUSS_DISPLAY_STATUS) {  // Discuss reset
@@ -697,7 +759,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatYLoc = height-chatSpace;
 		    chatXLoc = 20;
 		    NGlobals.cPrint("Resetting discuss...\n");
-		    repaint();
+		    redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
@@ -780,11 +842,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		double myH;		
 
 
-		if (isOsc[THREAD_ID]) {
+		if (isOsc(THREAD_ID)) {
 		    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
 
-		    sprites[THREAD_ID].x = x;
-		    sprites[THREAD_ID].y = y;
+		    tSprite = getSprite(THREAD_ID);
+
+		    tSprite.x = x;
+		    tSprite.y = y;
 
 		    if (x >= origX)
 			myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
@@ -820,9 +884,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    envPlayer[THREAD_ID].envelopePort.clear();
 		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-		    repaint();
+		    redraw();
 		}
 	    }
+
 	}
 
 	// ========= Pointer (Java based) ============================================
@@ -888,11 +953,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    double myH;		
 
 
-		    if (isOsc[THREAD_ID]) {
+		    if (isOsc(THREAD_ID)) {
 			NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
 
-			sprites[THREAD_ID].x = x;
-			sprites[THREAD_ID].y = y;
+			tSprite = getSprite(THREAD_ID);
+
+			tSprite.x = x;
+			tSprite.y = y;
 
 			if (x >= origX)
 			    myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
@@ -929,7 +996,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
 			//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
-			repaint();
+			redraw();
 		    }
 		}
 		else {
@@ -1219,7 +1286,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		numPasses++;
 		NGlobals.cPrint("...");
 		NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-		repaint();
+		redraw();
 	    }
 	}
 	// END OC_CLOUD ------------------------------------------------------------------------------------
@@ -1234,7 +1301,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatLines[i] = chatLines[i-1];
 		}
 		chatLines[0] = text;
-		repaint();
+		redraw();
 	    }
 	}
 
@@ -1292,26 +1359,42 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     // DT 6/30/10:  not sure we need these anymore
 
     public void start() {
-
+	runner = new Thread(this);
+	runner.start();
     }
 
     public void run () {
-	if (i == 1) {
-	} 
+	NGlobals.cPrint("I'm running!");
+	while (true) {
+	    try {
+		repaint();
+		runner.sleep(40);
+	    }
+	    catch (InterruptedException ie) {}
+	}
+
+
     }
 
     public void paint(Graphics g) {
+	super.paint(g);
+	redraw();
+	g.drawImage(offScreen, 0, 0, width, height, this);
+	// NGlobals.cPrint("painting...");
+    }
+
+    public synchronized void redraw() {
+
 	int tx, ty, r,gr,b,a;
 	Color tc;
 	int ksize = 7;
 	int ssize = 5;
 
-
 	int len1,len2;
 	//	g.dispose();
 	//setBackground(Color.black);
 	//g.setColor(Color.black);
-	super.paint(g);
+
 	//setBackground(Color.black);
 	// g.setColor(Color.black); //STK here's where to change the background color
 
@@ -1341,12 +1424,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	for (int i=0;i<numOscs;i++) {
 	    threadNum = oscNum[i];
-	    tx = sprites[threadNum].x;
-	    ty = sprites[threadNum].y;
+	    
+	    tSprite = getSprite(threadNum);
 
-	    r = sprites[threadNum].r;
-	    gr = sprites[threadNum].g;
-	    b = sprites[threadNum].b;
+	    tx = tSprite.x;
+	    ty = tSprite.y;
+
+	    r = tSprite.r;
+	    gr = tSprite.g;
+	    b = tSprite.b;
 	    a = pointerA;
 	    tc = new Color(r,gr,b,a);
 
@@ -1356,15 +1442,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		len1 = 0;
 		if (i > 0) {
 		    int tt1 = oscNum[i-1];
-		    int x2 = sprites[tt1].x;
-		    int y2 = sprites[tt1].y;
+		    tSprite = getSprite(tt1);
+		    int x2 = tSprite.x;
+		    int y2 = tSprite.y;
 		    // len1 = sqrt(abs(tx-x2)+abs(ty-y2));	
 		    offScreenGrp.drawLine(tx,ty,x2,y2);
 		    len2 = 0;
 		    if ((numOscs > 2) && (i > 1)) {
 			tt1 = oscNum[i-2];
-			x2 = sprites[tt1].x;
-			y2 = sprites[tt1].y;
+			x2 = tSprite.x;
+			y2 = tSprite.y;
 			// len2 = sqrt(abs(tx-x2)+abs(ty-y2));
 			offScreenGrp.drawLine(tx,ty,x2,y2);
 		    }
@@ -1424,7 +1511,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    chatYLoc -= chatSpace;
 	}
 
-	g.drawImage(offScreen, 0, 0, width, height, this);
+
 
 
     }
