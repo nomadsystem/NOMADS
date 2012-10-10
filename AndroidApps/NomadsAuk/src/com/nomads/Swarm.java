@@ -64,9 +64,7 @@ public class Swarm extends Activity {
 	private int dropletsOffset = 4000;
 	private String[] tonesFiles, dropletsFiles, cloudFiles;
 	private String currentPrompt;
-//	private String currentChatWindow;
-//	private int numChatLines = 30;
-	private String[] currentChatWindow = new String[NGlobals.numChatLines];
+//	private String[] currentChatWindow = new String[NGlobals.numChatLines];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -136,7 +134,7 @@ public class Swarm extends Activity {
 		
 		// request audio focus
 		if (app.requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-//			Log.d("Swarm", "onResume(): audio focus aquired.");
+//			Log.d("Swarm", "onResume(): audio focus acquired.");
 		}
 
 		// create array of media players
@@ -263,6 +261,8 @@ public class Swarm extends Activity {
 				}
 			} else if (grain.command == NCommandAuk.SET_DISCUSS_DISPLAY_STATUS) {
 				if (grain.bArray[0] == 0) {
+					// reset currentChatWindow to empty
+					app.resetChatWindow();
 					chatWindow.setText( "" );
 				}
 			}
@@ -815,16 +815,16 @@ public class Swarm extends Activity {
 		Log.d("Swarm", "Discuss message received: " + _text);
 		
 		// save current chatWindow text in case of device rotation ( see onResume() below )
-		System.arraycopy(app.state().currentChatWindow, 0, currentChatWindow, 0, NGlobals.numChatLines);
+//		System.arraycopy(app.state().currentChatWindow, 0, currentChatWindow, 0, NGlobals.numChatLines);
 //		String tempString = "";
 		if (chatWindow != null) {
 			for (int i=0; i<NGlobals.numChatLines-1; i++) {
-				currentChatWindow[i] = currentChatWindow[i+1];
+				app.state().currentChatWindow[i] = app.state().currentChatWindow[i+1];
 			}
-			currentChatWindow[NGlobals.numChatLines-1] = _text;
+			app.state().currentChatWindow[NGlobals.numChatLines-1] = _text;
 			
 			// save current chatWindow text in case of device rotation ( see onResume() below )
-			System.arraycopy(currentChatWindow, 0, app.state().currentChatWindow, 0, NGlobals.numChatLines);
+//			System.arraycopy(currentChatWindow, 0, app.state().currentChatWindow, 0, NGlobals.numChatLines);
 			
 			// update chat window & scroll
 			updateDisplay();

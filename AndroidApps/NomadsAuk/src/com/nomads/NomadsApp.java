@@ -72,7 +72,9 @@ public class NomadsApp extends Application {
 		am.setStreamVolume(AudioManager.STREAM_MUSIC,
 				am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
 			    AudioManager.FLAG_SHOW_UI);
-
+		
+		// initialize currentChatWindow to empty
+		resetChatWindow();
 		
 		// initialize xy coordinates in case of sound before any touches
 		xy = new float[2];
@@ -86,6 +88,12 @@ public class NomadsApp extends Application {
 	// ========================================================
 	// Getters / Setters
 	// ========================================================
+	
+	public void resetChatWindow() {
+		for (int i=0; i<NGlobals.numChatLines; i++) {
+			appState.currentChatWindow[i] = "";
+		}
+	}
 	
 	public AudioManager getAudioManager () {
 		return am;
@@ -110,6 +118,8 @@ public class NomadsApp extends Application {
 	public void setConnectionStatus(boolean _connected) {
 		connectionStatus = _connected;
 		if (connectionStatus) {
+			// reset currentChatWindow to empty
+			resetChatWindow();
 			startThread();
 		}
 	}
@@ -355,11 +365,13 @@ public class NomadsApp extends Application {
 
 	@Override
 	public void onLowMemory() {
+//		Log.d("NomadsApp", "onLowMemory() called");
 		super.onLowMemory();
 	}
 
 	@Override
 	public void onTerminate() {
+//		Log.d("NomadsApp", "onTerminate() called");
 		super.onTerminate();
 	}
 
