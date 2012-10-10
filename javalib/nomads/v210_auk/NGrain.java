@@ -56,44 +56,45 @@ public class NGrain {
 	}
 
 	public void print() {
-		NGlobals.lPrint("NGrain -> print()");
-		NGlobals.lPrint("appID =" + appID);
-		NGlobals.lPrint("commd =" + command);
-		NGlobals.lPrint("dataType =" + dataType);
-		NGlobals.lPrint("dLen  =" + dataLen);
+		System.out.println("LOG: " );
+		//		System.out.println("NGrain -> print()");
+		System.out.println("appID =" + appID);
+		System.out.println("commd =" + command);
+		System.out.println("dataType =" + dataType);
+		System.out.println("dLen  =" + dataLen);
 
 		if (dataType == NDataType.BYTE) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("BYTE: " + (char)bArray[i]);
+			    System.out.println("BYTE: " + (char)bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.CHAR) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("CHAR: " + (char)bArray[i]);
+			    System.out.println("CHAR: " + (char)bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.UINT8) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("UINT8: " + bArray[i]);
+			    System.out.println("UINT8: " + bArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.INT32) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("INT32: " + iArray[i]);
+			    System.out.println("INT32: " + iArray[i]);
 			}
 		} 
 
 		else if (dataType == NDataType.FLOAT32) {
 			for (int i=0;i<dataLen;i++) {
-			    NGlobals.lPrint("FLOAT32: " + fArray[i]);
+			    System.out.println("FLOAT32: " + fArray[i]);
 			}
 		} 
 
 		else {
-		    NGlobals.lPrint("NGRAIN:  UNKNOWN DATA TYPE\n");
+		    System.out.println("NGRAIN:  UNKNOWN DATA TYPE\n");
 		}
 
 	}
