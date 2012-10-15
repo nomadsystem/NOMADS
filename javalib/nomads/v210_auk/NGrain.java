@@ -18,12 +18,12 @@ public class NGrain {
 		dataType = dT;
 		dataLen = dL;
 		bArray = bA;
-		    NGlobals.lPrint("creating new NGrain");
-		    NGlobals.lPrint("appID =" + appID);
-		    NGlobals.lPrint("commd =" + command);
-		    NGlobals.lPrint("dataType =" + dataType);
-		    NGlobals.lPrint("dLen  =" + dataLen);
-		    NGlobals.lPrint("data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
+		NGlobals.lPrint("creating new NGrain");
+		NGlobals.lPrint("appID =" + appID);
+		NGlobals.lPrint("commd =" + command);
+		NGlobals.lPrint("dataType =" + dataType);
+		NGlobals.lPrint("dLen  =" + dataLen);
+		NGlobals.lPrint("data[] = BYTE/CHAR/UINT8Len  =" + dataLen);
 	}
 
 	public NGrain(byte a, byte c, byte dT, int dL, int[] iA) {

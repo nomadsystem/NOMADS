@@ -316,8 +316,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	cellSlots[14] = 14;
 	cellSlots[15] = 3;
 
-	startX = new int[numScreenCells];
-	startY = new int[numScreenCells];
+	startX = new int[100];
+	startY = new int[100];
 
 	imgPrefix = "http://nomads.music.virginia.edu/images/";
 
@@ -334,7 +334,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	offScreen = createImage(width,height);
 	offScreenGrp = (Graphics2D) offScreen.getGraphics();
-	backgroundIce = getImage(imgWebBase,"BackgroundDisplay1.jpg");
+	backgroundIce = getImage(imgWebBase,"BackgroundDisplay1_800x600.jpg");
 
 	// backgroundIce = getImage(imgWebBase,"NOMADSMainDisplay_5760x1200Background.jpg");
 
@@ -503,24 +503,30 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     public void deleteSynth(int threadNum) {
 
-	deleteSprite(threadNum);
-	// sprites[threadNum] = null;
-	deleteOsc(threadNum);
-	// oscCheck[threadNum] = false;
-	envPlayer[threadNum].stop();
-	int j=0;
+	if (isOsc(threadNum)) {
+		deleteSprite(threadNum);
+		// sprites[threadNum] = null;
+		deleteOsc(threadNum);
+		// oscCheck[threadNum] = false;
+		envPlayer[threadNum].stop();
+		envPlayer[threadNum].delete();
+		myNoiseSwarm[threadNum].delete();
+		
 
-	for (int i=0;i<numOscs;i++) {
-	    int tNum = 	oscNum[i];
-	    if (sprites[tNum] != null) {
-		tOscNum[j] = oscNum[i];
-		j++;
-	    }
-	}
-
-	numOscs--;
-	for (int i=0;i<numOscs;i++) {
-	    oscNum[i] = tOscNum[i];
+		int j=0;
+		
+		for (int i=0;i<numOscs;i++) {
+		    int tNum = 	oscNum[i];
+		    if (sprites[tNum] != null) {
+			tOscNum[j] = oscNum[i];
+			j++;
+		    }
+		}
+		
+		numOscs--;
+		for (int i=0;i<numOscs;i++) {
+		    oscNum[i] = tOscNum[i];
+		}
 	}
     }
 
@@ -694,7 +700,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	NGlobals.cPrint("OperaMain -> handle()");
 
 	grain = operaSand.getGrain();
-	grain.print(); //prints grain data to console
+	//grain.print(); //prints grain data to console
 
 	incAppID = grain.appID;
 	incCmd = grain.command;
@@ -1368,7 +1374,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	while (true) {
 	    try {
 		repaint();
-		runner.sleep(40);
+		runner.sleep(100);
 	    }
 	    catch (InterruptedException ie) {}
 	}
