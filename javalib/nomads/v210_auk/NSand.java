@@ -61,8 +61,7 @@ public class NSand
 
 
 	    // send data
-	    if (myGrain.dataType == NDataType.BYTE) {
-		NGlobals.lPrint("data[] = BYTE (Deprecated, use CHAR or UINT8)");
+	    if (myGrain.dataType == NDataType.CHAR) {
 		for (int i=0; i<myGrain.dataLen; i++) {
 		    streamOut.writeByte(myGrain.bArray[i]);
 		}
@@ -135,7 +134,7 @@ public class NSand
 
 	    for (int i=0; i<dLen; i++) {
 		streamOut.writeByte(bArray[i]);
-		NGlobals.lPrint("BYTE:  " + bArray[i]);
+		NGlobals.lPrint("BYTE:  " + (char)bArray[i]);
 	    }
 	}
 	catch(IOException ioe) {  
@@ -229,7 +228,6 @@ public class NSand
 		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		NGlobals.lPrint("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");
 
 	    }
 
@@ -330,12 +328,12 @@ public class NSand
 
 	    //Detect array type in Grain
 	    //Byte array
-	    if (dT == NDataType.BYTE) {
+	    if (dT == NDataType.CHAR) {
 		byte[] bA = new byte[dL];
 
 		for (int i=0; i< dL; i++) {
 		    bA[i] = streamIn.readByte();
-		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		    NGlobals.lPrint("CHAR:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
 		NGlobals.lPrint("NSand:getGrain: creating grain with BYTEs (Deprecated, use CHAR or UINT8)");

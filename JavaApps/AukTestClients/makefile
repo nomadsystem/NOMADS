@@ -5,9 +5,11 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-		OperaMain.java
+	DiscussTest.java\
+	CloudTest.java\
+	SwarmTest.java
 
-default: classes myliblink comlink jar
+default: classes myliblink comlink
 
 topliblink:
 	rm -f ./nomads
@@ -20,10 +22,6 @@ myliblink:
 comlink:
 	rm -f ./com
 	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
-
-jar:
-	rm -rf *.jar
-	jar cf OperaMain.jar *.class
 
 classes: $(CLASSES:.java=.class)
 

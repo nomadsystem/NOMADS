@@ -6,6 +6,7 @@ import nomads.v210_auk.*;
 
 public class NomadServer implements Runnable {  
     private NomadServerThread clients[] = new NomadServerThread[5000];
+
     private NomadServerThread currentClient;
     private short clientThreadNum[] = new short[100000];
 
@@ -16,6 +17,7 @@ public class NomadServer implements Runnable {
     private Thread       thread = null;
     private int clientCount = 0;
     private int IPCount = 0;
+
     private int userCount = 0;
     private int eventNum = 0;
     private static int debugLine = 0;
@@ -693,11 +695,14 @@ public class NomadServer implements Runnable {
 		clients[clientCount].start();  
 
 		NGlobals.sPrint("  Client added to lookup array at slot # " + clientCount);
+
 		clientCount++; 
 	    }
 	    catch(IOException ioe) {  
 		NGlobals.sPrint("    Error opening thread: " + ioe); 
 	    } 
+
+
 	}
 	else
 	    NGlobals.sPrint("  Client refused: maximum " + clients.length + " reached.");
