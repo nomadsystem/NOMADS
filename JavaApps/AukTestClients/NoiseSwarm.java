@@ -71,10 +71,6 @@ public class NoiseSwarm extends SynthCircuit
 		amplitude.setup(   0.0, 0.9, 0.999 );
 		myQ.setup( 0, 99, 100);
 	}
-
-    public void delete() {
-	myNoise.deleteAll();
-    }
 	
 /** Define a behavior for setStage(). This is a flexible way to do something like ON/OFF
  * control of a circuit.
