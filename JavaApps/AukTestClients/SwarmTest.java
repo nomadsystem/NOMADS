@@ -115,7 +115,7 @@ public class SwarmTest implements Runnable {
 	    try {
 		NGlobals.cPrint("SwarmTest -> NSand.send()");
 		swarmTestSand.sendGrain((byte)NAppID.JOC_POINTER, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy );
-		runner.sleep(10);
+		runner.sleep(100);
 	    }
 	    catch (InterruptedException ie) {}
 

@@ -12,6 +12,7 @@ import java.net.*;
 import java.io.*;
 import netscape.javascript.*;
 import nomads.v210_auk.*;
+import java.awt.image.BufferedImage;
 
 import com.softsynth.jsyn.*;
 import com.softsynth.jsyn.view11x.ExponentialPortFader;
@@ -21,25 +22,82 @@ import com.softsynth.jsyn.view11x.SynthScope;
 
 public class OperaMain extends Applet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 
+
+    
+
+
     private class NomadsAppThread extends Thread {
 	OperaMain client; //Replace with current class name
+	Calendar now;
+	long handleStart=0;
+	long handleEnd=1;
+	long millis=0;
+	Boolean runState=false;
+
+
+	public synchronized long getHandleStart() {
+	    return handleStart;
+	}
+	
+	public synchronized long getHandleEnd() {
+	    return handleEnd;
+	}
+	
+	public synchronized void setHandleStart(long hs) {
+	    handleStart = hs;
+	}
+	
+	public synchronized void setHandleEnd(long he) {
+	    handleEnd = he;
+	}
+
+	public synchronized void setRunState(Boolean state) {
+	    runState = state;
+	}
+
+	public synchronized Boolean getRunState() {
+	    return runState;
+	}
+
 
 	public NomadsAppThread(OperaMain _client) {
 	    client = _client;
 	}
 	public void run()    {			
 	    NGlobals.lPrint("NomadsAppThread -> run()");
-	    while (true)  {
+	    while (getRunState() == true)  {
+		now = Calendar.getInstance();
+		setHandleStart(now.getTimeInMillis());
 		client.handle();
+		client.setHandleActive(false);
+		handleEnd = now.getTimeInMillis();
+		millis = getHandleEnd()-getHandleStart();
+		// System.out.println("handle() proc time:" + millis);
 	    }
 	}
     }
 
+    private class NomadsErrCheckThread extends Thread {
+	OperaMain client; //Replace with current class name
+
+	public NomadsErrCheckThread(OperaMain _client) {
+	    client = _client;
+	}
+	public void run()    {			
+	    NGlobals.lPrint("NomadsErrCheckThread -> run()");
+	    while (true)  {
+		client.errCheck();
+	    }
+	}
+    }
+
+
     NSand operaSand;
     private NomadsAppThread nThread;
+    private NomadsErrCheckThread nECThread;
 
     int skipper = 0;
-    int maxSkip = 2;
+    int maxSkip = 1;
     Random randNum;
     int numOscs = 0;
 
@@ -109,7 +167,32 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     int activeChatLines = 0;
 
     int mx, my; // recent mouse coords
-    boolean isMouseDraggingBox = false;
+    Boolean isMouseDraggingBox = false;
+
+    Boolean handleActive = false;
+    Boolean sandRead = false;
+    Boolean connected;
+
+    public synchronized Boolean getSandRead() {
+	return sandRead;
+    }
+
+    public synchronized void setSandRead(Boolean sr) {
+	sandRead = sr;
+    }
+
+    public synchronized Boolean getHandleActive() {
+	return handleActive;
+    }
+
+    public synchronized void setHandleActive(Boolean ha) {
+	handleActive = ha;
+    }
+
+
+
+    int errFlag = 0;
+    int lastThread = 0;
 
     public class Sprite {
 	int x, y;
@@ -161,7 +244,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     int guesser,rGuess,cGuess;
 
-    Image offScreen;
+    BufferedImage offScreen;
     Graphics2D offScreenGrp;
     Image player;
 
@@ -332,9 +415,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	width = getSize().width;
 	height = getSize().height;
 
-	offScreen = createImage(width,height);
+	offScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
 	offScreenGrp = (Graphics2D) offScreen.getGraphics();
-	backgroundIce = getImage(imgWebBase,"BackgroundDisplay1_800x600.jpg");
+	backgroundIce = getImage(imgWebBase,"BackgroundDisplay1_1920x1080.jpg");
 
 	// backgroundIce = getImage(imgWebBase,"NOMADSMainDisplay_5760x1200Background.jpg");
 
@@ -462,26 +546,26 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	try
 	    {
-		Synth.startEngine(0);
+		// Synth.startEngine(0);
 
-		myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
-		envPlayer = new EnvelopePlayer[MAX_THREADS];
-		envData = new SynthEnvelope[MAX_THREADS];
-		lineOut  = new LineOut();
+		// myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
+		// envPlayer = new EnvelopePlayer[MAX_THREADS];
+		// envData = new SynthEnvelope[MAX_THREADS];
+		// lineOut  = new LineOut();
 
-		myBusReader = new BusReader();
+		// myBusReader = new BusReader();
 
-		myBusWriter = new BusWriter[MAX_THREADS];
+		// myBusWriter = new BusWriter[MAX_THREADS];
 
-		/* Synchronize Java display to make buttons appear. */
-		getParent().validate();
-		getToolkit().sync();
+		// /* Synchronize Java display to make buttons appear. */
+		// getParent().validate();
+		// getToolkit().sync();
 
-		myBusReader.output.connect(0, lineOut.input, 0 );
-		myBusReader.output.connect(0, lineOut.input, 1 );
+		// myBusReader.output.connect(0, lineOut.input, 0 );
+		// myBusReader.output.connect(0, lineOut.input, 1 );
 
-		myBusReader.start();
-		lineOut.start();
+		// myBusReader.start();
+		// lineOut.start();
 
 		//	myBusReader.output.connect(lineOut.input, 0 );
 
@@ -491,9 +575,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	}
 	operaSand = new NSand(); 
 	operaSand.connect();
+	connected = true;
 
 	nThread = new NomadsAppThread(this);
+	nThread.setRunState(true);
 	nThread.start();
+
+	nECThread = new NomadsErrCheckThread(this);
+	nECThread.start();
+
 	int d[] = new int[1];
 	d[0] = 0;
 	operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
@@ -501,16 +591,25 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	redraw();
     }	
 
+    public void deleteAllSynths() {
+	for (int i=0;i<numOscs;i++) {
+	    int tNum = 	oscNum[i];
+	    deleteSynth(tNum);
+	}
+	// numOscs = 0;
+    }
+
+
     public void deleteSynth(int threadNum) {
 
 	if (isOsc(threadNum)) {
 		deleteSprite(threadNum);
-		// sprites[threadNum] = null;
-		deleteOsc(threadNum);
+		sprites[threadNum] = null;
+		// deleteOsc(threadNum);
 		// oscCheck[threadNum] = false;
-		envPlayer[threadNum].stop();
-		envPlayer[threadNum].delete();
-		myNoiseSwarm[threadNum].delete();
+		// envPlayer[threadNum].stop();
+		// envPlayer[threadNum].delete();
+		// myNoiseSwarm[threadNum].delete();
 		
 
 		int j=0;
@@ -555,46 +654,59 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    if (myNoiseSwarm[threadNum] == null) {
-		myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    if (numOscs < 20) {
+		maxSkip = 1+(int)(numOscs/10);
 	    }
-	    if (envPlayer[threadNum] == null) {
-		envPlayer[threadNum] = new EnvelopePlayer();
+	    else if (numOscs < 40) {
+		maxSkip = 1+(int)(numOscs/5);
 	    }
-
-	    for (int i=0;i<numOscs;i++) {
-		tNum = oscNum[i];
-		tAmp = (float)2/numOscs; //default amp = 2.0
-		NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-		float tVolume = tAmp * mainVolumeFromSlider;
-		NGlobals.cPrint("Amplitude = " + tVolume);
+	    else if (numOscs < 60) {
+		maxSkip = 1+(int)(numOscs/4);
+	    }
+	    else if (numOscs < 100) {
+		maxSkip = 1+(int)(numOscs/3);
 	    }
 
-	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
+	    // if (myNoiseSwarm[threadNum] == null) {
+	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    // }
+	    // if (envPlayer[threadNum] == null) {
+	    // 	envPlayer[threadNum] = new EnvelopePlayer();
+	    // }
+
+	    // for (int i=0;i<numOscs;i++) {
+		// tNum = oscNum[i];
+		// tAmp = (float)2/numOscs; //default amp = 2.0
+		// NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		// myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+		// float tVolume = tAmp * mainVolumeFromSlider;
+		// NGlobals.cPrint("Amplitude = " + tVolume);
+			      // }
+
+	    //	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
 
 	    // define shape of envelope as an array of doubles
-	    data[threadNum] = new double[2];
-	    data[threadNum][0] = 0.1; //time point value
-	    data[threadNum][1] = (startFreq[tStartFreq]); //frequency
-	    NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
+	    // data[threadNum] = new double[2];
+	    // data[threadNum][0] = 0.1; //time point value
+	    // data[threadNum][1] = (startFreq[tStartFreq]); //frequency
+	    // NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
 
-	    if (envData[threadNum] == null) {
-		envData[threadNum] = new SynthEnvelope( 1 );
-	    }
-	    envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
+	    // if (envData[threadNum] == null) {
+	    // 	envData[threadNum] = new SynthEnvelope( 1 );
+	    // }
+	    // envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
 
-	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
+	    //	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
 
-	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
-	    myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
-	    myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
+	    //	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
+	    // myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
+	    // myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
 
-	    envPlayer[threadNum].start();
-	    myNoiseSwarm[threadNum].start();
-	    myBusWriter[threadNum].start();
+	    // envPlayer[threadNum].start();
+	    // myNoiseSwarm[threadNum].start();
+	    // myBusWriter[threadNum].start();
 	    oscCheck[threadNum] = true;
-	    envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
+	    // envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
 
 	}
 	else {
@@ -681,6 +793,79 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	paint (g);
     }
 
+
+    public void errCheck() {
+	Calendar now;
+	long mSecN=0;
+	long mSecH=0;
+	long mSecDiff=0;
+
+	try {
+
+	    if ((getHandleActive() == true) && (getSandRead() == true)) {
+
+		now = Calendar.getInstance();
+		mSecN = now.getTimeInMillis();
+		mSecH = nThread.getHandleStart();
+
+		mSecDiff = mSecN-mSecH;
+		
+		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+
+		if (mSecDiff > 100) {
+		    errFlag += 1;
+		    if (errFlag > 0) {
+			System.out.println(">>> ERROR COUNT: " + errFlag);
+		    }
+		    if ((errFlag > 3) && (connected == true)) {
+			System.out.println("######### CRITICAL ERROR");
+			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+			System.out.println(">>> halting thread ...");
+			nThread.setRunState(false);
+			NomadsErrCheckThread.sleep(500);
+			// deleteSynth(lastThread);
+			nThread = null;
+			System.out.println(">>> disconnecting ...");
+			operaSand.disconnect();
+			NomadsErrCheckThread.sleep(500);
+			operaSand = null;
+			connected = false;
+			System.out.println(">>> disconneced ...");
+			// System.out.println(">>> deleting sprites/synths ...");
+			// deleteAllSynths();
+			// System.out.println(">>> sprites/synths deleted ...");
+			System.out.println("+++++ Attempting reconnect ...");
+			NomadsErrCheckThread.sleep(500);
+			operaSand = new NSand(); 
+			operaSand.connect();
+			int d[] = new int[1];
+			d[0] = 0;
+			operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+			connected = true;
+			NomadsErrCheckThread.sleep(500);
+			System.out.println("+++ reconnected!");			
+			System.out.println("+++ attempting to restart thread ...");			
+			NomadsErrCheckThread.sleep(500);
+			nThread = new NomadsAppThread(this);
+			nThread.setRunState(true);
+			nThread.start();
+			System.out.println("+++ thread restarted!");			
+			errFlag = 0;
+			
+			now = Calendar.getInstance();
+			mSecN = now.getTimeInMillis();
+			nThread.setHandleStart(mSecN);
+
+		    }
+		}
+	    }
+	    NomadsErrCheckThread.sleep(10);
+	}
+	catch (InterruptedException ie) {}
+
+    }
+
+
     // ------------------------------------------------------------------------------------------------
     // BEGIN handle()
     // ------------------------------------------------------------------------------------------------
@@ -698,8 +883,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	NGrain grain;
 
 	NGlobals.cPrint("OperaMain -> handle()");
+	// System.out.println("handle()");
 
+	setSandRead(false);
 	grain = operaSand.getGrain();
+	setSandRead(true);
+	setHandleActive(true);
 	//grain.print(); //prints grain data to console
 
 	incAppID = grain.appID;
@@ -712,6 +901,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	if (incAppID == NAppID.SERVER) {
 	    if (grain.command == NCommand.DELETE_SPRITE) {
 		THREAD_ID = grain.iArray[0];
+
 		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
 		deleteSynth(THREAD_ID);
 	    }
@@ -769,16 +959,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		}
 	    }
 	    else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
-		tVolumeVal = (double)grain.iArray[0];
-		mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
-		for (i=0;i<numOscs;i++) {
-		    tNum = oscNum[i];
-		    tAmp = (float)2/numOscs; //default amp = 2.0
-		    NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		    myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-		    tVolume = tAmp * mainVolumeFromSlider;
-		    NGlobals.cPrint("Amplitude = " + tVolume);
-		}
+		// tVolumeVal = (double)grain.iArray[0];
+		// mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
+		// for (i=0;i<numOscs;i++) {
+		//     tNum = oscNum[i];
+		//     tAmp = (float)2/numOscs; //default amp = 2.0
+		//     NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		//     myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+		//     tVolume = tAmp * mainVolumeFromSlider;
+		//     NGlobals.cPrint("Amplitude = " + tVolume);
+		// }
 		//TO DO: Make this a log function. . .
 	    }
 
@@ -793,6 +983,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    NGlobals.cPrint("OMP: OC_POINTER\n");
 	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
 		THREAD_ID = grain.iArray[0];
+		lastThread = THREAD_ID;
 		x = grain.iArray[1];
 		y = grain.iArray[2];
 		NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
@@ -884,11 +1075,11 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			tFreq = 20.0;
 
 		    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-		    data[THREAD_ID][1] = tFreq;
+		    // data[THREAD_ID][1] = tFreq;
 		    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
-		    envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-		    envPlayer[THREAD_ID].envelopePort.clear();
-		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+		    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+		    // envPlayer[THREAD_ID].envelopePort.clear();
+		    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
 		    redraw();
 		}
@@ -995,11 +1186,11 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			    tFreq = 20.0;
 
 			NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-			data[THREAD_ID][1] = tFreq;
+			// data[THREAD_ID][1] = tFreq;
 			//	System.out.println("data[1] = " + data[THREAD_ID][1]);
-			envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-			envPlayer[THREAD_ID].envelopePort.clear();
-			envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+			// envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			// envPlayer[THREAD_ID].envelopePort.clear();
+			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
 			//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
 			redraw();
@@ -1323,8 +1514,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	//			}	 
 	//		}   
 
-
 	NGlobals.cPrint ("-------------------------------------------------[OM]\n");
+
+	setHandleActive(false);
+
     }
 
     // ------------------------------------------------------------------------------------------------

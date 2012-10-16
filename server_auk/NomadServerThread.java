@@ -96,7 +96,7 @@ public class NomadServerThread extends Thread
 			    if (tByte != 0) {
 				NGlobals.sPrint("\nTHREAD:  getGrain:  read byte:  " + tByte);
 				threadGrain = threadSand.getGrain(tByte);
-				threadGrain.print();
+				//threadGrain.print();
 				NGlobals.sPrint("THREAD:  server->handle()\n");
 				server.handle(THREAD_ID, threadGrain);
 			    }
