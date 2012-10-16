@@ -207,11 +207,13 @@ public class NomadServer implements Runnable {
 	incAppDataLen = myGrain.dataLen;
 
 	// Print out at the SERVER level
-	NGlobals.sPrint("appID: " + incAppID);
-	NGlobals.sPrint("command: " + incAppCmd);
-	NGlobals.sPrint("dataType: " + incAppDataType);
-	NGlobals.sPrint("dataLen: " + incAppDataLen);
-	myGrain.print();
+	if (false) {
+	    NGlobals.sPrint("appID: " + incAppID);
+	    NGlobals.sPrint("command: " + incAppCmd);
+	    NGlobals.sPrint("dataType: " + incAppDataType);
+	    NGlobals.sPrint("dataLen: " + incAppDataLen);
+	}
+	//myGrain.print();
 
 	// Thread admin stuff ---------------------------------------------------------------------
 
@@ -467,13 +469,13 @@ public class NomadServer implements Runnable {
 		    if (currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) {
 			if (incAppCmd == NCommand.SEND_PROMPT_ON) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
 			else if (incAppCmd == NCommand.SEND_PROMPT_OFF) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -487,7 +489,7 @@ public class NomadServer implements Runnable {
 			    (incAppCmd != NCommand.SET_POINTER_ALPHA)) {
 
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -498,7 +500,7 @@ public class NomadServer implements Runnable {
 			if ((incAppCmd != NCommand.SET_DROPLET_VOLUME) && 
 			    (incAppCmd != NCommand.SET_DROPLET_STATUS)) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -527,7 +529,7 @@ public class NomadServer implements Runnable {
 			// send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -535,7 +537,7 @@ public class NomadServer implements Runnable {
 			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			else if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -557,7 +559,7 @@ public class NomadServer implements Runnable {
 			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    myGrain.print();
+			    //myGrain.print();
 			    // Write the data out
 			    currentClient.threadSand.sendGrain(myGrain);
 			}
@@ -575,7 +577,7 @@ public class NomadServer implements Runnable {
 		    for (int c = 0; c < clientCount; c++) {
 
 			currentClient = clients[c];
-			NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+			// NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
 
 
 			// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -606,7 +608,7 @@ public class NomadServer implements Runnable {
 		    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
 
 
-		    myGrain.print();
+		    //myGrain.print();
 		    // Write the data out
 		    currentClient.threadSand.sendGrain(myGrain);
 
@@ -636,7 +638,7 @@ public class NomadServer implements Runnable {
 	    
 	    
 	    // send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
-	    if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+	    if ((currentClient.getAppID() == NAppID.OPERA_MAIN) && (currentClient.getThreadID() != THREAD_ID)) {
 		NGlobals.sPrint("Sending DELETE_SPRITE ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
 		
 		// CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y

@@ -412,13 +412,18 @@ public class NSand
 	return grain;
     }
 
-    //Connect, opens the socket, creates the streams
     public void connect() {
 	connectSocket();
 	openSocketStreams();
-	//client.start();
     }
 
+
+    public void disconnect() {
+	closeSocketStreams();
+	disConnectSocket();
+    }
+
+    // These are called by the two above
 
     public void connectSocket()
     {  
@@ -432,6 +437,19 @@ public class NSand
 	}
     }
 
+    public void disConnectSocket()
+    {  
+	System.out.println("Disconnecting Please wait ...");
+	try {  
+	    socket.close();
+	    System.out.println("Disconnected");
+	}
+	catch(IOException ioe) {  
+	    System.out.println("socket discconnect exception: ");
+	}
+    }
+
+
     public void openSocketStreams()
     {  
 	try {
@@ -444,7 +462,7 @@ public class NSand
     }
 
 
-    public void close()
+    public void closeSocketStreams()
     {  
 	try {
 	    if (streamOut != null)  streamOut.close();
@@ -453,7 +471,12 @@ public class NSand
 	catch(IOException ioe) {
 	    System.out.println("Error closing...");
 	}
+    }
 
+
+    public void close()
+    {  
+	closeSocketStreams();
     }
 
 
