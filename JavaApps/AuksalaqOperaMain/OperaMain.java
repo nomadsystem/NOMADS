@@ -819,7 +819,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		if (mSecDiff > 300) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
-			System.out.println(">>> ERROR COUNT: " + errFlag);
+			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
 		    }
 		    if ((errFlag > 3) && (connected == true)) {
 			System.out.println("######### CRITICAL ERROR");
@@ -862,8 +862,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		    }
 		}
-		else {
+		else if (errFlag > 0) {
 		    errFlag--;
+		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
 		}
 	    }
 	    NomadsErrCheckThread.sleep(10);
@@ -1666,6 +1667,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    len2 = 0;
 		    if ((numOscs > 2) && (i > 1)) {
 			tt1 = oscNum[i-2];
+			tSprite = getSprite(tt1);
 			x2 = tSprite.x;
 			y2 = tSprite.y;
 			// len2 = sqrt(abs(tx-x2)+abs(ty-y2));
@@ -1680,6 +1682,17 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    // 	}
 	    // }
 
+
+	    r -= randNum.nextInt(60);
+	    gr -= randNum.nextInt(60);
+	    b -= randNum.nextInt(60);
+
+
+	    // ssize = 4+randNum.nextInt(2);
+
+	    tc = new Color(r,gr,b,a);
+
+	    offScreenGrp.setColor(tc);
 
 	    txpoints[0] = tx-(int)(ssize/2);
 	    txpoints[1] = tx+(int)(ssize/2);

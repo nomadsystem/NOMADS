@@ -224,7 +224,7 @@ public class OC_Pointer extends JPanel implements Runnable
 	    offScreenGrp.setColor(Color.black);
 	    offScreenGrp.drawImage(backgroundIce, 0, 0, width, height, this);
 	    //    g.fillRect(0,0,width,height);
-	    int ksize = 5;
+	    int ksize = 7;
 	    int xpoints[] = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
 	    int ypoints[] = {y+(int)(ksize/2), y-(int)(ksize/2), y+(int)(ksize/2), y+(int)(ksize*1.5)};
 	    
