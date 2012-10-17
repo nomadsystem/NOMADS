@@ -173,7 +173,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Boolean sandRead = false;
     Boolean connected;
 
-    int MAX_OSCS = 20;
+    int MAX_OSCS = 50;
 
     public synchronized Boolean getSandRead() {
 	return sandRead;
