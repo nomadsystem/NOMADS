@@ -5,17 +5,24 @@ import java.lang.Object.*;
 import nomads.v210_auk.*;
 
 public class NomadServer implements Runnable {  
-    private NomadServerThread clients[] = new NomadServerThread[5000];
 
+    int MAX_THREADS = 5000;
+    int MAX_DISP_THR = 500;
+    int MAX_THREAD_IDS = 100000;
+    int MAX_IPS = 2000;
+
+    private NomadServerThread clientList[] = new NomadServerThread[MAX_THREADS];
+    private NomadServerThread mainDisplayClientList[] = new NomadServerThread[MAX_DISP_THR];
     private NomadServerThread currentClient;
-    private short clientThreadNum[] = new short[100000];
+    private short clientNumFromThreadID[] = new short[MAX_THREAD_IDS];
 
-    private String IPsLoggedIn[] = new String[1000];
-    private String users[] = new String[1000];
+    private String IPsLoggedIn[] = new String[MAX_IPS];
+    private String users[] = new String[MAX_IPS];
 
     private ServerSocket server = null;
     private Thread       thread = null;
     private int clientCount = 0;
+    private int mainDisplayClientCount = 0;
     private int IPCount = 0;
 
     private int userCount = 0;
@@ -63,13 +70,9 @@ public class NomadServer implements Runnable {
 	idList[NAppID.OPERA_CLIENT] = new String("OPERA_CLIENT");
 	idList[NAppID.OC_DISCUSS] = new String("OC_DISCUSS");
 	idList[NAppID.OC_CLOUD] = new String("OC_CLOUD");
-	idList[NAppID.OC_CLOUD] = new String("OC_LOGIN");
-	idList[NAppID.OC_CLOUD] = new String("OC_POINTER");
-	idList[NAppID.OC_CLOUD] = new String("DISCUSS_TOPIC");
-	idList[NAppID.OC_CLOUD] = new String("CLOUD_TOPIC");
-	idList[NAppID.OC_CLOUD] = new String("MONITOR");
-	idList[NAppID.OC_CLOUD] = new String("CENSOR");
-	idList[NAppID.OC_CLOUD] = new String("DEBUG");
+	idList[NAppID.OC_LOGIN] = new String("OC_LOGIN");
+	idList[NAppID.OC_POINTER] = new String("OC_POINTER");
+	idList[NAppID.JOC_POINTER] = new String("OC_POINTER");
 
 	// Print out the id as a string
 	if (idList[id] != null) {
@@ -84,10 +87,17 @@ public class NomadServer implements Runnable {
 
 
     public NomadServer(int port) {  	    
-	for (int i=0;i<100000;i++) {
-	    clientThreadNum[i] = -1;
+	for (int i=0;i<MAX_THREAD_IDS;i++) {
+	    clientNumFromThreadID[i] = -1;
 	}
-	for (int i=0;i<1000;i++) {
+	for (int i=0;i<MAX_DISP_THR;i++) {
+	    mainDisplayClientList[i] = null;
+	}
+	for (int i=0;i<MAX_THREADS;i++) {
+	    clientList[i] = null;
+	}
+
+	for (int i=0;i<MAX_IPS;i++) {
 	    IPsLoggedIn[i] = null;
 	    users[i] = null;
 	}
@@ -183,6 +193,8 @@ public class NomadServer implements Runnable {
 	int cIPNum = -1;
 	int nBlocks; //number of "blocks" of data
 	int tCNum;
+	int tMDNum;
+
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];
 
@@ -206,6 +218,8 @@ public class NomadServer implements Runnable {
 	incAppDataType = myGrain.dataType;
 	incAppDataLen = myGrain.dataLen;
 
+	NGlobals.sPrint("appID: " + incAppID);
+
 	// Print out at the SERVER level
 	if (false) {
 	    NGlobals.sPrint("appID: " + incAppID);
@@ -218,7 +232,7 @@ public class NomadServer implements Runnable {
 	// Thread admin stuff ---------------------------------------------------------------------
 
 	// Get client number of inc client
-	tCNum = clientThreadNum[THREAD_ID];
+	tCNum = clientNumFromThreadID[THREAD_ID];
 
 	if (tCNum < 0) {
 	    NGlobals.sPrint("   ERROR:  client thread not found.");
@@ -227,7 +241,7 @@ public class NomadServer implements Runnable {
 	    return;
 	}
 
-	currentClient = clients[tCNum];
+	currentClient = clientList[tCNum];
 
 	// Login and THREAD registration ----------------------------------------------------------
 
@@ -236,6 +250,7 @@ public class NomadServer implements Runnable {
 	//
 	//    otherwise KICK if not registering as the very first thing
 	//
+
 	if (currentClient.getAppID() == -1) {
 	    if (incAppCmd != NCommand.REGISTER) {
 		NGlobals.sPrint("ERROR:  you must REGISTER your app first before sending data\n");
@@ -246,17 +261,28 @@ public class NomadServer implements Runnable {
 		NGlobals.sPrint("===== REGISTERING (ONE TIME) =====");
 		NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
 		currentClient.setAppID(incAppID);
+		if (incAppID == NAppID.OPERA_MAIN) {
+
+		    if (mainDisplayClientCount < mainDisplayClientList.length) {  
+			NGlobals.sPrint("  ################ Adding client to OPERA_MAIN cache @ " + mainDisplayClientCount);
+			mainDisplayClientList[mainDisplayClientCount] = currentClient;
+			mainDisplayClientCount++; 
+		    }
+		    else {
+			NGlobals.sPrint("  ERROR:  current client > MAX_DISPLAY_THREADS, client NOT added to DISPLAY cache");
+		    }
+		}
 	    }
 	}
-
+	
 	// 2: INIT =================================================================================================================
-
+	
 	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
 	IP = currentClient.getIP();   	// Grab IP (more for data logging)
 
 	// INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 
-	currentClient = clients[tCNum];
+	currentClient = clientList[tCNum];
 	if ((currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) && (currentClient.getButtonInitStatus() == 0)) {
 
 	    NGlobals.lPrint("  Sending button states to CONDUCTOR PANEL from SERVER.");
@@ -312,7 +338,7 @@ public class NomadServer implements Runnable {
 			
 	    currentClient.setButtonInitStatus((byte)1);
 	    // tempString = new String("CNT:" + clientCount);
-	    // clients[cNum].send((byte)NAppID.MONITOR, tempString);
+	    // clientList[cNum].send((byte)NAppID.MONITOR, tempString);
 	    // NGlobals.lPrint("  Sending " + tempString + " to MONITOR client [" + cNum + "] from SERVER");
 
 			
@@ -320,7 +346,7 @@ public class NomadServer implements Runnable {
 	}
 
 	// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
-	currentClient = clients[tCNum];
+	currentClient = clientList[tCNum];
 	if ((incAppID == NAppID.OPERA_CLIENT) && (currentClient.getButtonInitStatus() == 0)) {
 	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
 	    byte d[] = new byte[1];
@@ -381,7 +407,16 @@ public class NomadServer implements Runnable {
 	}
 
 	// INIT for OPERA_MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
-	currentClient = clients[tCNum];
+
+	// HACKISH - sends message back to server, mimicking a send from the CONDUCTOR_PANEL
+	// effectively getting the message back from the server as if the CP had sent it
+
+	// TOP
+
+	// FIX:  just have the cached synth volume sent when an OM connects (along with the other attributes like alpha, etc.. perhaps even cached text and cloud)
+
+	currentClient = clientList[tCNum];
+	
 	if (incAppID == NAppID.OPERA_MAIN) {
 	    NGlobals.lPrint("  Sending button states to OPERA MAIN from SERVER / CONDUCTOR_PANEL.");
 	    int ix[] = new int[1];
@@ -396,7 +431,7 @@ public class NomadServer implements Runnable {
 	//
 	//    each    if (incAppID ==   )    block below corresponds to a single app's input data GRAIN
 	//    depending on who is sending us data
-	//    we cycle through all (or a subset of) clients and send data out
+	//    we cycle through all (or a subset of) clientList and send data out
 	//
 	// ====================================================================================================W
 
@@ -413,8 +448,11 @@ public class NomadServer implements Runnable {
 
 	    // incoming appID = CONDUCTOR_PANEL = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
+	    NGlobals.dtPrint("   incAppID == " + printID((byte)currentClient.getAppID()));
+
+
 	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
-		// scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		// scroll through all clientList // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
 
 		// Store various FEATURE STATES - - - - - - - - - - - - - - - - -
 
@@ -463,7 +501,7 @@ public class NomadServer implements Runnable {
 
 		for (int c = 0; c < clientCount; c++) {
 		    // Get the client off the master list
-		    currentClient = clients[c];
+		    currentClient = clientList[c];
 
 
 		    if (currentClient.getAppID() == NAppID.CONDUCTOR_PANEL) {
@@ -511,7 +549,7 @@ public class NomadServer implements Runnable {
 
 	    // incoming appID = OC_DISCUSS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-	    if (incAppID == NAppID.OC_DISCUSS) {
+	    else if (incAppID == NAppID.OC_DISCUSS) {
 
 		if (incAppCmd == NCommand.SEND_MESSAGE && (_DISCUSS_STATUS == 1)) {
 			    	
@@ -521,10 +559,10 @@ public class NomadServer implements Runnable {
 			discussStringCached.remove(0);
 		    }
 			    	
-		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    // scroll through all clientList // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
 		    for (int c = 0; c < clientCount; c++) {
 			// Get the client off the master list
-			currentClient = clients[c];
+			currentClient = clientList[c];
 
 			// send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
@@ -548,52 +586,71 @@ public class NomadServer implements Runnable {
 
 	    // incoming appID = OC_CLOUD = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-	    if (incAppID == NAppID.OC_CLOUD && (_CLOUD_STATUS == 1)) {
+	    else if (incAppID == NAppID.OC_CLOUD && (_CLOUD_STATUS == 1)) {
 
 		if (incAppCmd == NCommand.SEND_MESSAGE) {
-		    // scroll through all clients // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
-		    for (int c = 0; c < clientCount; c++) {
+
+		    // (see below)
+		    // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+		    // scroll through all clientList 
+		    // for (int c = 0; c < clientCount; c++) {
+		    // 	// Get the client off the master list
+		    // 	currentClient = clientList[c];
+
+		    // 	// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		    // 	if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+		    // 	    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+		    // 	    //myGrain.print();
+		    // 	    // Write the data out
+		    // 	    currentClient.threadSand.sendGrain(myGrain);
+		    // 	}
+
+		    // }
+
+		    // FIXED: SPEDUP: changed to separate APPID[client] arrays
+		    for (int c = 0; c < mainDisplayClientCount; c++) {
 			// Get the client off the master list
-			currentClient = clients[c];
-
-			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
-			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			    //myGrain.print();
-			    // Write the data out
-			    currentClient.threadSand.sendGrain(myGrain);
-			}
-
+			NGlobals.sPrint("   sending to ===> display client[" + c + "]");
+			currentClient = mainDisplayClientList[c];
+			NGlobals.sPrint("   w/ appID = " + printID((byte)currentClient.getAppID()));
+			currentClient.threadSand.sendGrain(myGrain);
 		    }
-		}   
-	    }
 
+		}
 
+	    }   
+	    
 	    // incoming appID = OC_POINTER = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-
-	    if ((incAppID == NAppID.OC_POINTER || incAppID == NAppID.JOC_POINTER) && (_POINTER_STATUS == 1)) {
+	    
+	    else if ((incAppID == NAppID.OC_POINTER || incAppID == NAppID.JOC_POINTER) && (_POINTER_STATUS == 1)) {
 		if (incAppCmd == NCommand.SEND_SPRITE_XY) {
 
-		    for (int c = 0; c < clientCount; c++) {
-
-			currentClient = clients[c];
-			// NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
-
-
-			// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
-			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
-			    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> OPERA_MAIN: " + THREAD_ID);
-
-			    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
-			    int[] x = new int[3];
-			    x[0] = THREAD_ID;
-			    x[1] = myGrain.iArray[0];
-			    x[2] = myGrain.iArray[1];
-
-			    currentClient.threadSand.sendGrain(incAppID, NCommand.SEND_SPRITE_THREAD_XY, NDataType.INT32, 3, x);
-
-			}
+		    // FIXED: SPEDUP: changed to separate APPID[client] arrays
+		    for (int c = 0; c < mainDisplayClientCount; c++) {
+			// Get the client off the master list
+			currentClient = mainDisplayClientList[c];
+			NGlobals.sPrint("   sending to ===> display client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+			currentClient.threadSand.sendGrain(myGrain);
 		    }
+		
+
+		    // OLD METHOD 
+
+		    // for (int c = 0; c < clientCount; c++) {
+		    // 	currentClient = clientList[c];
+		    // 	// NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+		    // 	// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
+		    // 	if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
+		    // 	    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> OPERA_MAIN: " + THREAD_ID);
+		    // 	    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
+		    // 	    int[] x = new int[3];
+		    // 	    x[0] = THREAD_ID;
+		    // 	    x[1] = myGrain.iArray[0];
+		    // 	    x[2] = myGrain.iArray[1];
+		    // 	    currentClient.threadSand.sendGrain(incAppID, NCommand.SEND_SPRITE_THREAD_XY, NDataType.INT32, 3, x);
+		    // 	}
+		    // }
+
 		}
 	    }
 
@@ -602,7 +659,7 @@ public class NomadServer implements Runnable {
 		for (int c = 0; c < clientCount; c++) {
 
 		    // Get the client off the master list
-		    currentClient = clients[c];
+		    currentClient = clientList[c];
 		    NGlobals.sPrint("===> client[" + c + "] w/ appID = " + currentClient.getAppID());
 
 		    // Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
@@ -628,12 +685,15 @@ public class NomadServer implements Runnable {
     // =====================================================================================================
 
     public synchronized void remove(int THREAD_ID) {  
-	int pos = clientThreadNum[THREAD_ID];
+	int pos = clientNumFromThreadID[THREAD_ID];
 	int tID;
 	
+
+	// SEND REMOVE/DELETE TO SWARM DISPLAY CLIENTS ---------------------------------------------------
+
 	for (int c = 0; c < clientCount; c++) {
 	    
-	    currentClient = clients[c];
+	    currentClient = clientList[c];
 	    NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
 	    
 	    
@@ -650,18 +710,29 @@ public class NomadServer implements Runnable {
 	    }
 	}
 
-
+	// remove from lists ---------------------------------------------------
 
 	if (pos >= 0) {  
-	    clientThreadNum[THREAD_ID] = -1;
-	    NomadServerThread toTerminate = clients[pos];
+	    clientNumFromThreadID[THREAD_ID] = -1;
+	    NomadServerThread toTerminate = clientList[pos];
 
+	    // rem from main display list
+	    if (pos < mainDisplayClientCount-1) {
+		NGlobals.sPrint("Removing thread from MAIN_DISPLAY cache" + THREAD_ID + " at " + pos);
+		for (int i = pos+1; i < mainDisplayClientCount; i++) {
+		    mainDisplayClientList[i-1] = mainDisplayClientList[i];
+		    tID = mainDisplayClientList[i-1].getThreadID();
+		}
+	    }
+	    mainDisplayClientCount--;
+
+	    // rem from client list
 	    if (pos < clientCount-1) {
 		NGlobals.sPrint("Removing client thread " + THREAD_ID + " at " + pos);
 		for (int i = pos+1; i < clientCount; i++) {
-		    clients[i-1] = clients[i];
-		    tID = clients[i-1].getThreadID();
-		    clientThreadNum[tID] = (short)(i-1);
+		    clientList[i-1] = clientList[i];
+		    tID = clientList[i-1].getThreadID();
+		    clientNumFromThreadID[tID] = (short)(i-1);
 		}
 	    }
 	    clientCount--;
@@ -673,31 +744,31 @@ public class NomadServer implements Runnable {
 		NGlobals.sPrint("  Error closing thread: " + ioe); 
 	    }
 	}
+
+
     }
 
     private  synchronized void addThread(Socket socket) {  
 	int tID;
+	NomadServerThread tHolder;
 	NGlobals.sPrint("addThread(" + socket + ")");
 
 	String IP = new String((socket.getInetAddress()).getHostAddress());
 
 	NGlobals.sPrint("     clientCount = " + clientCount);
-	NGlobals.sPrint("     clients.length = " + clients.length);
+	NGlobals.sPrint("     clientList.length = " + clientList.length);
 
-	if (clientCount < clients.length) {  
-	    NGlobals.sPrint("  Client accepted: " + socket);
-	    NGlobals.sPrint("  IP = " + IP);
-
-	    clients[clientCount] = new NomadServerThread(this, socket);
+	if (clientCount < clientList.length) {  
+	    NGlobals.sPrint("  Client accepted, adding to Global Client List: " + socket + " w/IP " + IP);
+	    tHolder = new NomadServerThread(this, socket);
+	    clientList[clientCount] = tHolder;
 	    try {  
-		clients[clientCount].open(); 
-		clients[clientCount].setIP(IP);
-		tID = clients[clientCount].getThreadID();
-		clientThreadNum[tID] = (short)clientCount;
-		clients[clientCount].start();  
-
+		clientList[clientCount].open(); 
+		clientList[clientCount].setIP(IP);
+		tID = clientList[clientCount].getThreadID();
+		clientNumFromThreadID[tID] = (short)clientCount;
+		clientList[clientCount].start();  
 		NGlobals.sPrint("  Client added to lookup array at slot # " + clientCount);
-
 		clientCount++; 
 	    }
 	    catch(IOException ioe) {  
@@ -707,7 +778,7 @@ public class NomadServer implements Runnable {
 
 	}
 	else
-	    NGlobals.sPrint("  Client refused: maximum " + clients.length + " reached.");
+	    NGlobals.sPrint("  Client refused: maximum " + clientList.length + " reached.");
     }
 
     public static void main(String args[]) {  
