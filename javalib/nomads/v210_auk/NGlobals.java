@@ -27,7 +27,7 @@ public class NGlobals {
 
     public static void dtPrint(String str) {
 	if (dtDebugLevel > 0) {
-	    System.out.println("CLIENT: " + str);
+	    System.out.println("DT: " + str);
 	}
     }
 
