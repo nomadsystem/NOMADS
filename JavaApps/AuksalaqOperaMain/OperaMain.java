@@ -862,6 +862,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		    }
 		}
+		else {
+		    errFlag--;
+		}
 	    }
 	    NomadsErrCheckThread.sleep(10);
 	}
