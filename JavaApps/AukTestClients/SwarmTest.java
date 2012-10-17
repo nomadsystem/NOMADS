@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-import netscape.javascript.*;
 import nomads.v210_auk.*;
 
 public class SwarmTest implements Runnable {   
@@ -99,15 +98,15 @@ public class SwarmTest implements Runnable {
     public void run () {
 	NGlobals.cPrint("SwarmTest -> run()");
 	int i = 0;
-	int startX = 10+randNum.nextInt(500);
-	int startY = 10+randNum.nextInt(500);
+	int startX = 300+randNum.nextInt(300);
+	int startY = 300+randNum.nextInt(300);
 	int xOff, yOff;
 
 	while (true) {
 
 	    int[] xy = new int[2];
-	    xOff = randNum.nextInt(200)-100;
-	    yOff = randNum.nextInt(200)-100;
+	    xOff = randNum.nextInt(400)-200;
+	    yOff = randNum.nextInt(400)-200;
 	    xy[0] = startX+xOff;
 	    xy[1] = startY+yOff;
 	    

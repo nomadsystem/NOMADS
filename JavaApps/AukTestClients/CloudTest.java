@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-import netscape.javascript.*;
 import nomads.v210_auk.*;
 
 public class CloudTest implements Runnable {   
