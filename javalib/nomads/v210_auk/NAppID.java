@@ -9,7 +9,7 @@ package nomads.v210_auk;
 public class NAppID {
     public static Byte SERVER = 99;
     public static Byte CONDUCTOR_PANEL = 1;
-    public static Byte OPERA_MAIN = 2;
+    public static Byte OPERA_MAIN = 100;
     public static Byte OPERA_CLIENT = 3;
     public static Byte OC_DISCUSS = 4; //OC= Opera Client
     public static Byte OC_CLOUD = 5;
