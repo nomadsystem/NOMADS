@@ -1,5 +1,5 @@
 //
-//  Nomads Opera Main v.210
+//  TEST CLIENT - DISCUSS
 //
 
 import java.awt.*;
@@ -115,7 +115,7 @@ public class DiscussTest implements Runnable {
 	    try {
 		NGlobals.cPrint("DiscussTest -> NSand.send()");
 		discussTestSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(500);
+		runner.sleep(1000);
 	    }
 	    catch (InterruptedException ie) {}
 
