@@ -13,8 +13,9 @@ public class NomadServer implements Runnable {
 
     private NomadServerThread clientList[] = new NomadServerThread[MAX_THREADS];
     private NomadServerThread mainDisplayClientList[] = new NomadServerThread[MAX_DISP_THR];
-    private NomadServerThread currentClient;
+
     private short clientNumFromThreadID[] = new short[MAX_THREAD_IDS];
+    private short clientDisplayNumFromThreadID[] = new short[MAX_THREAD_IDS];
 
     private String IPsLoggedIn[] = new String[MAX_IPS];
     private String users[] = new String[MAX_IPS];
@@ -45,9 +46,6 @@ public class NomadServer implements Runnable {
     private String _SEND_PROMPT_ON = new String ("Auksalaq NOMADS");
     private ArrayList<String> discussStringCached = new ArrayList<String>(Arrays.asList(" "));
     private static int MAX_CACHED_DISCUSS_STRINGS = 15;
-	
-
-
 
     int iDay;
     FileOutputStream out; // declare a file output object
@@ -72,7 +70,7 @@ public class NomadServer implements Runnable {
 	idList[NAppID.OC_CLOUD] = new String("OC_CLOUD");
 	idList[NAppID.OC_LOGIN] = new String("OC_LOGIN");
 	idList[NAppID.OC_POINTER] = new String("OC_POINTER");
-	idList[NAppID.JOC_POINTER] = new String("OC_POINTER");
+	idList[NAppID.JOC_POINTER] = new String("JOC_POINTER");
 
 	// Print out the id as a string
 	if (idList[id] != null) {
@@ -89,6 +87,7 @@ public class NomadServer implements Runnable {
     public NomadServer(int port) {  	    
 	for (int i=0;i<MAX_THREAD_IDS;i++) {
 	    clientNumFromThreadID[i] = -1;
+	    clientDisplayNumFromThreadID[i] = -1;
 	}
 	for (int i=0;i<MAX_DISP_THR;i++) {
 	    mainDisplayClientList[i] = null;
@@ -202,6 +201,11 @@ public class NomadServer implements Runnable {
 	int incAppDataLen;
 	byte incAppID;
 
+	int[] x1 = new int[1];
+	int[] x2 = new int[2];
+	int[] x3 = new int[3];
+
+	NomadServerThread currentClient;
 	NGrain inGrain;
 
 	NGlobals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
@@ -219,6 +223,7 @@ public class NomadServer implements Runnable {
 	incAppDataLen = myGrain.dataLen;
 
 	NGlobals.sPrint("appID: " + incAppID);
+	NGlobals.dtPrint("mainDisplayClientCount = " + mainDisplayClientCount);
 
 	// Print out at the SERVER level
 	if (false) {
@@ -262,11 +267,14 @@ public class NomadServer implements Runnable {
 		NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
 		currentClient.setAppID(incAppID);
 		if (incAppID == NAppID.OPERA_MAIN) {
-
+		    NGlobals.dtPrint("appID: " + printID(incAppID));
+		    NGlobals.dtPrint("appID: " + incAppID);
 		    if (mainDisplayClientCount < mainDisplayClientList.length) {  
 			NGlobals.sPrint("  ################ Adding client to OPERA_MAIN cache @ " + mainDisplayClientCount);
 			mainDisplayClientList[mainDisplayClientCount] = currentClient;
+			clientDisplayNumFromThreadID[THREAD_ID] = (short)mainDisplayClientCount;
 			mainDisplayClientCount++; 
+			NGlobals.dtPrint("mainDisplayClientCount = " + mainDisplayClientCount);
 		    }
 		    else {
 			NGlobals.sPrint("  ERROR:  current client > MAX_DISPLAY_THREADS, client NOT added to DISPLAY cache");
@@ -275,6 +283,10 @@ public class NomadServer implements Runnable {
 	    }
 	}
 	
+	NGlobals.dtPrint("----------- PRE-INIT ---------------");
+	NGlobals.dtPrint("appID: " + printID(incAppID));
+	NGlobals.dtPrint("appID: " + incAppID);
+
 	// 2: INIT =================================================================================================================
 	
 	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
@@ -347,7 +359,14 @@ public class NomadServer implements Runnable {
 
 	// INIT for OPERA_CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 	currentClient = clientList[tCNum];
+
+	NGlobals.dtPrint("----------- OC-INIT ---------------");
+	NGlobals.dtPrint("appID: " + printID(incAppID));
+	NGlobals.dtPrint("appID: " + incAppID);
+
 	if ((incAppID == NAppID.OPERA_CLIENT) && (currentClient.getButtonInitStatus() == 0)) {
+	    
+
 	    NGlobals.lPrint("  Sending button states to OPERA CLIENT from SERVER / CONDUCTOR_PANEL.");
 	    byte d[] = new byte[1];
 
@@ -416,6 +435,10 @@ public class NomadServer implements Runnable {
 	// FIX:  just have the cached synth volume sent when an OM connects (along with the other attributes like alpha, etc.. perhaps even cached text and cloud)
 
 	currentClient = clientList[tCNum];
+
+	NGlobals.dtPrint("----------- PRE-HACKISH OPERA_MAIN VOLUME SET ---------------");
+	NGlobals.dtPrint("appID: " + printID(incAppID));
+	NGlobals.dtPrint("appID: " + incAppID);
 	
 	if (incAppID == NAppID.OPERA_MAIN) {
 	    NGlobals.lPrint("  Sending button states to OPERA MAIN from SERVER / CONDUCTOR_PANEL.");
@@ -448,11 +471,16 @@ public class NomadServer implements Runnable {
 
 	    // incoming appID = CONDUCTOR_PANEL = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-	    NGlobals.dtPrint("   incAppID == " + printID((byte)currentClient.getAppID()));
-
+	    NGlobals.dtPrint("----------- APPCMD != REGISTER (top level of WRITE section) ---------------");
+	    NGlobals.dtPrint("appID: " + printID(incAppID));
+	    NGlobals.dtPrint("appID: " + incAppID);
 
 	    if (incAppID == NAppID.CONDUCTOR_PANEL) {
 		// scroll through all clientList // TODO: FIX: SPEEDUP: change to separate APPID[client] arrays
+
+		NGlobals.dtPrint("----------- appID = CONDUCTOR PANEL ---------------");
+		NGlobals.dtPrint("appID: " + printID(incAppID));
+		NGlobals.dtPrint("appID: " + incAppID);
 
 		// Store various FEATURE STATES - - - - - - - - - - - - - - - - -
 
@@ -551,6 +579,11 @@ public class NomadServer implements Runnable {
 
 	    else if (incAppID == NAppID.OC_DISCUSS) {
 
+		NGlobals.dtPrint("----------- appID = OC_DISCUSS ---------------");
+		NGlobals.dtPrint("appID: " + printID(incAppID));
+		NGlobals.dtPrint("appID: " + incAppID);
+
+
 		if (incAppCmd == NCommand.SEND_MESSAGE && (_DISCUSS_STATUS == 1)) {
 			    	
 		    //Sets cached discuss strings from input
@@ -588,6 +621,10 @@ public class NomadServer implements Runnable {
 
 	    else if (incAppID == NAppID.OC_CLOUD && (_CLOUD_STATUS == 1)) {
 
+		NGlobals.dtPrint(" -------------------- appID == OC_CLOUD ---------------");
+		NGlobals.dtPrint("appID: " + printID(incAppID));
+		NGlobals.dtPrint("appID: " + incAppID);
+
 		if (incAppCmd == NCommand.SEND_MESSAGE) {
 
 		    // (see below)
@@ -608,6 +645,7 @@ public class NomadServer implements Runnable {
 		    // }
 
 		    // FIXED: SPEDUP: changed to separate APPID[client] arrays
+		    NGlobals.dtPrint("mainDisplayClientCount = " + mainDisplayClientCount);
 		    for (int c = 0; c < mainDisplayClientCount; c++) {
 			// Get the client off the master list
 			NGlobals.sPrint("   sending to ===> display client[" + c + "]");
@@ -625,15 +663,23 @@ public class NomadServer implements Runnable {
 	    else if ((incAppID == NAppID.OC_POINTER || incAppID == NAppID.JOC_POINTER) && (_POINTER_STATUS == 1)) {
 		if (incAppCmd == NCommand.SEND_SPRITE_XY) {
 
+		    NGlobals.dtPrint(" >------------------> APPID == OC_POINTER !!! <-- the mini holy grail --------------------<");
+		    NGlobals.dtPrint("appID: " + printID(incAppID));
+		    NGlobals.dtPrint("appID: " + incAppID);
+		    NGlobals.dtPrint("mainDisplayClientCount = " + mainDisplayClientCount);
+
 		    // FIXED: SPEDUP: changed to separate APPID[client] arrays
 		    for (int c = 0; c < mainDisplayClientCount; c++) {
 			// Get the client off the master list
 			currentClient = mainDisplayClientList[c];
 			NGlobals.sPrint("   sending to ===> display client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
-			currentClient.threadSand.sendGrain(myGrain);
+			// CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
+			x3[0] = THREAD_ID;
+			x3[1] = myGrain.iArray[0];
+			x3[2] = myGrain.iArray[1];
+			currentClient.threadSand.sendGrain(incAppID, NCommand.SEND_SPRITE_THREAD_XY, NDataType.INT32, 3, x3);
 		    }
 		
-
 		    // OLD METHOD 
 
 		    // for (int c = 0; c < clientCount; c++) {
@@ -686,8 +732,13 @@ public class NomadServer implements Runnable {
 
     public synchronized void remove(int THREAD_ID) {  
 	int pos = clientNumFromThreadID[THREAD_ID];
+	int dPos = clientDisplayNumFromThreadID[THREAD_ID];
 	int tID;
-	
+	int ix[] = new int[1];
+	NomadServerThread currentClient;
+	NomadServerThread inClient;
+
+	inClient = clientList[pos];
 
 	// SEND REMOVE/DELETE TO SWARM DISPLAY CLIENTS ---------------------------------------------------
 
@@ -702,30 +753,37 @@ public class NomadServer implements Runnable {
 		NGlobals.sPrint("Sending DELETE_SPRITE ---> OPERA_MAIN: " + THREAD_ID);
 		
 		// CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
-		int[] x = new int[1];
-		x[0] = THREAD_ID;
+		ix[0] = THREAD_ID;
 		
-		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.DELETE_SPRITE, NDataType.INT32, 1, x);
+		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.DELETE_SPRITE, NDataType.INT32, 1, ix);
 		
 	    }
 	}
 
 	// remove from lists ---------------------------------------------------
 
+	// xxx
+
 	if (pos >= 0) {  
 	    clientNumFromThreadID[THREAD_ID] = -1;
 	    NomadServerThread toTerminate = clientList[pos];
 
 	    // rem from main display list
-	    if (pos < mainDisplayClientCount-1) {
-		NGlobals.sPrint("Removing thread from MAIN_DISPLAY cache" + THREAD_ID + " at " + pos);
-		for (int i = pos+1; i < mainDisplayClientCount; i++) {
-		    mainDisplayClientList[i-1] = mainDisplayClientList[i];
-		    tID = mainDisplayClientList[i-1].getThreadID();
+	    if (inClient.getAppID() == NAppID.OPERA_MAIN) {
+		if (dPos >=0) {
+		    
+		    if (dPos < mainDisplayClientCount-1) {
+			NGlobals.sPrint("Removing thread from MAIN_DISPLAY cache" + THREAD_ID + " at " + pos);
+			for (int i = dPos+1; i < mainDisplayClientCount; i++) {
+			    mainDisplayClientList[i-1] = mainDisplayClientList[i];
+			    tID = mainDisplayClientList[i-1].getThreadID();
+			    clientDisplayNumFromThreadID[tID] = (short)(i-1);
+			}
+		    }
 		}
+		mainDisplayClientCount--;
 	    }
-	    mainDisplayClientCount--;
-
+	    
 	    // rem from client list
 	    if (pos < clientCount-1) {
 		NGlobals.sPrint("Removing client thread " + THREAD_ID + " at " + pos);
