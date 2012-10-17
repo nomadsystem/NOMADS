@@ -101,14 +101,21 @@ public class CloudTest implements Runnable {
 	int i = 0;
 
 	while (true) {
-	    String tString = new String("CLOUD TEST " + i++);
+	    String tString;
+	    if (i>500) {
+		tString = new String("RESETTING CLOUD TEST STRING");
+		i=0;
+	    }
+	    else {
+		tString = new String("CLOUD TEST " + i++);
+	    }
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
 
 	    try {
 		NGlobals.cPrint("CloudTest -> NSand.send()");
 		cloudTestSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(10);
+		runner.sleep(1000);
 	    }
 	    catch (InterruptedException ie) {}
 

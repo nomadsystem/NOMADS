@@ -582,7 +582,7 @@ public class NomadServer implements Runnable {
 
 			// send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
 			if (currentClient.getAppID() == NAppID.OPERA_MAIN) {
-			    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+			    NGlobals.sPrint("Sending SOUND_SWARM:THREAD_ID to ---> OPERA_MAIN: " + THREAD_ID);
 
 			    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
 			    int[] x = new int[3];
@@ -639,7 +639,7 @@ public class NomadServer implements Runnable {
 	    
 	    // send out to SOUND_SWARM_DISPLAY - - - - - - - - - - - - - - - - - - - - - - - - -
 	    if ((currentClient.getAppID() == NAppID.OPERA_MAIN) && (currentClient.getThreadID() != THREAD_ID)) {
-		NGlobals.sPrint("Sending DELETE_SPRITE ---> SOUND_SWARM_DISPLAY: " + THREAD_ID);
+		NGlobals.sPrint("Sending DELETE_SPRITE ---> OPERA_MAIN: " + THREAD_ID);
 		
 		// CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
 		int[] x = new int[1];
