@@ -115,7 +115,7 @@ public class DiscussTest implements Runnable {
 	    try {
 		NGlobals.cPrint("DiscussTest -> NSand.send()");
 		discussTestSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(1000);
+		runner.sleep(500);
 	    }
 	    catch (InterruptedException ie) {}
 
