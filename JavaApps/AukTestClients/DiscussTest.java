@@ -101,14 +101,21 @@ public class DiscussTest implements Runnable {
 	int i = 0;
 
 	while (true) {
-	    String tString = new String("DISCUSSION TEST " + i++);
+	    String tString;
+	    if (i>500) {
+		tString = new String("RESETTING DISCUSS TEXT TAG TO 0");
+		i=0;
+	    }
+	    else {
+		tString = new String("DISCUSSION TEST " + i++);
+	    }
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
 
 	    try {
 		NGlobals.cPrint("DiscussTest -> NSand.send()");
 		discussTestSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(100);
+		runner.sleep(1000);
 	    }
 	    catch (InterruptedException ie) {}
 

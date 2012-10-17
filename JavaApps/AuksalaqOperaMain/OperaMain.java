@@ -173,6 +173,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Boolean sandRead = false;
     Boolean connected;
 
+    int MAX_OSCS = 50;
+
     public synchronized Boolean getSandRead() {
 	return sandRead;
     }
@@ -812,7 +814,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		
 		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 
-		if (mSecDiff > 100) {
+		if (mSecDiff > 300) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
 			System.out.println(">>> ERROR COUNT: " + errFlag);
@@ -822,12 +824,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 			System.out.println(">>> halting thread ...");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(500);
+			NomadsErrCheckThread.sleep(1000);
 			// deleteSynth(lastThread);
 			nThread = null;
 			System.out.println(">>> disconnecting ...");
 			operaSand.disconnect();
-			NomadsErrCheckThread.sleep(500);
+			NomadsErrCheckThread.sleep(1000);
 			operaSand = null;
 			connected = false;
 			System.out.println(">>> disconneced ...");
@@ -835,17 +837,17 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			// deleteAllSynths();
 			// System.out.println(">>> sprites/synths deleted ...");
 			System.out.println("+++++ Attempting reconnect ...");
-			NomadsErrCheckThread.sleep(500);
+			NomadsErrCheckThread.sleep(1000);
 			operaSand = new NSand(); 
 			operaSand.connect();
 			int d[] = new int[1];
 			d[0] = 0;
 			operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 			connected = true;
-			NomadsErrCheckThread.sleep(500);
+			NomadsErrCheckThread.sleep(1000);
 			System.out.println("+++ reconnected!");			
 			System.out.println("+++ attempting to restart thread ...");			
-			NomadsErrCheckThread.sleep(500);
+			NomadsErrCheckThread.sleep(1000);
 			nThread = new NomadsAppThread(this);
 			nThread.setRunState(true);
 			nThread.start();
@@ -986,9 +988,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		lastThread = THREAD_ID;
 		x = grain.iArray[1];
 		y = grain.iArray[2];
-		NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 
-		makeSynth(THREAD_ID);
+		if (numOscs < MAX_OSCS) {
+		    makeSynth(THREAD_ID);
+		}
+		else if (numOscs >= MAX_OSCS) {
+		    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		}
 
 		NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
 
@@ -1097,9 +1104,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    THREAD_ID = grain.iArray[0];
 		    x = grain.iArray[1];
 		    y = grain.iArray[2];
-		    NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		    NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 
-		    makeSynth(THREAD_ID);
+		    if (numOscs < MAX_OSCS) {
+			makeSynth(THREAD_ID);
+		    }
+		    else if (numOscs >= MAX_OSCS) {
+			NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		    }
 
 		    NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
 
