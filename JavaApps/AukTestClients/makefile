@@ -9,19 +9,22 @@ CLASSES = \
 	CloudTest.java\
 	SwarmTest.java
 
-default: classes myliblink comlink
+default: myliblink comlink classes
 
 topliblink:
 	rm -f ./nomads
-	/bin/ln -s /var/www/NOMADS/javalib/nomads .
+#	/bin/ln -s /var/www/NOMADS/javalib/nomads .
+	/bin/ln -s /Users/$(USER)/NOMADS/javalib/nomads .
 
 myliblink:
 	rm -f ./nomads
-	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
+#	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/nomads .
+	/bin/ln -s /Users/$(USER)/NOMADS/javalib/nomads .
 
 comlink:
 	rm -f ./com
-	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
+#	/bin/ln -s /var/www/$(USER)/NOMADS/javalib/com .
+	/bin/ln -s /Users/$(USER)/NOMADS/javalib/com .
 
 classes: $(CLASSES:.java=.class)
 
