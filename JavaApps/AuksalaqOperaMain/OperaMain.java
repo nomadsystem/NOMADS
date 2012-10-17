@@ -643,6 +643,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	if (!isOsc(threadNum)) {
 
+	    NGlobals.dtPrint("CREATING OSC" + numOscs);
+
 	    sprites[threadNum] = new Sprite();
 	    sprites[threadNum].x = width / 2 - 20;
 	    sprites[threadNum].y = height / 2 - 20;
