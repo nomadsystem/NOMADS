@@ -369,6 +369,23 @@ public class OperaClient extends JApplet implements Runnable
 		myOC_Pointer.run();
 	}
 
+	//These two methods check to make sure we only get ASCII values between 32-127
+	public static boolean isAsciiPrintable(String str) {
+	      if (str == null) {
+	          return false;
+	      }
+	      int sz = str.length();
+	      for (int i = 0; i < sz; i++) {
+	          if (isAsciiPrintable(str.charAt(i)) == false) {
+	              return false;
+	          }
+	      }
+	      return true;
+	  }
+	public static boolean isAsciiPrintable(char ch) {
+	      return ch >= 32 && ch < 127;
+	  }
+	
 	//Action Listeners==================================================
 
 	//OC_Discuss code===============================================
@@ -395,7 +412,13 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = myOC_Discuss.tInput.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Discuss.tInput.getBytes();
-					operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					if (isAsciiPrintable(myOC_Discuss.tInput)) {
+						operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					}
+					else {
+						NGlobals.cPrint("OC_Discuss: tInput:BAD ASCII CHAR: " + myOC_Discuss.tInput);
+					}
+						
 					myOC_Discuss.input.setText("");
 					NGlobals.cPrint("OC_Discuss: tInput: " + myOC_Discuss.tInput);
 				}
@@ -432,7 +455,12 @@ public class OperaClient extends JApplet implements Runnable
 						// NGlobals.cPrint("OC_Discuss: SENDING FAKE DATA");
 
 						// operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
-						operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+						if (isAsciiPrintable(myOC_Discuss.tInput)) {
+							operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+						}
+						else {
+							NGlobals.cPrint("OC_Discuss: tInput:BAD ASCII CHAR: " + myOC_Discuss.tInput);
+						}
 						myOC_Discuss.input.setText("");
 						NGlobals.cPrint("OC_Discuss: tInput: " + myOC_Discuss.tInput);
 					}
@@ -476,7 +504,12 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = myOC_Cloud.tInput.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
-					operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					if (isAsciiPrintable(myOC_Cloud.tInput)) {
+						operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+					}
+					else {
+						NGlobals.cPrint("OC_Cloud: tInput:BAD ASCII CHAR: " + myOC_Cloud.tInput);
+					}
 					myOC_Cloud.input.setText("");
 					NGlobals.cPrint("OC_Cloud: tInput: " + myOC_Cloud.tInput);
 				}
@@ -507,8 +540,12 @@ public class OperaClient extends JApplet implements Runnable
 						int tLen = myOC_Cloud.tInput.length();
 						//    char[] tStringAsChars = tString.toCharArray();
 						byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
-						operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
-						myOC_Cloud.input.setText("");
+						if (isAsciiPrintable(myOC_Cloud.tInput)) {
+							operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
+						}
+						else {
+							NGlobals.cPrint("OC_Cloud: tInput:BAD ASCII CHAR: " + myOC_Cloud.tInput);
+						}						myOC_Cloud.input.setText("");
 						NGlobals.cPrint("OC_Cloud: tInput: " + myOC_Cloud.tInput);
 					}
 
