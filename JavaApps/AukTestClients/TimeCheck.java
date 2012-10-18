@@ -116,7 +116,7 @@ public class TimeCheck implements Runnable {
 	    minute = date.get(Calendar.MINUTE);
 	    hour = date.get(Calendar.HOUR);
 	    
-	    tString = new String((month+1)+"/"+day+"   -   "+hour+":"+minute+":"+second);
+	    tString = new String((month+1)+"/"+day+"   -   "+hour+":"+minute);
 
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
@@ -124,7 +124,8 @@ public class TimeCheck implements Runnable {
 	    try {
 		NGlobals.cPrint("TimeCheck -> NSand.send()");
 		discussTestSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(1000*60*60);
+				runner.sleep(1000*60*60);
+				//runner.sleep(1000*30);
 	    }
 	    catch (InterruptedException ie) {}
 
