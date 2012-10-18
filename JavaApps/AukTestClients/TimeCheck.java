@@ -116,7 +116,7 @@ public class TimeCheck implements Runnable {
 	    minute = date.get(Calendar.MINUTE);
 	    hour = date.get(Calendar.HOUR);
 	    
-	    tString = new String((month+1)+"/"+day+"   -   "+hour+":"+minute);
+	    tString = new String("[TIMECHECK]  "+(month+1)+" (month)  "+day+" (day)  "+hour+" (hr)  "+minute+" (min)");
 
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
