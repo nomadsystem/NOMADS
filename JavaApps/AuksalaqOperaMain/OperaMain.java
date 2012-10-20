@@ -348,7 +348,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     //     }
 
     public void setChatColors(int alpha) {
-	chatColors[0] = new Color(255, 215, 10, alpha);
+	chatColors[0] = new Color(204, 255, 255, alpha);
 	chatColors[1] = new Color(145, 86, 65, alpha);
 	chatColors[2] = new Color(145, 86, 65, alpha);
 	chatColors[3] = new Color(145, 86, 65, alpha);
@@ -842,7 +842,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 
-		if (mSecDiff > 300) {
+		if (mSecDiff > 1000) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
 			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
