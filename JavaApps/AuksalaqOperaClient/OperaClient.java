@@ -383,6 +383,7 @@ public class OperaClient extends JApplet implements Runnable
 	      return true;
 	  }
 	public static boolean isAsciiPrintable(char ch) {
+	//	System.out.println("incoming Ascii char= " + ch);
 	      return ch >= 32 && ch < 127;
 	  }
 	
@@ -412,7 +413,7 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = myOC_Discuss.tInput.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Discuss.tInput.getBytes();
-					if (isAsciiPrintable(myOC_Discuss.tInput)) {
+					if (isAsciiPrintable(myOC_Discuss.tInput) && tLen > 0) {
 						operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 					}
 					else {
@@ -455,7 +456,7 @@ public class OperaClient extends JApplet implements Runnable
 						// NGlobals.cPrint("OC_Discuss: SENDING FAKE DATA");
 
 						// operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.SET_DISCUSS_DISPLAY_STATUS, (byte)NDataType.UINT8, 1, d);
-						if (isAsciiPrintable(myOC_Discuss.tInput)) {
+						if (isAsciiPrintable(myOC_Discuss.tInput) && tLen > 0) {
 							operaSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 						}
 						else {
@@ -504,7 +505,7 @@ public class OperaClient extends JApplet implements Runnable
 					int tLen = myOC_Cloud.tInput.length();
 					//    char[] tStringAsChars = tString.toCharArray();
 					byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
-					if (isAsciiPrintable(myOC_Cloud.tInput)) {
+					if (isAsciiPrintable(myOC_Cloud.tInput) && tLen > 0) {
 						operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 					}
 					else {
@@ -540,7 +541,7 @@ public class OperaClient extends JApplet implements Runnable
 						int tLen = myOC_Cloud.tInput.length();
 						//    char[] tStringAsChars = tString.toCharArray();
 						byte[] tStringAsBytes = myOC_Cloud.tInput.getBytes();
-						if (isAsciiPrintable(myOC_Cloud.tInput)) {
+						if (isAsciiPrintable(myOC_Cloud.tInput) && tLen > 0) {
 							operaSand.sendGrain((byte)NAppID.OC_CLOUD, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
 						}
 						else {
