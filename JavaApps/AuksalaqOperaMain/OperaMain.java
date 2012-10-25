@@ -3,7 +3,7 @@
 //
 
 import java.awt.*;
-import java.lang.Math;
+import java.lang.Math.*;
 import java.applet.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -33,7 +33,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	long handleEnd=1;
 	long millis=0;
 	Boolean runState=false;
-
 
 	public synchronized long getHandleStart() {
 	    return handleStart;
@@ -100,7 +99,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     int maxSkip = 1;
     Random randNum;
     int numOscs = 0;
-	
+
     int currentBackgroundImageName = 0; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
@@ -283,13 +282,27 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     int typoints[] = new int[4];
     int threadNum;
     int quad;
-    int lastQuad;
-    int numScreenCells;
-    int curCell;
-    int cellCtr;
-    int cellSlots[];
+    int numScreenCellsX;
+    int numScreenCellsY;
+    int curCellX;
+    int curCellY;
+    int cellCtrX;
+    int cellCtrY;
+    int cellSlotsX[];
+    int cellSlotsY[];
+    int screenCellX = 4; //Number of columns for cloud text
+    int screenCellY = 15; //Number of rows for cloud text
 
+    Random rng = new Random(); // Ideally just create one instance globally
+	
+    ArrayList<Integer> generatedX;
+    ArrayList<Integer> generatedY;
+	
     Thread runner;
+
+    long mSecR=0;
+    int resetCtr=0;
+    int maxResets=10;
 
     public static void main(String args[])
     {
@@ -348,6 +361,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     //     }
 
     public void setChatColors(int alpha) {
+	//chatColors[0] = new Color(255, 215, 10, alpha);
 	chatColors[0] = new Color(204, 255, 255, alpha);
 	chatColors[1] = new Color(145, 86, 65, alpha);
 	chatColors[2] = new Color(145, 86, 65, alpha);
@@ -379,16 +393,20 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	pointerColors[6] = new Color(255, 255, 255, alpha);
 	pointerColors[7] = new Color(255, 255, 255, alpha);
     }
-	
+
     public void init()
     {  	
+		
+	width = getSize().width;
+	height = getSize().height;
 
 	backgroundImageName = new String[4];
 	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
 	backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
 	backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
 	backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
-		
+
+
 	//Resizing text/pointer based on which image we're using
 	if (currentBackgroundImageName == 0)
 	    textImageSizeScaler = 1.0F;
@@ -398,33 +416,56 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    textImageSizeScaler = 1.7F;
 	else if (currentBackgroundImageName == 3)
 	    textImageSizeScaler = 1.8F;
-		
+
 
 	chatFont = new Font("TimesRoman", Font.PLAIN, (int)(14 * textImageSizeScaler));
-				
 
-	int i;
-
-	int screenCell = 4;
-	numScreenCells = (int)(screenCell*screenCell);
-
-	cellSlots = new int[numScreenCells];
-	cellSlots[0] = 0;
-	cellSlots[1] = 13;
-	cellSlots[2] = 2;
-	cellSlots[3] = 7;
-	cellSlots[4] = 4;
-	cellSlots[5] = 11;
-	cellSlots[6] = 6;
-	cellSlots[7] = 15;
-	cellSlots[8] = 8;
-	cellSlots[9] = 9;
-	cellSlots[10] = 10;
-	cellSlots[11] = 5;
-	cellSlots[12] = 12;
-	cellSlots[13] = 1;
-	cellSlots[14] = 14;
-	cellSlots[15] = 3;
+		
+	//STK**** Begin Cloud Randomization code========================================
+	cellSlotsX = new int[screenCellX];		
+	generatedX = new ArrayList<Integer>();
+	for (int i = 0; i < screenCellX; i++)
+	    {
+		while(true)
+		    {
+		        Integer next = rng.nextInt(screenCellX) + 1;
+		        if (!generatedX.contains(next))
+			    {
+				// Done for this iteration
+				generatedX.add(next);
+				break;
+			    }
+		    }
+	    }
+		
+	for (int i=0; i<screenCellX; i++) {
+	    cellSlotsX[i] = (generatedX.get(i) * (int)((width * 0.7)/screenCellX)); //Scale width to get greatest X value (try 0.7)
+	    NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
+	    System.out.println("CellSlotsX[i] = " + cellSlotsX[i]);
+	}
+		
+	cellSlotsY = new int[screenCellY];
+	generatedY = new ArrayList<Integer>();
+	for (int i = 0; i < screenCellY; i++)
+	    {
+		while(true)
+		    {
+		        Integer next = rng.nextInt(screenCellY) + 1;
+		        if (!generatedY.contains(next))
+			    {
+				// Done for this iteration
+				generatedY.add(next);
+				break;
+			    }
+		    }
+	    }
+	cellSlotsY = new int[screenCellY];
+	for (int i=0; i<screenCellY; i++) {
+	    cellSlotsY[i] = (generatedY.get(i) * (int)((height * 0.9)/screenCellY)); //Scale height to get greatest Y value (total screen size seems okay)
+	    NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
+	    System.out.println("CellSlotsY[i] = " + cellSlotsY[i]);
+	}
+	//STK**** End Cloud Randomization code========================================
 
 	startX = new int[100];
 	startY = new int[100];
@@ -432,15 +473,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	imgPrefix = "http://nomads.music.virginia.edu/images/";
 
 	quad = 0;
-	lastQuad = 0;
 
 	try { 
 	    imgWebBase = new URL(imgPrefix); 
 	} 
 	catch (Exception e) {}
 
-	width = getSize().width;
-	height = getSize().height;
+
 
 	offScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -455,17 +494,21 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	offScreenGrp.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	randNum = new Random();
 
-	int wEnd = (int)(width * 0.8);
+	// Cloud placement init code
+	int wEnd = (int)(width * 0.85);
 	int hEnd = (int)(height * 0.8);
 	int wStart = (int)(width * 0.1);
 	int hStart = (int)(height * 0.1);
 	int wDiff = wEnd-wStart;
 	int hDiff = hEnd-hStart;
 
-	int wIncr = (int)(wDiff/screenCell);
-	int hIncr = (int)(hDiff/screenCell);
+	int wIncr = (int)(wDiff/screenCellX);
+	int hIncr = (int)(hDiff/screenCellY);
 
-	cellCtr = randNum.nextInt(screenCell);
+	//	cellCtrX = randNum.nextInt(screenCellX);
+	//	cellCtrY = randNum.nextInt(screenCellY);
+	cellCtrX = 0;
+	cellCtrY = 0;
 
 	int tX;
 	int tY;
@@ -516,7 +559,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	wordFound = 0;
 	numPasses = 0;
 	startFontSize = (int)(30 * textImageSizeScaler);
-	minFontSize = (int)(10 * textImageSizeScaler);
+	minFontSize = (int)(2 * textImageSizeScaler);
 	maxFontSize = (int)(100 * textImageSizeScaler);
 
 	x = width / 2 - 20;
@@ -842,17 +885,29 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 
-		if (mSecDiff > 1000) {
+		if (mSecDiff > 2000) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
 			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
 		    }
 		    if ((errFlag > 3) && (connected == true)) {
+			now = Calendar.getInstance();
+			mSecR = now.getTimeInMillis(); // time of this reset
+			System.out.println("-----> EREC #" + resetCtr);
+			resetCtr++;
+			if (resetCtr > maxResets) {
+			    System.out.println("######### CRITICAL ERROR");
+			    System.out.println(">>> #### MAX RESETS");
+			    System.out.println(">>> sleeping 10 sec");
+			    NomadsErrCheckThread.sleep(10000);
+			    resetCtr=0;
+			}
+			nThread.setHandleStart(mSecN);
 			System.out.println("######### CRITICAL ERROR");
 			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 			System.out.println(">>> halting thread ...");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(1000);
+			NomadsErrCheckThread.sleep(2000);
 			// deleteSynth(lastThread);
 			nThread = null;
 			System.out.println(">>> disconnecting ...");
@@ -1347,34 +1402,34 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			NGlobals.cPrint("  DECreasing word size for " + tHist.text);
 			NGlobals.cPrint("...");
 			NGlobals.cPrint("  numPasses = " + numPasses);
-			if (numPasses%2 == 0) {
-			    tHist.size--;
-			    quad = tHist.quad;
-			    if (quad > 2) {
-				tHist.x+=2;
-				tHist.y+=2;
-			    }
-			    else if (quad > 1) {
-				tHist.x+=2;
-				tHist.y-=2;
-			    }
-			    else if (quad > 0) {
-				tHist.x-=2;
-				tHist.y-=2;
-			    }
-			    else {
-				tHist.x-=2;
-				tHist.y+=2;
-			    }
-			    if (tHist.x < 10) 
-				tHist.x = 10;
-			    if (tHist.x > (width-10))
-				tHist.x = width-10;
-			    if (tHist.y < 10) 
-				tHist.y = 10;
-			    if (tHist.y > (height-10))
-				tHist.y = height-10;
+			//	if (numPasses%1 == 0) {
+			tHist.size-=2;
+			quad = tHist.quad;
+			if (quad > 2) {
+			    tHist.x+=2;
+			    tHist.y+=2;
 			}
+			else if (quad > 1) {
+			    tHist.x+=2;
+			    tHist.y-=2;
+			}
+			else if (quad > 0) {
+			    tHist.x-=2;
+			    tHist.y-=2;
+			}
+			else {
+			    tHist.x-=2;
+			    tHist.y+=2;
+			}
+			if (tHist.x < 10) 
+			    tHist.x = 10;
+			if (tHist.x > (width-10))
+			    tHist.x = width-10;
+			if (tHist.y < 10) 
+			    tHist.y = 10;
+			if (tHist.y > (height-10))
+			    tHist.y = height-10;
+			//	}
 			if (tHist.size > maxFontSize)
 			    tHist.size = maxFontSize;
 			fontSize = tHist.size;
@@ -1424,31 +1479,54 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    tHist.text = new String(text);
 
 		    xMin = (int)(width * 0.0);
-		    xVar = (int)(width * 0.4);
+		    xVar = (int)(width * 0.6);
 
 		    yMin = (int)(height * 0.0);
 		    yVar = (int)(height * 0.4);
 
-		    lastQuad = quad;
-		    quad = randNum.nextInt(5);
-		    while (quad == lastQuad) {
-			quad = randNum.nextInt(5);
-		    }
-		    tHist.quad = quad;
 		    NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
 		    NGlobals.cPrint("setting quad = " + quad);
 
 		    xRand = xMin + randNum.nextInt(xVar);
 		    yRand = yMin + randNum.nextInt(yVar);
+					
+					
 
-		    curCell = cellSlots[cellCtr];
+		    // curCell = cellSlots[cellCtr];
+		    curCellX = cellSlotsX[cellCtrX]; //pick x value from random array
+		    curCellY = cellSlotsY[cellCtrY]; //pick y value from random array
 
-		    x = startX[curCell]+randNum.nextInt(100);
-		    y = startY[curCell]+randNum.nextInt(100);
+		    x = curCellX; //Set x coordinate
+		    y = curCellY; //Set y coordinate
 
-		    cellCtr++;
-		    if (cellCtr >= numScreenCells)
-			cellCtr = 0;
+		    // Check that text is shifted properly
+
+		    int tLen = text.length();
+		    int tEnd = x+((int)(startFontSize*0.6)*tLen);
+		    int tDiff = (int)((width*0.9)-tEnd);
+		    if (tDiff < 0) {
+			x+=tDiff;
+		    }
+		    if (x < (int)(width*0.1)) {
+			x = (int)(width*0.1);
+		    }
+
+
+		    cellCtrX++; //Move counter for next slot in random arrays
+		    cellCtrY++;
+					
+		    //Reset counters 
+		    if (cellCtrY >= screenCellY) {
+			cellCtrY = 0;
+		    }
+
+		    if (cellCtrX >= screenCellX) {
+			cellCtrX = 0;
+		    }
+
+		    NGlobals.cPrint("cellCntrX = " + cellCtrX);
+		    NGlobals.cPrint("cellCntrY = " + cellCtrY);
+
 
 		    // if (quad > 2) {
 		    // 	x = centerX + xRand;
