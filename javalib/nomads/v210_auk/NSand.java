@@ -28,8 +28,6 @@ public class NSand
 	socket = serverSock;
     }
 
-
-
     public DataInputStream getInStream() {
 	return streamIn;
     }
@@ -58,7 +56,6 @@ public class NSand
 	    NGlobals.lPrint("commd =" + myGrain.command);
 	    NGlobals.lPrint("dataType =" + myGrain.dataType);
 	    NGlobals.lPrint("dLen  =" + myGrain.dataLen);
-
 
 	    // send data
 	    if (myGrain.dataType == NDataType.CHAR) {
@@ -108,7 +105,7 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("SAND write error 1");
 	}
     }
 
@@ -138,7 +135,7 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("SAND write error 2");
 	}
     }
 
@@ -165,7 +162,7 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("SAND write error 3");
 	}
     }
 
@@ -192,7 +189,8 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+
+	    System.out.println("SAND write error 4");
 	}
     }
 
@@ -298,7 +296,7 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("SAND write error 5");
 	}
 	NGlobals.lPrint("NSand:getGrain: returning grain\n");
 
@@ -407,7 +405,7 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    NGlobals.lPrint("SAND write error");
+	    System.out.println("SAND write error 6");
 	}
 	return grain;
     }
