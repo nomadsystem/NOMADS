@@ -290,7 +290,7 @@ public class NomadServer implements Runnable {
 	// 2: INIT =================================================================================================================
 	
 	// TODO:  what other apps need init?  EG., OperaMain display too? - to set last state in case of a crash
-	IP = currentClient.getIP();   	// Grab IP (more for data logging)
+	//IP = currentClient.getIP();   	// Grab IP (more for data logging)
 
 	// INIT for CONDUCTOR_PANEL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WI
 

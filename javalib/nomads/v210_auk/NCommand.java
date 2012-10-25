@@ -36,6 +36,8 @@ public class NCommand {
     
     public static byte SEND_PROMPT_ON = 30;
     public static byte SEND_PROMPT_OFF = 31;
+    public static byte SET_CLIENT_COUNT = 33;
+
     
 
 }

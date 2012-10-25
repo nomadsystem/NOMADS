@@ -899,7 +899,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			    System.out.println("######### CRITICAL ERROR");
 			    System.out.println(">>> #### MAX RESETS");
 			    System.out.println(">>> sleeping 10 sec");
-			    NomadsErrCheckThread.sleep(10000);
+			    NomadsErrCheckThread.sleep(12000);
 			    resetCtr=0;
 			}
 			nThread.setHandleStart(mSecN);

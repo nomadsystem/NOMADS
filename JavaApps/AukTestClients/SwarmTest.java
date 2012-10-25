@@ -98,8 +98,8 @@ public class SwarmTest implements Runnable {
     public void run () {
 	NGlobals.cPrint("SwarmTest -> run()");
 	int i = 0;
-	int startX = 300+randNum.nextInt(300);
-	int startY = 300+randNum.nextInt(300);
+	int startX = 300+randNum.nextInt(1000);
+	int startY = 300+randNum.nextInt(1000);
 	int xOff, yOff;
 
 	while (true) {
