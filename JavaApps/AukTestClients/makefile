@@ -7,8 +7,7 @@ include ../makefile.conf
 CLASSES = \
 	DiscussTest.java\
 	CloudTest.java\
-	SwarmTest.java\
-	TimeCheck.java
+	SwarmTest.java
 
 default: myliblink comlink classes
 
