@@ -34,6 +34,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	long millis=0;
 	Boolean runState=false;
 
+	int numSynths=0;
 	public synchronized long getHandleStart() {
 	    return handleStart;
 	}
@@ -176,7 +177,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Boolean sandRead = false;
     Boolean connected;
 
-    int MAX_OSCS = 50;
+    int MAX_OSCS = 150;
 
     public synchronized Boolean getSandRead() {
 	return sandRead;
@@ -659,7 +660,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	d[0] = 0;
 	operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	redraw();
+	//redraw();
     }	
 
     public void deleteAllSynths() {
@@ -727,18 +728,49 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    if (numOscs < 20) {
-		maxSkip = 1+(int)(numOscs/10);
-	    }
-	    else if (numOscs < 40) {
-		maxSkip = 1+(int)(numOscs/5);
-	    }
-	    else if (numOscs < 60) {
-		maxSkip = 1+(int)(numOscs/4);
-	    }
-	    else if (numOscs < 100) {
-		maxSkip = 1+(int)(numOscs/3);
-	    }
+	    maxSkip = 1+(int)(numOscs/20);
+	    // if (numOscs < 20) {
+	    // 	maxSkip = 1+(int)(numOscs/10);
+	    // }
+	    // else if (numOscs < 40) {
+	    // 	maxSkip = 1+(int)(numOscs/9);
+	    // }
+	    // else if (numOscs < 80) {
+	    // 	maxSkip = 1+(int)(numOscs/8);
+	    // }
+	    // else if (numOscs < 150) {
+	    // 	maxSkip = 1+(int)(numOscs/3);
+	    // }
+	    // else if (numOscs < 200) {
+	    // 	maxSkip = 1+(int)(numOscs/2);
+	    // }
+	    // else if (numOscs < 400) {
+	    // 	maxSkip = 1+(int)(numOscs*1);
+	    // }
+	    // else {
+	    //  	maxSkip = 1+(int)(numOscs*2);
+	    // }
+	    // else if (numOscs < 160) {
+	    // 	maxSkip = 1+(int)(numOscs*1.3);
+	    // }
+	    // else if (numOscs < 180) {
+	    // 	maxSkip = 1+(int)(numOscs*1.4);
+	    // }
+	    // else if (numOscs < 200) {
+	    // 	maxSkip = 1+(int)(numOscs*1.4);
+	    // }
+	    // else if (numOscs < 250) {
+	    // 	maxSkip = 1+(int)(numOscs*2);
+	    // }
+	    // else if (numOscs < 300) {
+	    // 	maxSkip = 1+(int)(numOscs*2.5);
+	    // }
+	    // else if (numOscs < 400) {
+	    // 	maxSkip = 1+(int)(numOscs*4);
+	    // }
+	    // else {
+	    // 	maxSkip = 1+(int)(numOscs*10);
+	    // }
 
 	    // if (myNoiseSwarm[threadNum] == null) {
 	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
@@ -857,7 +889,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    my = new_my;
 
 
-	    redraw();
+	    //redraw();
 	    e.consume();
 	}
     }
@@ -993,6 +1025,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
 		deleteSynth(THREAD_ID);
+		maxSkip = 1+(int)(numOscs/20);
 	    }
 
 	}
@@ -1007,20 +1040,20 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		chatA = grain.iArray[0];
 		setChatColors(chatA);
 		NGlobals.cPrint("Setting ChA to " + chatA);
-		redraw();
+		//redraw();
 	    }
 
 	    else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
 		cloudA = grain.iArray[0];;
 		setCloudColors(cloudA);
 		NGlobals.cPrint("Setting ClA to " + cloudA);
-		redraw();
+		//redraw();
 	    }
 	    else if (incCmd == NCommand.SET_POINTER_ALPHA) {
 		pointerA = grain.iArray[0];;
 		setPointerColors(pointerA);
 		NGlobals.cPrint("Setting PtA to " + pointerA);
-		redraw();
+		//redraw();
 	    }
 	    else if (incCmd == NCommand.SET_CLOUD_DISPLAY_STATUS) {  // Cloud reset
 		if(grain.bArray[0] == 0) {
@@ -1031,7 +1064,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    //     histoGram.remove(i);
 		    // }
 		    NGlobals.cPrint("Resetting cloud...\n");
-		    redraw();
+		    //redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_DISCUSS_DISPLAY_STATUS) {  // Discuss reset
@@ -1044,7 +1077,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatYLoc = height-chatSpace;
 		    chatXLoc = 20;
 		    NGlobals.cPrint("Resetting discuss...\n");
-		    redraw();
+		    //redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
@@ -1071,114 +1104,121 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	else if (incAppID == NAppID.OC_POINTER) {
 	    NGlobals.cPrint("OMP: OC_POINTER\n");
 	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-		THREAD_ID = grain.iArray[0];
-		lastThread = THREAD_ID;
-		x = grain.iArray[1];
-		y = grain.iArray[2];
-		NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		if (skipper == 0) {
+		    THREAD_ID = grain.iArray[0];
+		    lastThread = THREAD_ID;
+		    x = grain.iArray[1];
+		    y = grain.iArray[2];
+		    NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		    
+		    if (numOscs < MAX_OSCS) {
+			makeSynth(THREAD_ID);
+		    }
+		    else if (numOscs >= MAX_OSCS) {
+			NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		    }
+		    
+		    NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
+		    
+		    freq = (float)x;
+		    amp = (float)(y/1000);
+		    
+		    //				float fx = (float)(x+1000)/(float)2000;
+		    //				float fy = (float)(y+1000)/(float)2000;
+		    //
+		    //				x = (int)(fx*width);
+		    //				y = (int)(fy*height);
+		    
+		    scaledX = (int)(x * origXScaler);
+		    scaledY = (int)(y * origYScaler);
+		    x = scaledX;
+		    y = scaledY;
+		    
+		    NGlobals.cPrint("OMP: x = " + x);
+		    //		amp = 1;
+		    NGlobals.cPrint("OMP: y = " + y);
+		    NGlobals.cPrint("OMP: scaledX = " + scaledX);
+		    //		amp = 1;
+		    NGlobals.cPrint("OMP: scaledY = " + scaledY);
+		    
+		    //if (x > 900)
+		    //	x = 900;
+		    //				xput = (float)(x/0.5);
+		    xput = x;
+		    if (xput < 50)
+			xput = 50;
+		    if (xput > 900)
+			xput = 900;
+		    
+		    //if (y > 900)
+		    //	y = 900;
+		    
+		    //			yput = (float)((y/0.5));
+		    yput = y;
+		    if (yput < 0)
+			yput = 0;
+		    if (yput > 900)
+			yput = 900;
+		    
+		    
+		    //=============== STK code to get H value for frequency =======================
+		    
+		    double myX, myY, myH_Sqr;
+		    double myH;		
+		    
+		    
+		    if (isOsc(THREAD_ID)) {
+			NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+			
+			tSprite = getSprite(THREAD_ID);
 
-		if (numOscs < MAX_OSCS) {
-		    makeSynth(THREAD_ID);
+			tSprite.x = x;
+			tSprite.y = y;
+
+			if (x >= origX)
+			    myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+			else 
+			    myX = (double)(origX - x);
+
+			if (posY >= y)
+			    myY = (double)(y - origY);
+			else
+			    myY = (double)(origY - y);
+
+			NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+
+
+			myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+			myH = Math.sqrt(myH_Sqr); //distance from center
+			NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+			// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+			tFreq = (float)myH * 4.0;
+
+			if (tFreq > 22050.0)
+			    tFreq = 22050.0;
+
+			if (tFreq < 20.0)
+			    tFreq = 20.0;
+
+			NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+			// data[THREAD_ID][1] = tFreq;
+			//	System.out.println("data[1] = " + data[THREAD_ID][1]);
+			// envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			// envPlayer[THREAD_ID].envelopePort.clear();
+			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+			redraw();
+		    }
 		}
-		else if (numOscs >= MAX_OSCS) {
-		    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		else {
+		    // System.out.println("skipping: " + skipper);
 		}
-
-		NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
-
-		freq = (float)x;
-		amp = (float)(y/1000);
-
-		//				float fx = (float)(x+1000)/(float)2000;
-		//				float fy = (float)(y+1000)/(float)2000;
-		//
-		//				x = (int)(fx*width);
-		//				y = (int)(fy*height);
-
-		scaledX = (int)(x * origXScaler);
-		scaledY = (int)(y * origYScaler);
-		x = scaledX;
-		y = scaledY;
-
-		NGlobals.cPrint("OMP: x = " + x);
-		//		amp = 1;
-		NGlobals.cPrint("OMP: y = " + y);
-		NGlobals.cPrint("OMP: scaledX = " + scaledX);
-		//		amp = 1;
-		NGlobals.cPrint("OMP: scaledY = " + scaledY);
-
-		//if (x > 900)
-		//	x = 900;
-		//				xput = (float)(x/0.5);
-		xput = x;
-		if (xput < 50)
-		    xput = 50;
-		if (xput > 900)
-		    xput = 900;
-
-		//if (y > 900)
-		//	y = 900;
-
-		//			yput = (float)((y/0.5));
-		yput = y;
-		if (yput < 0)
-		    yput = 0;
-		if (yput > 900)
-		    yput = 900;
-
-
-		//=============== STK code to get H value for frequency =======================
-
-		double myX, myY, myH_Sqr;
-		double myH;		
-
-
-		if (isOsc(THREAD_ID)) {
-		    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
-
-		    tSprite = getSprite(THREAD_ID);
-
-		    tSprite.x = x;
-		    tSprite.y = y;
-
-		    if (x >= origX)
-			myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-		    else 
-			myX = (double)(origX - x);
-
-		    if (posY >= y)
-			myY = (double)(y - origY);
-		    else
-			myY = (double)(origY - y);
-
-		    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
-
-
-		    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
-
-		    myH = Math.sqrt(myH_Sqr); //distance from center
-		    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
-
-		    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-		    tFreq = (float)myH * 4.0;
-
-		    if (tFreq > 22050.0)
-			tFreq = 22050.0;
-
-		    if (tFreq < 20.0)
-			tFreq = 20.0;
-
-		    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-		    // data[THREAD_ID][1] = tFreq;
-		    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
-		    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-		    // envPlayer[THREAD_ID].envelopePort.clear();
-		    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
-
-		    redraw();
-		}
+		skipper++;
+		if (skipper > maxSkip)
+		    skipper = 0;
 	    }
-
 	}
 
 	// ========= Pointer (Java based) ============================================
@@ -1605,7 +1645,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		numPasses++;
 		NGlobals.cPrint("...");
 		NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-		redraw();
+		// redraw();
 	    }
 	}
 	// END OC_CLOUD ------------------------------------------------------------------------------------
