@@ -23,9 +23,6 @@ import com.softsynth.jsyn.view11x.SynthScope;
 public class OperaMain extends Applet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 
 
-
-
-
     private class NomadsAppThread extends Thread {
 	OperaMain client; //Replace with current class name
 	Calendar now;
@@ -63,6 +60,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	public NomadsAppThread(OperaMain _client) {
 	    client = _client;
 	}
+
 	public void run()    {			
 	    NGlobals.lPrint("NomadsAppThread -> run()");
 	    while (getRunState() == true)  {
@@ -91,13 +89,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	}
     }
 
+    private int maxSkip;
 
     NSand operaSand;
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
 
     int skipper = 0;
-    int maxSkip = 1;
+
     Random randNum;
     int numOscs = 0;
 
@@ -178,6 +177,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Boolean connected;
 
     int MAX_OSCS = 150;
+
+    public synchronized int getMaxSkip() {
+	return maxSkip;
+    }
+
+    public synchronized void setMaxSkip(int m) {
+	maxSkip = m;
+    }
 
     public synchronized Boolean getSandRead() {
 	return sandRead;
@@ -400,6 +407,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		
 	width = getSize().width;
 	height = getSize().height;
+
+	setMaxSkip(1);
 
 	backgroundImageName = new String[4];
 	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
@@ -728,49 +737,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    maxSkip = 1+(int)(numOscs/20);
-	    // if (numOscs < 20) {
-	    // 	maxSkip = 1+(int)(numOscs/10);
-	    // }
-	    // else if (numOscs < 40) {
-	    // 	maxSkip = 1+(int)(numOscs/9);
-	    // }
-	    // else if (numOscs < 80) {
-	    // 	maxSkip = 1+(int)(numOscs/8);
-	    // }
-	    // else if (numOscs < 150) {
-	    // 	maxSkip = 1+(int)(numOscs/3);
-	    // }
-	    // else if (numOscs < 200) {
-	    // 	maxSkip = 1+(int)(numOscs/2);
-	    // }
-	    // else if (numOscs < 400) {
-	    // 	maxSkip = 1+(int)(numOscs*1);
-	    // }
-	    // else {
-	    //  	maxSkip = 1+(int)(numOscs*2);
-	    // }
-	    // else if (numOscs < 160) {
-	    // 	maxSkip = 1+(int)(numOscs*1.3);
-	    // }
-	    // else if (numOscs < 180) {
-	    // 	maxSkip = 1+(int)(numOscs*1.4);
-	    // }
-	    // else if (numOscs < 200) {
-	    // 	maxSkip = 1+(int)(numOscs*1.4);
-	    // }
-	    // else if (numOscs < 250) {
-	    // 	maxSkip = 1+(int)(numOscs*2);
-	    // }
-	    // else if (numOscs < 300) {
-	    // 	maxSkip = 1+(int)(numOscs*2.5);
-	    // }
-	    // else if (numOscs < 400) {
-	    // 	maxSkip = 1+(int)(numOscs*4);
-	    // }
-	    // else {
-	    // 	maxSkip = 1+(int)(numOscs*10);
-	    // }
+	    setMaxSkip((int)(numOscs/20));
 
 	    // if (myNoiseSwarm[threadNum] == null) {
 	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
@@ -898,6 +865,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	paint (g);
     }
 
+    float mSecAvg=10;
+    float mSecAvgL=10;
 
     public void errCheck() {
 	Calendar now;
@@ -914,8 +883,25 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		mSecH = nThread.getHandleStart();
 
 		mSecDiff = mSecN-mSecH;
+		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
+		mSecAvgL = ((mSecAvgL*14)+mSecDiff)/15;
 
-		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+		System.out.println("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
+
+		if (mSecAvg > (mSecAvgL)) {
+		    setMaxSkip(getMaxSkip()+1);
+		    if (getMaxSkip() > (int)(numOscs/10)) {
+			setMaxSkip((int)(numOscs/10));
+		    }
+		}
+		else if (mSecAvg < (mSecAvgL)) {
+		    setMaxSkip(getMaxSkip()-1);
+		    if (getMaxSkip() < (numOscs/20)) {
+			setMaxSkip(numOscs/20);
+		    }
+		}
+
+		NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
 
 		if (mSecDiff > 2000) {
 		    errFlag += 1;
@@ -1025,7 +1011,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
 		deleteSynth(THREAD_ID);
-		maxSkip = 1+(int)(numOscs/20);
+		setMaxSkip((int)(numOscs/20));
 	    }
 
 	}
@@ -1209,14 +1195,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			// envPlayer[THREAD_ID].envelopePort.clear();
 			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-			redraw();
+			// redraw();
 		    }
 		}
 		else {
 		    // System.out.println("skipping: " + skipper);
 		}
 		skipper++;
-		if (skipper > maxSkip)
+		if (skipper > getMaxSkip())
 		    skipper = 0;
 	    }
 	}
@@ -1339,7 +1325,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    // System.out.println("skipping: " + skipper);
 		}
 		skipper++;
-		if (skipper > maxSkip)
+		if (skipper > getMaxSkip())
 		    skipper = 0;
 	    }
 	}

@@ -1022,7 +1022,7 @@ public class NomadServer implements Runnable {
 	setHandleActive(false);
 
 	hDiff = getHandleEnd()-getHandleStart();
-	hAvg = ((hAvg*99)+hDiff)/100;
+	hAvg = ((hAvg*19)+hDiff)/20;
 
 	if ((hAvg > 500) && (hAvg <= 1000)) {
 	    if (pToggle%100 == 0) {
