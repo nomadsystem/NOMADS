@@ -98,8 +98,8 @@ public class SwarmTest implements Runnable {
     public void run () {
 	NGlobals.cPrint("SwarmTest -> run()");
 	int i = 0;
-	int startX = 300+randNum.nextInt(1000);
-	int startY = 300+randNum.nextInt(1000);
+	int startX = 200+randNum.nextInt(600);
+	int startY = 200+randNum.nextInt(600);
 	int xOff, yOff;
 
 	while (true) {
@@ -114,7 +114,7 @@ public class SwarmTest implements Runnable {
 	    try {
 		NGlobals.cPrint("SwarmTest -> NSand.send()");
 		swarmTestSand.sendGrain((byte)NAppID.JOC_POINTER, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy );
-		runner.sleep(200);
+		runner.sleep(100);
 	    }
 	    catch (InterruptedException ie) {}
 
