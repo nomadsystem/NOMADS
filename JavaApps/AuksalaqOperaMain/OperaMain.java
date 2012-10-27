@@ -91,6 +91,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     private int maxSkip;
 
+    int pToggle=0;
     NSand operaSand;
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
@@ -722,6 +723,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	if (!isOsc(threadNum)) {
 
+
 	    NGlobals.dtPrint("CREATING OSC" + numOscs);
 
 	    sprites[threadNum] = new Sprite();
@@ -886,14 +888,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
 		mSecAvgL = ((mSecAvgL*14)+mSecDiff)/15;
 
-		System.out.println("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
+		// System.out.println("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
 
+		// Slow down
 		if (mSecAvg > (mSecAvgL)) {
 		    setMaxSkip(getMaxSkip()+1);
 		    if (getMaxSkip() > (int)(numOscs/10)) {
 			setMaxSkip((int)(numOscs/10));
 		    }
 		}
+		// Speed up
 		else if (mSecAvg < (mSecAvgL)) {
 		    setMaxSkip(getMaxSkip()-1);
 		    if (getMaxSkip() < (numOscs/20)) {
@@ -901,7 +905,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    }
 		}
 
-		NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
+		pToggle++;
+		if (pToggle > 100) {
+		    pToggle=0;
+		}
+		if (pToggle%5 == 0) {
+		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
+		}
 
 		if (mSecDiff > 2000) {
 		    errFlag += 1;
