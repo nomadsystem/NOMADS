@@ -1,11 +1,29 @@
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-java CloudTest &>/dev/null & 
-
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 1
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
