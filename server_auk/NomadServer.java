@@ -74,6 +74,7 @@ public class NomadServer implements Runnable {
     private int spriteTicker=0;
 
     private int maxClients=10;
+    int errCode = 0;
 
     public synchronized int getSpriteTicker() {
 	return spriteTicker;
@@ -157,6 +158,7 @@ public class NomadServer implements Runnable {
     // private NomadsErrCheckThread nECThread;
 
     int errChecks = 0;
+    byte lagAppID = 0;
 
     public void errCheck() {
 	Calendar now;
@@ -169,17 +171,17 @@ public class NomadServer implements Runnable {
 	errChecks++;
 
 	NGlobals.dtPrint(eString);
-	 try {
+	try {
 
-	     if (getHandleActive() == true) {
+	    if (getHandleActive() == true) {
 
 
-		 now = Calendar.getInstance();
-		 //		 mSecN = now.getTimeInMillis();
-		 mSecN = System.nanoTime()/1000;
+		now = Calendar.getInstance();
+		//		 mSecN = now.getTimeInMillis();
+		mSecN = System.nanoTime()/1000;
 
-		 mSecH = getHandleStart();
-		 mSecE = getHandleEnd();
+		mSecH = getHandleStart();
+		mSecE = getHandleEnd();
 		 
 	 	mSecDiff = mSecN-mSecH;
 
@@ -207,25 +209,25 @@ public class NomadServer implements Runnable {
 			System.out.println(">>> DECR ERROR COUNT: " + errFlag);
 		    }
 		}
-	     }
+	    }
 	     
-	     if (resetCtr > maxResets) {
-		 System.out.println("######### CRITICAL ERROR");
-		 System.out.println(">>> #### MAX RESETS");
-		 System.out.println(">>> sleeping 10 sec");
-		 // Get clent number of inc client
-		 int tNum = currentClientHolder.getThreadID();
-		 int tCNum = clientNumFromThreadID[tNum];
-		 remove(tCNum);
-		 NomadsErrCheckThread.sleep(1000);
-		 resetCtr=0;
+	    if (resetCtr > maxResets) {
+		System.out.println("######### CRITICAL ERROR");
+		System.out.println(">>> #### MAX RESETS");
+		System.out.println(">>> sleeping 10 sec");
+		// Get clent number of inc client
+		int tNum = currentClientHolder.getThreadID();
+		int tCNum = clientNumFromThreadID[tNum];
+		remove(tCNum);
+		NomadsErrCheckThread.sleep(1000);
+		resetCtr=0;
 
-	     }
-	     // THIS SETS THE ERROR CHECKING RATE
-	     NomadsErrCheckThread.sleep(500);
+	    }
+	    // THIS SETS THE ERROR CHECKING RATE
+	    NomadsErrCheckThread.sleep(500);
 
-	 }
-	 catch (InterruptedException ie) {}
+	}
+	catch (InterruptedException ie) {}
     }
 
 
@@ -415,38 +417,41 @@ public class NomadServer implements Runnable {
 	}		
 
 	// Skip data because we're taking too long (crash prevention) based on an individual hDiff
-	//   specifically, we're skipping OC_DISCUSS data
 
-	if ((incAppID == NAppID.OC_DISCUSS) && 
-	    (incAppCmd != NCommand.REGISTER) && 
-	    (skipper > 0)) {
-
-	    // NGlobals.dtPrint("HANDLE():  OC_DISCUSS skipping");
-	    skipper--;
-
-	    if (skipper == 0) {
-		NGlobals.dtPrint(" ");
-		NGlobals.dtPrint("    HANDLE():  done skipping (OC_DISCUSS)");
-		NGlobals.dtPrint(" ");
-		setRunState(true);
-	    }
-	    else {
-		// send to the incoming client (so people can see their text)
-		tCNum = clientNumFromThreadID[THREAD_ID];
-		currentClient = clientList[tCNum];
-		currentClient.threadSand.sendGrain(myGrain);
-
-		for (int c = 0; c < mainDisplayClientCount; c++) {
-		    // Get the client off the master list
-		    NGlobals.sPrint("   sending to ===> display client[" + c + "]");
-		    currentClient = mainDisplayClientList[c];
-		    currentClientHolder = currentClient;
-		    NGlobals.sPrint("   w/ appID = " + printID((byte)currentClient.getAppID()));
-		    currentClient.threadSand.sendGrain(myGrain);
+	if (((incAppID == lagAppID) && 
+	     (incAppCmd != NCommand.REGISTER) && 
+	     (skipper > 0)) ||
+	    ((incAppID == NAppID.OC_DISCUSS) && 
+	     (incAppCmd != NCommand.REGISTER) && 
+	     (skipper > 0)))
+	    {
+		
+		// NGlobals.dtPrint("HANDLE():  OC_DISCUSS skipping");
+		skipper--;
+		
+		if (skipper == 0) {
+		    NGlobals.dtPrint(" ");
+		    NGlobals.dtPrint("    HANDLE():  done skipping " + printID(lagAppID));
+		    NGlobals.dtPrint(" ");
+		    setRunState(true);
 		}
-		return;
+		else {
+		    // send to the incoming client (so people can see their text)
+		    tCNum = clientNumFromThreadID[THREAD_ID];
+		    currentClient = clientList[tCNum];
+		    currentClient.threadSand.sendGrain(myGrain);
+
+		    for (int c = 0; c < mainDisplayClientCount; c++) {
+			// Get the client off the master list
+			NGlobals.sPrint("   sending to ===> display client[" + c + "]");
+			currentClient = mainDisplayClientList[c];
+			currentClientHolder = currentClient;
+			NGlobals.sPrint("   w/ appID = " + printID((byte)currentClient.getAppID()));
+			currentClient.threadSand.sendGrain(myGrain);
+		    }
+		    return;
+		}
 	    }
-	}
 	    
 	// Skip data because we're taking too long (crash prevention) based on average hDiff
 	//   skipping everything except the following
@@ -848,7 +853,7 @@ public class NomadServer implements Runnable {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
 			    //myGrain.print();
 			    // Write the data out
-			    currentClient.threadSand.sendGrain(myGrain);
+			    errCode = currentClient.threadSand.sendGrain(myGrain);
 			}
 		    }
 
@@ -883,7 +888,16 @@ public class NomadServer implements Runnable {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
 			    //myGrain.print();
 			    // Write the data out
-			    currentClient.threadSand.sendGrain(myGrain);
+			    errCode = currentClient.threadSand.sendGrain(myGrain);
+			    if (errCode < 1) {
+				NGlobals.dtPrint("SAND ERROR:  writing to client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
+				// myGrain.print();
+			    }
+			    // int tNum = currentClientHolder.getThreadID();
+			    // int tCNum = clientNumFromThreadID[tNum];
+			    // remove(tCNum);
+
+			    // xxx
 			}
 
 			// send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -891,7 +905,7 @@ public class NomadServer implements Runnable {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + printID((byte)currentClient.getAppID()));
 			    //myGrain.print();
 			    // Write the data out
-			    currentClient.threadSand.sendGrain(myGrain);
+			    errCode = currentClient.threadSand.sendGrain(myGrain);
 			}
 
 		    }
@@ -1069,7 +1083,7 @@ public class NomadServer implements Runnable {
 	    NGlobals.dtPrint(" ");
 	    NGlobals.dtPrint("   THROTTLE DOWN:  hDiff > 1200 msec (" + hDiff + ")");
 	    if (getMaxClients() > 10) {
-		setMaxClients(getMaxClients()-2);
+		setMaxClients(getMaxClients()-10);
 
 		NGlobals.dtPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID +  " | setting maxClients to (" + getMaxClients() + ") | total (" + getClientCount() + ")");
 	    }
@@ -1077,7 +1091,8 @@ public class NomadServer implements Runnable {
 	    // THROTTLE DOWN:  based on hDiff, skip OC_DISCUSS data (temporarily)
 	    
 	    if ((skipper == 0) && (getRunState() == true)) {
-		skipper = (int)(hDiff/100);
+		skipper = (int)(hDiff/200);
+		lagAppID = incAppID;
 		NGlobals.dtPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID +  " | setting grain skip: " + skipper);
 		setRunState(false);
 	    }

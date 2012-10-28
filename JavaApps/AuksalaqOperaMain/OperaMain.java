@@ -22,6 +22,73 @@ import com.softsynth.jsyn.view11x.SynthScope;
 
 public class OperaMain extends Applet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 
+    // Number of times we've checked our global word list array
+    int numPasses;
+
+    // List of all our elements
+    ArrayList<HistoElt> histoGram;
+    //  Temporary placeholder
+    HistoElt tHist;
+
+    int guesser,rGuess,cGuess;
+
+    BufferedImage offScreen;
+    Graphics2D offScreenGrp;
+    Image player;
+
+    Font chatFont;
+
+
+    Color chatColor;
+
+    // mist vars made global to try and improve performance
+
+    double tVolumeVal;
+    int tNum;
+    float tAmp;
+    float tVolume;
+    int scaledX;
+    int scaledY;
+    double myX, myY, myH_Sqr;
+    double myH;
+    double tFreq;
+    String text;
+    int xMin;
+    int xVar;
+    int yMin;
+    int yVar;
+    int xRand;
+    int yRand;
+    int xpoints[] = new int[4];
+    int ypoints[] = new int[4];
+    int txpoints[] = new int[4];
+    int typoints[] = new int[4];
+    int threadNum;
+    int quad;
+    int numScreenCellsX;
+    int numScreenCellsY;
+    int curCellX;
+    int curCellY;
+    int cellCtrX;
+    int cellCtrY;
+    int cellSlotsX[];
+    int cellSlotsY[];
+    int screenCellX = 4; //Number of columns for cloud text
+    int screenCellY = 15; //Number of rows for cloud text
+
+    Random rng = new Random(); // Ideally just create one instance globally
+	
+    ArrayList<Integer> generatedX;
+    ArrayList<Integer> generatedY;
+	
+    Thread runner;
+
+    long mSecR=0;
+    int resetCtr=0;
+    int maxResets=10;
+
+    float mSecAvg=10;
+    float mSecAvgL=10;
 
     private class NomadsAppThread extends Thread {
 	OperaMain client; //Replace with current class name
@@ -96,12 +163,23 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
 
-    int skipper = 0;
+    int spriteSkipper = 0;
+    int allSkipper = 0;
+
+    private int allMaxSkip = 0;
+
+    public synchronized void setAllMaxSkip (int s) {
+	allMaxSkip = s;
+    }
+
+    public synchronized int getAllMaxSkip () {
+	return allMaxSkip;
+    }
 
     Random randNum;
     int numOscs = 0;
 
-    int currentBackgroundImageName = 0; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
+    int currentBackgroundImageName = 3; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
 
@@ -177,13 +255,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Boolean sandRead = false;
     Boolean connected;
 
-    int MAX_OSCS = 150;
+    int MAX_OSCS = 50;
 
-    public synchronized int getMaxSkip() {
+    public synchronized int getMaxSpriteSkip() {
 	return maxSkip;
     }
 
-    public synchronized void setMaxSkip(int m) {
+    public synchronized void setSpriteMaxSkip(int m) {
 	maxSkip = m;
     }
 
@@ -248,70 +326,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	Color color;
     }    
 
-    // Number of times we've checked our global word list array
-    int numPasses;
-
-    // List of all our elements
-    ArrayList<HistoElt> histoGram;
-    //  Temporary placeholder
-    HistoElt tHist;
-
-    int guesser,rGuess,cGuess;
-
-    BufferedImage offScreen;
-    Graphics2D offScreenGrp;
-    Image player;
-
-    Font chatFont;
-
-
-    Color chatColor;
-
-    // mist vars made global to try and improve performance
-
-    double tVolumeVal;
-    int tNum;
-    float tAmp;
-    float tVolume;
-    int scaledX;
-    int scaledY;
-    double myX, myY, myH_Sqr;
-    double myH;
-    double tFreq;
-    String text;
-    int xMin;
-    int xVar;
-    int yMin;
-    int yVar;
-    int xRand;
-    int yRand;
-    int xpoints[] = new int[4];
-    int ypoints[] = new int[4];
-    int txpoints[] = new int[4];
-    int typoints[] = new int[4];
-    int threadNum;
-    int quad;
-    int numScreenCellsX;
-    int numScreenCellsY;
-    int curCellX;
-    int curCellY;
-    int cellCtrX;
-    int cellCtrY;
-    int cellSlotsX[];
-    int cellSlotsY[];
-    int screenCellX = 4; //Number of columns for cloud text
-    int screenCellY = 15; //Number of rows for cloud text
-
-    Random rng = new Random(); // Ideally just create one instance globally
-	
-    ArrayList<Integer> generatedX;
-    ArrayList<Integer> generatedY;
-	
-    Thread runner;
-
-    long mSecR=0;
-    int resetCtr=0;
-    int maxResets=10;
 
     public static void main(String args[])
     {
@@ -409,7 +423,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	width = getSize().width;
 	height = getSize().height;
 
-	setMaxSkip(1);
+	setSpriteMaxSkip(1);
+	setAllMaxSkip(1);
 
 	backgroundImageName = new String[4];
 	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
@@ -682,7 +697,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     }
 
 
-    public void deleteSynth(int threadNum) {
+    public synchronized void deleteSynth(int threadNum) {
 
 	if (isOsc(threadNum)) {
 	    deleteSprite(threadNum);
@@ -739,7 +754,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    setMaxSkip((int)(numOscs/20));
+	    setSpriteMaxSkip((int)(numOscs/3));
 
 	    // if (myNoiseSwarm[threadNum] == null) {
 	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
@@ -867,8 +882,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	paint (g);
     }
 
-    float mSecAvg=10;
-    float mSecAvgL=10;
 
     public void errCheck() {
 	Calendar now;
@@ -886,22 +899,22 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		mSecDiff = mSecN-mSecH;
 		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
-		mSecAvgL = ((mSecAvgL*14)+mSecDiff)/15;
+		mSecAvgL = ((mSecAvgL*19)+mSecDiff)/20;
 
 		// System.out.println("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
 
 		// Slow down
 		if (mSecAvg > (mSecAvgL)) {
-		    setMaxSkip(getMaxSkip()+1);
-		    if (getMaxSkip() > (int)(numOscs/10)) {
-			setMaxSkip((int)(numOscs/10));
+		    setSpriteMaxSkip(getMaxSpriteSkip()+3);
+		    if (getMaxSpriteSkip() > (int)(numOscs/3)) {
+			setSpriteMaxSkip((int)(numOscs/5));
 		    }
 		}
 		// Speed up
 		else if (mSecAvg < (mSecAvgL)) {
-		    setMaxSkip(getMaxSkip()-1);
-		    if (getMaxSkip() < (numOscs/20)) {
-			setMaxSkip(numOscs/20);
+		    setSpriteMaxSkip(getMaxSpriteSkip()-1);
+		    if (getMaxSpriteSkip() < (numOscs/6)) {
+			setSpriteMaxSkip(numOscs/10);
 		    }
 		}
 
@@ -909,8 +922,24 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		if (pToggle > 100) {
 		    pToggle=0;
 		}
-		if (pToggle%5 == 0) {
+		if (pToggle%2 == 0) {
 		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
+		}
+
+		if (mSecDiff > 300) {
+		    setAllMaxSkip(getAllMaxSkip()+1);
+		    if (getAllMaxSkip() > 10) {
+			setAllMaxSkip(10);
+		    }
+		    NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
+		}
+		else {
+		    setAllMaxSkip(getAllMaxSkip()-1);
+		    if (getAllMaxSkip() < 0) {
+			setAllMaxSkip(0);
+		    }
+		    NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
+		    
 		}
 
 		if (mSecDiff > 2000) {
@@ -1015,16 +1044,22 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd);
 	NGlobals.cPrint("...");
 
+
+
+
 	if (incAppID == NAppID.SERVER) {
 	    if (grain.command == NCommand.DELETE_SPRITE) {
 		THREAD_ID = grain.iArray[0];
 
 		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
 		deleteSynth(THREAD_ID);
-		setMaxSkip((int)(numOscs/20));
+		setSpriteMaxSkip((int)(numOscs/3));
 	    }
 
 	}
+
+
+
 
 
 	// CONDUCTOR PANEL ================================================================================
@@ -1095,571 +1130,579 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	}
 
-	// ========= Pointer (regular) ============================================
-
-	else if (incAppID == NAppID.OC_POINTER) {
-	    NGlobals.cPrint("OMP: OC_POINTER\n");
-	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-		if (skipper == 0) {
-		    THREAD_ID = grain.iArray[0];
-		    lastThread = THREAD_ID;
-		    x = grain.iArray[1];
-		    y = grain.iArray[2];
-		    NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
-		    
-		    if (numOscs < MAX_OSCS) {
-			makeSynth(THREAD_ID);
-		    }
-		    else if (numOscs >= MAX_OSCS) {
-			NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
-		    }
-		    
-		    NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
-		    
-		    freq = (float)x;
-		    amp = (float)(y/1000);
-		    
-		    //				float fx = (float)(x+1000)/(float)2000;
-		    //				float fy = (float)(y+1000)/(float)2000;
-		    //
-		    //				x = (int)(fx*width);
-		    //				y = (int)(fy*height);
-		    
-		    scaledX = (int)(x * origXScaler);
-		    scaledY = (int)(y * origYScaler);
-		    x = scaledX;
-		    y = scaledY;
-		    
-		    NGlobals.cPrint("OMP: x = " + x);
-		    //		amp = 1;
-		    NGlobals.cPrint("OMP: y = " + y);
-		    NGlobals.cPrint("OMP: scaledX = " + scaledX);
-		    //		amp = 1;
-		    NGlobals.cPrint("OMP: scaledY = " + scaledY);
-		    
-		    //if (x > 900)
-		    //	x = 900;
-		    //				xput = (float)(x/0.5);
-		    xput = x;
-		    if (xput < 50)
-			xput = 50;
-		    if (xput > 900)
-			xput = 900;
-		    
-		    //if (y > 900)
-		    //	y = 900;
-		    
-		    //			yput = (float)((y/0.5));
-		    yput = y;
-		    if (yput < 0)
-			yput = 0;
-		    if (yput > 900)
-			yput = 900;
-		    
-		    
-		    //=============== STK code to get H value for frequency =======================
-		    
-		    double myX, myY, myH_Sqr;
-		    double myH;		
-		    
-		    
-		    if (isOsc(THREAD_ID)) {
-			NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+	if (allSkipper == 0) {
+	    
+	    // ========= Pointer (regular) ============================================
+	    
+	    if (incAppID == NAppID.OC_POINTER) {
+		NGlobals.cPrint("OMP: OC_POINTER\n");
+		if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
+		    if (spriteSkipper == 0) {
+			THREAD_ID = grain.iArray[0];
+			lastThread = THREAD_ID;
+			x = grain.iArray[1];
+			y = grain.iArray[2];
+			NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 			
-			tSprite = getSprite(THREAD_ID);
-
-			tSprite.x = x;
-			tSprite.y = y;
-
-			if (x >= origX)
-			    myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-			else 
-			    myX = (double)(origX - x);
-
-			if (posY >= y)
-			    myY = (double)(y - origY);
-			else
-			    myY = (double)(origY - y);
-
-			NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
-
-
-			myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
-
-			myH = Math.sqrt(myH_Sqr); //distance from center
-			NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
-
-			// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-			tFreq = (float)myH * 4.0;
-
-			if (tFreq > 22050.0)
-			    tFreq = 22050.0;
-
-			if (tFreq < 20.0)
-			    tFreq = 20.0;
-
-			NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-			// data[THREAD_ID][1] = tFreq;
-			//	System.out.println("data[1] = " + data[THREAD_ID][1]);
-			// envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-			// envPlayer[THREAD_ID].envelopePort.clear();
-			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
-
-			// redraw();
+			if (numOscs < MAX_OSCS) {
+			    makeSynth(THREAD_ID);
+			}
+			else if (numOscs >= MAX_OSCS) {
+			    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+			}
+			
+			NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
+			
+			freq = (float)x;
+			amp = (float)(y/1000);
+			
+			//				float fx = (float)(x+1000)/(float)2000;
+			//				float fy = (float)(y+1000)/(float)2000;
+			//
+			//				x = (int)(fx*width);
+			//				y = (int)(fy*height);
+			
+			scaledX = (int)(x * origXScaler);
+			scaledY = (int)(y * origYScaler);
+			x = scaledX;
+			y = scaledY;
+			
+			NGlobals.cPrint("OMP: x = " + x);
+			//		amp = 1;
+			NGlobals.cPrint("OMP: y = " + y);
+			NGlobals.cPrint("OMP: scaledX = " + scaledX);
+			//		amp = 1;
+			NGlobals.cPrint("OMP: scaledY = " + scaledY);
+			
+			//if (x > 900)
+			//	x = 900;
+			//				xput = (float)(x/0.5);
+			xput = x;
+			if (xput < 50)
+			    xput = 50;
+			if (xput > 900)
+			    xput = 900;
+			
+			//if (y > 900)
+			//	y = 900;
+			
+			//			yput = (float)((y/0.5));
+			yput = y;
+			if (yput < 0)
+			    yput = 0;
+			if (yput > 900)
+			    yput = 900;
+			
+			
+			//=============== STK code to get H value for frequency =======================
+			
+			double myX, myY, myH_Sqr;
+			double myH;		
+			
+			
+			if (isOsc(THREAD_ID)) {
+			    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+			    
+			    tSprite = getSprite(THREAD_ID);
+			    
+			    tSprite.x = x;
+			    tSprite.y = y;
+			    
+			    if (x >= origX)
+				myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+			    else 
+				myX = (double)(origX - x);
+			    
+			    if (posY >= y)
+				myY = (double)(y - origY);
+			    else
+				myY = (double)(origY - y);
+			    
+			    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+			    
+			    
+			    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+			    
+			    myH = Math.sqrt(myH_Sqr); //distance from center
+			    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+			    
+			    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+			    tFreq = (float)myH * 4.0;
+			    
+			    if (tFreq > 22050.0)
+				tFreq = 22050.0;
+			    
+			    if (tFreq < 20.0)
+				tFreq = 20.0;
+			    
+			    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+			    // data[THREAD_ID][1] = tFreq;
+			    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
+			    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			    // envPlayer[THREAD_ID].envelopePort.clear();
+			    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+			    
+			    // redraw();
+			}
 		    }
+		    else {
+			// System.out.println("skipping: " + spriteSkipper);
+		    }
+		    spriteSkipper++;
+		    if (spriteSkipper > getMaxSpriteSkip())
+			spriteSkipper = 0;
 		}
-		else {
-		    // System.out.println("skipping: " + skipper);
-		}
-		skipper++;
-		if (skipper > getMaxSkip())
-		    skipper = 0;
 	    }
-	}
+	    
+	    // ========= Pointer (Java based) ============================================
+	    
+	    else if (incAppID == NAppID.JOC_POINTER) {
+		NGlobals.cPrint("OMP: JOC_POINTER\n");
+		if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
+		    if (spriteSkipper == 0) {
+			
+			THREAD_ID = grain.iArray[0];
+			x = grain.iArray[1];
+			y = grain.iArray[2];
+			NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+			
+			if (numOscs < MAX_OSCS) {
+			    makeSynth(THREAD_ID);
+			}
+			else if (numOscs >= MAX_OSCS) {
+			    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+			}
+			
+			NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
+			
+			freq = (float)x;
+			amp = (float)(y/1000);
+			
+			//				float fx = (float)(x+1000)/(float)2000;
+			//				float fy = (float)(y+1000)/(float)2000;
+			//
+			//				x = (int)(fx*width);
+			//				y = (int)(fy*height);
+			
+			scaledX = (int)(x * origXScaler);
+			scaledY = (int)(y * origYScaler);
+			x = scaledX;
+			y = scaledY;
+			
+			NGlobals.cPrint("OMP: x = " + x);
+			//		amp = 1;
+			NGlobals.cPrint("OMP: y = " + y);
+			NGlobals.cPrint("OMP: scaledX = " + scaledX);
+			//		amp = 1;
+			NGlobals.cPrint("OMP: scaledY = " + scaledY);
 
-	// ========= Pointer (Java based) ============================================
+			//if (x > 900)
+			//	x = 900;
+			//				xput = (float)(x/0.5);
+			xput = x;
+			if (xput < 50)
+			    xput = 50;
+			if (xput > 900)
+			    xput = 900;
 
-	else if (incAppID == NAppID.JOC_POINTER) {
-	    NGlobals.cPrint("OMP: JOC_POINTER\n");
-	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-		if (skipper == 0) {
+			//if (y > 900)
+			//	y = 900;
 
-		    THREAD_ID = grain.iArray[0];
-		    x = grain.iArray[1];
-		    y = grain.iArray[2];
-		    NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+			//			yput = (float)((y/0.5));
+			yput = y;
+			if (yput < 0)
+			    yput = 0;
+			if (yput > 900)
+			    yput = 900;
 
-		    if (numOscs < MAX_OSCS) {
-			makeSynth(THREAD_ID);
+
+			//=============== STK code to get H value for frequency =======================
+
+			double myX, myY, myH_Sqr;
+			double myH;		
+
+
+			if (isOsc(THREAD_ID)) {
+			    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+
+			    tSprite = getSprite(THREAD_ID);
+
+			    tSprite.x = x;
+			    tSprite.y = y;
+
+			    if (x >= origX)
+				myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+			    else 
+				myX = (double)(origX - x);
+
+			    if (posY >= y)
+				myY = (double)(y - origY);
+			    else
+				myY = (double)(origY - y);
+
+			    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+
+
+			    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+			    myH = Math.sqrt(myH_Sqr); //distance from center
+			    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+			    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+			    tFreq = (float)myH * 4.0;
+
+			    if (tFreq > 22050.0)
+				tFreq = 22050.0;
+
+			    if (tFreq < 20.0)
+				tFreq = 20.0;
+
+			    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+			    // data[THREAD_ID][1] = tFreq;
+			    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
+			    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			    // envPlayer[THREAD_ID].envelopePort.clear();
+			    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+			    //	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
+			    redraw();
+			}
 		    }
-		    else if (numOscs >= MAX_OSCS) {
-			NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		    else {
+			// System.out.println("skipping: " + spriteSkipper);
 		    }
-
-		    NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
-
-		    freq = (float)x;
-		    amp = (float)(y/1000);
-
-		    //				float fx = (float)(x+1000)/(float)2000;
-		    //				float fy = (float)(y+1000)/(float)2000;
-		    //
-		    //				x = (int)(fx*width);
-		    //				y = (int)(fy*height);
-
-		    scaledX = (int)(x * origXScaler);
-		    scaledY = (int)(y * origYScaler);
-		    x = scaledX;
-		    y = scaledY;
-
-		    NGlobals.cPrint("OMP: x = " + x);
-		    //		amp = 1;
-		    NGlobals.cPrint("OMP: y = " + y);
-		    NGlobals.cPrint("OMP: scaledX = " + scaledX);
-		    //		amp = 1;
-		    NGlobals.cPrint("OMP: scaledY = " + scaledY);
-
-		    //if (x > 900)
-		    //	x = 900;
-		    //				xput = (float)(x/0.5);
-		    xput = x;
-		    if (xput < 50)
-			xput = 50;
-		    if (xput > 900)
-			xput = 900;
-
-		    //if (y > 900)
-		    //	y = 900;
-
-		    //			yput = (float)((y/0.5));
-		    yput = y;
-		    if (yput < 0)
-			yput = 0;
-		    if (yput > 900)
-			yput = 900;
-
-
-		    //=============== STK code to get H value for frequency =======================
-
-		    double myX, myY, myH_Sqr;
-		    double myH;		
-
-
-		    if (isOsc(THREAD_ID)) {
-			NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
-
-			tSprite = getSprite(THREAD_ID);
-
-			tSprite.x = x;
-			tSprite.y = y;
-
-			if (x >= origX)
-			    myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-			else 
-			    myX = (double)(origX - x);
-
-			if (posY >= y)
-			    myY = (double)(y - origY);
-			else
-			    myY = (double)(origY - y);
-
-			NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
-
-
-			myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
-
-			myH = Math.sqrt(myH_Sqr); //distance from center
-			NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
-
-			// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-			tFreq = (float)myH * 4.0;
-
-			if (tFreq > 22050.0)
-			    tFreq = 22050.0;
-
-			if (tFreq < 20.0)
-			    tFreq = 20.0;
-
-			NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-			// data[THREAD_ID][1] = tFreq;
-			//	System.out.println("data[1] = " + data[THREAD_ID][1]);
-			// envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-			// envPlayer[THREAD_ID].envelopePort.clear();
-			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
-
-			//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
-			redraw();
-		    }
+		    spriteSkipper++;
+		    if (spriteSkipper > getMaxSpriteSkip())
+			spriteSkipper = 0;
 		}
-		else {
-		    // System.out.println("skipping: " + skipper);
-		}
-		skipper++;
-		if (skipper > getMaxSkip())
-		    skipper = 0;
 	    }
-	}
 
-	// ========= CLOUD INPUT ============================================
+	    // ========= CLOUD INPUT ============================================
 
-	else if (incAppID == NAppID.OC_CLOUD) {
-	    if (incCmd == NCommand.SEND_MESSAGE) {
-		text = new String(grain.bArray);
-		NGlobals.cPrint("OM: CloudText: " + text);
-		NGlobals.cPrint("OC_CLOUD\n");
+	    else if (incAppID == NAppID.OC_CLOUD) {
+		if (incCmd == NCommand.SEND_MESSAGE) {
+		    text = new String(grain.bArray);
+		    NGlobals.cPrint("OM: CloudText: " + text);
+		    NGlobals.cPrint("OC_CLOUD\n");
 
-		stringLength = text.length(); 
+		    stringLength = text.length(); 
 
-		// Then check text locations to avoid collisions *************************
+		    // Then check text locations to avoid collisions *************************
 
-		wordFound = 0;
+		    wordFound = 0;
 
-		// Check our histogram =============================================
+		    // Check our histogram =============================================
 
-		for (i=0;i<histoGram.size();i++) {
-		    tHist = histoGram.get(i);
-		    NGlobals.cPrint("...");
-		    NGlobals.cPrint("checking histogram ----- tHist.text = ||>> " + tHist.text + " <<||");
-		    NGlobals.cPrint("...");
-		    NGlobals.cPrint("  tHist.size = " + tHist.size);
-		    NGlobals.cPrint("...");
-		    NGlobals.cPrint(" histoGram.size() = " + histoGram.size());
-
-		    // 1.  Histogram element [i] matches incoming text -----
-
-		    x=tHist.x;
-		    y=tHist.y;	       	
-
-		    if (tHist.text.compareToIgnoreCase(text) == 0) {
-			wordFound = 1;
+		    for (i=0;i<histoGram.size();i++) {
+			tHist = histoGram.get(i);
 			NGlobals.cPrint("...");
-			NGlobals.cPrint(">>>FOUND " + tHist.text + " at [" + x + "]" + "[" + y + "]");
-			NGlobals.cPrint("  INCreasing text size");
+			NGlobals.cPrint("checking histogram ----- tHist.text = ||>> " + tHist.text + " <<||");
+			NGlobals.cPrint("...");
+			NGlobals.cPrint("  tHist.size = " + tHist.size);
+			NGlobals.cPrint("...");
+			NGlobals.cPrint(" histoGram.size() = " + histoGram.size());
+
+			// 1.  Histogram element [i] matches incoming text -----
+
+			x=tHist.x;
+			y=tHist.y;	       	
+
+			if (tHist.text.compareToIgnoreCase(text) == 0) {
+			    wordFound = 1;
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint(">>>FOUND " + tHist.text + " at [" + x + "]" + "[" + y + "]");
+			    NGlobals.cPrint("  INCreasing text size");
+
+			    // This will change to be a combination of rank v time (ie., numPasses);
+			    tHist.size += 4;
+
+			    quad = tHist.quad;
+			    NGlobals.cPrint("  quad = " + quad);
+			    if (quad > 2) {
+				tHist.x-=8;
+				tHist.y-=5;
+				if (tHist.x < centerX)
+				    tHist.x = centerX;
+				if (tHist.y < centerY)
+				    tHist.y = centerY;
+			    }
+			    else if (quad > 1) {
+				tHist.x-=8;
+				tHist.y+=5;
+				if (tHist.x < centerX)
+				    tHist.x = centerX;
+				if (tHist.y > centerY)
+				    tHist.y = centerY;
+			    }
+			    else if (quad > 0) {
+				tHist.x+=6;
+				tHist.y+=5;
+				if (tHist.x > centerX)
+				    tHist.x = centerX;
+				if (tHist.y > centerY)
+				    tHist.y = centerY;
+			    }
+			    else {
+				tHist.x+=6;
+				tHist.y-=5;
+				if (tHist.x > centerX)
+				    tHist.x = centerX;
+				if (tHist.y < centerY)
+				    tHist.y = centerY;
+			    }
+
+			    if (tHist.size > maxFontSize) {
+				fontSize = maxFontSize;
+			    }
+			    else {
+				fontSize = tHist.size;
+			    }
+			    tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+
+			    //i = histoGram.size();  // exit the loop
+
+			}
+
+			// 2a.  Blank cell ... do nothing
+			else if (tHist.text.compareToIgnoreCase("") == 0) {
+			    NGlobals.cPrint("|_|");
+			}
+
+			// 2.  Histogram element [i] DOES NOT match incoming text and is > min size -----
+
+			else if (tHist.size > minFontSize) {  // Decrease size (if > min AND modulo 2)
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  DECreasing word size for " + tHist.text);
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  numPasses = " + numPasses);
+			    //	if (numPasses%1 == 0) {
+			    tHist.size-=2;
+			    quad = tHist.quad;
+			    if (quad > 2) {
+				tHist.x+=2;
+				tHist.y+=2;
+			    }
+			    else if (quad > 1) {
+				tHist.x+=2;
+				tHist.y-=2;
+			    }
+			    else if (quad > 0) {
+				tHist.x-=2;
+				tHist.y-=2;
+			    }
+			    else {
+				tHist.x-=2;
+				tHist.y+=2;
+			    }
+			    if (tHist.x < 10) 
+				tHist.x = 10;
+			    if (tHist.x > (width-10))
+				tHist.x = width-10;
+			    if (tHist.y < 10) 
+				tHist.y = 10;
+			    if (tHist.y > (height-10))
+				tHist.y = height-10;
+			    //	}
+			    if (tHist.size > maxFontSize)
+				tHist.size = maxFontSize;
+			    fontSize = tHist.size;
+			    tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+
+			    NGlobals.cPrint("...");
+
+			    NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  tHist.size= " + tHist.size);
+			}
+
+			// 3.  Histogram element [i] DOES NOT match and is < min size ... delete it
+
+			else if (tHist.size <= minFontSize) {
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  tHist.size= " + tHist.size);
+			    NGlobals.cPrint("...");
+			    NGlobals.cPrint("  REMoving word: " + tHist.text + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+			    fontSize = tHist.size;
+			    if (fontSize < minFontSize)
+				fontSize = minFontSize;
+
+			    histoGram.remove(i);
+			    i--;
+			}			  	
+		    }  // end for (i=0;i<histoGram.size();i++)
+
+
+		    // No words found, add new word and store relevant data
+		    if (wordFound == 0) {
+			// Figure out where to put the text =============================================
+
+			// Find a free cell
+			picker = 1;
+
+			NGlobals.cPrint("...");
+
+			// figure out center, then expand range over time 
+
+			x=y=0;
+
+			tHist = new HistoElt();
+			tHist.text = new String(text);
+
+			xMin = (int)(width * 0.0);
+			xVar = (int)(width * 0.6);
+
+			yMin = (int)(height * 0.0);
+			yVar = (int)(height * 0.4);
+
+			NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
+			NGlobals.cPrint("setting quad = " + quad);
+
+			xRand = xMin + randNum.nextInt(xVar);
+			yRand = yMin + randNum.nextInt(yVar);
+					
+					
+
+			// curCell = cellSlots[cellCtr];
+			curCellX = cellSlotsX[cellCtrX]; //pick x value from random array
+			curCellY = cellSlotsY[cellCtrY]; //pick y value from random array
+
+			x = curCellX; //Set x coordinate
+			y = curCellY; //Set y coordinate
+
+			// Check that text is shifted properly
+
+			int tLen = text.length();
+			int tEnd = x+((int)(startFontSize*0.6)*tLen);
+			int tDiff = (int)((width*0.9)-tEnd);
+			if (tDiff < 0) {
+			    x+=tDiff;
+			}
+			if (x < (int)(width*0.1)) {
+			    x = (int)(width*0.1);
+			}
+
+
+			cellCtrX++; //Move counter for next slot in random arrays
+			cellCtrY++;
+					
+			//Reset counters 
+			if (cellCtrY >= screenCellY) {
+			    cellCtrY = 0;
+			}
+
+			if (cellCtrX >= screenCellX) {
+			    cellCtrX = 0;
+			}
+
+			NGlobals.cPrint("cellCntrX = " + cellCtrX);
+			NGlobals.cPrint("cellCntrY = " + cellCtrY);
+
+
+			// if (quad > 2) {
+			// 	x = centerX + xRand;
+			// 	y = centerY + yRand;
+			// }
+			// else if (quad > 1) {
+			// 	x = centerX + xRand;
+			// 	y = centerY - yRand;
+			// }
+			// else if (quad > 0) {
+			// 	x = centerX - xRand;
+			// 	y = centerY - yRand;
+			// }
+			// else  {
+			// 	x = centerX - xRand;
+			// 	y = centerY + yRand;
+			// }
+
+			if ((x > centerX) && (y > centerY)) {
+			    quad = 3;
+			}
+			if ((x > centerX) && (y < centerY)) {
+			    quad = 2;
+			}
+			if ((x < centerX) && (y < centerY)) {
+			    quad = 1;
+			}
+			if ((x < centerX) && (y > centerY)) {
+			    quad = 0;
+			}
+			tHist.quad = quad;
+
+			NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
+
+			tHist.color = cloudColors[tCloudColorNum]; 	
+			tCloudColorNum++;
+			if (tCloudColorNum > maxCloudColors)
+			    tCloudColorNum = 0;	
+
+			fontSize = tHist.size = startFontSize;
+			tHist.pass = numPasses;
+
+			tHist.x = x;
+			tHist.y = y;
+
+			tHist.font = new Font("TimesRoman", Font.PLAIN, tHist.size);
+			histoGram.add(tHist);
 
 			// This will change to be a combination of rank v time (ie., numPasses);
-			tHist.size += 4;
 
-			quad = tHist.quad;
-			NGlobals.cPrint("  quad = " + quad);
-			if (quad > 2) {
-			    tHist.x-=8;
-			    tHist.y-=5;
-			    if (tHist.x < centerX)
-				tHist.x = centerX;
-			    if (tHist.y < centerY)
-				tHist.y = centerY;
-			}
-			else if (quad > 1) {
-			    tHist.x-=8;
-			    tHist.y+=5;
-			    if (tHist.x < centerX)
-				tHist.x = centerX;
-			    if (tHist.y > centerY)
-				tHist.y = centerY;
-			}
-			else if (quad > 0) {
-			    tHist.x+=6;
-			    tHist.y+=5;
-			    if (tHist.x > centerX)
-				tHist.x = centerX;
-			    if (tHist.y > centerY)
-				tHist.y = centerY;
-			}
-			else {
-			    tHist.x+=6;
-			    tHist.y-=5;
-			    if (tHist.x > centerX)
-				tHist.x = centerX;
-			    if (tHist.y < centerY)
-				tHist.y = centerY;
-			}
-
-			if (tHist.size > maxFontSize) {
-			    fontSize = maxFontSize;
-			}
-			else {
-			    fontSize = tHist.size;
-			}
-			tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
-
-			//i = histoGram.size();  // exit the loop
-
-		    }
-
-		    // 2a.  Blank cell ... do nothing
-		    else if (tHist.text.compareToIgnoreCase("") == 0) {
-			NGlobals.cPrint("|_|");
-		    }
-
-		    // 2.  Histogram element [i] DOES NOT match incoming text and is > min size -----
-
-		    else if (tHist.size > minFontSize) {  // Decrease size (if > min AND modulo 2)
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  DECreasing word size for " + tHist.text);
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  numPasses = " + numPasses);
-			//	if (numPasses%1 == 0) {
-			tHist.size-=2;
-			quad = tHist.quad;
-			if (quad > 2) {
-			    tHist.x+=2;
-			    tHist.y+=2;
-			}
-			else if (quad > 1) {
-			    tHist.x+=2;
-			    tHist.y-=2;
-			}
-			else if (quad > 0) {
-			    tHist.x-=2;
-			    tHist.y-=2;
-			}
-			else {
-			    tHist.x-=2;
-			    tHist.y+=2;
-			}
-			if (tHist.x < 10) 
-			    tHist.x = 10;
-			if (tHist.x > (width-10))
-			    tHist.x = width-10;
-			if (tHist.y < 10) 
-			    tHist.y = 10;
-			if (tHist.y > (height-10))
-			    tHist.y = height-10;
-			//	}
-			if (tHist.size > maxFontSize)
-			    tHist.size = maxFontSize;
-			fontSize = tHist.size;
-			tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
+			// DRAW THE TEXT ======================================
 
 			NGlobals.cPrint("...");
+			NGlobals.cPrint("Drawing word: " + text);
 
-			NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  tHist.size= " + tHist.size);
 		    }
 
-		    // 3.  Histogram element [i] DOES NOT match and is < min size ... delete it
+		    // CODE TO CLEAR THE SCREEN, NOT USED AS OF 2/15/2010 ============================
+		    //**** If we fill up the cells they clear SK 12/03/09
+		    //****Ultimately we should make a button that does this
 
-		    else if (tHist.size <= minFontSize) {
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  tHist.x,tHist.y = " + tHist.x + "," + tHist.y);
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  tHist.size= " + tHist.size);
-			NGlobals.cPrint("...");
-			NGlobals.cPrint("  REMoving word: " + tHist.text + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-
-			fontSize = tHist.size;
-			if (fontSize < minFontSize)
-			    fontSize = minFontSize;
-
-			histoGram.remove(i);
-			i--;
-		    }			  	
-		}  // end for (i=0;i<histoGram.size();i++)
-
-
-		// No words found, add new word and store relevant data
-		if (wordFound == 0) {
-		    // Figure out where to put the text =============================================
-
-		    // Find a free cell
-		    picker = 1;
-
-		    NGlobals.cPrint("...");
-
-		    // figure out center, then expand range over time 
-
-		    x=y=0;
-
-		    tHist = new HistoElt();
-		    tHist.text = new String(text);
-
-		    xMin = (int)(width * 0.0);
-		    xVar = (int)(width * 0.6);
-
-		    yMin = (int)(height * 0.0);
-		    yVar = (int)(height * 0.4);
-
-		    NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
-		    NGlobals.cPrint("setting quad = " + quad);
-
-		    xRand = xMin + randNum.nextInt(xVar);
-		    yRand = yMin + randNum.nextInt(yVar);
-					
-					
-
-		    // curCell = cellSlots[cellCtr];
-		    curCellX = cellSlotsX[cellCtrX]; //pick x value from random array
-		    curCellY = cellSlotsY[cellCtrY]; //pick y value from random array
-
-		    x = curCellX; //Set x coordinate
-		    y = curCellY; //Set y coordinate
-
-		    // Check that text is shifted properly
-
-		    int tLen = text.length();
-		    int tEnd = x+((int)(startFontSize*0.6)*tLen);
-		    int tDiff = (int)((width*0.9)-tEnd);
-		    if (tDiff < 0) {
-			x+=tDiff;
-		    }
-		    if (x < (int)(width*0.1)) {
-			x = (int)(width*0.1);
-		    }
-
-
-		    cellCtrX++; //Move counter for next slot in random arrays
-		    cellCtrY++;
-					
-		    //Reset counters 
-		    if (cellCtrY >= screenCellY) {
-			cellCtrY = 0;
-		    }
-
-		    if (cellCtrX >= screenCellX) {
-			cellCtrX = 0;
-		    }
-
-		    NGlobals.cPrint("cellCntrX = " + cellCtrX);
-		    NGlobals.cPrint("cellCntrY = " + cellCtrY);
-
-
-		    // if (quad > 2) {
-		    // 	x = centerX + xRand;
-		    // 	y = centerY + yRand;
-		    // }
-		    // else if (quad > 1) {
-		    // 	x = centerX + xRand;
-		    // 	y = centerY - yRand;
-		    // }
-		    // else if (quad > 0) {
-		    // 	x = centerX - xRand;
-		    // 	y = centerY - yRand;
-		    // }
-		    // else  {
-		    // 	x = centerX - xRand;
-		    // 	y = centerY + yRand;
-		    // }
-
-		    if ((x > centerX) && (y > centerY)) {
-			quad = 3;
-		    }
-		    if ((x > centerX) && (y < centerY)) {
-			quad = 2;
-		    }
-		    if ((x < centerX) && (y < centerY)) {
-			quad = 1;
-		    }
-		    if ((x < centerX) && (y > centerY)) {
-			quad = 0;
-		    }
-		    tHist.quad = quad;
-
-		    NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
-
-		    tHist.color = cloudColors[tCloudColorNum]; 	
-		    tCloudColorNum++;
-		    if (tCloudColorNum > maxCloudColors)
-			tCloudColorNum = 0;	
-
-		    fontSize = tHist.size = startFontSize;
-		    tHist.pass = numPasses;
-
-		    tHist.x = x;
-		    tHist.y = y;
-
-		    tHist.font = new Font("TimesRoman", Font.PLAIN, tHist.size);
-		    histoGram.add(tHist);
-
-		    // This will change to be a combination of rank v time (ie., numPasses);
-
-		    // DRAW THE TEXT ======================================
-
-		    NGlobals.cPrint("...");
-		    NGlobals.cPrint("Drawing word: " + text);
-
-		}
-
-		// CODE TO CLEAR THE SCREEN, NOT USED AS OF 2/15/2010 ============================
-		//**** If we fill up the cells they clear SK 12/03/09
-		//****Ultimately we should make a button that does this
-
-		clear = 0;
-		if (clear == 1) {
-		    NGlobals.cPrint("CLEAR!");
-		    histoGram.clear();
 		    clear = 0;
-		    i = 0;
-		    j = 0;
-		    clear = 0;
-		    guesser = 0;		
-		    NGlobals.cPrint("CLEAR:  clearing rows/cols");
+		    if (clear == 1) {
+			NGlobals.cPrint("CLEAR!");
+			histoGram.clear();
+			clear = 0;
+			i = 0;
+			j = 0;
+			clear = 0;
+			guesser = 0;		
+			NGlobals.cPrint("CLEAR:  clearing rows/cols");
+		    }
+
+		    // END CLEAR CODE ==================================================================
+
+		    numPasses++;
+		    NGlobals.cPrint("...");
+		    NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
+		    // redraw();
 		}
-
-		// END CLEAR CODE ==================================================================
-
-		numPasses++;
-		NGlobals.cPrint("...");
-		NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-		// redraw();
 	    }
-	}
-	// END OC_CLOUD ------------------------------------------------------------------------------------
+	    // END OC_CLOUD ------------------------------------------------------------------------------------
 
-	// OC_DISCUSS ============================================================================================
+	    // OC_DISCUSS ============================================================================================
 
-	else if (incAppID == NAppID.OC_DISCUSS) {
-	    if (incCmd == NCommand.SEND_MESSAGE) {
-		text = new String(grain.bArray);
-		NGlobals.cPrint("OM: DiscussText: " + text);
-		for (i=(numChatLines-1);i>0;i--) {
-		    chatLines[i] = chatLines[i-1];
+	    else if (incAppID == NAppID.OC_DISCUSS) {
+		if (incCmd == NCommand.SEND_MESSAGE) {
+		    text = new String(grain.bArray);
+		    NGlobals.cPrint("OM: DiscussText: " + text);
+		    for (i=(numChatLines-1);i>0;i--) {
+			chatLines[i] = chatLines[i-1];
+		    }
+		    chatLines[0] = text;
+		    redraw();
 		}
-		chatLines[0] = text;
-		redraw();
 	    }
 	}
 
+	allSkipper++;
+	if (allSkipper > getAllMaxSkip()) {
+	    allSkipper = 0;
+	}
+	
 	//		if (bite == app_id.MONITOR) {
 	//			if (text.equals("CHECK")) {
 	//				try {
@@ -1671,17 +1714,17 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	//				}
 	//			}	 
 	//		}   
-
+	
 	NGlobals.cPrint ("-------------------------------------------------[OM]\n");
-
+	
 	setHandleActive(false);
-
+	
     }
-
+    
     // ------------------------------------------------------------------------------------------------
     // END handle()
     // ------------------------------------------------------------------------------------------------
-
+    
     public void actionPerformed( ActionEvent ae )
     {
 	Object obj = ae.getSource();
@@ -1690,10 +1733,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    NGlobals.cPrint("...");
 	    NGlobals.cPrint("actionPerformed():  clearing histogram");
 	    for (i=0;i<histoGram.size();i++) {
-
+		
 		NGlobals.cPrint("...");
 		String tempString = Integer.toString(histoGram.size());
-
+		
 		NGlobals.cPrint(tempString);
 		tHist = histoGram.get(i);
 		tHist.pass = 0;
@@ -1711,15 +1754,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    NGlobals.cPrint("...");
 	    NGlobals.cPrint("actionPerformed():  clearing rows/cols");
 	}
-
+	
     }
     // DT 6/30/10:  not sure we need these anymore
-
+    
     public void start() {
 	runner = new Thread(this);
 	runner.start();
     }
-
+    
     public void run () {
 	NGlobals.cPrint("I'm running!");
 	while (true) {
