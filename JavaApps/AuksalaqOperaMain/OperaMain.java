@@ -164,7 +164,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     private NomadsErrCheckThread nECThread;
 
     int spriteSkipper = 0;
-    int allSkipper = 0;
+    // int allSkipper = 0;
 
     private int allMaxSkip = 0;
 
@@ -179,7 +179,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Random randNum;
     int numOscs = 0;
 
-    int currentBackgroundImageName = 3; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
+    int currentBackgroundImageName = 1; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
 
@@ -424,7 +424,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	height = getSize().height;
 
 	setSpriteMaxSkip(1);
-	setAllMaxSkip(1);
+	// setAllMaxSkip(1);
 
 	backgroundImageName = new String[4];
 	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
@@ -643,28 +643,28 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	try
 	    {
-		// Synth.startEngine(0);
+		Synth.startEngine(0);
 
-		// myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
-		// envPlayer = new EnvelopePlayer[MAX_THREADS];
-		// envData = new SynthEnvelope[MAX_THREADS];
-		// lineOut  = new LineOut();
+		myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
+		envPlayer = new EnvelopePlayer[MAX_THREADS];
+		envData = new SynthEnvelope[MAX_THREADS];
+		lineOut  = new LineOut();
 
-		// myBusReader = new BusReader();
+		myBusReader = new BusReader();
 
-		// myBusWriter = new BusWriter[MAX_THREADS];
+		myBusWriter = new BusWriter[MAX_THREADS];
 
-		// /* Synchronize Java display to make buttons appear. */
-		// getParent().validate();
-		// getToolkit().sync();
+		/* Synchronize Java display to make buttons appear. */
+		getParent().validate();
+		getToolkit().sync();
 
-		// myBusReader.output.connect(0, lineOut.input, 0 );
-		// myBusReader.output.connect(0, lineOut.input, 1 );
+		myBusReader.output.connect(0, lineOut.input, 0 );
+		myBusReader.output.connect(0, lineOut.input, 1 );
 
-		// myBusReader.start();
-		// lineOut.start();
+		myBusReader.start();
+		lineOut.start();
 
-		//	myBusReader.output.connect(lineOut.input, 0 );
+			myBusReader.output.connect(lineOut.input, 0 );
 
 
 	    } catch(SynthException e) {
@@ -700,13 +700,14 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     public synchronized void deleteSynth(int threadNum) {
 
 	if (isOsc(threadNum)) {
+	    myNoiseSwarm[threadNum].amplitude.set(0);
 	    deleteSprite(threadNum);
 	    sprites[threadNum] = null;
-	    // deleteOsc(threadNum);
-	    // oscCheck[threadNum] = false;
-	    // envPlayer[threadNum].stop();
-	    // envPlayer[threadNum].delete();
-	    // myNoiseSwarm[threadNum].delete();
+	    deleteOsc(threadNum);
+	    oscCheck[threadNum] = false;
+	    envPlayer[threadNum].stop();
+	    envPlayer[threadNum].delete();
+	    myNoiseSwarm[threadNum].delete();
 
 
 	    int j=0;
@@ -756,46 +757,46 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    oscNum[numOscs++] = threadNum;
 	    setSpriteMaxSkip((int)(numOscs/3));
 
-	    // if (myNoiseSwarm[threadNum] == null) {
-	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
-	    // }
-	    // if (envPlayer[threadNum] == null) {
-	    // 	envPlayer[threadNum] = new EnvelopePlayer();
-	    // }
+	    if (myNoiseSwarm[threadNum] == null) {
+	    	myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    }
+	    if (envPlayer[threadNum] == null) {
+	    	envPlayer[threadNum] = new EnvelopePlayer();
+	    }
 
-	    // for (int i=0;i<numOscs;i++) {
-	    // tNum = oscNum[i];
-	    // tAmp = (float)2/numOscs; //default amp = 2.0
-	    // NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-	    // myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-	    // float tVolume = tAmp * mainVolumeFromSlider;
-	    // NGlobals.cPrint("Amplitude = " + tVolume);
-	    // }
+	    for (int i=0;i<numOscs;i++) {
+		tNum = oscNum[i];
+		tAmp = (float)2/numOscs; //default amp = 2.0
+		NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+		float tVolume = tAmp * mainVolumeFromSlider;
+		NGlobals.cPrint("Amplitude = " + tVolume);
+	    }
 
-	    //	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
-
+	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
+		    
 	    // define shape of envelope as an array of doubles
-	    // data[threadNum] = new double[2];
-	    // data[threadNum][0] = 0.1; //time point value
-	    // data[threadNum][1] = (startFreq[tStartFreq]); //frequency
-	    // NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
+	    data[threadNum] = new double[2];
+	    data[threadNum][0] = 0.1; //time point value
+	    data[threadNum][1] = (startFreq[tStartFreq]); //frequency
+	    NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
 
-	    // if (envData[threadNum] == null) {
-	    // 	envData[threadNum] = new SynthEnvelope( 1 );
-	    // }
-	    // envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
+	    if (envData[threadNum] == null) {
+	    	envData[threadNum] = new SynthEnvelope( 1 );
+	    }
+	    envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
 
-	    //	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
+	    	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
 
-	    //	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
-	    // myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
-	    // myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
+	    	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
+	    myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
+	    myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
 
-	    // envPlayer[threadNum].start();
-	    // myNoiseSwarm[threadNum].start();
-	    // myBusWriter[threadNum].start();
+	    envPlayer[threadNum].start();
+	    myNoiseSwarm[threadNum].start();
+	    myBusWriter[threadNum].start();
 	    oscCheck[threadNum] = true;
-	    // envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
+	    envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
 
 	}
 	else {
@@ -926,21 +927,21 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
 		}
 
-		if (mSecDiff > 300) {
-		    setAllMaxSkip(getAllMaxSkip()+1);
-		    if (getAllMaxSkip() > 10) {
-			setAllMaxSkip(10);
-		    }
-		    NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
-		}
-		else {
-		    setAllMaxSkip(getAllMaxSkip()-1);
-		    if (getAllMaxSkip() < 0) {
-			setAllMaxSkip(0);
-		    }
-		    NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
+		// if (mSecDiff > 300) {
+		//     setAllMaxSkip(getAllMaxSkip()+1);
+		//     if (getAllMaxSkip() > 10) {
+		// 	setAllMaxSkip(10);
+		//     }
+		//     NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
+		// }
+		// else {
+		//     setAllMaxSkip(getAllMaxSkip()-1);
+		//     if (getAllMaxSkip() < 0) {
+		// 	setAllMaxSkip(0);
+		//     }
+		//     NGlobals.dtPrint("### allMaxSkip:" + allMaxSkip);
 		    
-		}
+		// }
 
 		if (mSecDiff > 2000) {
 		    errFlag += 1;
@@ -1112,16 +1113,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		}
 	    }
 	    else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
-		// tVolumeVal = (double)grain.iArray[0];
-		// mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
-		// for (i=0;i<numOscs;i++) {
-		//     tNum = oscNum[i];
-		//     tAmp = (float)2/numOscs; //default amp = 2.0
-		//     NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		//     myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-		//     tVolume = tAmp * mainVolumeFromSlider;
-		//     NGlobals.cPrint("Amplitude = " + tVolume);
-		// }
+		tVolumeVal = (double)grain.iArray[0];
+		mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
+		for (i=0;i<numOscs;i++) {
+		    tNum = oscNum[i];
+		    tAmp = (float)2/numOscs; //default amp = 2.0
+		    NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		    myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+		    tVolume = tAmp * mainVolumeFromSlider;
+		    NGlobals.cPrint("Amplitude = " + tVolume);
+		}
 		//TO DO: Make this a log function. . .
 	    }
 
@@ -1130,7 +1131,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	}
 
-	if (allSkipper == 0) {
+	//	if (allSkipper == 0) {
 	    
 	    // ========= Pointer (regular) ============================================
 	    
@@ -1358,13 +1359,13 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 				tFreq = 20.0;
 
 			    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-			    // data[THREAD_ID][1] = tFreq;
-			    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
-			    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-			    // envPlayer[THREAD_ID].envelopePort.clear();
-			    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+			    data[THREAD_ID][1] = tFreq;
+			    // System.out.println("data[1] = " + data[THREAD_ID][1]);
+			    envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			    envPlayer[THREAD_ID].envelopePort.clear();
+			    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-			    //	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
+			    // myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
 			    redraw();
 			}
 		    }
@@ -1696,13 +1697,11 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    redraw();
 		}
 	    }
-	}
 
-	allSkipper++;
-	if (allSkipper > getAllMaxSkip()) {
-	    allSkipper = 0;
-	}
-	
+	    //    }
+
+	    // DT:  deleted some allSkipper stuff here
+
 	//		if (bite == app_id.MONITOR) {
 	//			if (text.equals("CHECK")) {
 	//				try {

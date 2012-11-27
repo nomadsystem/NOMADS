@@ -410,7 +410,7 @@ public class NomadServer implements Runnable {
 
 	pToggle++;
 	if (pToggle%2000 == 0) {
-	    NGlobals.dtPrint("==>  max (" + getMaxClients() + ") count (" + getClientCount() + ") hDiff (" + hDiff + ")" + " hAvg (" + hAvg + ")  <==");
+	    NGlobals.xPrint("==>  max (" + getMaxClients() + ") count (" + getClientCount() + ") hDiff (" + hDiff + ")" + " hAvg (" + hAvg + ")  <==");
 	}
 	if (pToggle > 9999) {
 	    pToggle = 0;
@@ -482,7 +482,7 @@ public class NomadServer implements Runnable {
 	if ((hAvg < 700) && 
 	    (hDiff < 700) &&
 	    (getMaxClients() < getClientCount())) {
-	    NGlobals.dtPrint("   THROTTLE UP:  hAvg/hDiff < 700 msec (" + hAvg + ")(" + hDiff + ") maxClients (" + getMaxClients() + ")  clientCount (" + getClientCount() +")");
+	    NGlobals.xPrint("   THROTTLE UP:  hAvg/hDiff < 700 msec (" + hAvg + ")(" + hDiff + ") maxClients (" + getMaxClients() + ")  clientCount (" + getClientCount() +")");
 	    if (getMaxClients() < getClientCount()) { 
 		setMaxClients(getMaxClients()+1);
 	    }
@@ -1050,9 +1050,9 @@ public class NomadServer implements Runnable {
 		 (debugLine > 100) ){
 	    if (getMaxClients() > 10) {
 		setMaxClients(getMaxClients()-10);
-		NGlobals.dtPrint(" ");
-		NGlobals.dtPrint("   THROTTLE DOWN:  hAvg > 700 msec (" + hAvg + ")");
-		NGlobals.dtPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID + " | setting grain (avg) skip: " + aSkipper + "\n");
+		NGlobals.xPrint(" ");
+		NGlobals.xPrint("   THROTTLE DOWN:  hAvg > 700 msec (" + hAvg + ")");
+		NGlobals.xPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID + " | setting grain (avg) skip: " + aSkipper + "\n");
 	    }
 	}
 
@@ -1061,9 +1061,9 @@ public class NomadServer implements Runnable {
 	if ((hAvg > 1200) && (debugLine > 100)){
 	    if ((getRunState() == true) && (aSkipper == 0)) {
 		aSkipper = (int)(hAvg/100);
-		NGlobals.dtPrint(" ");
-		NGlobals.dtPrint("   THROTTLE DOWN: hAvg > 1200 msec (" + hAvg + ")");
-		NGlobals.dtPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID + " | setting grain (avg) skip: " + aSkipper + "\n");
+		NGlobals.xPrint(" ");
+		NGlobals.xPrint("   THROTTLE DOWN: hAvg > 1200 msec (" + hAvg + ")");
+		NGlobals.xPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID + " | setting grain (avg) skip: " + aSkipper + "\n");
 		setRunState(false);
 	    }
 	}
@@ -1085,7 +1085,7 @@ public class NomadServer implements Runnable {
 	    if (getMaxClients() > 10) {
 		setMaxClients(getMaxClients()-10);
 
-		NGlobals.dtPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID +  " | setting maxClients to (" + getMaxClients() + ") | total (" + getClientCount() + ")");
+		NGlobals.xPrint("    incAppID = " + printID(incAppID) + " threadID " + THREAD_ID +  " | setting maxClients to (" + getMaxClients() + ") | total (" + getClientCount() + ")");
 	    }
 
 	    // THROTTLE DOWN:  based on hDiff, skip OC_DISCUSS data (temporarily)
