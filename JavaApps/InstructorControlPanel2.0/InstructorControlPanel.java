@@ -114,8 +114,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		public NomadsAppThread(InstructorControlPanel _client) {
 			client = _client;
 			// Connect
-			instructorControlPanelSand = new NSand();
-			instructorControlPanelSand.connect();
 		}
 
 		public void run() {			
@@ -174,15 +172,22 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		} 
 		catch (Exception e) {}
 
+
 		//Code below starts thread (connects), sends register byte
 		byte d[] = new byte[1];
 		d[0] = 0;
+
+		instructorControlPanelSand = new NSand();
+		instructorControlPanelSand.connect();
+		instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
+		setupButtons();
+
 		nThread = new NomadsAppThread(this);
 		nThread.start();
 
-		setupButtons( );
 
-		instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
 
 	}
 
@@ -636,7 +641,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	}
 
 	public void open() {
-		sendMessage("KHAN");
+	    //	sendMessage("KHAN");
 	}
 
 	//-------------------------------------------------------------------------------

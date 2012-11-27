@@ -8,7 +8,6 @@ import nomads.v210.*;
 import com.softsynth.jsyn.*;
 
 
-
 public class StudentControlPanel extends JApplet  implements  ActionListener {
 
 
