@@ -5,7 +5,8 @@ public class NGlobals {
     public static int clientDebugLevel = 0;  // Use this for printout info
     public static int serverDebugLevel = 0;  // Use this for printout info
     public static int libraryDebugLevel = 0;  // Use this for printout info
-    public static int dtDebugLevel = 1;  // Use this for printout info
+    public static int dtDebugLevel = 0;  // Use this for printout info
+    public static int xDebugLevel = 1;  // Use this for printout info
     public static String    serverName = "nomads.music.virginia.edu";
     public static int serverPort = 52910;
     public static int serverPortDT = 52911;
@@ -18,6 +19,13 @@ public class NGlobals {
 	    System.out.println(str);
 	}
     }
+
+    public static void xPrint(String str) {
+	if (xDebugLevel > 0) {
+	    System.out.println("CLIENT: " + str);
+	}
+    }
+
 
     public static void cPrint(String str) {
 	if (clientDebugLevel > 0) {
