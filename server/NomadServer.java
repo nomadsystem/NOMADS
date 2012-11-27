@@ -283,6 +283,22 @@ public class NomadServer implements Runnable {
 
 	}
 
+	else if ((incAppID == NAppID.DISCUSS) || (incAppID == NAppID.INSTRUCTOR_DISCUSS)) {
+	    for (int c = 0; c < clientCount; c++) {
+		
+		// Get the client off the master list
+		currentClient = clients[c];
+		NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
+		
+		if ((currentClient.getAppID() == NAppID.BINDLE) || (currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL)) {
+		    NGlobals.sPrint("Sending DISCUSS to ---> BINDLE/ICP DISCUSS: " + currentClient.getThreadID());
+		    currentClient.threadSand.sendGrain(myGrain);
+		}
+	    }
+
+	}
+
+
 	// GENERIC Logic =============================================================
 	//    -for each client SEND ALL DATA
 
