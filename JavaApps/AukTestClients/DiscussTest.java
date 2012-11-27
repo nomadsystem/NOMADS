@@ -39,6 +39,10 @@ public class DiscussTest implements Runnable {
 
     Thread runner;
 
+    String discussString[] = new String[31];
+
+    int tNum, tNumL;
+
     public static void main(String args[])
     {
 
@@ -57,6 +61,41 @@ public class DiscussTest implements Runnable {
 	discussTestSand = new NSand(); 
 	discussTestSand.connect();
 
+
+	i=0;
+	discussString[i++] = new String("Hello everyone");
+	discussString[i++] = new String("This is wonderful");
+	discussString[i++] = new String("How ironic given the weather");
+	discussString[i++] = new String("What's it like where you are?");
+	discussString[i++] = new String("I love Alaska");
+	discussString[i++] = new String("I love New York");
+	discussString[i++] = new String("I love Montreal");
+	discussString[i++] = new String("I love the ocean");
+	discussString[i++] = new String("I like turtles");
+	discussString[i++] = new String("I like polar bears");
+	discussString[i++] = new String("I hate when people deny climate change");
+	discussString[i++] = new String("Hello from New York");
+	discussString[i++] = new String("Hello from Norway");
+	discussString[i++] = new String("Hello from Washington DC");
+	discussString[i++] = new String("Hello from Montreal");
+	discussString[i++] = new String("This is giving me a lot to think about");
+	discussString[i++] = new String("Hi");
+	discussString[i++] = new String("Hello");
+	discussString[i++] = new String("Hi");
+	discussString[i++] = new String("Hello");
+	discussString[i++] = new String("Yo!");
+	discussString[i++] = new String("Woohoo");
+	discussString[i++] = new String("I feel bad for polar bears");
+	discussString[i++] = new String("I like ice");
+	discussString[i++] = new String("Will Romney help the environment?");
+	discussString[i++] = new String("Will Obama help the environment?");
+	discussString[i++] = new String("How can I help the environment?");
+	discussString[i++] = new String("What can we do?");
+	discussString[i++] = new String("Hmmm...");
+	discussString[i++] = new String("Ok");
+	discussString[i++] = new String("I think I understand");
+
+
 	int d[] = new int[1];
 	d[0] = 0;
 
@@ -70,15 +109,11 @@ public class DiscussTest implements Runnable {
 
     }	
 
-
     public DiscussTest() {  	    
 	randNum = new Random();
 	init();
 	start();
     }
-
-
-
 
     public void start()  {  
 	NGlobals.cPrint("DiscussTest -> start()");
@@ -101,20 +136,31 @@ public class DiscussTest implements Runnable {
 
 	while (true) {
 	    String tString;
-	    if (i>500) {
-		tString = new String("RESETTING DISCUSS TEXT TAG TO 0");
-		i=0;
+	    // if (i>500) {
+	    // 	tString = new String("RESETTING DISCUSS TEXT TAG TO 0");
+	    // 	i=0;
+	    // }
+	    // else {
+	    // 	tString = new String("DISCUSSION TEST " + i++);
+	    // }
+	    // xxx
+	    tNumL = tNum;
+	    System.out.println("tNumL = " + tNumL);
+	    tNum = randNum.nextInt(31);
+	    while (tNum == tNumL) {
+		tNum = randNum.nextInt(31);
+		System.out.println("tNum = " + tNum);
 	    }
-	    else {
-		tString = new String("DISCUSSION TEST " + i++);
-	    }
+	    System.out.println("#tNum = " + tNum);
+	    tString = new String(discussString[tNum]);
+
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
 
 	    try {
 		NGlobals.cPrint("DiscussTest -> NSand.send()");
 		discussTestSand.sendGrain((byte)NAppID.OC_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(10000);
+		runner.sleep(1000);
 	    }
 	    catch (InterruptedException ie) {}
 
@@ -126,11 +172,11 @@ public class DiscussTest implements Runnable {
 
 	NGrain grain;
 
-	NGlobals.cPrint("DiscussTest -> handle()");
+	// NGlobals.cPrint("DiscussTest -> handle()");
 
 	grain = discussTestSand.getGrain();
-	grain.print();
-	System.out.println("DiscussTest handle()");
+	// grain.print();
+	// System.out.println("DiscussTest handle()");
 
 	    
     }

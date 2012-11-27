@@ -41,7 +41,8 @@ public class NSand
     }
 
     // SendGrain with Byte Array
-    public void sendGrain (NGrain myGrain) {
+    public int sendGrain (NGrain myGrain) {
+	int retCode = 0;
 	NGlobals.lPrint("sendGrain: (NGrain) ");
 	try {  
 	    // send app id
@@ -105,8 +106,10 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error 1");
+	    NGlobals.dtPrint("SAND write error 1");
+	    return -1;
 	}
+	return retCode;
     }
 
 
