@@ -346,7 +346,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	cloudDisplayFrame = new JFrame("Cloud");
 	cloudDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	cloudDisplayFrame.setLocationRelativeTo(null);
-	cloudDisplayFrame.setPreferredSize(new Dimension(800,800));
+	cloudDisplayFrame.setPreferredSize(new Dimension(1024,768));
 	cloudDisplayFrame.getContentPane().add(myCloudDisplayPanel);
 	cloudDisplayFrame.pack();
 		
