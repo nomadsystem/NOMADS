@@ -1,0 +1,8 @@
+echo " "
+echo "process ID                                  PORT number"
+echo "-------------------------------------------------------"
+ps ax | grep java | grep -v "/usr/lib" | grep -v "grep"
+echo " "
+echo "  ./killmine <process ID> # to kill your process"
+echo "  nohup java NomadServer <your PORT number> &>somefile.out # to restart"
+echo " "

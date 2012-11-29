@@ -30,7 +30,9 @@ public class PollPrompt extends JApplet implements ActionListener
     double difference = 0, finAns = 0;
 
     JLabel title, results;
+    String qText;
     JButton ask;
+    JButton clear;
     JTextField question;
     JComboBox qType;
 
@@ -82,22 +84,20 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	//middle of applet
 	//split to allow results and question stuff to fit
-	subMiddle = new JPanel(new FlowLayout());
-	middle = new JPanel(new BorderLayout());
+	middle = new JPanel(new FlowLayout());
 
 	//going in bottom of middle
 	dispResults = new JPanel(new FlowLayout());
-	results = new JLabel("");
+	results = new JLabel("<html><center><h3> (ask question)</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
 	dispResults.add(results);
 
 	// setting background colors
 	// the names of the colors are irrelevent at this point 1-7-10
 	top.setBackground(middleColor);
-	subMiddle.setBackground(middleColor);
 	middle.setBackground(middleColor);
 	bottom.setBackground(titleColor);
 	wholeThing.setBackground(middleColor);
-	dispResults.setBackground(middleColor);
+	dispResults.setBackground(titleColor);
 
 	qType = new JComboBox();
 	qType.addItem("Yes-No");
@@ -109,7 +109,7 @@ public class PollPrompt extends JApplet implements ActionListener
 	setLayout(new BorderLayout());
 
 	//set title
-	title = new JLabel("<html><h1 style='color:black;font-size:150%'>NOMADS Teacher Poll: Pose a question</h1><br><h3 style='color:black'>Choose a question type, type in the question, and hit 'ask' to poll students.<br>Poll Results will appear in the bottom of the screen.</h3></html>", JLabel.CENTER);
+	title = new JLabel("<html><h1 style='color:black;font-size:150%'>NOMADS Teacher Poll: Pose a question</h1><br><h3 style='color:black'>Choose a question type, type in the question, and hit 'ask' to poll students.<br>Poll Results will appear in the bottom of the screen.&nbsp<p></h3></html>", JLabel.CENTER);
 	top.add(title);
 
 	//JTextField to recieve question entered by user
@@ -117,29 +117,33 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	//button to send question
 	ask = new JButton("Ask");
+	clear = new JButton("Clear");
 
 	ask.addActionListener(this);
+	clear.addActionListener(this);
 	question.addActionListener(this);
 
 	//creates middle JPanel
-	subMiddle.add(qType);
-	subMiddle.add(question);
-	subMiddle.add(ask);
+	middle.add(qType);
+	middle.add(question);
+	middle.add(ask);
+	middle.add(clear);
 
-	middle.add(subMiddle, BorderLayout.NORTH);
-	middle.add(dispResults, BorderLayout.SOUTH);	
+	// middle.add(subMiddle, BorderLayout.NORTH);
+	// middle.add(dispResults, BorderLayout.SOUTH);	
 
 	//add componens to top-most container
 	wholeThing.add(top);
-	wholeThing.add(middle);
+	wholeThing.add(middle, BorderLayout.CENTER);
+	wholeThing.add(dispResults);
 	// wholeThing.add(bottom);
 
 	add(wholeThing, BorderLayout.CENTER);
-	//bottom.setBackground(theColors[2]);
+	// bottom.setBackground(theColors[2]);
 
 	byte d[] = new byte[1];
 	d[0] = 0;
-	mySand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+	// mySand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
     }
 
     public void handle(NGrain myGrain)
@@ -203,7 +207,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		    dispResults.setBackground(theColors[(int)Math.round(finAns)]);
 
 		    //show yes no totals in applet too
-		    results.setText("<html><h2 style='color:black'>Yes: " + yesTotal + " No: " + noTotal + "</h2></html>");	
+		    results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Yes: " + yesTotal + " No: " + noTotal + "</h2></center></html>");	
 		}
 			
 	    //parse 1 to 10 results
@@ -224,7 +228,7 @@ public class PollPrompt extends JApplet implements ActionListener
 
 		    //show results average in applet too
 
-		    results.setText("<html><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></html>");	
+		    results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><html><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></center></html>");	
 		}
 	    else	
 		{
@@ -238,7 +242,7 @@ public class PollPrompt extends JApplet implements ActionListener
     {
 	Object source = ae.getSource();
 
-	if (source == ask)
+	if (source == clear)
 	    {
 		int tCommand = 0;
 
@@ -251,7 +255,8 @@ public class PollPrompt extends JApplet implements ActionListener
 		else 
 		    NGlobals.cPrint("Invalid question type specified");
 
-		String tString = question.getText();
+		String tString = new String("");
+		qText = tString;
 		int tLen = tString.length();
 		//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
@@ -282,7 +287,62 @@ public class PollPrompt extends JApplet implements ActionListener
 		difference = 0;
 		finAns = 0;
 
-		results.setText("");
+		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
+		bottom.setBackground(titleColor);
+		dispResults.setBackground(titleColor);
+
+		typeOfQuestionSubmitted = qType.getSelectedItem().toString();
+
+
+	    }
+
+
+	if (source == ask)
+	    {
+		int tCommand = 0;
+
+		int tQuestionType = qType.getSelectedIndex();
+			
+		if (tQuestionType == 0) //refers to JComboBox index number
+		    tCommand = NCommand.QUESTION_TYPE_YES_NO;	// Replace with QUESTION_TYPE_YES_NO;
+		else if (tQuestionType == 1)
+		    tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
+		else 
+		    NGlobals.cPrint("Invalid question type specified");
+
+		String tString = question.getText();
+		qText = tString;
+		int tLen = tString.length();
+		//    char[] tStringAsChars = tString.toCharArray();
+		byte[] tStringAsBytes = tString.getBytes();
+		mySand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+
+
+		// The data 
+		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+
+		//                for (int i=0; i<tLen; i++) {
+		//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+		//                streamOut.writeByte(tString.charAt(i));
+		//                }
+		NGlobals.cPrint("sending: Command:(" + tCommand + ")");
+		NGlobals.cPrint("sending: (" + tString + ")");
+		question.setText("");
+
+		runningTotal = 0;
+		count = 0;
+		average = 0;
+
+		// yes no number data variables
+		yesTotal = 0;
+		noTotal = 0;
+		totalYesAndNo = 0;
+		yesPer = 0;
+		noPer = 0;
+		difference = 0;
+		finAns = 0;
+
+		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
 		bottom.setBackground(titleColor);
 		dispResults.setBackground(titleColor);
 
@@ -339,6 +399,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		}
 
 		String tString = question.getText();
+		qText = tString;
 		int tLen = tString.length();
 		//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
@@ -354,7 +415,9 @@ public class PollPrompt extends JApplet implements ActionListener
 		//                }
 		NGlobals.cPrint("sending: Command:(" + tCommand + ")");
 		NGlobals.cPrint("sending: (" + tString + ")");
+		// xxx
 		question.setText("");
+
 
 		runningTotal = 0;
 		count = 0;
@@ -369,7 +432,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		difference = 0;
 		finAns = 0;
 
-		results.setText("");
+		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
 		bottom.setBackground(titleColor);
 		dispResults.setBackground(titleColor);
 

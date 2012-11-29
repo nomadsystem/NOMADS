@@ -98,7 +98,7 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	int tLen = tString.length();
 	byte[] tStringAsBytes = tString.getBytes();
 
-	mySand.sendGrain((byte)NAppID.SOUND_SWARM_DISPLAY, (byte)NCommand.REGISTER, (byte)NDataType.BYTE, tLen, tStringAsBytes);
+	// mySand.sendGrain((byte)NAppID.SOUND_SWARM_DISPLAY, (byte)NCommand.REGISTER, (byte)NDataType.BYTE, tLen, tStringAsBytes);
 
 	randNum = new Random();
 

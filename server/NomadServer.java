@@ -30,6 +30,9 @@ public class NomadServer implements Runnable {
 
     // xxx
     NGrain myGrain;
+
+    private byte modStates[] = new byte[6];
+    int numModStates;
     
     public NomadServer(int port) {  	    
 	for (int i=0;i<100000;i++) {
@@ -39,6 +42,15 @@ public class NomadServer implements Runnable {
 	    IPsLoggedIn[i] = null;
 	    users[i] = null;
 	}
+
+	numModStates = (int)(NCommand.MOD_STATE_END-NCommand.MOD_STATE_START)+1;
+	NGlobals.dtPrint("  numModStates = " + numModStates);
+
+	// Use this now for "button states"
+	for (int i=0;i<numModStates;i++) {
+	    modStates[i] = 0;
+	}
+
     	try {  
 	    NGlobals.sPrint("  Binding to port " + port + ", please wait  ...");
 	    server = new ServerSocket(port);  
@@ -138,12 +150,13 @@ public class NomadServer implements Runnable {
 	int incAppDataLen;
 	byte incAppID;
 
+	int modStateOffset;
+
+	byte tCommand;
 	NGrain inGrain;
 
     	NGlobals.sPrint("-----------------------------------------------------[" + debugLine++ + "]");
     	
-		
-
 	// Do the following for EACH client
 
 	// 1 ---- READ ------------------------------------------------------------------
@@ -185,6 +198,17 @@ public class NomadServer implements Runnable {
 	    NGlobals.sPrint("===== REGISTERING =====");
 	    NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
 	    currentClient.setAppID(incAppID);
+
+	    // Send button states to the ICP
+	    if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+		for (int i=0; i<numModStates; i++) {
+		    tCommand = (byte)(NCommand.MOD_STATE_START+i);
+		    byte[] dx = new byte[1];
+		    dx[0] = modStates[i];
+		    NGlobals.dtPrint("Sending button state (" + tCommand + "/" + dx[0] + ") to ICP " + currentClient.getThreadID());
+		    currentClient.threadSand.sendGrain(NAppID.SERVER, tCommand, NDataType.UINT8, 1, dx);
+		}
+	    }
 	}
 
 	// 2: check login
@@ -217,6 +241,14 @@ public class NomadServer implements Runnable {
 		byte[] dx = new byte[1];
 		dx[0] = 1;
 		currentClient.threadSand.sendGrain(NAppID.SERVER, NCommand.LOGIN_STATUS, NDataType.UINT8, 1, dx);
+
+		// Send button states (to the BINDLE -> implied by this coming from LOGIN)
+		for (int i=0; i<numModStates; i++) {
+		    tCommand = (byte)(NCommand.MOD_STATE_START+i);
+		    dx[0] = modStates[i];
+		    NGlobals.dtPrint("Sending button state to BINDLE (" + tCommand + "/" + dx[0] + ") to BINDLE " + currentClient.getThreadID());
+		    currentClient.threadSand.sendGrain(NAppID.SERVER, tCommand, NDataType.UINT8, 1, dx);
+		}
 	    }
 	}
 
@@ -244,6 +276,15 @@ public class NomadServer implements Runnable {
 
 	IP = currentClient.getIP();
 
+	// Grab incoming button state messages from INSTRUCTOR_PANEL
+
+	if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+	    if ( (incAppCmd >= NCommand.MOD_STATE_START) && (incAppCmd <= NCommand.MOD_STATE_END) ) {
+		modStateOffset = (int)(incAppCmd-NCommand.MOD_STATE_START);
+		modStates[modStateOffset] = myGrain.bArray[0];
+	    }
+	}
+
 	// 2 ---- WRITE -----------------------------------------------------------------
 	// ------------------------------------------------------------------------------
 
@@ -258,6 +299,64 @@ public class NomadServer implements Runnable {
 
 	NGlobals.sPrint("===== WRITING =====");
 
+	// Send out any messages from the ICP
+
+	if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+	    for (int c = 0; c < clientCount; c++) {
+		currentClient = clients[c];
+		if (currentClient.getAppID() == NAppID.BINDLE) {
+		    NGlobals.dtPrint("Sending button state to BINDLE " + currentClient.getThreadID());
+		    // myGrain.print();
+		    currentClient.threadSand.sendGrain(myGrain);
+		}
+	    }
+	}
+
+	// Send bulk data to BINDLE
+	
+	if ( (incAppID == NAppID.DISCUSS_PROMPT) || 
+	     (incAppID == NAppID.CLOUD_PROMPT) || 
+	     //	     (incAppID == NAppID.POLL_PROMPT) ||
+	     (incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) || 
+	     //	     (incAppID == NAppID.POLL_PROMPT) ||
+	     (incAppID == NAppID.DISCUSS) ||
+	     (incAppID == NAppID.INSTRUCTOR_DISCUSS) ||
+	     (incAppID == NAppID.TEACHER_POLL) ||
+	     (incAppID == NAppID.INSTRUCTOR_SEQUENCER) ) {
+
+	    for (int c = 0; c < clientCount; c++) {
+		currentClient = clients[c];
+		if ( currentClient.getAppID() == NAppID.BINDLE) {
+		    NGlobals.dtPrint("Sending bulk data to BINDLE " + currentClient.getThreadID());
+		    // myGrain.print();
+		    currentClient.threadSand.sendGrain(myGrain);
+		}
+	    }
+	}
+
+	// Send bulk data to INSTRUCTOR_PANEL
+
+	if ( (incAppID == NAppID.CLOUD_CHAT) ||
+	     (incAppID == NAppID.STUDENT_POLL) ||
+	     //	     (incAppID == NAppID.POLL_PROMPT) ||
+	     (incAppID == NAppID.TEACHER_POLL) ||
+
+	     (incAppID == NAppID.STUDENT_SEQUENCER) ||
+	     (incAppID == NAppID.DISCUSS) ||
+	     (incAppID == NAppID.DISCUSS_PROMPT) ||
+	     (incAppID == NAppID.STUDENT_SAND_POINTER) ||
+	     (incAppID == NAppID.STUD_EMRG_SYNTH) ) { 
+
+	    for (int c = 0; c < clientCount; c++) {
+		currentClient = clients[c];
+		if ( currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL) {
+		    NGlobals.dtPrint("Sending bulk data to ICP " + currentClient.getThreadID());
+		    // myGrain.print();
+		    currentClient.threadSand.sendGrain(myGrain);
+		}
+	    }
+	}
+	    
 	// Sound SWARM Routing Logic ==========================================================================R
 
 	// TODO:  send 3 ints instead, 1st int is the THREAD_ID
@@ -276,23 +375,8 @@ public class NomadServer implements Runnable {
 		    currentClient.threadSand.sendGrain(myGrain.appID, NCommand.SEND_THREAD_ID, NDataType.INT, 1, x);
 		    NGlobals.sPrint("Sending SOUND_SWARM: x/y coordinates\n");
 		    currentClient.threadSand.sendGrain(myGrain);
-		    myGrain.print();
+		    // myGrain.print();
 
-		}
-	    }
-
-	}
-
-	else if ((incAppID == NAppID.DISCUSS) || (incAppID == NAppID.INSTRUCTOR_DISCUSS)) {
-	    for (int c = 0; c < clientCount; c++) {
-		
-		// Get the client off the master list
-		currentClient = clients[c];
-		NGlobals.sPrint("===> client[" + c + "] w/ id = " + currentClient.getAppID());
-		
-		if ((currentClient.getAppID() == NAppID.BINDLE) || (currentClient.getAppID() == NAppID.INSTRUCTOR_PANEL)) {
-		    NGlobals.sPrint("Sending DISCUSS to ---> BINDLE/ICP DISCUSS: " + currentClient.getThreadID());
-		    currentClient.threadSand.sendGrain(myGrain);
 		}
 	    }
 
@@ -302,7 +386,7 @@ public class NomadServer implements Runnable {
 	// GENERIC Logic =============================================================
 	//    -for each client SEND ALL DATA
 
-	else {
+	else if (1 == 0) {
 	    NGlobals.sPrint("===> sending PASSTHROUGH network data");
 	    for (int c = 0; c < clientCount; c++) {
 		
@@ -313,18 +397,20 @@ public class NomadServer implements Runnable {
 		// Extra step for SOUND_SWARM_DISPLAY: need to send THREAD_ID
 		
 		
-		myGrain.print();
+		// myGrain.print();
 		// Write the data out
 		currentClient.threadSand.sendGrain(myGrain);
 		
-	    }   
-	    // END --------------------------------------------------------------------
-	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
-	    
-	    // Free up memory
-	    if (myGrain != null) {
-		myGrain = null;
 	    }
+	  
+	    NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
+	}
+	// END --------------------------------------------------------------------
+	
+
+	// Free up memory
+	if (myGrain != null) {
+	    myGrain = null;
 	}
     }
     

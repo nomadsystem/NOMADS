@@ -1,0 +1,1 @@
+for proc in $(ps -ax | grep $1); do kill $proc; done &>/dev/null

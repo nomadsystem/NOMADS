@@ -21,11 +21,15 @@ public class JoinPanel extends JApplet implements ActionListener {
     JTextField login;
     Color bgColor;
     NSand mySand;
+    StudentControlPanel parent;
+
+    Boolean joined = false;
 
     int i;
 	
     boolean c = false; //flag to see if it is connected to server
     int wait;
+
 	
     public void init(NSand inSand) {
 	mySand = inSand;
@@ -52,12 +56,12 @@ public class JoinPanel extends JApplet implements ActionListener {
 
     public void handle(NSand inSand) {
 
-      NGlobals.cPrint("Login -> handle()");
+	NGlobals.cPrint("Login -> handle()");
 
-      NGrain grain = inSand.getGrain();
-      grain.print(); //prints grain data to console
-      if (grain != null)
-	  grain = null;
+	NGrain grain = inSand.getGrain();
+	grain.print(); //prints grain data to console
+	if (grain != null)
+	    grain = null;
 		
     }
 
@@ -72,23 +76,28 @@ public class JoinPanel extends JApplet implements ActionListener {
 	    NGlobals.cPrint("ENTER");
 
 	    String tString = login.getText();
+	    parent.userName = new String(tString);
 	    int tLen = tString.length();
 	    //    char[] tStringAsChars = tString.toCharArray();
-	    byte[] tStringAsBytes = tString.getBytes();
+	    if (tLen > 2) {
+		byte[] tStringAsBytes = tString.getBytes();
 
-	    mySand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+		mySand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
-	    // The data 
-	    NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+		// The data 
+		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
 
-	    //                for (int i=0; i<tLen; i++) {
-	    //                NGlobals.cPrint("sending:  " + tString.charAt(i));
-	    //                streamOut.writeByte(tString.charAt(i));
-	    //                }
+		//                for (int i=0; i<tLen; i++) {
+		//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+		//                streamOut.writeByte(tString.charAt(i));
+		//                }
 
-	    NGlobals.cPrint("sending: (" + tString + ")");
-	    login.setText("");
+		NGlobals.cPrint("sending: (" + tString + ")");
+		login.setText("");
 
+		parent.joined = true;
+		parent.joinFrame.setVisible(false);
+	    }
 	}
     }
 
@@ -109,24 +118,28 @@ public class JoinPanel extends JApplet implements ActionListener {
 	if (source == submit) {
 	    NGlobals.cPrint("pressed speak button");
 	    String tString = login.getText();
+	    parent.userName = new String(tString);
 	    int tLen = tString.length();
-	    //    char[] tStringAsChars = tString.toCharArray();
-	    byte[] tStringAsBytes = tString.getBytes();
-
-	    mySand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
-
-	    // The data 
-	    NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
-
-	    //                for (int i=0; i<tLen; i++) {
-	    //                NGlobals.cPrint("sending:  " + tString.charAt(i));
-	    //                streamOut.writeByte(tString.charAt(i));
-	    //                }
-
-	    NGlobals.cPrint("sending: (" + tString + ")");
-	    login.setText("");
-
-	} 
+	    if (tLen > 2) {
+		//    char[] tStringAsChars = tString.toCharArray();
+		byte[] tStringAsBytes = tString.getBytes();
+		
+		mySand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+		
+		// The data 
+		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+		
+		//                for (int i=0; i<tLen; i++) {
+		//                NGlobals.cPrint("sending:  " + tString.charAt(i));
+		//                streamOut.writeByte(tString.charAt(i));
+		//                }
+		
+		NGlobals.cPrint("sending: (" + tString + ")");
+		login.setText("");
+		parent.joined = true;
+		parent.joinFrame.setVisible(false);
+		
+	    } 
+	}
     }
-
 }

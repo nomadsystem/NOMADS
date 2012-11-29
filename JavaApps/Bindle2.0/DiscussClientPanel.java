@@ -19,6 +19,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     JTextField input;
     JPanel panel, panPanel, wholeThing, lTab, rTab, titleTopicPanel;
     JLabel title, topic, spa1, spa2, spa3, spa5;
+    public String myUserName;
     Font titleFont, topicFont;
     String tempString = "";   
     //background color for the whole applet
@@ -39,6 +40,8 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     int wait;
 
     NSand mySand;
+
+    StudentControlPanel parent;
 
     public void init(NSand inSand)
     { 
@@ -182,8 +185,8 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	if (e.getKeyCode() == 10) {// enter key
 
 	    NGlobals.cPrint("ENTER pressed");
-
-	    String tString = input.getText();
+	    String t1String = input.getText();
+	    String tString = new String(myUserName + ": " + t1String);
 	    int tLen = tString.length();
 	    //    char[] tStringAsChars = tString.toCharArray();
 	    byte[] tStringAsBytes = tString.getBytes();
@@ -223,7 +226,8 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	if (source == speak)
 	    {
 		NGlobals.cPrint("pressed speak button");
-		String tString = input.getText();
+		String t1String = input.getText();
+		String tString = new String(myUserName + ": " + t1String);
 		int tLen = tString.length();
 		//			//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
