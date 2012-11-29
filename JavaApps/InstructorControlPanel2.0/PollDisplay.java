@@ -29,6 +29,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
     int     MAX_THREADS = 100000;
 
     Image[] bgImages = new Image[50];
+    Image bgImage;
 
     public enum pollType { 
 	BLANK, YESNO, TEN;
@@ -160,13 +161,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	int i;
 
 	NGlobals.cPrint("init() ...\n");
-	imgPrefix = "http://nomads.music.virginia.edu/images/PollSandBackgroundImages";
-	
-	for (i=0;i<50;i++) {
-	    String tString = new String("SandDunePoll_" + i+1 + "_web.jpg");
-	    NGlobals.dtPrint("opened: " + tString);
-	}
-
 
 	count = 0;
 	sOff = 0;
@@ -819,8 +813,12 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	x = 0;
 	y = 0;
 
-	NGlobals.cPrint("paint() ...\n");
-	offScreenGrp.drawImage(bgImages[colAvg], 0, 0, width, height, this);
+	NGlobals.dtPrint("paint() ...\n");
+	double dAvg = (average/10.0) * 20.0;
+	NGlobals.dtPrint("average = " + average);
+	int tAvg = (int)dAvg;
+	NGlobals.dtPrint("tAvg = " + tAvg);
+	offScreenGrp.drawImage(bgImages[tAvg], 0, 0, width, height, this);
 
 	// offScreenGrp.setColor(nomadsColors[colAvg]);
 	// offScreenGrp.fillRect (0, 0,width, height);
@@ -910,8 +908,9 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	    DecimalFormat rounder = new DecimalFormat("#.##");//use to round to 2 decimal places
 	    String tString = rounder.format(average);
-	    offScreenGrp.drawString("Average:  " + tString, centerX-150, mY(30));
-	    offScreenGrp.drawString("Responses:  " + sNum, centerX+50, mY(30));
+	    NGlobals.dtPrint("average = " + average);
+	    offScreenGrp.drawString("Average:  " + tString, centerX-150, mY(50));
+	    offScreenGrp.drawString("Responses:  " + sNum, centerX+50, mY(50));
 
 	    NGlobals.cPrint("colAvg = " + colAvg + "\n");	    
 

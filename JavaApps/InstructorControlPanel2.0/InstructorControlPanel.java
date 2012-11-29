@@ -371,10 +371,25 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	pollPromptButton.setBorderPainted(false);
 	pollPromptButton.addActionListener( this );
 
-	// Poll Display ---------------------------
+	// Poll Display --------------------------- xxx
 
 	myPollDisplayPanel = new PollDisplay();
 	myPollDisplayPanel.init(instructorControlPanelSand);
+	imgPrefix = "http://nomads.music.virginia.edu/images/PollSandBackgroundImages/";
+
+	try { 
+	    imgWebBase = new URL(imgPrefix); 
+	} 
+	catch (Exception e) {}
+
+	myPollDisplayPanel.bgImage = getImage(imgWebBase,"SandDunePoll_10_web.jpg");
+	for (int i=0; i<20; i++) {
+	    int fileNum = i+20;
+	    String tString = new String("SandDunePoll_" + fileNum + "_web.jpg");
+	    myPollDisplayPanel.bgImages[i] = getImage(imgWebBase,tString);
+	    NGlobals.dtPrint("tString = " + tString);
+	}
+
 	pollDisplayFrame = new JFrame("NOMADS Poll");
 	pollDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	pollDisplayFrame.setLocationRelativeTo(null);
@@ -423,6 +438,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	myPointerDisplayPanel = new SandPointerDisplay();
 	myPointerDisplayPanel.init(instructorControlPanelSand);
+
 	pointerDisplayFrame = new JFrame("Sand Pointer");
 	pointerDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	pointerDisplayFrame.setLocationRelativeTo(null);
