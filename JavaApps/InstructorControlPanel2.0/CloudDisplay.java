@@ -177,8 +177,8 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 
 	randNum = new Random();
 
-	width = 800;
-	height = 800;
+	width = 1024;
+	height = 768;
 
 	xVar = 50;
 	
@@ -433,35 +433,36 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 
 		    quad = tHist.quad;
 
+		    int scalar = 4;
 
 		    NGlobals.cPrint("  quad = " + quad);
 		    if (quad > 2) {
-			tHist.x-=8;
-			tHist.y-=5;
+			tHist.x-=(8 * scalar);
+			tHist.y-=(5 * scalar);
 			if (tHist.x < centerX)
 			    tHist.x = centerX;
 			if (tHist.y < centerY)
 			    tHist.y = centerY;
 		    }
 		    else if (quad > 1) {
-			tHist.x-=8;
-			tHist.y+=5;
+			tHist.x-=(8 * scalar);
+			tHist.y+=(5 * scalar);
 			if (tHist.x < centerX)
 			    tHist.x = centerX;
 			if (tHist.y > centerY)
 			    tHist.y = centerY;
 		    }
 		    else if (quad > 0) {
-			tHist.x+=6;
-			tHist.y+=5;
+			tHist.x+=(6 * scalar);
+			tHist.y+=(5 * scalar);
 			if (tHist.x > centerX)
 			    tHist.x = centerX;
 			if (tHist.y > centerY)
 			    tHist.y = centerY;
 		    }
 		    else {
-			tHist.x+=6;
-			tHist.y-=5;
+			tHist.x+=(6 * scalar);
+			tHist.y-=(5 * scalar);
 			if (tHist.x > centerX)
 			    tHist.x = centerX;
 			if (tHist.y < centerY)
