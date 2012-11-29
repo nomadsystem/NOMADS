@@ -257,9 +257,9 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	//	getContentPane().setBackground(nomadsColors[1]);
 	//	offScreenGrp.setBackground(Color.black);
 
-	byte d[] = new byte[1];
-	d[0] = 0;
-	mySand.sendGrain((byte)NAppID.DISPLAY_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+	// byte d[] = new byte[1];
+	// d[0] = 0;
+	// mySand.sendGrain((byte)NAppID.DISPLAY_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 		
 
     }	
@@ -420,16 +420,20 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		
 
 	NGlobals.cPrint("handle() =========================================================================================");
+	NGlobals.dtPrint("handle() =========================================================================================");
 
 	temp = "";
 	resp = 0;
 
 	NGlobals.cPrint("PD: Inside pollDisplay handle");
+	NGlobals.dtPrint("PD: Inside pollDisplay handle");
 
 
 	//get question from teacher poll app, and type of question submitted
 	if (incAppID == NAppID.TEACHER_POLL)  {
-	    NGlobals.cPrint("PD: Got AppID TEACHER POLL");
+	    NGlobals.dtPrint("PD: Got AppID TEACHER POLL");
+	    NGlobals.dtPrint("PD: Inside pollDisplay handle");
+
 	    //when a new question is asked, clear old result totals
 	    // 1 to 10 number data variables
 	    runningTotal = 0;
@@ -450,6 +454,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    typeOfQuestionSubmitted = incCmd; //Get question type from incoming command
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
 		NGlobals.cPrint("PD: YES-NO Question");
+		NGlobals.dtPrint("PD: YES-NO Question");
 		reset(); 
 		sCenterX[0] = (int)(width*0.25);
 		sCenterY[0] = height/2;
@@ -460,6 +465,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
 		reset();
 		NGlobals.cPrint("PD: 1-10 Question");
+		NGlobals.dtPrint("PD: 1-10 Question");
 		pType = pollType.TEN;
 	    }
 
@@ -476,16 +482,16 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	//get results from student poll apps
 	else if (incAppID == NAppID.STUDENT_POLL) {	 		 
-	    NGlobals.cPrint("PD: Getting Message from Student Poll");
+	    NGlobals.dtPrint("PD: Getting Message from Student Poll");
 	    int response =  grain.iArray[0];
 
 	    // YESNO ============================================================----------
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
-		NGlobals.cPrint("PD: SP: YES-NO ----------------------------------------------------------");
+		NGlobals.dtPrint("PD: SP: YES-NO ----------------------------------------------------------");
 		pType = pollType.YESNO;
 
 		if (response == 1)  {
-		    NGlobals.cPrint("PD: yes came in");
+		    NGlobals.dtPrint("PD: yes came in");
 		    yesTotal++;
 
 		    float sScale=0;
@@ -536,13 +542,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		    }
 
 
-		    NGlobals.cPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
+		    NGlobals.dtPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
 		    sNum++;
-		    NGlobals.cPrint("PD: yesTotal " + yesTotal);
+		    NGlobals.dtPrint("PD: yesTotal " + yesTotal);
 		}
 
 		if (response == 0) {
-		    NGlobals.cPrint("PD: no came in");
+		    NGlobals.dtPrint("PD: no came in");
 		    noTotal++;
 
 		    float sScale=0;
@@ -593,10 +599,10 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		    }
 
 
-		    NGlobals.cPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
+		    NGlobals.dtPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
 		    sNum++;
 
-		    NGlobals.cPrint("PD: noTotal " + noTotal);
+		    NGlobals.dtPrint("PD: noTotal " + noTotal);
 		}
 
 		//convert yes no results to an average to map to color
@@ -604,7 +610,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		yesPer = (double) yesTotal / totalYesAndNo;
 		noPer = (double) noTotal / totalYesAndNo;
 
-		NGlobals.cPrint("PD: totalYesAndNo " + totalYesAndNo);
+		NGlobals.dtPrint("PD: totalYesAndNo " + totalYesAndNo);
 
 		difference = yesPer - noPer;
 		difference *= 10;
@@ -662,7 +668,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
 		pType = pollType.TEN;
 
-		NGlobals.cPrint("PD: SP: 1-to-10 ----------------------------------------------------------");
+		NGlobals.dtPrint("PD: SP: 1-to-10 ----------------------------------------------------------");
 		resp = response; // DISPLAY
 		tVal = colVals[resp];
 		tVal++;
@@ -885,11 +891,19 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		}
 	    }
 
+
 	    offScreenGrp.setColor(Color.black);
+
+	    for (i=1;i<=nCols;i++) {
+		x = i*colW;
+		offScreenGrp.setColor(Color.black);
+		offScreenGrp.drawString(Integer.toString(i), x, mY(70));
+	    }
+
 	    DecimalFormat rounder = new DecimalFormat("#.##");//use to round to 2 decimal places
 	    String tString = rounder.format(average);
-	    offScreenGrp.drawString("Average:  " + tString, centerX-100, mY(20));
-	    offScreenGrp.drawString("Responses:  " + sNum, centerX+100, mY(20));
+	    offScreenGrp.drawString("Average:  " + tString, centerX-150, mY(30));
+	    offScreenGrp.drawString("Responses:  " + sNum, centerX+50, mY(30));
 
 	    NGlobals.cPrint("colAvg = " + colAvg + "\n");	    
 
@@ -908,11 +922,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    // g.fillPolygon(xpoints, ypoints, 10);
 	    //	    g.fillRect(tx, ty, 10, 10);
 
-	    for (i=1;i<=nCols;i++) {
-		x = i*colW;
-		offScreenGrp.setColor(Color.black);
-		offScreenGrp.drawString(Integer.toString(i), x, mY(50));
-	    }
 
 
 	}
@@ -987,7 +996,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    String nString = nrounder.format(nPct);
 	    offScreenGrp.drawString("No " + noTotal + " (" + nString + "%) ", centerX+100, mY(50));
 
-	    offScreenGrp.drawString("Responses " + sNum, centerX-30, mY(20));
+	    offScreenGrp.drawString("Responses " + sNum, centerX-30, mY(30));
 
 
 	    // g.setColor(Color.red);

@@ -22,6 +22,7 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
     JPanel panel, panPanel, wholeThing, lTab, rTab, titleTopicPanel;
     JLabel title, topic, spa1, spa2, spa3, spa5;
     Font titleFont, topicFont;
+    String userName = new String("K");
 
     String tempString = "";   
 	
@@ -198,7 +199,8 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 	    {
 		NGlobals.cPrint("ENTER");
 
-		String tString = input.getText();
+		String t1String = input.getText();
+		String tString = new String(userName + ": " + t1String);
 		int tLen = tString.length();
 		//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
@@ -237,7 +239,8 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 	    {
 		NGlobals.cPrint("ENTER");
 
-		String tString = input.getText();
+		String t1String = input.getText();
+		String tString = new String(userName + ": " + t1String);
 		int tLen = tString.length();
 		//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();

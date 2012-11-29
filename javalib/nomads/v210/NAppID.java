@@ -12,8 +12,6 @@ public class NAppID {
     public static byte BINDLE = 7;
     public static byte DEBUG = 10;
 
-    public static byte INSTRUCTOR_CONTROL_PANEL = 11;
-
     public static byte DISCUSS = 20;
     public static byte DISCUSS_PROMPT = 22;
     public static byte INSTRUCTOR_DISCUSS = 24;
@@ -27,7 +25,7 @@ public class NAppID {
     public static byte TEACHER_POLL = 60;
     public static byte STUDENT_POLL = 62;
     public static byte DISPLAY_POLL = 64;
-    public static byte POLL_PROMPT = 65;
+    //    public static byte POLL_PROMPT = 65;  // DT:  TODO change this to POLL_PROMPT
 
     public static byte INSTRUCTOR_SEQUENCER = 80;
     public static byte STUDENT_SEQUENCER = 82;
