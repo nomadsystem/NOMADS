@@ -3,7 +3,8 @@ package nomads.v210;
 public class NGlobals {
     public static int clientDebugLevel = 0;  // Use this for printout info
     public static int serverDebugLevel = 1;  // Use this for printout info
-    public static int libraryDebugLevel = 1;  // Use this for printout info
+    public static int libraryDebugLevel = 0;  // Use this for printout info
+    public static int dtDebugLevel = 1;  // Use this for printout info
     public static String    serverName = "nomads.music.virginia.edu";
     public static int serverPort = 52920;
     public static int serverPortDT = 52921;
@@ -25,6 +26,12 @@ public class NGlobals {
     public static void cPrint(String str) {
 	if (clientDebugLevel > 0) {
 	    System.out.println("CLIENT: " + str);
+	}
+    }
+
+    public static void dtPrint(String str) {
+	if (dtDebugLevel > 0) {
+	    System.out.println("DT: " + str);
 	}
     }
 

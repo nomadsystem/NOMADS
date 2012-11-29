@@ -8,6 +8,7 @@ public class NCommand {
     public static byte LOGIN_STATUS = 3;
     public static byte LOGIN = 4;
 
+    public static byte MOD_STATE_START = 11; 
     public static byte SET_DISCUSS_STATUS = 11; 
     public static byte SET_CLOUD_STATUS = 12; 
     public static byte SET_POLL_STATUS = 13; 
@@ -15,6 +16,7 @@ public class NCommand {
     public static byte SET_POINTER_STATUS = 15;  // DT: these still need to be fixed, much already cleaned 
     public static byte SET_SWARM_STATUS = 15; 
     public static byte SET_UGROOVE_STATUS = 16; 
+    public static byte MOD_STATE_END = 16; 
     
     public static byte SEND_DISCUSS_PROMPT = 20;
     public static byte SEND_CLOUD_PROMPT = 21;

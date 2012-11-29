@@ -412,11 +412,11 @@ public class SoundMosaicDisplay extends JApplet implements ActionListener, Runna
 	
 	byte d[] = new byte[1];
 	d[0] = 0;
-	mySand.sendGrain((byte)NAppID.INSTRUCTOR_SEQUENCER, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+	// mySand.sendGrain((byte)NAppID.INSTRUCTOR_SEQUENCER, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 	// Request list of sound files
 
-	mySand.sendGrain((byte)NAppID.INSTRUCTOR_SEQUENCER, (byte)NCommand.GET_SOUNDFILE_LIST, (byte)NDataType.UINT8, 1, d );
+	// mySand.sendGrain((byte)NAppID.INSTRUCTOR_SEQUENCER, (byte)NCommand.GET_SOUNDFILE_LIST, (byte)NDataType.UINT8, 1, d );
 
 	start.setEnabled(true);
 	allOff.setEnabled(true);

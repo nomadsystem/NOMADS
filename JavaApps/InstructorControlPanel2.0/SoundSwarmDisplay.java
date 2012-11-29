@@ -112,7 +112,7 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	int tLen = tString.length();
 	byte[] tStringAsBytes = tString.getBytes();
 
-	swarmDisplaySand.sendGrain((byte)NAppID.SOUND_SWARM_DISPLAY, (byte)NCommand.REGISTER, (byte)NDataType.BYTE, tLen, tStringAsBytes);
+	// swarmDisplaySand.sendGrain((byte)NAppID.SOUND_SWARM_DISPLAY, (byte)NCommand.REGISTER, (byte)NDataType.BYTE, tLen, tStringAsBytes);
 
 	nThread = new NomadsAppThread(this);
 	nThread.start();
