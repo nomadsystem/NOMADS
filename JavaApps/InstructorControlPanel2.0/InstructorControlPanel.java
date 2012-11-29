@@ -342,7 +342,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	myCloudDisplayPanel = new CloudDisplay();
 	myCloudDisplayPanel.init(instructorControlPanelSand);
 	//Have to perform this method here, can't do it in JPanel
-	myCloudDisplayPanel.backgroundImg = getImage(imgWebBase,"SandDunes1_950x650.jpg");
+	myCloudDisplayPanel.backgroundImg = getImage(imgWebBase,"SandDunes1_1024x768_web.jpg");
 	cloudDisplayFrame = new JFrame("Cloud");
 	cloudDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	cloudDisplayFrame.setLocationRelativeTo(null);
