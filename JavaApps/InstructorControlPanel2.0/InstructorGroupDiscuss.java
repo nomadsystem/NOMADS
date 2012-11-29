@@ -188,11 +188,9 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 		
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////
     //key listener code
-    ///////////////////////////////////////////////////////////////////////////
+    ///a////////////////////////////////////////////////////////////////////////
     public void keyPressed (KeyEvent e)
     {
 	if (e.getKeyCode() == 10) // enter key
@@ -216,7 +214,6 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 		//                }
 
 		NGlobals.cPrint("sending: (" + tString + ")");
-		input.setText("");
 	    }
     }
 
@@ -256,7 +253,6 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 		//                }
 
 		NGlobals.cPrint("sending: (" + tString + ")");
-		input.setText("");
 		//       	 }
 	    } 
     }
