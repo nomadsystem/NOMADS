@@ -269,9 +269,9 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 
 	wordFound = 0;
 	numPasses = 0;
-	startFontSize = 25;
-	minFontSize = 10;
-	maxFontSize = 200;
+	startFontSize = 30;
+	minFontSize = 2;
+	maxFontSize = 100;
 
 	x = width / 2 - 20;
 	y = height / 2 - 20;
@@ -429,7 +429,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 		    NGlobals.cPrint("  INCreasing text size");
 
 		    // This will change to be a combination of rank v time (ie., numPasses);
-		    tHist.size += 4;
+		    tHist.size += 5;
 
 		    quad = tHist.quad;
 
@@ -497,7 +497,8 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 		    if (tHist.size > maxFontSize)
 			tHist.size = maxFontSize;
 
-		    if (numPasses%2 == 0) {
+		    if (true) {
+			//		    if (numPasses%2 == 0) {
 			tHist.size--;
 			quad = tHist.quad;
 			if (quad > 2) {
