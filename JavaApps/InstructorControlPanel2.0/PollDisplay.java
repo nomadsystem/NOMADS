@@ -28,6 +28,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
     int     MAX_THREADS = 100000;
 
+    Image[] bgImages = new Image[50];
+
     public enum pollType { 
 	BLANK, YESNO, TEN;
     }
@@ -158,7 +160,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	int i;
 
 	NGlobals.cPrint("init() ...\n");
-	imgPrefix = "http://nomads.music.virginia.edu/images/";
+	imgPrefix = "http://nomads.music.virginia.edu/images/PollSandBackgroundImages";
+	
+	for (i=0;i<50;i++) {
+	    String tString = new String("SandDunePoll_" + i+1 + "_web.jpg");
+	    NGlobals.dtPrint("opened: " + tString);
+	}
+
 
 	count = 0;
 	sOff = 0;
@@ -259,8 +267,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	// byte d[] = new byte[1];
 	// d[0] = 0;
-	// mySand.sendGrain((byte)NAppID.DISPLAY_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
-		
+	// mySand.sendGrain((byte)NAppID.DISPLAY_POLL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );		
 
     }	
 
@@ -813,10 +820,11 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	y = 0;
 
 	NGlobals.cPrint("paint() ...\n");
-	offScreenGrp.setColor(nomadsColors[colAvg]);
-	offScreenGrp.fillRect (0, 0,width, height);
-	//	g.dispose();
+	offScreenGrp.drawImage(bgImages[colAvg], 0, 0, width, height, this);
 
+	// offScreenGrp.setColor(nomadsColors[colAvg]);
+	// offScreenGrp.fillRect (0, 0,width, height);
+	//	g.dispose();
 
 	// getContentPane().setBackground(Color.blue);	
 	// getContentPane().setBackground(Color(145,86,65));
