@@ -497,23 +497,23 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 		    if (tHist.size > maxFontSize)
 			tHist.size = maxFontSize;
 
-		    if (numPasses%3 == 0) {
-			tHist.size-=2;
+		    if (numPasses%2 == 0) {
+			tHist.size--;
 			quad = tHist.quad;
 			if (quad > 2) {
-			    tHist.x+=4;
+			    tHist.x+=6;
 			    tHist.y+=4;
 			}
 			else if (quad > 1) {
-			    tHist.x+=4;
+			    tHist.x+=6;
 			    tHist.y-=4;
 			}
 			else if (quad > 0) {
-			    tHist.x-=4;
+			    tHist.x-=6;
 			    tHist.y-=4;
 			}
 			else {
-			    tHist.x-=4;
+			    tHist.x-=6;
 			    tHist.y+=4;
 			}
 			if (tHist.x < 10) 
