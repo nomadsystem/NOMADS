@@ -9,6 +9,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import nomads.v210.*;
+import javax.imageio.ImageIO;
+
 
 public class InstructorControlPanel extends JApplet  implements  ActionListener {
 
@@ -276,14 +278,17 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	mosaicIcon = new ImageIcon(mosaicImgOff);
 	mosaicButton = new JButton( mosaicIcon);
 	mosaicButton.setMargin(new Insets(0,0,0,0));
+	mosaicButton.setEnabled(false);
 
 	pointerIcon = new ImageIcon(pointerImgOff);
 	pointerButton = new JButton( pointerIcon );
 	pointerButton.setMargin(new Insets(0,0,0,0));
+	pointerButton.setEnabled(false);
 
 	uGrooveIcon = new ImageIcon(uGrooveImgOff);
 	uGrooveButton = new JButton( uGrooveIcon);
 	uGrooveButton.setMargin(new Insets(0,0,0,0));
+	uGrooveButton.setEnabled(false);
 
 	// Set up button specifics + actions + set class pointers ----------------------------------
 	//
@@ -309,18 +314,20 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	myInstructorGroupDiscussPanel = new InstructorGroupDiscuss();
 	myInstructorGroupDiscussPanel.init(instructorControlPanelSand);
+
 	instructorGroupDiscussFrame = new JFrame("Discussion");
+
 	instructorGroupDiscussFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	instructorGroupDiscussFrame.setLocationRelativeTo(null);
 	instructorGroupDiscussFrame.setPreferredSize(new Dimension(800,600));
 	instructorGroupDiscussFrame.getContentPane().add(myInstructorGroupDiscussPanel);
 	instructorGroupDiscussFrame.pack();
 
+
 	discussDisplayButton = new JButton ( discussDisplayIcon );
 	discussDisplayButton.setMargin(new Insets(0,0,0,0));
 	discussDisplayButton.setBorderPainted(false);
 	discussDisplayButton.addActionListener( this );
-
 	// Cloud Prompt ------------------------
 		
 	myCloudPromptPanel = new CloudPrompt();
@@ -382,8 +389,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	} 
 	catch (Exception e) {}
 
-	myPollDisplayPanel.bgImage = getImage(imgWebBase,"SandDunePoll_10_web.jpg");
-	for (int i=0; i<20; i++) {
+	myPollDisplayPanel.bgImage = getImage(imgWebBase,"SandDunePoll_40_web.jpg");
+	for (int i=0; i<30; i++) {
 	    int fileNum = i+20;
 	    String tString = new String("SandDunePoll_" + fileNum + "_web.jpg");
 	    myPollDisplayPanel.bgImages[i] = getImage(imgWebBase,tString);
@@ -417,7 +424,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	uGroovePromptButton.setMargin(new Insets(0,0,0,0));
 	uGroovePromptButton.setBorderPainted(false);
 	uGroovePromptButton.addActionListener( this );
-		
+	uGroovePromptButton.setEnabled(false);		
 	// Unity Groove "display" -----------------------
 
 	myUnityGrooveDisplayPanel = new UnityGroovePanel();
@@ -433,6 +440,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	uGroovePromptButton.setMargin(new Insets(0,0,0,0));
 	uGrooveDisplayButton.setBorderPainted(false);
 	uGrooveDisplayButton.addActionListener( this );
+	uGrooveDisplayButton.setEnabled(false);
 		
 	// Sand Pointer ------------------
 
@@ -450,6 +458,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	pointerDisplayButton.setMargin(new Insets(0,0,0,0));
 	pointerDisplayButton.setBorderPainted(false);
 	pointerDisplayButton.addActionListener( this );
+	pointerDisplayButton.setEnabled(false);
 		
 	// Sound Mosaic ------------------
 
@@ -466,6 +475,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	mosaicDisplayButton.setMargin(new Insets(0,0,0,0));
 	mosaicDisplayButton.setBorderPainted(false);
 	mosaicDisplayButton.addActionListener( this );
+	mosaicDisplayButton.setEnabled(false);
 
 	// "blank" button for the grid layout to be happy
 	blankButton = new JLabel( "" );

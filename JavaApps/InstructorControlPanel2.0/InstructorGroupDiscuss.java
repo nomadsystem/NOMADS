@@ -1,10 +1,7 @@
 //
-//  NOMADS Group Discuss (Instructor)
+// Instructor Discuss
 //
 
-import java.net.*;
-import java.io.*;
-import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.text.DefaultCaret;
@@ -13,24 +10,26 @@ import java.util.*;
 import java.lang.*;
 import nomads.v210.*;
 
-public class InstructorGroupDiscuss extends JApplet implements ActionListener, KeyListener {   
+public class InstructorGroupDiscuss extends JPanel implements ActionListener, KeyListener {   
 
     JTextArea chatWindow;
     JScrollPane spane;
-    JButton speak, connect, disconnect;
+    JButton speak;
     JTextField input;
     JPanel panel, panPanel, wholeThing, lTab, rTab, titleTopicPanel;
     JLabel title, topic, spa1, spa2, spa3, spa5;
+    public String myUserName = new String("KHAN");
     Font titleFont, topicFont;
-    String userName = new String("K");
-
     String tempString = "";   
-	
     //background color for the whole applet
-    Color BG = new Color(158,55,33);      
 
+    int tAlpha = 255;
+    //    nomadsColors[i++] = new Color(191,140,44,tAlpha);
+
+    Color BG =   new Color(235,220,160,tAlpha);
     //background color for chatwindow
-    Color cWindy = new Color(242,197,126);
+    Color cWindy =new Color(249,245,220,tAlpha); //light yellow = 10
+
 
     //background color for input text field
     Color inputColor = new Color(249,241,131);
@@ -45,11 +44,10 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 
     NSand mySand;
 
+    InstructorControlPanel parent;
+
     public void init(NSand inSand)
-    { //daniel's swingin' code
-
-	NGlobals.cPrint("InstructorGroupDiscuss->init(sand)");
-
+    { 
 	mySand = inSand;
 	//topmost container. It will hold wholeThing, which is the applet
 	setLayout( new BorderLayout() );
@@ -61,9 +59,8 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 
 	//initialize components
 	speak = new JButton("Speak");
-	//	  connect = new JButton("Connect");
-	//	  disconnect = new JButton("Disconnect");
 	chatWindow = new JTextArea(10,30);
+
 	//makes chat window autoscroll
 	DefaultCaret caret = (DefaultCaret)chatWindow.getCaret();
 	caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -72,11 +69,12 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 	chatWindow.setBackground(cWindy);
 	chatWindow.setFont(chatFont);
 	chatWindow.setDisabledTextColor(chatColor);
+
 	spane = new JScrollPane(chatWindow);
 	input = new JTextField("", 30);
 	input.setBackground(inputColor);
 	panel = new JPanel( new FlowLayout() ); //holds buttons and textfield 
-	panPanel = new JPanel( new GridLayout(1,1,0,5)); //holds panel for spacing and color purposes...may not be necessary
+	panPanel = new JPanel( new GridLayout(1,1,0,5)); //holds panel for spacing and color purposes
 	panPanel.setBackground(BG);
 	panel.setBackground(BG);		  
 
@@ -94,13 +92,10 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 
 
 	//key listener stuff
-	//	  input.setFocusable(true);
 	input.addKeyListener(this); 
 
 	//add action listeners to the buttons
 	speak.addActionListener(this);
-	//	  connect.addActionListener(this);
-	//	  disconnect.addActionListener(this);
 
 	//buffer the sides of the applet  
 	lTab = new JPanel( new FlowLayout() );
@@ -110,18 +105,14 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 
 	spa1 = new JLabel("            ");
 	spa2 = new JLabel("            ");
-	//spa3 = new JLabel("            ");
 	spa5 = new JLabel("                 ");
 	lTab.add(spa1);
 	rTab.add(spa2);
 
 	//add components to the applet
-	//	   panel.add(connect);
-	//	   panel.add(disconnect);
 	panel.add(spa5);
 	panel.add(input);
 	panel.add(speak);   
-	//panPanel.add(spa3);
 	panPanel.add(panel);
 
 
@@ -133,51 +124,49 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 
 	add(wholeThing, BorderLayout.CENTER);
 
-	byte d[] = new byte[1];
-	d[0] = 0;
-
     }
 
-    public void handle(NGrain inGrain)
+    public synchronized void handle(NGrain inGrain)
     {	
 	int incNBlocks, incDType, incDLen;
 	int i,j;
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 	NGrain grain;
-
+    
 	NGlobals.cPrint("DiscussClient -> handle()");
-
+    
 	grain = inGrain;
-	grain.print(); //prints grain data to console
+
 	byte incAppID = grain.appID;
 	byte incCmd = grain.command;
 	String msg = new String(grain.bArray);
-
+    
 	if (incAppID == NAppID.DISCUSS_PROMPT && incCmd == NCommand.SEND_DISCUSS_PROMPT) {
 	    topic.setText(msg);
 	    tempString = new String(msg);
 	    topic.setForeground(Color.BLACK);
 	    topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 	}
-
 	// Disable discuss when the student panel button is off
-	//****STK Commented out, we don't want to disable the instructor discuss
-	//		else if (grain.appID == NAppID.INSTRUCTOR_PANEL) {
-	//			if (msg.equals("DISABLE_DISCUSS_BUTTON")) {
-	//				speak.setEnabled(false);
-	//				topic.setText("Discuss Disabled");
-	//				chatWindow.setText("");
-	//			}
-	//			else if (msg.equals("ENABLE_DISCUSS_BUTTON")) {
-	//				speak.setEnabled(true);
-	//				topic.setText(msg);
-	//			}			
-	//		}
-	else if (incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.SERVER){
+	else if (incAppID == NAppID.INSTRUCTOR_PANEL && incCmd == NCommand.SET_DISCUSS_STATUS) {
+	    if (grain.bArray[0] == 0) {
+		speak.setEnabled(false);
+		topic.setText("Discuss Disabled");
+		chatWindow.setText("");
+	    }
+	    else if (grain.bArray[0] == 1) {
+		speak.setEnabled(true);
+		topic.setText(tempString);
+	    }		
+	}
+    		
+	else if (incAppID == NAppID.DISCUSS || 
+		 incAppID == NAppID.INSTRUCTOR_DISCUSS ||
+		 grain.appID == NAppID.SERVER){
 	    if (incCmd == NCommand.SEND_MESSAGE) {
 		chatWindow.append(msg + "\n");
-		input.requestFocus();
+		// input.requestFocus();
 	    }
 	}
 	else {
@@ -185,36 +174,43 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 	}
 	if (grain != null)
 	    grain = null;
-		
+
+	wholeThing.setBackground(BG);
+	chatWindow.setBackground(cWindy);
+    		
     }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //key listener code
-    ///a////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+
     public void keyPressed (KeyEvent e)
     {
-	if (e.getKeyCode() == 10) // enter key
-	    {
-		NGlobals.cPrint("ENTER");
+	if (e.getKeyCode() == 10) {// enter key
 
-		String t1String = input.getText();
-		String tString = new String(userName + ": " + t1String);
-		int tLen = tString.length();
-		//    char[] tStringAsChars = tString.toCharArray();
-		byte[] tStringAsBytes = tString.getBytes();
+	    NGlobals.cPrint("ENTER pressed");
+	    String t1String = input.getText();
+	    String tString = new String(myUserName + ": " + t1String);
+	    int tLen = tString.length();
+	    //    char[] tStringAsChars = tString.toCharArray();
+	    byte[] tStringAsBytes = tString.getBytes();
 
-		mySand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+	    mySand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
-		// The data 
-		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
+	    // The data 
+	    NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
 
-		//                for (int i=0; i<tLen; i++) {
-		//                NGlobals.cPrint("sending:  " + tString.charAt(i));
-		//                streamOut.writeByte(tString.charAt(i));
-		//                }
+	    //                for (int i=0; i<tLen; i++) {
+	    //                NGlobals.cPrint("sending:  " + tString.charAt(i));
+	    //                streamOut.writeByte(tString.charAt(i));
+	    //                }
 
-		NGlobals.cPrint("sending: (" + tString + ")");
-	    }
+	    NGlobals.cPrint("sending: (" + tString + ")");
+	    input.setText("");
+
+	}
     }
 
     //makes compiler happy
@@ -231,18 +227,19 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
     {
 	Object source = ae.getSource();
 
+
 	//listener code for speak button
 	if (source == speak)
 	    {
-		NGlobals.cPrint("ENTER");
-
+		NGlobals.cPrint("pressed speak button");
 		String t1String = input.getText();
-		String tString = new String(userName + ": " + t1String);
+		String tString = new String(myUserName + ": " + t1String);
 		int tLen = tString.length();
-		//    char[] tStringAsChars = tString.toCharArray();
+		//			//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
-
+		//
 		mySand.sendGrain((byte)NAppID.INSTRUCTOR_DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+
 
 		// The data 
 		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
@@ -253,7 +250,8 @@ public class InstructorGroupDiscuss extends JApplet implements ActionListener, K
 		//                }
 
 		NGlobals.cPrint("sending: (" + tString + ")");
-		//       	 }
+		input.setText("");
+
 	    } 
     }
 

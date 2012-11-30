@@ -343,6 +343,7 @@ public class NomadServer implements Runnable {
 
 	     (incAppID == NAppID.STUDENT_SEQUENCER) ||
 	     (incAppID == NAppID.DISCUSS) ||
+	     (incAppID == NAppID.INSTRUCTOR_DISCUSS) ||
 	     (incAppID == NAppID.DISCUSS_PROMPT) ||
 	     (incAppID == NAppID.STUDENT_SAND_POINTER) ||
 	     (incAppID == NAppID.STUD_EMRG_SYNTH) ) { 
