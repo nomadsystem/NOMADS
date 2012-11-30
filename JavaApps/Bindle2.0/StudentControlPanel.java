@@ -134,7 +134,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	//Could add window listener here if we wanted to
 	pollFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	pollFrame.setLocationRelativeTo(null);
-	pollFrame.setPreferredSize(new Dimension(600, 600));
+	pollFrame.setPreferredSize(new Dimension(500, 250));
 	pollFrame.getContentPane().add(myPollStudentPanel);
 	pollFrame.pack();
 

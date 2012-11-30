@@ -27,7 +27,9 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 	String tempString = "";
 
 	//background color for the whole applet
-	Color BG = new Color(158,55,33);      
+	Color BG = new Color(145, 106, 65);
+
+	Color BG2 = new Color(145, 106, 65);
 
 	//background color for chatwindow
 	//    Color cWindy = new Color(242,197,126);

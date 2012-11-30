@@ -25,8 +25,8 @@ public class GroupDiscussPrompt extends JApplet implements ActionListener
 
     Color[] theColors = new Color[11];
 
-    Color titleColor = new Color(233, 158, 37);
-    Color middleColor = new Color(254, 205, 129);
+    Color middleColor = new Color(191,140,44);
+    Color titleColor = new Color(191,140,44);
 
     JPanel middle, top; //bottom shows teacher the results of poll
     JPanel subMiddle, wholeThing;
