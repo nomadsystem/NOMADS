@@ -149,6 +149,29 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
     //   	pointerColors[7] = new Color(249, 241, 131, alpha);
     //     }
 
+    Thread runner;
+
+    // DT 6/30/10:  not sure we need these anymore
+
+    public void start() {
+	runner = new Thread(this);
+	runner.start();
+    }
+    
+    public void run () {
+	NGlobals.cPrint("I'm running!");
+	while (true) {
+	    try {
+		repaint();
+		runner.sleep(100);
+	    }
+	    catch (InterruptedException ie) {}
+	}
+
+
+    }
+
+
     public void setCloudColors(int alpha) {
 	cloudColors[0] = new Color(158, 55, 33, alpha);
 	cloudColors[1] = new Color(145, 86, 65, alpha);
@@ -279,8 +302,9 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	addMouseListener(this);
 	addMouseMotionListener(this);
 
+	start();
 		
-    }	
+    }
 
 
     public void mouseEntered(MouseEvent e) {
@@ -349,7 +373,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	    my = new_my;
 
 
-	    repaint();
+	    // repaint();
 	    e.consume();
 	}
     }
@@ -709,7 +733,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	    numPasses++;
 	    NGlobals.cPrint("...");
 	    NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-	    repaint();
+	    // repaint();
 	}
 		
 	else {
@@ -773,15 +797,6 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 
 
     // DT 6/30/10:  not sure we need these anymore
-
-    public void start() {
-
-    }
-
-    public void run () {
-	if (i == 1) {
-	} 
-    }
 
     public void paint(Graphics g) {
 	int tx, ty, r,gr,b,a;

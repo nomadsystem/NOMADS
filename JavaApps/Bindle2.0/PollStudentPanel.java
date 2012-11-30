@@ -283,8 +283,9 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 				{
 					// gui is blank
 					// add the options
-					oneToTen.add(yes);
 					oneToTen.add(no);
+					oneToTen.add(yes);
+
 
 					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
 
@@ -332,8 +333,8 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 					NGlobals.cPrint("Student Poll YNQ: Removing 1-10 Buttons");
 
 					// in with the new
-					oneToTen.add(yes);
 					oneToTen.add(no);
+					oneToTen.add(yes);
 					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
 
 					// refresh the options
@@ -358,8 +359,9 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 					NGlobals.cPrint("Student Poll YNQ: Removing A-E Buttons");
 
 					// in with the new
-					oneToTen.add(yes);
 					oneToTen.add(no);
+					oneToTen.add(yes);
+
 					NGlobals.cPrint("Student Poll YNQ: Adding Yes/No Buttons");
 
 					// refresh the options
@@ -599,9 +601,9 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 		{
 			yes.setSelected(true);
 			no.setSelected(false);
-			//Disable after you choose
-			yes.setEnabled(false);
-			no.setEnabled(false);
+			//Disable after you choose  // REVOTE
+			// yes.setEnabled(false);
+			// no.setEnabled(false);
 
 			//show results with color
 
@@ -617,8 +619,8 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			yes.setSelected(false);
 			no.setSelected(true);
 			//Disable after you choose
-			yes.setEnabled(false);
-			no.setEnabled(false);
+			// yes.setEnabled(false);
+			// no.setEnabled(false);
 			//show results with color
 
 			tCommand = NCommand.QUESTION_TYPE_YES_NO;

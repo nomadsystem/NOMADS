@@ -33,7 +33,10 @@ public class JoinPanel extends JApplet implements ActionListener {
 	
     public void init(NSand inSand) {
 	mySand = inSand;
-	Color bgColor = new Color(233, 158, 37);
+
+	Color bgColor2 = new Color(233, 158, 37);
+	Color bgColor = new Color(145, 106, 65);
+
 	Container content = getContentPane();
 	content.setBackground(bgColor);
 	i = 0;

@@ -22,11 +22,18 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     public String myUserName;
     Font titleFont, topicFont;
     String tempString = "";   
-    //background color for the whole applet
-    Color BG = new Color(158,55,33);      
 
+    int tAlpha = 255;
+    //    nomadsColors[i++] = new Color(191,140,44,tAlpha);
+
+    Color BG = new Color(145, 106, 65);
+    Color BG2 = new Color(191, 140, 44);
+
+    // Color BG =   new Color(235,220,160,tAlpha);
     //background color for chatwindow
-    Color cWindy = new Color(242,197,126);
+    Color cWindy = new Color(185, 146, 105);
+
+    // Color BG2 = new Color(249,245,220,tAlpha); //light yellow = 10
 
     //background color for input text field
     Color inputColor = new Color(249,241,131);
@@ -34,7 +41,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     //color for chat window
     Color chatColor = new Color(0,0,0);
 
-    Font chatFont = new Font("sansserif", Font.BOLD, 18);
+    Font chatFont = new Font("sansserif", Font.PLAIN, 18);
 
     boolean c = false; //flag to see if it is connected to server
     int wait;
@@ -79,7 +86,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	titleTopicPanel.setBackground(BG);
 
 	titleFont = new Font("TimesRoman", Font.BOLD, 28);
-	title = new JLabel("Group Discuss", JLabel.CENTER);
+	title = new JLabel("Discussion", JLabel.CENTER);
 	title.setFont(titleFont);
 	topicFont = new Font("TimesRoman", Font.PLAIN, 20);
 	topic = new JLabel("", JLabel.CENTER);
@@ -163,7 +170,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 		 grain.appID == NAppID.SERVER){
 	    if (incCmd == NCommand.SEND_MESSAGE) {
 		chatWindow.append(msg + "\n");
-		input.requestFocus();
+		// input.requestFocus();
 	    }
 	}
 	else {
