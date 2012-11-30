@@ -1206,12 +1206,12 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    NGlobals.cPrint("noTotal = " + noTotal);
 
 	    String yString = yrounder.format(yPct);
-	    offScreenGrp.drawString("Yes " + yesTotal + " (" + yString + "%) ", centerX+100, mY(70));
+	    offScreenGrp.drawString("Yes " + yesTotal + " (" + yString + "%) ", centerX+90, mY(70));
 
 	    DecimalFormat nrounder = new DecimalFormat("#.##");//use to round to 2 decimal places
 
 	    String nString = nrounder.format(nPct);
-	    offScreenGrp.drawString("No " + noTotal + " (" + nString + "%) ", centerX-150, mY(70));
+	    offScreenGrp.drawString("No " + noTotal + " (" + nString + "%) ", centerX-170, mY(70));
 
 	    offScreenGrp.drawString("Responses " + sNum, centerX-30, mY(40));
 

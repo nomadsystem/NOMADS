@@ -369,7 +369,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	pollPromptFrame = new JFrame("Poll Prompt");
 	pollPromptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	pollPromptFrame.setLocationRelativeTo(null);
-	pollPromptFrame.setPreferredSize(new Dimension(750,400));
+	pollPromptFrame.setPreferredSize(new Dimension(850,350));
 	pollPromptFrame.getContentPane().add(myPollPromptPanel);
 	pollPromptFrame.pack();
 
