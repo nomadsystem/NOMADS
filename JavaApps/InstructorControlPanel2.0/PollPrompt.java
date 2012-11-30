@@ -89,7 +89,7 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	//going in bottom of middle
 	dispResults = new JPanel(new FlowLayout());
-	results = new JLabel("<html><center><h3> (ask question)</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
+	results = new JLabel("<html><center><h3> (ask question)</h3><h2 style='color:black'>Awaiting results");
 	dispResults.add(results);
 
 	// setting background colors
@@ -110,7 +110,7 @@ public class PollPrompt extends JApplet implements ActionListener
 	setLayout(new BorderLayout());
 
 	//set title
-	title = new JLabel("<html><h1 style='color:black;font-size:150%'>NOMADS Teacher Poll: Pose a question</h1><br><h3 style='color:black'>Choose a question type, type in the question, and hit 'ask' to poll students.<br>Poll Results will appear in the bottom of the screen.&nbsp<p></h3></html>", JLabel.CENTER);
+	title = new JLabel("<html><h1 style='color:black;'>NOMADS Teacher Poll: Pose a question</h1><h3 style='color:black'>Choose a question type, type in the question, and hit 'ask' to poll students.<br>Poll Results will appear in the bottom of the screen.&nbsp<p></h3></html>", JLabel.CENTER);
 	top.add(title);
 
 	//JTextField to recieve question entered by user
@@ -229,7 +229,7 @@ public class PollPrompt extends JApplet implements ActionListener
 
 		    //show results average in applet too
 
-		    results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><html><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></center></html>");	
+		    results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></center></html>");	
 		}
 	    else	
 		{
@@ -288,7 +288,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		difference = 0;
 		finAns = 0;
 
-		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
+		results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Awaiting results");
 		bottom.setBackground(titleColor);
 		dispResults.setBackground(titleColor);
 
@@ -343,7 +343,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		difference = 0;
 		finAns = 0;
 
-		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
+		results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Awaiting results");
 		bottom.setBackground(titleColor);
 		dispResults.setBackground(titleColor);
 
@@ -433,7 +433,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		difference = 0;
 		finAns = 0;
 
-		results.setText("<html><center><h3>" + qText + "</h3><p>&nbsp<p><h2 style='color:black'>Awaiting results");
+		results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Awaiting results");
 		bottom.setBackground(titleColor);
 		dispResults.setBackground(titleColor);
 
