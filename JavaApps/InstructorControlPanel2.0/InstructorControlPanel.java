@@ -853,24 +853,32 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	// end buttons ----------------------------
 
 	// Send to DISCUSS ------------------------
-	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
-	    myInstructorGroupDiscussPanel.handle(grain);
+	if (discussOnOff == 1) {
+	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
+		myInstructorGroupDiscussPanel.handle(grain);
+	    }
 	}
 
-	// Send to CLOUD DISPLAY------------------------
-	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
-	    myCloudDisplayPanel.handle(grain);
+	// Send to CLOUD DISPLAY------------------------q
+	if (cloudOnOff == 1) {
+	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
+		myCloudDisplayPanel.handle(grain);
+	    }
 	}
 		
 	// Send to POLL PROMPT------------------------
-	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
-	    myPollPromptPanel.handle(grain);
+	if (pollOnOff == 1) {
+	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
+		myPollPromptPanel.handle(grain);
+	    }
 	}
 		
 	// Send to POLL DISPLAY------------------------
-	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
-	    NGlobals.dtPrint("ICP:  sending to pollDisplay");
-	    myPollDisplayPanel.handle(grain);
+	if (pollOnOff == 1) {
+	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
+		NGlobals.dtPrint("ICP:  sending to pollDisplay");
+		myPollDisplayPanel.handle(grain);
+	    }
 	}
 		
 	// Send to SOUND MOSAIC DISPLAY------------------------
