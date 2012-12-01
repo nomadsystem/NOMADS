@@ -218,7 +218,7 @@ public class NSand
 		    NGlobals.lPrint("UINT8:  " + bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with UINT8s");
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
 	    }
 			
 	    //Int Array
@@ -241,7 +241,7 @@ public class NSand
 		    NGlobals.lPrint("INT:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INT32s");
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
 	    }
 			
 	    //Float Array
@@ -263,7 +263,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 
@@ -315,7 +315,7 @@ public class NSand
 		    NGlobals.lPrint("UINT8:  " + (char) bA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, bA);
-		System.out.println("NSand:getGrain: creating grain with UINT8s");
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
 	    }
 
 	    //Int Array
@@ -338,7 +338,7 @@ public class NSand
 		    NGlobals.lPrint("INT32:  " + iA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, iA);
-		System.out.println("NSand:getGrain: creating grain with INT32s");
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
 	    }
 			
 	    //Float Array
@@ -361,7 +361,7 @@ public class NSand
 		    NGlobals.lPrint("FLOAT:  " + fA[i]);
 		}
 		grain = new NGrain(appID, cmd, dT, dL, fA);
-		System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
 
 	    }
 	    else {
@@ -370,7 +370,7 @@ public class NSand
 			
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    // System.out.println("SAND write error");
 	}
 	return grain;
     }
@@ -382,16 +382,44 @@ public class NSand
 	//client.start();
     }
 
+    public void disconnect() {
+	closeSocketStreams();
+	disConnectSocket();
+    }
+
+    public void closeSocketStreams()
+    {  
+	try {
+	    if (streamOut != null)  streamOut.close();
+	    if (socket    != null)  socket.close();
+	}
+	catch(IOException ioe) {
+	    System.out.println("Error closing...");
+	}
+    }
+
+    public void disConnectSocket()
+    {  
+	System.out.println("Disconnecting Please wait ...");
+	try {  
+	    socket.close();
+	    System.out.println("Disconnected");
+	}
+	catch(IOException ioe) {  
+	    System.out.println("socket discconnect exception: ");
+	}
+    }
+
 
     public void connectSocket()
     {  
-	System.out.println("Establishing connection. Please wait ...");
+	// System.out.println("Establishing connection. Please wait ...");
 	try {  
 	    socket = new Socket(serverName, serverPort);
-	    System.out.println("Connected");
+	    // System.out.println("Connected");
 	}
 	catch(IOException ioe) {  
-	    System.out.println("socket connect exception: ");
+	    // System.out.println("socket connect exception: ");
 	}
     }
 
@@ -402,7 +430,7 @@ public class NSand
 	    streamIn = new DataInputStream(socket.getInputStream());
 	}
 	catch(IOException ioe) {
-	    System.out.println("Error opening output stream: ");
+	    // System.out.println("Error opening output stream: ");
 	}
     }
 
@@ -414,14 +442,14 @@ public class NSand
 	    if (socket    != null)  socket.close();
 	}
 	catch(IOException ioe) {
-	    System.out.println("Error closing...");
+	    // System.out.println("Error closing...");
 	}
 
     }
 
 
     public void stop() {
-	System.out.println("NSand stop() called, not implemented...");
+	// System.out.println("NSand stop() called, not implemented...");
     }
 
 

@@ -1,0 +1,2 @@
+java CloudTest &>/dev/null &
+java DiscussTest &>/dev/null &
