@@ -46,6 +46,11 @@ public class InstructorGroupDiscuss extends JPanel implements ActionListener, Ke
 
     InstructorControlPanel parent;
 
+    public void resetSand(NSand inSand) {
+	mySand = inSand;
+    }
+
+
     public void init(NSand inSand)
     { 
 	mySand = inSand;

@@ -184,6 +184,11 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	maxCloudColors = 7;
     }
 
+    public void resetSand(NSand inSand) {
+	mySand = inSand;
+    }
+
+
     public void init(NSand inSand)
     {  	
 
@@ -518,7 +523,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 		    NGlobals.cPrint("...");
 		    NGlobals.cPrint("  DECreasing word size for " + tHist.text);
 		    NGlobals.cPrint("...");
-		    NGlobals.dtPrint("  numPasses = " + numPasses);
+		    // NGlobals.dtPrint("  numPasses = " + numPasses);
 		    if (tHist.size > maxFontSize)
 			tHist.size = maxFontSize;
 
