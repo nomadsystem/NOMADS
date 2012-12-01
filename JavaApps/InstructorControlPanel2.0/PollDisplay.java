@@ -107,6 +107,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
     NSand mySand;
 
+
     // ###########################
 
     public static void main(String args[])
@@ -153,6 +154,11 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	numColors = i-1;
 	colColorRatio = 1+(int)Math.ceil(nRows/numColors);
 
+    }
+
+
+    public void resetSand(NSand inSand) {
+	mySand = inSand;
     }
 
     // init () ============================================================================================
@@ -431,20 +437,20 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	byte incCmd = grain.command;
 		
 
-	NGlobals.cPrint("handle() =========================================================================================");
-	NGlobals.dtPrint("handle() =========================================================================================");
+	// NGlobals.cPrint("handle() =========================================================================================");
+	// NGlobals.dtPrint("handle() =========================================================================================");
 
 	temp = "";
 	resp = 0;
 
-	NGlobals.cPrint("PD: Inside pollDisplay handle");
-	NGlobals.dtPrint("PD: Inside pollDisplay handle");
+	// NGlobals.cPrint("PD: Inside pollDisplay handle");
+	// NGlobals.dtPrint("PD: Inside pollDisplay handle");
 
 
 	//get question from teacher poll app, and type of question submitted
 	if (incAppID == NAppID.TEACHER_POLL)  {
-	    NGlobals.dtPrint("PD: Got AppID TEACHER POLL");
-	    NGlobals.dtPrint("PD: Inside pollDisplay handle");
+	    // NGlobals.dtPrint("PD: Got AppID TEACHER POLL");
+	    // NGlobals.dtPrint("PD: Inside pollDisplay handle");
 
 	    //when a new question is asked, clear old result totals
 	    // 1 to 10 number data variables
@@ -465,8 +471,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	    typeOfQuestionSubmitted = incCmd; //Get question type from incoming command
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
-		NGlobals.cPrint("PD: YES-NO Question");
-		NGlobals.dtPrint("PD: YES-NO Question");
+		// NGlobals.cPrint("PD: YES-NO Question");
+		// NGlobals.dtPrint("PD: YES-NO Question");
 		reset(); 
 		sCenterX[0] = (int)(width*0.25);
 		sCenterY[0] = height/2;
@@ -476,8 +482,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    }
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
 		reset();
-		NGlobals.cPrint("PD: 1-10 Question");
-		NGlobals.dtPrint("PD: 1-10 Question");
+		// NGlobals.cPrint("PD: 1-10 Question");
+		// NGlobals.dtPrint("PD: 1-10 Question");
 		pType = pollType.TEN;
 	    }
 
@@ -641,7 +647,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		yesPer = (double) yesTotal / totalYesAndNo;
 		noPer = (double) noTotal / totalYesAndNo;
 
-		NGlobals.dtPrint("PD: totalYesAndNo " + totalYesAndNo);
+		// NGlobals.dtPrint("PD: totalYesAndNo " + totalYesAndNo);
 
 		difference = yesPer - noPer;
 		difference *= 10;
@@ -829,6 +835,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	return height-y;
     }
 
+
     // paint() ===================================================================================================
 
     public void paint(Graphics g) {
@@ -839,14 +846,17 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	int i,j;
 
+	int xpoints[];
+	int ypoints[];
+	xpoints = new int[4];
+	ypoints = new int[4];
+
 	int colW = width/(nCols+1);
 	int rowH = sHeight/(nRows+2);
 	int tilerW = (int)(colW*0.9);
 	int tilerH = 40;
 	int tilerO = (int)(tilerW*0.2);
 	int xOff = tilerO;
-	int xpoints[];
-	int ypoints[];
 	int tVal=0;
 	int cSet=0;
 	int tColor;
@@ -856,18 +866,16 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	// animation(offScreen.getGraphics()); //bf is the BufferedImage object
 	// g.drawImage(offScreen,0,0,null);
 
-	xpoints = new int[4];
-	ypoints = new int[4];
 
 	x = 0;
 	y = 0;
 
-	NGlobals.dtPrint("paint() ...\n");
+	// NGlobals.dtPrint("paint() ...\n");
 	if (average == 0) {
 	    colAvg = 5;
 	}
 	// double dAvg = (average/10.0) * 30.0;
-	NGlobals.dtPrint("average = " + average);
+	// NGlobals.dtPrint("average = " + average);
 	// int tAvg = (int)dAvg;
 	// NGlobals.dtPrint("tAvg = " + tAvg);
 	// offScreenGrp.drawImage(bgImages[tAvg], 0, 0, width, height, this);
@@ -875,7 +883,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	offScreenGrp.setColor(nomadsColors[colAvg]);
 	offScreenGrp.fillRect (0, 0,width, height);
-	//	g.dispose();
 
 	// getContentPane().setBackground(Color.blue);	
 	// getContentPane().setBackground(Color(145,86,65));
@@ -1011,7 +1018,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	    DecimalFormat rounder = new DecimalFormat("#.##");//use to round to 2 decimal places
 	    String tString = rounder.format(average);
-	    NGlobals.dtPrint("average = " + average);
+	    // NGlobals.dtPrint("average = " + average);
 	    offScreenGrp.drawString("Average:  " + tString, centerX-180, mY(40));
 	    offScreenGrp.drawString("Responses:  " + sNum, centerX+30, mY(40));
 
@@ -1234,6 +1241,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		
 		
 	g.drawImage(offScreen, 0, 0, width, height, this);
+	g.dispose();
+
     }	
     // END paint() ---------------------------------------------------------------------------------------
 }

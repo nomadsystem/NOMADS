@@ -35,6 +35,10 @@ public class GroupDiscussPrompt extends JApplet implements ActionListener
 
     //middle is where teacher submits poll question
 
+    public void resetSand(NSand inSand) {
+	mySand = inSand;
+    }
+
     public void init(NSand inSand)
     {
 

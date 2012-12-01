@@ -10,6 +10,7 @@ public class NAppID {
     public static byte SERVER = 0;
     public static byte INSTRUCTOR_PANEL = 1;
     public static byte BINDLE = 7;
+
     public static byte DEBUG = 10;
 
     public static byte DISCUSS = 20;

@@ -1,0 +1,1 @@
+for proc in $(ps -ax | grep "CloudTest"); do kill $proc; done &>/dev/null

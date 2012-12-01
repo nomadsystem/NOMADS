@@ -30,6 +30,7 @@ public class NomadServer implements Runnable {
 
     // xxx
     NGrain myGrain;
+    byte currentPollType;
 
     private byte modStates[] = new byte[6];
     int numModStates;
@@ -310,6 +311,14 @@ public class NomadServer implements Runnable {
 		    currentClient.threadSand.sendGrain(myGrain);
 		}
 	    }
+	}
+
+	if (incAppID == NAppID.TEACHER_POLL) {
+	    currentPollType = incAppCmd;
+	}
+
+	if ((incAppID == NAppID.STUDENT_POLL) && (incAppCmd != currentPollType)) {
+	    return;
 	}
 
 	// Send bulk data to BINDLE
