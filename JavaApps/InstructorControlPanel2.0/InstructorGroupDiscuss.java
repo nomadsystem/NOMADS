@@ -39,7 +39,7 @@ public class InstructorGroupDiscuss extends JPanel implements ActionListener, Ke
     //color for chat window
     Color chatColor = new Color(0,0,0);
 
-    Font chatFont = new Font("sansserif", Font.PLAIN, 16);
+    Font chatFont = new Font("sansserif", Font.PLAIN, 14);
 
     boolean c = false; //flag to see if it is connected to server
     int wait;
