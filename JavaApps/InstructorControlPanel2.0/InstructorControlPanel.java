@@ -853,47 +853,47 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	// end buttons ----------------------------
 
 	// Send to DISCUSS ------------------------
-	if (discussOnOff == 1) {
+	//	if (discussOnOff == 1) {
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
 		myInstructorGroupDiscussPanel.handle(grain);
 	    }
-	}
+	    //	}
 
 	// Send to CLOUD DISPLAY------------------------q
-	if (cloudOnOff == 1) {
+	    //	if (cloudOnOff == 1) {
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
 		myCloudDisplayPanel.handle(grain);
 	    }
-	}
+	    //	}
 		
 	// Send to POLL PROMPT------------------------
-	if (pollOnOff == 1) {
+	    //	if (pollOnOff == 1) {
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
 		myPollPromptPanel.handle(grain);
 	    }
-	}
+	    //	}
 		
 	// Send to POLL DISPLAY------------------------
-	if (pollOnOff == 1) {
+	    //	if (pollOnOff == 1) {
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
 		NGlobals.dtPrint("ICP:  sending to pollDisplay");
 		myPollDisplayPanel.handle(grain);
 	    }
-	}
+	    //	}
 		
 	// Send to SOUND MOSAIC DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_SEQUENCER ) {
-	    myMosaicDisplayPanel.handle(grain);
+	    // myMosaicDisplayPanel.handle(grain);
 	}
 		
 	// Send to SAND POINTER DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.SOUND_SWARM ) {
-	    myPointerDisplayPanel.handle(grain);
+	    // myPointerDisplayPanel.handle(grain);
 	}
 
 	// Send to UNITY GROOVE DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.INSTRUCT_EMRG_SYNTH_PROMPT) {
-	    myUnityGrooveDisplayPanel.handle(grain);
+	    // myUnityGrooveDisplayPanel.handle(grain);
 	}
 
     }
@@ -1030,6 +1030,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	else if( source == discussDisplayButton ) {
 	    instructorGroupDiscussFrame.setVisible(true);
+	    myInstructorGroupDiscussPanel.chatBottom();
+	    
 	    // xxx
 	    // getAppletContext().showDocument(discussURL,"CloudPrompt"); 	
 	}

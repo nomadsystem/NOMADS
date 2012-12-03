@@ -421,6 +421,13 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	NGlobals.cPrint("handle(" + text + "," + grain.appID + ") [CloudDisplay]\n");
 	NGlobals.cPrint("...");
 
+	if (incAppID == NAppID.INSTRUCTOR_PANEL && incCmd == NCommand.SET_CLOUD_STATUS) {
+	    if (grain.bArray[0] == 1) {
+		NGlobals.dtPrint("CLEAR!");
+		histoGram.clear();
+	    }
+	}
+
 
 
 	// ========= CLOUD INPUT ============================================

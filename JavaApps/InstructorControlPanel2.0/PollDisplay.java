@@ -23,6 +23,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	int x, y, xOff, tW, tH;
     }    
 
+
+    int txtOff;
     String imgPrefix;
     URL imgWebBase;
 
@@ -438,7 +440,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		
 
 	// NGlobals.cPrint("handle() =========================================================================================");
-	// NGlobals.dtPrint("handle() =========================================================================================");
+	NGlobals.dtPrint("-- POLL handle() ====");
 
 	temp = "";
 	resp = 0;
@@ -446,6 +448,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	// NGlobals.cPrint("PD: Inside pollDisplay handle");
 	// NGlobals.dtPrint("PD: Inside pollDisplay handle");
 
+	// if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+	//     if (incCmd == NCommand.SET_POLL_STATUS) {
+	// 	if (grain.bArray[0] == 1) {
+	// 	    reset(); 
+	// 	}
+	//     }
+	// }
 
 	//get question from teacher poll app, and type of question submitted
 	if (incAppID == NAppID.TEACHER_POLL)  {
@@ -466,10 +475,21 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    noPer = 0;
 	    difference = 0;
 	    finAns = 0;
+	    byte tByte;
+
+	    if ((grain.dataType == NDataType.CHAR || grain.dataType == NDataType.UINT8) && (grain.dataLen > 0)){
+		tByte = grain.bArray[0];
+		// NGlobals.dtPrint("INSTRUCTOR PANEL RCVD CMD: " + tCmd + " w/ BYTE: " + tByte);
+	    }
 
 	    //getContentPane().setBackground(nomadsColors[0]);	   	  	
 
+	    // Turning ON the POLL from an OFF state will trigger a reset
+
+
 	    typeOfQuestionSubmitted = incCmd; //Get question type from incoming command
+
+
 	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
 		// NGlobals.cPrint("PD: YES-NO Question");
 		// NGlobals.dtPrint("PD: YES-NO Question");
@@ -920,7 +940,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 		if (tVal > 0) {
 		    offScreenGrp.setColor(Color.black);
-		    offScreenGrp.drawString(Integer.toString(tVal), x, y);
+		    if (tVal > 9) {
+			txtOff = 10;
+		    }
+		    else {
+			txtOff = 5;
+		    }
+		    offScreenGrp.drawString(Integer.toString(tVal), x-txtOff, y);
 		}
 
 		xpoints[0] = x-(int)(tilerW*0.5);
@@ -1064,7 +1090,9 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 		if (tVal > 0) {
 		    offScreenGrp.setColor(Color.black);
-		    offScreenGrp.drawString(Integer.toString(tVal), x, y);
+
+		    txtOff = 5;
+		    offScreenGrp.drawString(Integer.toString(tVal), x-txtOff, y);
 		}
 
 		xpoints[0] = x-(int)(tilerW*0.5);
