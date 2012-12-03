@@ -23,6 +23,9 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     Font titleFont, topicFont;
     String tempString = "";   
 
+    Boolean DiscussOn=true;
+
+
     int tAlpha = 255;
     //    nomadsColors[i++] = new Color(191,140,44,tAlpha);
 
@@ -41,7 +44,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     //color for chat window
     Color chatColor = new Color(0,0,0);
 
-    Font chatFont = new Font("sansserif", Font.PLAIN, 18);
+    Font chatFont = new Font("sansserif", Font.PLAIN, 16);
 
     boolean c = false; //flag to see if it is connected to server
     int wait;
@@ -49,6 +52,10 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
     NSand mySand;
 
     StudentControlPanel parent;
+
+    public void chatBottom() {
+	chatWindow.setCaretPosition(chatWindow.getDocument().getLength());
+    }
 
     public void init(NSand inSand)
     { 
@@ -157,22 +164,28 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	    if (grain.bArray[0] == 0) {
 		speak.setEnabled(false);
 		topic.setText("Discuss Disabled");
-		chatWindow.setText("");
+		DiscussOn = false;
 	    }
 	    else if (grain.bArray[0] == 1) {
+		chatWindow.setText("");
 		speak.setEnabled(true);
 		topic.setText(tempString);
+		DiscussOn = true;
 	    }		
 	}
     		
-	else if (incAppID == NAppID.DISCUSS || 
+
+	else if ((incAppID == NAppID.DISCUSS || 
 		 incAppID == NAppID.INSTRUCTOR_DISCUSS ||
-		 grain.appID == NAppID.SERVER){
+		 grain.appID == NAppID.SERVER) &&
+		 DiscussOn == true) {
+
 	    if (incCmd == NCommand.SEND_MESSAGE) {
 		chatWindow.append(msg + "\n");
 		// input.requestFocus();
 	    }
 	}
+
 	else {
 	    grain = null;
 	}
@@ -193,12 +206,15 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 
 	    NGlobals.cPrint("ENTER pressed");
 	    String t1String = input.getText();
+	    int t1Len = t1String.length();
+
 	    String tString = new String(myUserName + ": " + t1String);
 	    int tLen = tString.length();
 	    //    char[] tStringAsChars = tString.toCharArray();
 	    byte[] tStringAsBytes = tString.getBytes();
 
-	    mySand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+	    if (t1Len > 0)
+		mySand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 	    // The data 
 	    NGlobals.cPrint("sending:  (" + tLen + ") of this data type");
@@ -210,6 +226,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 
 	    NGlobals.cPrint("sending: (" + tString + ")");
 	    input.setText("");
+	    chatBottom();
 
 	}
     }
@@ -234,12 +251,15 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	    {
 		NGlobals.cPrint("pressed speak button");
 		String t1String = input.getText();
+		int t1Len = t1String.length();
+
 		String tString = new String(myUserName + ": " + t1String);
 		int tLen = tString.length();
 		//			//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = tString.getBytes();
 		//
-		mySand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+		if (t1Len > 0)
+		    mySand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
 		// The data 
@@ -252,7 +272,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 
 		NGlobals.cPrint("sending: (" + tString + ")");
 		input.setText("");
-
+		chatBottom();
 	    } 
     }
 

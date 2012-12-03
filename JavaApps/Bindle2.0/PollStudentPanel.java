@@ -585,7 +585,7 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 		int dLen = 1;
 		Object source = ae.getSource();
 
-		int turnOff = 0; //Allows re-voting (turnOff = 0) 
+		int turnOff = 1; //Allows re-voting (turnOff = 0) 
 
 		for (i=0;i<5;i++) {
 			if (source == ateBox[i]) {
@@ -602,8 +602,8 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			yes.setSelected(true);
 			no.setSelected(false);
 			//Disable after you choose  // REVOTE
-			// yes.setEnabled(false);
-			// no.setEnabled(false);
+			yes.setEnabled(false);
+			no.setEnabled(false);
 
 			//show results with color
 
@@ -619,8 +619,8 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 			yes.setSelected(false);
 			no.setSelected(true);
 			//Disable after you choose
-			// yes.setEnabled(false);
-			// no.setEnabled(false);
+			yes.setEnabled(false);
+			no.setEnabled(false);
 			//show results with color
 
 			tCommand = NCommand.QUESTION_TYPE_YES_NO;
