@@ -86,7 +86,7 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 		titleFont = new Font("TimesRoman", Font.BOLD, 20);
 		title = new JLabel("Send your text to the NOMADS cloud", JLabel.CENTER);
 		title.setFont(titleFont);
-		topicFont = new Font("TimesRoman", Font.PLAIN, 16);
+		topicFont = new Font("TimesRoman", Font.BOLD, 20);
 		topic = new JLabel("", JLabel.CENTER);
 		topic.setFont(topicFont);
 
@@ -131,7 +131,7 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 			topic.setText(msg);
 			tempString = new String(msg);
 			topic.setForeground(Color.BLACK);
-			topicFont = new Font("TimesRoman", Font.PLAIN, 20);
+			topicFont = new Font("TimesRoman", Font.BOLD, 20);
 		}
 		else if (incAppID == NAppID.INSTRUCTOR_PANEL && incCmd == NCommand.SET_CLOUD_STATUS) {
 			if (grain.bArray[0] == 0) {

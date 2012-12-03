@@ -271,7 +271,7 @@ public class NSand
 	catch(IOException ioe) {  
 	    System.out.println("SAND write error");
 	}
-	System.out.println("NSand:getGrain: returning grain");
+	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
 	return grain;
     }

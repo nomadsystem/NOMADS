@@ -49,12 +49,12 @@ public class NomadServerThread extends Thread
     }
     
     public Boolean getLoginStatus() {
-    	System.out.println("          getLoginStatus(" + loginStatus + ")");    
+	//    	System.out.println("          getLoginStatus(" + loginStatus + ")");    
     	return loginStatus;
     }
     
     public void setLoginStatus(Boolean status) {
-    	System.out.println("setLoginStatus(" + status + ")");
+    	// System.out.println("setLoginStatus(" + status + ")");
     	loginStatus = status;
     }
 
@@ -68,27 +68,27 @@ public class NomadServerThread extends Thread
     
     public void setIP(String ip) {
     	IP = new String(ip);
-    	System.out.println("          setIP(" + IP + ")");
+    	// System.out.println("          setIP(" + IP + ")");
     }
     
     public String getIP() {
-    	System.out.println("          getIP(" + IP + ")");
+    	// System.out.println("          getIP(" + IP + ")");
     	return IP;
     }
 
     public void setUser(String u) {
-    	System.out.println("          setUser(" + u + ")");    
+    	// System.out.println("          setUser(" + u + ")");    
     	USER = new String(u);
     }
     
     public String getUser() {
-    	System.out.println("          getUser(" + USER + ")");
+    	// System.out.println("          getUser(" + USER + ")");
     	return USER;
     }
 
    
     public synchronized void run() {  
-    	System.out.println("Server Thread " + THREAD_ID + " running.");
+	    	System.out.println("Server Thread " + THREAD_ID + " running.");
 		while (true) {
 			try {  
 			    byte tByte = streamIn.readByte();

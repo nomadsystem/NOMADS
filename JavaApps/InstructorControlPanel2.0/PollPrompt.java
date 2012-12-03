@@ -261,11 +261,9 @@ public class PollPrompt extends JApplet implements ActionListener
 		else 
 		    NGlobals.cPrint("Invalid question type specified");
 
-		String tString = new String("");
-		qText = tString;
-		int tLen = tString.length();
+		int tLen = qText.length();
 		//    char[] tStringAsChars = tString.toCharArray();
-		byte[] tStringAsBytes = tString.getBytes();
+		byte[] tStringAsBytes = qText.getBytes();
 		mySand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 
 
@@ -277,7 +275,7 @@ public class PollPrompt extends JApplet implements ActionListener
 		//                streamOut.writeByte(tString.charAt(i));
 		//                }
 		NGlobals.cPrint("sending: Command:(" + tCommand + ")");
-		NGlobals.cPrint("sending: (" + tString + ")");
+		NGlobals.cPrint("sending: (" + qText + ")");
 		question.setText("");
 
 		runningTotal = 0;
