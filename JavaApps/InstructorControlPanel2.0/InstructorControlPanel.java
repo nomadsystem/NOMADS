@@ -747,7 +747,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	butPanel.add( uGroovePromptButton, buttonGridLayout );
 	butPanel.add( uGrooveDisplayButton, buttonGridLayout );
 
-	// add the "button panel" to the window ------------
+	// add the "button panel" to the window ------------h
 
 	add (butPanel);
     }
@@ -772,7 +772,10 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	setSandRead(true);
 	setHandleActive(true);
 
-	grain.print(); //prints grain data to console
+	if (grain == null)
+	    return;
+	else
+	    grain.print(); //prints grain data to console
 
 	byte incAppID = grain.appID;
 	byte tCmd = grain.command;
