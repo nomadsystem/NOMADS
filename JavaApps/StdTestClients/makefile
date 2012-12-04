@@ -5,6 +5,7 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
+	crasher.java\
 	CloudTest.java\
 	DiscussTest.java\
 	PollTest10.java\

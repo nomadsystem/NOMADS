@@ -183,6 +183,9 @@ public class NSand
 	}
     }
 
+
+    // getGrain 1 (arg) ===========================================================================================
+
     //Returns Grain appID, cmd, dT, dL, bA
     public  NGrain getGrain (byte appID) {
 	NGlobals.lPrint("getGrain");
@@ -277,6 +280,7 @@ public class NSand
     }
 
 
+    // getGrain() 2 no args ===========================================================================================
 
     //Returns Grain appID, cmd, dT, dL, bA
     public  NGrain getGrain () {
@@ -374,6 +378,211 @@ public class NSand
 	}
 	return grain;
     }
+
+
+    // CRASHER getGrainC 1 (arg) ===========================================================================================
+
+    //Returns Grain appID, cmd, dT, dL, bA
+    public  NGrain getGrainC (byte appID) {
+	NGlobals.lPrint("getGrainC: ");
+	byte cmd, dT;
+	int dL;
+	NGrain grain = null;
+	try {  
+	    // get command
+	    cmd = streamIn.readByte();
+	    // get data Type
+	    dT = streamIn.readByte();
+	    if (false)
+		return null;
+	    // get data Length
+	    dL = streamIn.readInt();
+
+	    //Detect array type in Grain
+	    //Byte array
+	    if (dT == NDataType.BYTE) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+	    }
+
+	    //Byte array
+	    else if (dT == NDataType.UINT8) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("UINT8:  " + bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
+	    }
+			
+	    //Int Array
+	    else if (dT == NDataType.INT) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+	    }
+
+	    //Int Array 32
+	    else if (dT == NDataType.INT32) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
+	    }
+			
+	    //Float Array
+	    else if (dT == NDataType.FLOAT) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+	    }
+			
+	    else if (dT == NDataType.FLOAT32) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+
+	    }
+
+	}
+	catch(IOException ioe) {  
+	    System.out.println("SAND write error");
+	}
+	// System.out.println("NSand:getGrain: returning grain");
+	// grain.print();
+	return grain;
+    }
+
+
+    // CRASHER getGrain() 2 no args ===========================================================================================
+
+    //Returns Grain appID, cmd, dT, dL, bA
+    public  NGrain getGrainC () {
+	NGlobals.lPrint("getGrain");
+	byte appID, cmd, dT;
+	int dL;
+	NGrain grain = null;
+	try {  
+	    // get app id
+	    appID = streamIn.readByte();
+	    // get command
+	    cmd = streamIn.readByte();
+	    // get data Type
+	    dT = streamIn.readByte();
+	    // get data Length
+	    dL = streamIn.readInt();
+
+	    if (true) {
+		byte[] bA = new byte[dL];
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		return grain;
+	    }
+
+	    //Detect array type in Grain
+	    //Byte array
+	    if (dT == NDataType.BYTE) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+	    }
+			
+	    //Byte array
+	    else if (dT == NDataType.UINT8) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("UINT8:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
+	    }
+
+	    //Int Array
+	    else if (dT == NDataType.INT) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+	    }
+
+	    //Int Array 32
+	    else if (dT == NDataType.INT32) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT32:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
+	    }
+			
+	    //Float Array
+	    else if (dT == NDataType.FLOAT) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+	    }
+
+	    //Float Array 32
+	    else if (dT == NDataType.FLOAT32) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+
+	    }
+	    else {
+		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
+	    }
+			
+	}
+	catch(IOException ioe) {  
+	    // System.out.println("SAND write error");
+	}
+	return grain;
+    }
+
 
     //Connect, opens the socket, creates the streams
     public void connect() {
