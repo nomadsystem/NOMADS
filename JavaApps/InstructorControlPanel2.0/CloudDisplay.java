@@ -234,7 +234,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	    xRand = 25-randNum.nextInt(xVar);
 	    cellSlotsX[i] = ((generatedX.get(i) * (int)((width * 0.7)/screenCellX)) + xRand); //Scale width to get greatest X value (try 0.7)
 	    NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
-	    System.out.println("CellSlotsX[i] = " + cellSlotsX[i]);
+	    // System.out.println("CellSlotsX[i] = " + cellSlotsX[i]);
 	}
 		
 	cellSlotsY = new int[screenCellY];
