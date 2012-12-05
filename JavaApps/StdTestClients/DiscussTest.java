@@ -104,7 +104,7 @@ public class DiscussTest implements Runnable {
 
 	discussTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	String tString = new String("testUsers");
+	String tString = new String("userX");
 	int tLen = tString.length();
 
 	byte[] tStringAsBytes = tString.getBytes();
@@ -160,7 +160,10 @@ public class DiscussTest implements Runnable {
 		System.out.println("tNum = " + tNum);
 	    }
 	    System.out.println("#tNum = " + tNum);
-	    tString = new String(discussString[tNum]);
+
+	    String tString2 = new String("userX: ");
+
+	    tString = new String(tString2 + discussString[tNum]);
 
 	    int tLen = tString.length();
 	    byte[] tBytes = tString.getBytes();
