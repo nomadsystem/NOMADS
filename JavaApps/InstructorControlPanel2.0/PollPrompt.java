@@ -107,7 +107,7 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	qType = new JComboBox();
 	qType.addItem("Yes-No");
-	//qType.addItem("A through E");
+	qType.addItem("A through E");
 	qType.addItem("Scale of 1 to 10");
 	//qType.addItem("Infinity and beyond");
 
@@ -257,6 +257,8 @@ public class PollPrompt extends JApplet implements ActionListener
 		if (tQuestionType == 0) //refers to JComboBox index number
 		    tCommand = NCommand.QUESTION_TYPE_YES_NO;	// Replace with QUESTION_TYPE_YES_NO;
 		else if (tQuestionType == 1)
+		    tCommand = NCommand.QUESTION_TYPE_A_TO_E;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
+		else if (tQuestionType == 2)
 		    tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
 		else 
 		    NGlobals.cPrint("Invalid question type specified");
@@ -310,9 +312,9 @@ public class PollPrompt extends JApplet implements ActionListener
 		if (tQuestionType == 0) //refers to JComboBox index number
 		    tCommand = NCommand.QUESTION_TYPE_YES_NO;	// Replace with QUESTION_TYPE_YES_NO;
 		else if (tQuestionType == 1)
+		    tCommand = NCommand.QUESTION_TYPE_A_TO_E;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
+		else if (tQuestionType == 2)
 		    tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
-		else 
-		    NGlobals.cPrint("Invalid question type specified");
 
 		String tString = question.getText();
 		qText = tString;
@@ -397,10 +399,9 @@ public class PollPrompt extends JApplet implements ActionListener
 		if (tQuestionType == 0) //refers to JComboBox index number
 		    tCommand = NCommand.QUESTION_TYPE_YES_NO;	// Replace with QUESTION_TYPE_YES_NO;
 		else if (tQuestionType == 1)
+		    tCommand = NCommand.QUESTION_TYPE_A_TO_E;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
+		else if (tQuestionType == 2)
 		    tCommand = NCommand.QUESTION_TYPE_ONE_TO_TEN;	// Replace with QUESTION_TYPE_ONE_TO_TEN;
-		else {
-		    NGlobals.cPrint("Invalid question type specified");
-		}
 
 		String tString = question.getText();
 		qText = tString;

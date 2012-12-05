@@ -34,7 +34,7 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
     Image bgImage;
 
     public enum pollType { 
-	BLANK, YESNO, TEN;
+	BLANK, YESNO, TEN, ATOE;
     }
     pollType pType = pollType.BLANK;
 
@@ -109,6 +109,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
     NSand mySand;
 
+    String[] numBoxLetter = new String[5];
+    
 
     // ###########################
 
@@ -155,6 +157,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	colColors[i++] = new Color(249,245,220,tAlpha); //light yellow = 10
 	numColors = i-1;
 	colColorRatio = 1+(int)Math.ceil(nRows/numColors);
+
+
 
     }
 
@@ -266,6 +270,12 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	addMouseListener(this);
 	addMouseMotionListener(this);
 
+	numBoxLetter[0] = "a";
+	numBoxLetter[1] = "b";
+	numBoxLetter[2] = "c";
+	numBoxLetter[3] = "d";
+	numBoxLetter[4] = "e";
+	
 
 	//	getContentPane().setBackground(nomadsColors[1]);
 	//	offScreenGrp.setBackground(Color.black);
@@ -319,7 +329,16 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	x = width / 2 - 20;
 	y = height / 2 - 20;
 
-	nCols = 10;  // Width (x)
+	if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_YES_NO) {
+	    nCols = 2;
+	}
+	else if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_A_TO_E) {
+	    nCols = 2;
+	}
+	else if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_ONE_TO_TEN) {
+	    nCols = 2;
+	}
+
 	nRows = 20;  // Height (y)
 
 	for (i=0; i<200; i++) {
@@ -506,6 +525,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		// NGlobals.dtPrint("PD: 1-10 Question");
 		pType = pollType.TEN;
 	    }
+	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_A_TO_E) {
+		reset();
+		// NGlobals.cPrint("PD: 1-10 Question");
+		// NGlobals.dtPrint("PD: 1-10 Question");
+		pType = pollType.ATOE;
+	    }
+
 
 	    NGlobals.cPrint("PD: ----------------------");
 
@@ -550,116 +576,10 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 		if (response == 1)  {
 		    yesTotal++;
-
-		    // float sScale=0;
-		    // if (yesTotal < 25) {
-		    // 	sScale = (float)(yesTotal*1.1);
-		    // }
-		    // if (yesTotal < 50) {
-		    // 	sScale = (float)(yesTotal);
-		    // }
-		    // if (yesTotal < 100) {
-		    // 	sScale = (float)(yesTotal*0.9);
-		    // }
-		    // if (yesTotal < 200) {
-		    // 	sScale = (float)(yesTotal*0.8);
-		    // }
-
-
-		    // int tLen = 10 + (int)(sScale + randGen.nextInt(10));
-		    // int tAng = (int)yesTotal + randGen.nextInt(6);
-
-		    // //			sprites[sNum].xOff = 10 - randGen.nextInt(20);
-		    // // sprites[sNum].tW = 20 + randGen.nextInt(20);
-		    // // sprites[sNum].tH = 20 + randGen.nextInt(20);
-		    // sprites[sNum].tW = 10 + randGen.nextInt(7);
-		    // sprites[sNum].tH = 10 + randGen.nextInt(2);
-
-		    // sprites[sNum].x = sCenterX[0] + (int)(Math.cos(tAng)*tLen);
-		    // sprites[sNum].y = sCenterY[0]+ (int)(Math.sin(tAng)*tLen);
-		    // x = sprites[sNum].x;
-		    // y = sprites[sNum].y;
-
-
-		    // if ((x > sCenterX[0]) && (y > sCenterY[0])) {
-		    // 	sprites[sNum].xOff = 10;
-		    // 	// sprites[sNum].xOff = 10+(int)((5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x > sCenterX[0]) && (y < sCenterY[0])) {
-		    // 	sprites[sNum].xOff = -10;
-		    // 	// sprites[sNum].xOff = -10-(int)(-1*(5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x < sCenterX[0]) && (y < sCenterY[0])) {
-		    // 	sprites[sNum].xOff = 10;
-		    // 	// sprites[sNum].xOff = 10+(int)(-1*(5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x < sCenterX[0]) && (y > sCenterY[0])) {
-		    // 	sprites[sNum].xOff = -10;
-		    // 	// sprites[sNum].xOff = -10-(int)((5.0 * (Math.cos(tAng))));
-		    // }
-
-
-		    // NGlobals.dtPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
-		    // sNum++;
-		    // NGlobals.dtPrint("PD: yesTotal " + yesTotal);
 		}
 
 		if (response == 0) {
-		    // NGlobals.dtPrint("PD: no came in");
 		    noTotal++;
-
-		    // float sScale=0;
-		    // if (noTotal < 25) {
-		    // 	sScale = (float)(noTotal*1.1);
-		    // }
-		    // if (noTotal < 50) {
-		    // 	sScale = (float)(noTotal);
-		    // }
-		    // if (noTotal < 100) {
-		    // 	sScale = (float)(noTotal*0.9);
-		    // }
-		    // if (noTotal < 200) {
-		    // 	sScale = (float)(noTotal*0.8);
-		    // }
-
-
-		    // int tLen = 10 + (int)(sScale + randGen.nextInt(10));
-		    // int tAng = (int)noTotal + randGen.nextInt(6);
-
-		    // //			sprites[sNum].xOff = 10 - randGen.nextInt(20);
-		    // // sprites[sNum].tW = 20 + randGen.nextInt(20);
-		    // // sprites[sNum].tH = 20 + randGen.nextInt(20);
-		    // sprites[sNum].tW = 10 + randGen.nextInt(7);
-		    // sprites[sNum].tH = 10 + randGen.nextInt(2);
-
-		    // sprites[sNum].x = sCenterX[1] + (int)(Math.cos(tAng)*tLen);
-		    // sprites[sNum].y = sCenterY[1]+ (int)(Math.sin(tAng)*tLen);
-		    // x = sprites[sNum].x;
-		    // y = sprites[sNum].y;
-
-
-		    // if ((x > sCenterX[1]) && (y > sCenterY[1])) {
-		    // 	sprites[sNum].xOff = 10;
-		    // 	// sprites[sNum].xOff = 10+(int)((5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x > sCenterX[1]) && (y < sCenterY[1])) {
-		    // 	sprites[sNum].xOff = -10;
-		    // 	// sprites[sNum].xOff = -10-(int)(-1*(5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x < sCenterX[1]) && (y < sCenterY[1])) {
-		    // 	sprites[sNum].xOff = 10;
-		    // 	// sprites[sNum].xOff = 10+(int)(-1*(5.0 * (Math.cos(tAng))));
-		    // }
-		    // if ((x < sCenterX[1]) && (y > sCenterY[1])) {
-		    // 	sprites[sNum].xOff = -10;
-		    // 	// sprites[sNum].xOff = -10-(int)((5.0 * (Math.cos(tAng))));
-		    // }
-
-
-		    // NGlobals.dtPrint("setting sprite " + sNum + "at (" + x + "," + y + ")");
-		    // sNum++;
-
-		    // NGlobals.dtPrint("PD: noTotal " + noTotal);
 		}
 
 		//convert yes no results to an average to map to color
@@ -686,7 +606,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 		if (finAns > 10)
 		    finAns = 10;
-
 
 		NGlobals.cPrint("PD: finAns " + finAns);
 		NGlobals.cPrint("PD: (int)Math.round(finAns) " + (int)Math.round(finAns));
@@ -718,6 +637,66 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		// eastResults.setBackground(theColors[(int)Math.round(finAns)]);  // DISPLAY
 		// westResults.setBackground(theColors[(int)Math.round(finAns)]);  // DISPLAY
 		// southResults.setBackground(theColors[(int)Math.round(finAns)]);  // DISPLAY
+
+	    }
+
+	    // A to E =================================================================-----------
+	    if (typeOfQuestionSubmitted == NCommand.QUESTION_TYPE_A_TO_E) {
+		pType = pollType.ATOE;
+		nCols = 5;  // Width (x)
+
+		NGlobals.dtPrint("PD: SP: A-to-E ----------------------------------------------------------");
+		resp = response; // DISPLAY
+		tVal = colVals[resp];
+		tVal++;
+		sNum++;
+		colVals[resp] = tVal;
+		if (tVal > tMax) {
+		    tMax = tVal+1;
+		}
+
+		NGlobals.cPrint("resp: " + resp);
+		// if (tVal >= nRows) {
+		//     nRows = tVal;
+		// }
+		colSum += resp;
+		NGlobals.cPrint("colSum: " + colSum);
+
+		colColorRatio = 1+(int)Math.ceil(nRows/numColors);
+		respAvg = (int)(colSum/(nCols));
+		// colAvg = (int)respAvg/colColorRatio;
+
+		NGlobals.cPrint("colColorRatio: " + colColorRatio);
+
+		runningTotal += resp;
+		count++;
+
+		NGlobals.cPrint("PD: runningTotal / count " + (runningTotal / count));
+		average = runningTotal / count;
+		DecimalFormat roundAverage = new DecimalFormat("#.##");//use to round to 2 decimal places
+		colAvg = (int)(average*2);
+
+		if (colAvg > numColors) {
+		    colAvg = numColors;
+		}
+		if (colAvg < 1) {
+		    colAvg = 1;
+		}
+
+		//		getContentPane().setBackground(nomadsColors[colAvg]);
+		NGlobals.cPrint("Setting background to: colAvg: " + colAvg);
+
+		// show results average in applet too
+		// results.setBackground(theColors[(int)Math.round(average)]);
+		// results.setText("<html><h2>WTF</html>");
+		// results.setText("<html><center><h2 style='color:black'>Average: " + roundAverage.format(average) + " <br>(" + Math.round(count) + ")</center></h2></html>");	
+
+		// show results with color in bottom of applet
+		// bottom.setBackground(theColors[(int)Math.round(average)]);
+		// dispResults.setBackground(theColors[(int)Math.round(average)]);
+		// eastResults.setBackground(theColors[(int)Math.round(average)]);
+		// westResults.setBackground(theColors[(int)Math.round(average)]);
+		// southResults.setBackground(theColors[(int)Math.round(average)]);
 
 	    }
 
@@ -929,6 +908,8 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	    // getContentPane().setBackground(nomadsColors[colAvg]);
 
+	    nCols = 10;
+
 	    for(cCol=1; cCol<=nCols; cCol++) {
 
 		tVal = colVals[cCol];
@@ -966,67 +947,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		offScreenGrp.setColor(Color.black);
 		offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
 
-
-		// NGlobals.cPrint("cCol = " + cCol);	    
-
-		// // Shadow -----------------------
-
-		// int tXOff = 200;1
-
-		// xpoints[0] = x-(int)((tilerW*0.5));
-		// xpoints[1] = x+tXOff;
-		// xpoints[2] = x+tXOff;
-		// xpoints[3] = x+(int)((tilerW*0.5));
-
-		// double tYS = 500;
-		
-
-		// y = mYS((int)tYS);
-
-
-		// ypoints[0] = mYS(0);
-		// ypoints[1] = y;
-		// ypoints[2] = y;
-		// ypoints[3] = mYS(0);
-		
-		// Color shadowColor = new Color(0,0,0,10); 
-
-		// offScreenGrp.setColor(shadowColor);
-		// offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
-
-		// NGlobals.cPrint("tVal = " + tVal);	    
-
-		// for (cRow=1; cRow<=tVal; cRow++) {
-		//     x = cCol*colW;
-		//     y = mYS(cRow*rowH);
-
-		//     xpoints[0] = x-(int)tilerW/2+xOff;
-		//     xpoints[1] = (x-(int)tilerW/2);
-		//     xpoints[2] = x+(int)(tilerW/2);
-		//     xpoints[3] = (x+(int)tilerW/2)+xOff;
-
-		//     // = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
-
-		//     ypoints[0] = y-(int)tilerH/2;
-		//     ypoints[1] = y+(int)tilerH/2;
-		//     ypoints[2] = y+(int)tilerH/2;
-		//     ypoints[3] = y-(int)tilerH/2;
-
-		//     // int ypoints[4] = {y+(int)(ksize/1), y-(int)(ksize/1), y+(int)(ksize/1), y+(int)(ksize*3)};
-
-		//     cSet = 1+(int)(cRow/colColorRatio);
-		//     if (cSet > numColors) {
-		// 	cSet = numColors;
-		//     }
-		//     //  NGlobals.cPrint("cRow = " + cRow);
-		//     //  NGlobals.cPrint("tVal = " + tVal);	  
-		//     //  NGlobals.cPrint("colColorRatio = " + colColorRatio + "\n");	  
-		//     //  NGlobals.cPrint("cSet = " + cSet + "\n");	  
-		//     offScreenGrp.setColor(colColors[cCol]);
-		//     offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
-		//     offScreenGrp.setColor(Color.black);
-		//     offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
-		// }
 		if (cCol == resp) {
 		    // offScreenGrp.setColor(Color.white);
 		    // offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
@@ -1050,24 +970,80 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 
 	    NGlobals.cPrint("colAvg = " + colAvg + "\n");	    
 
-	    // g.setColor(Color.red);
-	    // g.drawImage(backgroundIce, 0, 0, width, height, this);
-	    // g.fillRect(10,10,50,50);
-	    // g.setColor(colColors[avg]);
-	    // g.fillRect(30,30,50,50);
+	}
 
-	    // g.rotate();                     // Rotate 45 degrees
+	// A TO E ============================================================================
 
-	    //g.dispose();
+	if (pType == pollType.ATOE) {
 
-	    //	setBackground(Color.black);
+	    nCols = 5;
 
-	    // g.fillPolygon(xpoints, ypoints, 10);
-	    //	    g.fillRect(tx, ty, 10, 10);
+	    NGlobals.cPrint("rendering A-E columns");
+
+	    // getContentPane().setBackground(nomadsColors[colAvg]);
+
+	    for(cCol=1; cCol<=nCols; cCol++) {
+
+		tVal = colVals[cCol];
+		x = cCol*colW;
+		double tY = ((double)tVal/(double)tMax) * 500.0;
+
+		// Colum -------------------------------
+		y = mYS((int)tY+10);
+
+		if (tVal > 0) {
+		    offScreenGrp.setColor(Color.black);
+		    if (tVal > 9) {
+			txtOff = 10;
+		    }
+		    else {
+			txtOff = 5;
+		    }
+		    offScreenGrp.drawString(Integer.toString(tVal), x-txtOff, y);
+		}
+
+		xpoints[0] = x-(int)(tilerW*0.5);
+		xpoints[1] = x-(int)(tilerW*0.47);
+		xpoints[2] = x+(int)(tilerW*0.47);
+		xpoints[3] = x+(int)(tilerW*0.5);
+
+		y = mYS((int)tY);
+
+		ypoints[0] = mYS(0);
+		ypoints[1] = y;
+		ypoints[2] = y;
+		ypoints[3] = mYS(0);
+
+		offScreenGrp.setColor(colColors[cCol]);
+		offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
+		offScreenGrp.setColor(Color.black);
+		offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
+
+		if (cCol == resp) {
+		    // offScreenGrp.setColor(Color.white);
+		    // offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
+		}
+	    }
 
 
+	    // offScreenGrp.setColor(Color.black);
+
+	    for (i=1;i<=nCols;i++) {
+		x = i*colW;
+		offScreenGrp.setColor(Color.black);
+		offScreenGrp.drawString(numBoxLetter[i-1], x, mY(90));
+	    }
+
+	    DecimalFormat rounder = new DecimalFormat("#.##");//use to round to 2 decimal places
+	    String tString = rounder.format(average);
+	    // NGlobals.dtPrint("average = " + average);
+	    offScreenGrp.drawString("Average:  " + tString, centerX-180, mY(40));
+	    offScreenGrp.drawString("Responses:  " + sNum, centerX+30, mY(40));
+
+	    NGlobals.cPrint("colAvg = " + colAvg + "\n");	    
 
 	}
+
 
 	// yes/no ================================================================----------
 
@@ -1120,107 +1096,11 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 		offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
 
 
-		// NGlobals.cPrint("cCol = " + cCol);	    
-
-		// // Shadow -----------------------
-
-		// int tXOff = 200;1
-
-		// xpoints[0] = x-(int)((tilerW*0.5));
-		// xpoints[1] = x+tXOff;
-		// xpoints[2] = x+tXOff;
-		// xpoints[3] = x+(int)((tilerW*0.5));
-
-		// double tYS = 500;
-		
-
-		// y = mYS((int)tYS);
-
-
-		// ypoints[0] = mYS(0);
-		// ypoints[1] = y;
-		// ypoints[2] = y;
-		// ypoints[3] = mYS(0);
-		
-		// Color shadowColor = new Color(0,0,0,10); 
-
-		// offScreenGrp.setColor(shadowColor);
-		// offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
-
-		// NGlobals.cPrint("tVal = " + tVal);	    
-
-		// for (cRow=1; cRow<=tVal; cRow++) {
-		//     x = cCol*colW;
-		//     y = mYS(cRow*rowH);
-
-		//     xpoints[0] = x-(int)tilerW/2+xOff;
-		//     xpoints[1] = (x-(int)tilerW/2);
-		//     xpoints[2] = x+(int)(tilerW/2);
-		//     xpoints[3] = (x+(int)tilerW/2)+xOff;
-
-		//     // = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
-
-		//     ypoints[0] = y-(int)tilerH/2;
-		//     ypoints[1] = y+(int)tilerH/2;
-		//     ypoints[2] = y+(int)tilerH/2;
-		//     ypoints[3] = y-(int)tilerH/2;
-
-		//     // int ypoints[4] = {y+(int)(ksize/1), y-(int)(ksize/1), y+(int)(ksize/1), y+(int)(ksize*3)};
-
-		//     cSet = 1+(int)(cRow/colColorRatio);
-		//     if (cSet > numColors) {
-		// 	cSet = numColors;
-		//     }
-		//     //  NGlobals.cPrint("cRow = " + cRow);
-		//     //  NGlobals.cPrint("tVal = " + tVal);	  
-		//     //  NGlobals.cPrint("colColorRatio = " + colColorRatio + "\n");	  
-		//     //  NGlobals.cPrint("cSet = " + cSet + "\n");	  
-		//     offScreenGrp.setColor(colColors[cCol]);
-		//     offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
-		//     offScreenGrp.setColor(Color.black);
-		//     offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
-		// }
 		if (cCol == resp) {
 		    // offScreenGrp.setColor(Color.white);
 		    // offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
 		}
 	    }
-	    // for (i=0;i<sNum;i++) {
-
-	    // 	x = sprites[i].x;
-	    // 	y = sprites[i].y;
-
-	    // 	xOff = sprites[i].xOff;
-	    // 	tilerW = sprites[i].tW;
-	    // 	tilerH = sprites[i].tH;
-
-	    // 	// int xpoints[] = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
-	    // 	// int ypoints[] = {y+(int)(ksize/1), y-(int)(ksize/1), y+(int)(ksize/1), y+(int)(ksize*3)};
-
-
-	    // 	xpoints[0] = x-(int)tilerW/2;
-	    // 	xpoints[1] = (x+(int)tilerW/2);
-	    // 	xpoints[2] = x+(int)(tilerW*1.5);
-	    // 	xpoints[3] = (x+(int)tilerW/2);
-
-	    // 	// = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
-
-	    // 	ypoints[0] = y+(int)tilerH/1;
-	    // 	ypoints[1] = y-(int)tilerH/1;
-	    // 	ypoints[2] = y+(int)tilerH/1;
-	    // 	ypoints[3] = y+(int)tilerH*3;
-
-	    // 	// int ypoints[4] = {y+(int)(ksize/1), y-(int)(ksize/1), y+(int)(ksize/1), y+(int)(ksize*3)};
-
-	    // 	float tFact = (float)((float)i/(float)sNum);
-	    // 	tColor = (int)((numColors * tFact) + 1);
-	    // 	NGlobals.cPrint("rendering sprite at (" + x + ")(" + y + ") w cols " + tColor + "," + tFact);
-	    // 	offScreenGrp.setColor(colColors[tColor]);
-	    // 	offScreenGrp.fillPolygon(xpoints, ypoints, xpoints.length);
-	    // 	offScreenGrp.setColor(Color.black);
-	    // 	offScreenGrp.drawPolygon(xpoints, ypoints, xpoints.length);
-	    // }
-
 
 	    DecimalFormat yrounder = new DecimalFormat("#.##");//use to round to 2 decimal places
 	    if (sNum > 0) {
@@ -1251,20 +1131,6 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    offScreenGrp.drawString("Responses " + sNum, centerX-30, mY(40));
 
 
-	    // g.setColor(Color.red);
-	    // g.drawImage(backgroundIce, 0, 0, width, height, this);
-	    // g.fillRect(10,10,50,50);
-	    // g.setColor(colColors[avg]);
-	    // g.fillRect(30,30,50,50);
-
-	    // g.rotate();                     // Rotate 45 degrees
-
-	    //g.dispose();
-
-	    //	setBackground(Color.black);
-
-	    // g.fillPolygon(xpoints, ypoints, 10);
-	    //	    g.fillRect(tx, ty, 10, 10);
 	} // **
 		
 		
