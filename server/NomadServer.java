@@ -412,7 +412,13 @@ public class NomadServer implements Runnable {
 
 	if ((incAppDataType == NDataType.CHAR || incAppDataType == NDataType.BYTE) && (incAppDataLen > 1)) {
 	    String msg = new String(myGrain.bArray);
-	    NGlobals.csvPrint("LOG, user = " + myUser + ", msg = " + msg + ", appID = " + printID(incAppID) + ", appCmd = " + incAppCmd);
+	    if (incAppCmd == NCommand.LOGIN) {
+		String tip = clients[tCNum].getIP();
+		NGlobals.csvPrint("LOG, user = " + myUser + ", login from IP " + tip);
+	    }
+	    else {
+		NGlobals.csvPrint("LOG, user = " + myUser + ", msg = " + msg + ", appID = " + printID(incAppID) + ", appCmd = " + incAppCmd);
+	    }
 	}
 	if ((incAppDataType == NDataType.UINT8 || incAppDataType == NDataType.BYTE) && (incAppDataLen == 1)) {
 	    int val = (int)myGrain.bArray[0];
