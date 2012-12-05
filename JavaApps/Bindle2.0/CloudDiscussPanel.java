@@ -47,6 +47,10 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 
 	NSand mySand;
 
+	public void resetSand(NSand inSand)
+	{ 
+		mySand = inSand;
+	}
 
 	public void init(NSand inSand)
 	{ 

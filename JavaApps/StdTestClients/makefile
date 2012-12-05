@@ -9,6 +9,7 @@ CLASSES = \
 	CloudTest.java\
 	DiscussTest.java\
 	PollTest10.java\
+	PollTest5.java\
 	PollTestYN.java
 
 

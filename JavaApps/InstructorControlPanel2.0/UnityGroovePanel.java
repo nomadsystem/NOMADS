@@ -282,7 +282,7 @@ public class UnityGroovePanel extends JPanel implements ActionListener, Runnable
 	{
 		//	int nextTime = 1000;
 		//		int duration = 1000;
-		System.out.println("RUN()");
+		// System.out.println("RUN()");
 
 		int time = Synth.getTickCount();
 		while(true) 

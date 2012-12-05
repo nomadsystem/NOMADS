@@ -12,11 +12,13 @@ import nomads.v210.*;
 import javax.imageio.ImageIO;
 
 
-public class InstructorControlPanel extends JApplet  implements  ActionListener {
+public class InstructorControlPanel extends JApplet  implements  ActionListener, Runnable{
 
     NSand instructorControlPanelSand;
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
+    
+    int mSecLimit=1000;
 
     JMenuItem pollMenu_VoteAgain ;
     JMenuItem pollMenu_ResetScreen;
@@ -140,6 +142,24 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	handleActive = ha;
     }
 
+    Thread runner;
+
+    // DT 6/30/10:  not sure we need these anymore
+
+    public void start() {
+	runner = new Thread(this);
+	runner.start();
+    }
+
+    public void run () {
+	while (true) {
+	    try {
+		runner.sleep(1000);
+	    }
+	    catch (InterruptedException ie) {}
+	}
+    }
+
     private class NomadsAppThread extends Thread {
 	InstructorControlPanel client; //Replace with current class name
 	Calendar now;
@@ -222,7 +242,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 	long mSecH=0;
 	long mSecDiff=0;
 
-	//	NGlobals.dtPrint(" . ");
+	// NGlobals.csvPrint(" . ");
 
 	try {
 
@@ -246,12 +266,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
 		}
 
-		if (mSecDiff > 3000) {
+		if (mSecDiff > mSecLimit) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
-			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
+			System.out.println("   INCR ERROR COUNT: " + errFlag);
 		    }
-		    if ((errFlag > 3) && (connected == true)) {
+		    if ((errFlag > 5) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
 			System.out.println("-----> EREC #" + resetCtr);
@@ -264,24 +284,24 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 			    resetCtr=0;
 			}
 			nThread.setHandleStart(mSecN);
-			System.out.println("######### CRITICAL ERROR");
-			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
-			System.out.println(">>> halting thread ...");
+			System.out.println("######### NETWORK ERROR");
+			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+			// System.out.println(">>> halting thread.");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(2000);
+			NomadsErrCheckThread.sleep(3000);
 			// deleteSynth(lastThread);
 			nThread = null;
-			System.out.println(">>> disconnecting ...");
+			System.out.println("   disconnecting.");
 			instructorControlPanelSand.disconnect();
-			NomadsErrCheckThread.sleep(1000);
+			NomadsErrCheckThread.sleep(4000);
 			instructorControlPanelSand = null;
 			connected = false;
-			System.out.println(">>> disconneced ...");
-			// System.out.println(">>> deleting sprites/synths ...");
+			System.out.println("   disconneced.");
+			// System.out.println(">>> deleting sprites/synths.");
 			// deleteAllSynths();
-			// System.out.println(">>> sprites/synths deleted ...");
-			System.out.println("+++++ Attempting reconnect ...");
-			NomadsErrCheckThread.sleep(1000);
+			// System.out.println(">>> sprites/synths deleted.");
+			System.out.println("   Attempting reconnect.");
+			NomadsErrCheckThread.sleep(5000);
 			instructorControlPanelSand = new NSand(); 
 			instructorControlPanelSand.connect();
 
@@ -295,8 +315,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 			connected = true;
 			NomadsErrCheckThread.sleep(1000);
-			System.out.println("+++ reconnected!");			
-			System.out.println("+++ attempting to restart thread ...");			
+			System.out.println("   reconnected!");			
+			System.out.println("   attempting to restart thread.");			
 			NomadsErrCheckThread.sleep(1000);
 			nThread = new NomadsAppThread(this);
 			nThread.setRunState(true);
@@ -309,7 +329,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 			myPollPromptPanel.resetSand(instructorControlPanelSand);
 			myPollDisplayPanel.resetSand(instructorControlPanelSand);
 
-			System.out.println("+++ thread restarted!");			
+			System.out.println("Thread restarted.");			
 			errFlag = 0;
 
 			now = Calendar.getInstance();
@@ -318,7 +338,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 		    }
 		}
-		else if (errFlag > 0) {
+		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
 		    errFlag--;
 		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
 		}
@@ -761,7 +781,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
     //============================= HANDLE ==============================
     public void handle() {
-	NGlobals.cPrint("InstructorControlPanel -> handle()");
+	NGlobals.dtPrint("InstructorControlPanel -> handle()");
 
 	NGrain grain;
 	byte tByte;
@@ -769,8 +789,17 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener 
 
 	setSandRead(false);
 	grain = instructorControlPanelSand.getGrain();
-	setSandRead(true);
-	setHandleActive(true);
+	if (grain == null) {
+	    setSandRead(true);
+	    setHandleActive(true);
+	    while(true) {
+		// Force timeout for errCheckThread to restart
+		try {
+		    runner.sleep(1000);
+		}
+		catch (InterruptedException ie) {}
+	    }
+	}
 
 	if (grain == null)
 	    return;

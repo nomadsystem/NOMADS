@@ -31,6 +31,10 @@ public class JoinPanel extends JApplet implements ActionListener {
     int wait;
 
 	
+    public void resetSand(NSand inSand) {
+	mySand = inSand;
+    }
+
     public void init(NSand inSand) {
 	mySand = inSand;
 
