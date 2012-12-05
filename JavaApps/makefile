@@ -25,6 +25,7 @@ class_install:
 	do \
 	( cp -r $$DIR/*.class $(CLASS_INSTALL_DIR)/$$DIR; echo "cp $$DIR/*.class $(CLASS_INSTALL_DIR)/$$DIR"; echo "done in $$DIR"; echo "===============================" ); \
 	( cp -r $$DIR/*.jar $(CLASS_INSTALL_DIR)/$$DIR; echo "cp $$DIR/*.jar $(CLASS_INSTALL_DIR)/$$DIR"; echo "done in $$DIR"; echo "===============================" ); \
+	( cp -r $$DIR/*.html $(CLASS_INSTALL_DIR)/$$DIR; echo "cp $$DIR/*.html $(CLASS_INSTALL_DIR)/$$DIR"; echo "done in $$DIR"; echo "===============================" ); \
 	 done
 
 

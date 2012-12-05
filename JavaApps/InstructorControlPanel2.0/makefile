@@ -18,11 +18,14 @@ CLASSES = \
 	SoundMosaicDisplay.java\
 	InstructorControlPanel.java 
 
-default: classes myliblink comlink
+default: classes myliblink comlink jar
 
 topliblink:
 	rm -f ./nomads
 	/bin/ln -s /var/www/NOMADS/javalib/nomads .
+
+jar:
+	jar cf InstructorControlPanel.jar *.class
 
 myliblink:
 	rm -f ./nomads
