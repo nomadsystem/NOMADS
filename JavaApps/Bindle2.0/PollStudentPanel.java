@@ -36,6 +36,12 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 
 	NSand mySand;
 
+	public void resetSand(NSand inSand)
+	{
+		mySand = inSand;
+
+	}	    
+
 	public void init(NSand inSand)
 	{
 		mySand = inSand;
@@ -590,11 +596,18 @@ public class PollStudentPanel extends JPanel implements ItemListener, ActionList
 		for (i=0;i<5;i++) {
 			if (source == ateBox[i]) {
 				ateBox[i].setSelected(true);
+				tCommand = NCommand.QUESTION_TYPE_A_TO_E;
+				int[] answer = new int[1];
+				answer[0] = i+1;
+				mySand.sendGrain(NAppID.STUDENT_POLL, tCommand, NDataType.INT32, dLen, answer );
+				NGlobals.cPrint("Sending " + answer[0]);
+
 			}
 			else {
 				ateBox[i].setSelected(false);
 			}
 			ateBox[i].setEnabled(false);
+
 		}
 
 		if (source == yes)

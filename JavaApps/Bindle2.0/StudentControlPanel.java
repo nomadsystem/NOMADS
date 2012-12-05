@@ -8,11 +8,15 @@ import nomads.v210.*;
 import com.softsynth.jsyn.*;
 
 
-public class StudentControlPanel extends JApplet  implements  ActionListener {
+public class StudentControlPanel extends JApplet  implements  ActionListener, Runnable {
 
+    int mSecLimit=1000;
 
     NSand studentControlPanelSand;
     private NomadsAppThread nThread;
+    private NomadsErrCheckThread nECThread;
+
+
     public String userName;
 
     JButton joinButton, discussButton, cloudButton, soundButton, pollButton, pointButton, uGrooveButton;
@@ -55,20 +59,246 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 
     int soundOn = 0;
 
+    // errCheck ------------------
+
+    int errFlag = 0;
+    int lastThread = 0;
+    Boolean handleActive = false;
+    Boolean sandRead = false;
+    Boolean connected = false;
+
+    long mSecR=0;
+    int resetCtr=0;
+    int maxResets=10;
+
+    float mSecAvg=10;
+    float mSecAvgL=10;
+
+    int pToggle=0;
+    private int maxSkip;
+
+    Thread runner;
+
+    // DT 6/30/10:  not sure we need these anymore
+
+    public void start() {
+	runner = new Thread(this);
+	runner.start();
+    }
+
+    public void run () {
+	while (true) {
+	    try {
+		runner.sleep(1000);
+	    }
+	    catch (InterruptedException ie) {}
+	}
+    }
+
+    public synchronized Boolean getSandRead() {
+	return sandRead;
+    }
+
+    public synchronized void setSandRead(Boolean sr) {
+	sandRead = sr;
+    }
+
+    public synchronized Boolean getHandleActive() {
+	return handleActive;
+    }
+
+    public synchronized void setHandleActive(Boolean ha) {
+	handleActive = ha;
+    }
+
     private class NomadsAppThread extends Thread {
 	StudentControlPanel client; //Replace with current class name
+	Calendar now;
+
+	long handleStart=0;
+	long handleEnd=1;
+	long millis=0;
+	Boolean runState=false;
+
+	long mSecR=0;
+	int resetCtr=0;
+	int maxResets=10;
+	
+	float mSecAvg=10;
+	float mSecAvgL=10;
+
+	public synchronized long getHandleStart() {
+	    return handleStart;
+	}
+
+	public synchronized long getHandleEnd() {
+	    return handleEnd;
+	}
+
+	public synchronized void setHandleStart(long hs) {
+	    handleStart = hs;
+	}
+
+	public synchronized void setHandleEnd(long he) {
+	    handleEnd = he;
+	}
+
+	public synchronized void setRunState(Boolean state) {
+	    runState = state;
+	}
+
+	public synchronized Boolean getRunState() {
+	    return runState;
+	}
+
 
 	public NomadsAppThread(StudentControlPanel _client) {
 	    client = _client;
+	    // Connect
 	}
 
-	public void run() {			
-	    NGlobals.lPrint("Student Control Panel Thread-> run()");
-	    while (true)  {
+	public void run()    {			
+	    NGlobals.dtPrint("NomadsAppThread -> run()");
+	    while (getRunState() == true)  {
+		now = Calendar.getInstance();
+		setHandleStart(now.getTimeInMillis());
 		client.handle();
+		client.setHandleActive(false);
+		handleEnd = now.getTimeInMillis();
+		millis = getHandleEnd()-getHandleStart();
+		NGlobals.dtPrint("handle() proc time:" + millis);
 	    }
 	}
     }
+
+    private class NomadsErrCheckThread extends Thread {
+	StudentControlPanel client; //Replace with current class name
+
+	public NomadsErrCheckThread(StudentControlPanel _client) {
+	    client = _client;
+	}
+	public void run()    {			
+	    NGlobals.dtPrint("StudentControlPanel ERRCHECKTHREAD -> run");
+	    while (true)  {
+		client.errCheck();
+	    }
+	}
+    }
+
+    // START errCheck() !!===================================!!
+
+    public void errCheck() {
+	Calendar now;
+	long mSecN=0;
+	long mSecH=0;
+	long mSecDiff=0;
+
+	//	NGlobals.dtPrint(". ");
+
+	try {
+
+	    if ((getHandleActive() == true) && (getSandRead() == true)) {
+
+		now = Calendar.getInstance();
+		mSecN = now.getTimeInMillis();
+		mSecH = nThread.getHandleStart();
+
+		mSecDiff = mSecN-mSecH;
+		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
+		mSecAvgL = ((mSecAvgL*19)+mSecDiff)/20;
+
+		NGlobals.dtPrint("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
+
+		pToggle++;
+		if (pToggle > 10) {
+		    pToggle=0;
+		}
+		if (pToggle%2 == 0) {
+		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
+		}
+
+		if (mSecDiff > mSecLimit) {
+		    errFlag += 1;
+		    if (errFlag > 0) {
+			System.out.println("   INCR ERROR COUNT: " + errFlag);
+		    }
+		    if ((errFlag > 5) && (connected == true)) {
+			now = Calendar.getInstance();
+			mSecR = now.getTimeInMillis(); // time of this reset
+			System.out.println("-----> EREC #" + resetCtr);
+			resetCtr++;
+			if (resetCtr > maxResets) {
+			    System.out.println("######### CRITICAL ERROR");
+			    System.out.println(">>> #### MAX RESETS");
+			    System.out.println(">>> sleeping 10 sec");
+			    NomadsErrCheckThread.sleep(12000);
+			    resetCtr=0;
+			}
+			nThread.setHandleStart(mSecN);
+			System.out.println("######### NETWORK ERROR");
+			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+			// System.out.println(">>> halting thread.");
+			nThread.setRunState(false);
+			NomadsErrCheckThread.sleep(3000);
+			// deleteSynth(lastThread);
+			nThread = null;
+			System.out.println("   disconnecting.");
+			studentControlPanelSand.disconnect();
+			NomadsErrCheckThread.sleep(4000);
+			studentControlPanelSand = null;
+			connected = false;
+			System.out.println("   disconneced.");
+			// System.out.println(">>> deleting sprites/synths.");
+			// deleteAllSynths();
+			// System.out.println(">>> sprites/synths deleted.");
+			System.out.println("   Attempting reconnect.");
+			NomadsErrCheckThread.sleep(5000);
+			studentControlPanelSand = new NSand(); 
+			studentControlPanelSand.connect();
+
+
+			int d[] = new int[1];
+			d[0] = 0;
+			studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
+			// xaxa
+
+			connected = true;
+			NomadsErrCheckThread.sleep(1000);
+			System.out.println("   reconnected!");			
+			System.out.println("   attempting to restart thread.");			
+			NomadsErrCheckThread.sleep(1000);
+			nThread = new NomadsAppThread(this);
+			nThread.setRunState(true);
+			nThread.start();
+
+			myJoinPanel.resetSand(studentControlPanelSand);
+			myDiscussClientPanel.resetSand(studentControlPanelSand);
+			myCloudDiscussPanel.resetSand(studentControlPanelSand);
+			myPollStudentPanel.resetSand(studentControlPanelSand);
+
+			System.out.println("Thread restarted.");			
+			errFlag = 0;
+
+			now = Calendar.getInstance();
+			mSecN = now.getTimeInMillis();
+			nThread.setHandleStart(mSecN);
+
+		    }
+		}
+		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
+		    errFlag--;
+		    System.out.println("   DECR ERROR COUNT: " + errFlag);
+		}
+	    }
+	    NomadsErrCheckThread.sleep(10);
+	}
+	catch (InterruptedException ie) {}
+
+    }
+
+    // END errcheck -------------------------------------------
+
 
     public void init( ) {
 	setLayout(new BorderLayout( ) );
@@ -84,6 +314,8 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	// Connect
 	studentControlPanelSand = new NSand();
 	studentControlPanelSand.connect();
+	connected = true;
+
 	byte d[] = new byte[1];
 	d[0] = 1;
 	studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
@@ -187,7 +419,11 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 
 	//Code below starts thread (connects), sends register byte
 	nThread = new NomadsAppThread(this);
+	nThread.setRunState(true);
 	nThread.start();
+
+	nECThread = new NomadsErrCheckThread(this);
+	nECThread.start();
     }
 
 
@@ -308,8 +544,22 @@ public class StudentControlPanel extends JApplet  implements  ActionListener {
 	NGlobals.cPrint("StudentControlPanel -> handle()");
 
 	NGrain grain;
-
+	setSandRead(false);
 	grain = studentControlPanelSand.getGrain();
+	setSandRead(true);
+	setHandleActive(true);
+	if (grain == null) {
+	    setSandRead(true);
+	    setHandleActive(true);
+	    while(true) {
+		try {
+		    // Force timeout for errCheckThread to restart
+		    runner.sleep(1000);
+		}
+		catch (InterruptedException ie) {}
+	    }
+	}
+
 
 	if (joined == false) {
 	    return;

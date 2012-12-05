@@ -257,7 +257,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	    yRand = 10-randNum.nextInt(yVar);
 	    cellSlotsY[i] = ((generatedY.get(i) * (int)((height * 0.9)/screenCellY)) + yRand); //Scale height to get greatest Y value (total screen size seems okay)
 	    NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
-	    System.out.println("CellSlotsY[i] = " + cellSlotsY[i]);
+	    // System.out.println("CellSlotsY[i] = " + cellSlotsY[i]);
 	}
 	//STK**** End Cloud Randomization code========================================
 		

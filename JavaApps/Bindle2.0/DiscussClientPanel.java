@@ -57,6 +57,11 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	chatWindow.setCaretPosition(chatWindow.getDocument().getLength());
     }
 
+    public void resetSand(NSand inSand)
+    { 
+	mySand = inSand;
+    }
+
     public void init(NSand inSand)
     { 
 	mySand = inSand;
