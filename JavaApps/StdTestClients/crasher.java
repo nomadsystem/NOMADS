@@ -32,7 +32,7 @@ public class crasher implements Runnable {
 		catch (InterruptedException ie) {}
 		client.handle();
 		if (crashCount > 5) {
-		    System.exit(0);
+		    client.exit();
 		}
 	    }
 	}
@@ -61,6 +61,10 @@ public class crasher implements Runnable {
 
     }
 
+    public void exit() {
+	System.exit(1);
+    }
+
     public void init()
     {  	
 
@@ -86,7 +90,7 @@ public class crasher implements Runnable {
 	crasherString[i++] = new String("I hate when people play loud music");
 	crasherString[i++] = new String("Hello from the back of the room");
 	crasherString[i++] = new String("Hello from the front of the room");
-	crasherString[i++] = new String("Hello from the closet");
+	crasherString[i++] = new String("Hello from the library");
 	crasherString[i++] = new String("Hello from my dorm room");
 	crasherString[i++] = new String("This is giving me a lot to think about");
 	crasherString[i++] = new String("Hi");
@@ -159,7 +163,7 @@ public class crasher implements Runnable {
 	    // }
 	    // xxx
 	    tNumL = tNum;
-	    System.out.println("tNumL = " + tNumL);
+	    // System.out.println("tNumL = " + tNumL);
 	    tNum = randNum.nextInt(31);
 	    while (tNum == tNumL) {
 		tNum = randNum.nextInt(31);
