@@ -15,7 +15,7 @@ import nomads.v210.*;
 public class crasher implements Runnable {   
 
     int crashCount = 0;
-    int maxCrashes = 50;
+    int maxCrashes = 5;
 
     private class NomadsAppThread extends Thread {
 	crasher client; //Replace with current class name
@@ -26,10 +26,10 @@ public class crasher implements Runnable {
 	public void run()    {			
 	    NGlobals.lPrint("NomadsAppThread -> run()");
 	    while (true)  {
-		crashCount++;
 		client.handle();
-		if (crashCount > maxCrashes) {
-		    client.exit();
+		crashCount++;
+		if (crashCount > maxCrashes)  {
+		    exit();
 		}
 	    }
 	}
@@ -120,7 +120,7 @@ public class crasher implements Runnable {
 
 	crasherTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	String tString = new String("userX");
+	String tString = new String("crasherX");
 	int tLen = tString.length();
 
 	byte[] tStringAsBytes = tString.getBytes();
@@ -171,12 +171,10 @@ public class crasher implements Runnable {
 		tNum = randNum.nextInt(31);
 		// System.out.println("tNum = " + tNum);
 	    }
-	    System.out.println("#tNum = " + tNum);
-	    String tString2 = new String("userX ("+ crashCount + "): " );
+	    // System.out.println("#tNum = " + tNum);
+	    String tString2 = new String("crasherX ("+ crashCount + "): " );
 	    crashCount++;
-	    if (crashCount > maxCrashes) {
-		this.exit();
-	    }
+
 
 	    tString = new String(tString2 + crasherString[tNum]);
 
@@ -184,10 +182,18 @@ public class crasher implements Runnable {
 	    byte[] tBytes = tString.getBytes();
 
 	    try {
-		NGlobals.cPrint("crasher -> NSand.send()");
-		crasherTestSand.sendGrainC((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		runner.sleep(1000);
-		
+		if (crashCount < maxCrashes) {
+		    NGlobals.csvPrint("crasher -> NSand.send()");
+		    crasherTestSand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
+		    runner.sleep(1000);
+		}
+		else {
+		    NGlobals.csvPrint("crasher -> NSand.sendC()");
+		    crasherTestSand.sendGrainC((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
+		    runner.sleep(1000);
+		    NGlobals.csvPrint("calling exit()");
+		    exit();
+		}
 	    }
 	    catch (InterruptedException ie) {}
 
@@ -201,7 +207,7 @@ public class crasher implements Runnable {
 
 	NGlobals.csvPrint("crasher -> handle()");
 
-	grain = crasherTestSand.getGrainC();
+	grain = crasherTestSand.getGrain();
 
 	byte incAppID = grain.appID;
 	byte incCmd = grain.command;
@@ -209,7 +215,7 @@ public class crasher implements Runnable {
 	//	String msg = new String(grain.bArray);
 
 	//	System.out.println("CRASHER GOT:  +  " + msg);
-	System.out.println("CRASHER READ:  +  " + len);
+	// System.out.println("CRASHER READ:  +  " + len);
 	    
     }
 
