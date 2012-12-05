@@ -15,7 +15,7 @@ import nomads.v210.*;
 public class crasher implements Runnable {   
 
     int crashCount = 0;
-    int maxCrashes = 5;
+    int maxCrashes = 10;
 
     private class NomadsAppThread extends Thread {
 	crasher client; //Replace with current class name
@@ -27,9 +27,17 @@ public class crasher implements Runnable {
 	    NGlobals.lPrint("NomadsAppThread -> run()");
 	    while (true)  {
 		client.handle();
+		try {
+		    nThread.sleep(1000);
+		}
+		catch (InterruptedException ie) {}
 		crashCount++;
 		if (crashCount > maxCrashes)  {
-		    exit();
+		    try {
+			nThread.sleep(10000);
+		    }
+		    catch (InterruptedException ie) {}
+
 		}
 	    }
 	}
@@ -190,9 +198,7 @@ public class crasher implements Runnable {
 		else {
 		    NGlobals.csvPrint("crasher -> NSand.sendC()");
 		    crasherTestSand.sendGrainC((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
-		    runner.sleep(1000);
-		    NGlobals.csvPrint("calling exit()");
-		    exit();
+		    runner.sleep(10000);
 		}
 	    }
 	    catch (InterruptedException ie) {}
