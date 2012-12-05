@@ -15,6 +15,7 @@ import nomads.v210.*;
 public class crasher implements Runnable {   
 
     int crashCount = 0;
+    int maxCrashes = 50;
 
     private class NomadsAppThread extends Thread {
 	crasher client; //Replace with current class name
@@ -25,14 +26,10 @@ public class crasher implements Runnable {
 	public void run()    {			
 	    NGlobals.lPrint("NomadsAppThread -> run()");
 	    while (true)  {
-		try {
-		    nThread.sleep(2000);
-		    crashCount++;
-		}
-		catch (InterruptedException ie) {}
+		crashCount++;
 		client.handle();
-		if (crashCount > 5) {
-		    System.exit(0);
+		if (crashCount > maxCrashes) {
+		    client.exit();
 		}
 	    }
 	}
@@ -61,6 +58,15 @@ public class crasher implements Runnable {
 
     }
 
+    public void exit() {
+	nThread.stop();
+	nThread = null;
+	runner.stop();
+	runner = null;
+	System.exit(1);
+
+    }
+
     public void init()
     {  	
 
@@ -86,7 +92,7 @@ public class crasher implements Runnable {
 	crasherString[i++] = new String("I hate when people play loud music");
 	crasherString[i++] = new String("Hello from the back of the room");
 	crasherString[i++] = new String("Hello from the front of the room");
-	crasherString[i++] = new String("Hello from the closet");
+	crasherString[i++] = new String("Hello from the library");
 	crasherString[i++] = new String("Hello from my dorm room");
 	crasherString[i++] = new String("This is giving me a lot to think about");
 	crasherString[i++] = new String("Hi");
@@ -159,14 +165,18 @@ public class crasher implements Runnable {
 	    // }
 	    // xxx
 	    tNumL = tNum;
-	    System.out.println("tNumL = " + tNumL);
+	    // System.out.println("tNumL = " + tNumL);
 	    tNum = randNum.nextInt(31);
 	    while (tNum == tNumL) {
 		tNum = randNum.nextInt(31);
-		System.out.println("tNum = " + tNum);
+		// System.out.println("tNum = " + tNum);
 	    }
 	    System.out.println("#tNum = " + tNum);
-	    String tString2 = new String("userX: " );
+	    String tString2 = new String("userX ("+ crashCount + "): " );
+	    crashCount++;
+	    if (crashCount > maxCrashes) {
+		this.exit();
+	    }
 
 	    tString = new String(tString2 + crasherString[tNum]);
 
@@ -175,8 +185,9 @@ public class crasher implements Runnable {
 
 	    try {
 		NGlobals.cPrint("crasher -> NSand.send()");
-		crasherTestSand.sendGrain((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
+		crasherTestSand.sendGrainC((byte)NAppID.DISCUSS, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.CHAR, tLen, tBytes );
 		runner.sleep(1000);
+		
 	    }
 	    catch (InterruptedException ie) {}
 
