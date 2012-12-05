@@ -11,13 +11,14 @@ import com.softsynth.jsyn.*;
 public class StudentControlPanel extends JApplet  implements  ActionListener, Runnable {
 
     int mSecLimit=1000;
+    int errTrip=20;
 
     NSand studentControlPanelSand;
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
 
 
-    public String userName;
+    public String userName=null;
 
     JButton joinButton, discussButton, cloudButton, soundButton, pollButton, pointButton, uGrooveButton;
 
@@ -222,7 +223,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 		    if (errFlag > 0) {
 			System.out.println("   INCR ERROR COUNT: " + errFlag);
 		    }
-		    if ((errFlag > 5) && (connected == true)) {
+		    if ((errFlag > errTrip) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
 			System.out.println("-----> EREC #" + resetCtr);
@@ -283,6 +284,18 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			now = Calendar.getInstance();
 			mSecN = now.getTimeInMillis();
 			nThread.setHandleStart(mSecN);
+
+			if (userName != null) {
+			    byte[] tStringAsBytes = userName.getBytes();
+			    int tLen = userName.length();
+			    studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
+
+
+			}
+			discussFrame.setVisible(false);
+			cloudFrame.setVisible(false);
+			pollFrame.setVisible(false);
+			
 
 		    }
 		}
