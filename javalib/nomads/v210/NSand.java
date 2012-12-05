@@ -139,8 +139,9 @@ public class NSand
 	    streamOut.writeByte(cmd);
 	    // send data Type
 	    streamOut.writeByte(dType);
-	    if (true)
+	    if (true) {
 		return;
+	    }
 
 	    // send data Length
 	    streamOut.writeInt(dLen);
@@ -426,10 +427,13 @@ public class NSand
 	    cmd = streamIn.readByte();
 	    // get data Type
 	    dT = streamIn.readByte();
-	    if (false)
-		return null;
 	    // get data Length
 	    dL = streamIn.readInt();
+	    if (true) {
+		byte[] bA = new byte[dL];
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		return grain;
+	    }
 
 	    //Detect array type in Grain
 	    //Byte array
