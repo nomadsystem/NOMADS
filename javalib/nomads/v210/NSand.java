@@ -42,7 +42,7 @@ public class NSand
 	socket = serverSock;
     }
 
-    // SendGrain with Byte Array
+    // 1.  SendGrain with Grain ===============================
     public void sendGrain (NGrain myGrain) {
 	NGlobals.lPrint("sendGrain: (NGrain) ");
 	try {  
@@ -100,7 +100,7 @@ public class NSand
     }
 
 
-    // SendGrain with Byte Array
+    // 2. SendGrain with Byte Array ===============================
     public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
 	NGlobals.lPrint("sendGrain: ... args ... bArray[]");
 	try {  
@@ -129,7 +129,39 @@ public class NSand
 	}
     }
 
-    // SendGrain with Int Array
+    // 2 CRASHER. SendGrain with Byte Array ===============================
+    public void sendGrainC (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
+	NGlobals.lPrint("sendGrain: ... args ... bArray[]");
+	try {  
+	    // send app id
+	    streamOut.writeByte(aID);
+	    // send command
+	    streamOut.writeByte(cmd);
+	    if (true)
+		return;
+	    // send data Type
+	    streamOut.writeByte(dType);
+	    // send data Length
+	    streamOut.writeInt(dLen);
+
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
+
+	    for (int i=0; i<dLen; i++) {
+		streamOut.writeByte(bArray[i]);
+		NGlobals.lPrint("BYTE:  " + bArray[i]);
+	    }
+	}
+	catch(IOException ioe) {  
+	    System.out.println("SAND write error");
+	}
+    }
+
+
+    // 3. SendGrain with Int Array 
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
 	NGlobals.lPrint("sendGrain: ... args ... iArray[]");
 	try {  
@@ -156,7 +188,7 @@ public class NSand
 	}
     }
 
-    // SendGrain with Float Array
+    // SendGrain with Float Array ===============================
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
 	NGlobals.lPrint("sendGrain: ... args ... fArray[]");
 	try {  
