@@ -1035,7 +1035,13 @@ public class PollDisplay extends JApplet implements MouseListener, MouseMotionLi
 	    }
 
 	    DecimalFormat rounder = new DecimalFormat("#.##");//use to round to 2 decimal places
-	    String tString = rounder.format(average);
+	    if (average < 1) {
+		average = 1;
+	    }
+	    if (average > 5) {
+		average = 5;
+	    }
+	    String tString = new String(numBoxLetter[(int)(average-1)]);
 	    // NGlobals.dtPrint("average = " + average);
 	    offScreenGrp.drawString("Average:  " + tString, centerX-180, mY(40));
 	    offScreenGrp.drawString("Responses:  " + sNum, centerX+30, mY(40));

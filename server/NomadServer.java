@@ -141,6 +141,36 @@ public class NomadServer implements Runnable {
 	}
     }
 
+    private String printID (byte id) {
+	String[] idList = new String[255];
+	int i;
+	for(i=0;i<255;i++) {
+	    idList[i] = null;
+	}
+
+	// Populate the list
+
+	idList[NAppID.SERVER] = new String("SERVER");
+	idList[NAppID.INSTRUCTOR_PANEL] = new String("INSTRUCTOR_PANEL");
+	idList[NAppID.BINDLE] = new String("BINDLE");
+	idList[NAppID.DISCUSS] = new String("DISCUSS");
+	idList[NAppID.DISCUSS_PROMPT] = new String("DISCUSS_PROMPT");
+	idList[NAppID.CLOUD_CHAT] = new String("CLOUD_CHAT");
+	idList[NAppID.CLOUD_PROMPT] = new String("CLOUD_PROMPT");
+	idList[NAppID.STUDENT_POLL] = new String("STUDENT_POLL");
+	idList[NAppID.TEACHER_POLL] = new String("TEACHER_POLL");
+
+	// Print out the id as a string
+	if (idList[id] != null) {
+	    String rString = new String(idList[id] + "[" + id + "]");
+	    return rString;	
+	}
+	else {
+	    String rString = new String("UNKNOWN[" + id + "]");
+	    return rString;	
+	}
+    }
+
     // ================================================================
     //    handle ( THREAD_ID , grain )
     // ================================================================
@@ -210,14 +240,24 @@ public class NomadServer implements Runnable {
 	    NGlobals.sPrint("  Setting client[" + tCNum + "] incAppID to: " + incAppID);
 	    currentClient.setAppID(incAppID);
 
+
 	    // Send button states to the ICP
 	    if (incAppID == NAppID.INSTRUCTOR_PANEL) {
+		// Log the client in
+		String tStringX = new String("KHAN");
+		currentClient.setUser(tStringX);
+		
+		// Set new login status 
+		currentClient.setLoginStatus(true);
+
 		for (int i=0; i<numModStates; i++) {
 		    tCommand = (byte)(NCommand.MOD_STATE_START+i);
 		    byte[] dx = new byte[1];
 		    dx[0] = modStates[i];
-		    NGlobals.dtPrint("Sending button state (" + tCommand + "/" + dx[0] + ") to ICP " + currentClient.getThreadID());
+		    NGlobals.sPrint("Sending button state (" + tCommand + "/" + dx[0] + ") to ICP " + currentClient.getThreadID());
 		    currentClient.threadSand.sendGrain(NAppID.SERVER, tCommand, NDataType.UINT8, 1, dx);
+
+
 		}
 	    }
 	}
@@ -257,7 +297,7 @@ public class NomadServer implements Runnable {
 		for (int i=0; i<numModStates; i++) {
 		    tCommand = (byte)(NCommand.MOD_STATE_START+i);
 		    dx[0] = modStates[i];
-		    NGlobals.dtPrint("Sending button state to BINDLE (" + tCommand + "/" + dx[0] + ") to BINDLE " + currentClient.getThreadID());
+		    NGlobals.sPrint("Sending button state to BINDLE (" + tCommand + "/" + dx[0] + ") to BINDLE " + currentClient.getThreadID());
 		    currentClient.threadSand.sendGrain(NAppID.SERVER, tCommand, NDataType.UINT8, 1, dx);
 		}
 
@@ -362,25 +402,25 @@ public class NomadServer implements Runnable {
 	// Get client number of inc client
 	tCNum = clientThreadNum[THREAD_ID];
 	String myUser = clients[tCNum].getUser();
-	if (incAppID == NAppID.INSTRUCTOR_PANEL || 
-	    incAppID == NAppID.DISCUSS_PROMPT || 
-	    incAppID == NAppID.TEACHER_POLL || 
-	    incAppID == NAppID.CLOUD_PROMPT || 
-	    incAppID == NAppID.INSTRUCTOR_DISCUSS) {
-	    myUser = new String("KHAN");
-	}
+	// if (incAppID == NAppID.INSTRUCTOR_PANEL || 
+	//     incAppID == NAppID.DISCUSS_PROMPT || 
+	//     incAppID == NAppID.TEACHER_POLL || 
+	//     incAppID == NAppID.CLOUD_PROMPT || 
+	//     incAppID == NAppID.INSTRUCTOR_DISCUSS) {
+	//     myUser = new String("KHAN");
+	// }
 
 	if ((incAppDataType == NDataType.CHAR || incAppDataType == NDataType.BYTE) && (incAppDataLen > 1)) {
 	    String msg = new String(myGrain.bArray);
-	    NGlobals.csvPrint("DATA: user = " + myUser + " | msg = " + msg + " | appID = " + incAppID + "| appCmd = " + incAppCmd);
+	    NGlobals.csvPrint("LOG, user = " + myUser + ", msg = " + msg + ", appID = " + printID(incAppID) + ", appCmd = " + incAppCmd);
 	}
 	if ((incAppDataType == NDataType.UINT8 || incAppDataType == NDataType.BYTE) && (incAppDataLen == 1)) {
 	    int val = (int)myGrain.bArray[0];
-	    NGlobals.csvPrint("DATA: user = " + myUser + " | bval = " + val + " | appID = " + incAppID + "| appCmd = " + incAppCmd);
+	    NGlobals.csvPrint("LOG, user = " + myUser + ", bval = " + val + ", appID = " + printID(incAppID) + ", appCmd = " + incAppCmd);
 	}
 	if ((incAppDataType == NDataType.INT32 || incAppDataType == NDataType.INT) && (incAppDataLen > 0)) {
 	    int val = (int)myGrain.iArray[0];
-	    NGlobals.csvPrint("DATA: user = " + myUser + " | val = " + val + " | appID = " + incAppID + "| appCmd =" + incAppCmd);
+	    NGlobals.csvPrint("LOG, user = " + myUser + ", val = " + val + ", appID = " + printID(incAppID) + ", appCmd =" + incAppCmd);
 	}
 
 
