@@ -137,10 +137,11 @@ public class NSand
 	    streamOut.writeByte(aID);
 	    // send command
 	    streamOut.writeByte(cmd);
-	    if (true)
-		return;
 	    // send data Type
 	    streamOut.writeByte(dType);
+	    if (true)
+		return;
+
 	    // send data Length
 	    streamOut.writeInt(dLen);
 
