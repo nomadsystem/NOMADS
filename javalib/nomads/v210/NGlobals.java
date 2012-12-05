@@ -2,7 +2,7 @@ package nomads.v210;
 
 public class NGlobals {
     public static int clientDebugLevel = 0;  // Use this for printout info
-    public static int serverDebugLevel = 1;  // Use this for printout info
+    public static int serverDebugLevel = 0;  // Use this for printout info
     public static int libraryDebugLevel = 0;  // Use this for printout info
     public static int dtDebugLevel = 0;  // Use this for printout info
     public static int csvEnable = 1;  // Use this for printout info

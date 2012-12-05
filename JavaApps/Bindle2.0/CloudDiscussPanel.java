@@ -166,7 +166,8 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 		{
 			NGlobals.cPrint("ENTER");
 
-			tInput = input.getText();
+			tInput = input.getText().trim();
+
 			if (lastInput.equals(tInput)) {
 				input.setText("");
 				return;
@@ -174,6 +175,8 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 			else {
 				lastInput = tInput;
 				int tLen = tInput.length();
+				if (tLen < 2) 
+				    return;
 				byte[] tStringAsBytes = tInput.getBytes();
 
 				mySand.sendGrain((byte)NAppID.CLOUD_CHAT, (byte)NCommand.SEND_MESSAGE, (byte)NDataType.BYTE, tLen, tStringAsBytes );
@@ -220,6 +223,8 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 			else {
 				lastInput = tInput;
 				int tLen = tInput.length();
+				if (tLen < 2) 
+				    return;
 				//    char[] tStringAsChars = tString.toCharArray();
 				byte[] tStringAsBytes = tInput.getBytes();
 

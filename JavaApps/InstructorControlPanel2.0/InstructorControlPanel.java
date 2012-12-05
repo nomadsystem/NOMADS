@@ -19,6 +19,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
     private NomadsErrCheckThread nECThread;
     
     int mSecLimit=1000;
+    int errTrip=20;
 
     JMenuItem pollMenu_VoteAgain ;
     JMenuItem pollMenu_ResetScreen;
@@ -271,7 +272,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 		    if (errFlag > 0) {
 			System.out.println("   INCR ERROR COUNT: " + errFlag);
 		    }
-		    if ((errFlag > 5) && (connected == true)) {
+		    if ((errFlag > errTrip) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
 			System.out.println("-----> EREC #" + resetCtr);
@@ -309,10 +310,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			d[0] = 0;
 			instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-
-
-			// xaxa
-
 			connected = true;
 			NomadsErrCheckThread.sleep(1000);
 			System.out.println("   reconnected!");			
@@ -335,6 +332,18 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			now = Calendar.getInstance();
 			mSecN = now.getTimeInMillis();
 			nThread.setHandleStart(mSecN);
+
+			groupDiscussPromptFrame.setVisible(false);
+			instructorGroupDiscussFrame.setVisible(false);
+			cloudPromptFrame.setVisible(false);
+			cloudDisplayFrame.setVisible(false);
+			pollPromptFrame.setVisible(false);
+			pollDisplayFrame.setVisible(false);
+			mosaicDisplayFrame.setVisible(false);
+			pointerDisplayFrame.setVisible(false);
+			unityGroovePromptFrame.setVisible(false);
+			unityGrooveDisplayFrame.setVisible(false);
+
 
 		    }
 		}
