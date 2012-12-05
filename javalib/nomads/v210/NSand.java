@@ -137,14 +137,14 @@ public class NSand
 	    streamOut.writeByte(aID);
 	    // send command
 	    streamOut.writeByte(cmd);
-	    // send data Type
-	    streamOut.writeByte(dType);
 	    if (true) {
 		return;
 	    }
-
+	    // send data Type
+	    streamOut.writeByte(dType);
 	    // send data Length
 	    streamOut.writeInt(dLen);
+
 
 	    NGlobals.lPrint("appID =" + aID);
 	    NGlobals.lPrint("commd =" + cmd);
