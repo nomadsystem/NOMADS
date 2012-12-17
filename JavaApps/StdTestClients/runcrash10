@@ -1,29 +1,29 @@
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java crasher &>/dev/null &"
 java crasher &>/dev/null &
