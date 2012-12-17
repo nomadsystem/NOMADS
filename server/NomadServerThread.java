@@ -93,11 +93,16 @@ public class NomadServerThread extends Thread
 			try {  
 			    byte tByte = streamIn.readByte();
 			    if (tByte != 0) {
-				NGlobals.sPrint("\nTHREAD:  getGrain:  read byte:  " + tByte);
+				NGlobals.sPrint("THREAD:\nTHREAD:  getGrain:  read byte:  " + tByte);
 				threadGrain = threadSand.getGrain(tByte);
 				//threadGrain.print();
 				NGlobals.sPrint("THREAD:  server->handle()\n");
-				server.handle(THREAD_ID, threadGrain);
+				if (threadSand.canRun) {
+				    server.handle(THREAD_ID, threadGrain);
+				}
+				else {
+				    server.remove(THREAD_ID);
+				}
 			    }
 	       	        }
 			catch(IOException ioe) {  
