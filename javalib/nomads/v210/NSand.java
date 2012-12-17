@@ -17,6 +17,7 @@ public class NSand
     private DataOutputStream streamOut = null;    
     private String    serverName = NGlobals.serverName;
     private int       serverPort = NGlobals.serverPortDT;
+    public Boolean canRun = true;
 
     // Maybe yes to these
     URL imgWebBase, webBase;
@@ -27,8 +28,6 @@ public class NSand
     public NSand (Socket serverSock) {
 	socket = serverSock;
     }
-
-
 
     public DataInputStream getInStream() {
 	return streamIn;
@@ -95,7 +94,8 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("1: SAND write error");
+	    canRun = false;
 	}
     }
 
@@ -125,7 +125,8 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("2: SAND write error");
+	    canRun = false;
 	}
     }
 
@@ -158,7 +159,8 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("3: SAND write error");
+	    canRun = false;
 	}
     }
 
@@ -186,7 +188,8 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("4: SAND write error");
+	    canRun = false;
 	}
     }
 
@@ -213,7 +216,8 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("5: SAND write error");
+	    canRun = false;
 	}
     }
 
@@ -306,7 +310,8 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("6: SAND write error");
+	    canRun = false;
 	}
 	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
@@ -408,7 +413,8 @@ public class NSand
 			
 	}
 	catch(IOException ioe) {  
-	    // System.out.println("SAND write error");
+	    // System.out.println("7: SAND write error");
+	    canRun = false;
 	}
 	return grain;
     }
@@ -507,7 +513,8 @@ public class NSand
 
 	}
 	catch(IOException ioe) {  
-	    System.out.println("SAND write error");
+	    System.out.println("8: SAND write error");
+	    canRun = false;
 	}
 	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
@@ -615,7 +622,8 @@ public class NSand
 			
 	}
 	catch(IOException ioe) {  
-	    // System.out.println("SAND write error");
+	    // System.out.println("9: SAND write error");
+	    canRun = false;
 	}
 	return grain;
     }

@@ -1,29 +1,29 @@
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &
-sleep 1
+# sleep 1
 echo "running java DiscussTest &>/dev/null &"
 java DiscussTest &>/dev/null &

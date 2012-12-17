@@ -1,10 +1,9 @@
 package nomads.v210;
-
 public class NGlobals {
     public static int clientDebugLevel = 0;  // Use this for printout info
-    public static int serverDebugLevel = 0;  // Use this for printout info
+    public static int serverDebugLevel = 1;  // Use this for printout info
     public static int libraryDebugLevel = 0;  // Use this for printout info
-    public static int dtDebugLevel = 0;  // Use this for printout info
+    public static int dtDebugLevel = 1;  // Use this for printout info
     public static int csvEnable = 1;  // Use this for printout info
     public static String    serverName = "nomads.music.virginia.edu";
     public static int serverPort = 52920;
@@ -17,8 +16,6 @@ public class NGlobals {
     public static int serverPortSK_Auk = 52912;
     public static int serverPortPT_Auk = 52913;
     public static int serverPortMB_Auk = 52914;
-
-
 
     public static void csvPrint(String str) {
 	if (csvEnable > 0) {
