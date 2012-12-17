@@ -1,0 +1,71 @@
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+sleep 3
+echo "KILLING DISCUSS CLIENTS"
+./killdiscs
+echo "DONE"
+echo " "
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+sleep 3
+echo "KILLING DISCUSS CLIENTS"
+./killdiscs
+echo "DONE"
+echo " "
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+sleep 3
+echo "KILLING DISCUSS CLIENTS"
+./killdiscs
+echo "DONE"
+echo " "
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+
+
+echo "running java DiscussTest &>/dev/null &"
+java DiscussTest &>/dev/null &
+sleep 3
+echo "KILLING DISCUSS CLIENTS"
+./killdiscs
+echo "DONE"
+echo " "

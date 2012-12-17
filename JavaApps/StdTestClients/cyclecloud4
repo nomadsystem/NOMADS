@@ -1,29 +1,52 @@
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
+sleep 3
+echo "KILL CLOUDS"
+./killclouds
+echo "DONE"
+echo " "
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
+sleep 3
+echo "KILL CLOUDS"
+./killclouds
+echo "DONE"
+echo " "
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
-sleep 2
 echo "running java CloudTest &>/dev/null &"
 java CloudTest &>/dev/null &
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 3
+echo "KILL CLOUDS"
+./killclouds
+echo "DONE"
+echo " "
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+echo "running java CloudTest &>/dev/null &"
+java CloudTest &>/dev/null &
+sleep 3
+echo "KILL CLOUDS"
+./killclouds
+echo "DONE"
+echo " "
