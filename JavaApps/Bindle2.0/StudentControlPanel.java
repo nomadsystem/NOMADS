@@ -240,12 +240,12 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 			// System.out.println(">>> halting thread.");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(3000);
+			NomadsErrCheckThread.sleep(2000);
 			// deleteSynth(lastThread);
 			nThread = null;
 			System.out.println("   disconnecting.");
 			studentControlPanelSand.disconnect();
-			NomadsErrCheckThread.sleep(4000);
+			NomadsErrCheckThread.sleep(2000);
 			studentControlPanelSand = null;
 			connected = false;
 			System.out.println("   disconneced.");
@@ -253,7 +253,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// deleteAllSynths();
 			// System.out.println(">>> sprites/synths deleted.");
 			System.out.println("   Attempting reconnect.");
-			NomadsErrCheckThread.sleep(5000);
+			NomadsErrCheckThread.sleep(2000);
 			studentControlPanelSand = new NSand(); 
 			studentControlPanelSand.connect();
 
