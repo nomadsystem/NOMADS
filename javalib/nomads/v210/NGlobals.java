@@ -17,6 +17,10 @@ public class NGlobals {
     public static int serverPortPT_Auk = 52913;
     public static int serverPortMB_Auk = 52914;
 
+    public static void noPrint(String str) {
+    }
+
+
     public static void csvPrint(String str) {
 	if (csvEnable > 0) {
 	    System.out.println(str);
