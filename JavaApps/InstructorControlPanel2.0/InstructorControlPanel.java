@@ -119,7 +119,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 
     long mSecR=0;
     int resetCtr=0;
-    int maxResets=10;
+    int maxResets=1000;
 
     float mSecAvg=10;
     float mSecAvgL=10;
@@ -289,12 +289,12 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 			// System.out.println(">>> halting thread.");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(3000);
+			NomadsErrCheckThread.sleep(800);
 			// deleteSynth(lastThread);
 			nThread = null;
 			System.out.println("   disconnecting.");
 			instructorControlPanelSand.disconnect();
-			NomadsErrCheckThread.sleep(4000);
+			NomadsErrCheckThread.sleep(800);
 			instructorControlPanelSand = null;
 			connected = false;
 			System.out.println("   disconneced.");
@@ -302,7 +302,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			// deleteAllSynths();
 			// System.out.println(">>> sprites/synths deleted.");
 			System.out.println("   Attempting reconnect.");
-			NomadsErrCheckThread.sleep(5000);
+			NomadsErrCheckThread.sleep(800);
 			instructorControlPanelSand = new NSand(); 
 			instructorControlPanelSand.connect();
 
@@ -311,10 +311,10 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 			connected = true;
-			NomadsErrCheckThread.sleep(1000);
+			NomadsErrCheckThread.sleep(800);
 			System.out.println("   reconnected!");			
 			System.out.println("   attempting to restart thread.");			
-			NomadsErrCheckThread.sleep(1000);
+			NomadsErrCheckThread.sleep(800);
 			nThread = new NomadsAppThread(this);
 			nThread.setRunState(true);
 			nThread.start();
@@ -430,8 +430,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 
 	NGlobals.dtPrint("registering...");
 	instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
-
-
     }
 
     // button setup function -----------------------------------------------------------------------
