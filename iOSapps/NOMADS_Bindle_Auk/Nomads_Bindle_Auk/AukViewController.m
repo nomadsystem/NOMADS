@@ -54,6 +54,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     //Handles first check of internet communcation status
     if (![self internetConnectionStatus]) {
         CLog("No internet connection");

@@ -16,6 +16,7 @@
 #import "NCommandMain.h"
 #import "NGrain.h"
 #import "NSand.h"
+#import "Reachability.h"
 
 @implementation BindleAppDelegate
 
@@ -26,6 +27,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+
     
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -47,6 +50,16 @@
     loginStatus = 0;
     return YES;
 }
+
+
+//Method to handle networkConnectionError from NSand (delegate of NSand)
+- (void)networkConnectionError:(NSString *)ErrStr
+{
+    [tabBarController setSelectedIndex:0];
+    [self tabBarItemsEnabled:NO];
+    
+}
+
 
 // input data function ===================================================================
 
