@@ -11,13 +11,16 @@
 		0B116B6416C3415B00878006 /* Pointer_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6116C3415B00878006 /* Pointer_30x30.png */; };
 		0B116B6516C3415B00878006 /* Discuss_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6216C3415B00878006 /* Discuss_30x30.png */; };
 		0B116B6616C3415B00878006 /* Cloud_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6316C3415B00878006 /* Cloud_30x30.png */; };
+		0B116B6C16C38A6200878006 /* infoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6B16C38A6200878006 /* infoView.xib */; };
 		0B22629916C33A2C00BA1449 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B22629816C33A2C00BA1449 /* Default-568h@2x.png */; };
 		0B22629F16C33F0A00BA1449 /* Login_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B22629E16C33F0900BA1449 /* Login_30x30.png */; };
+		0B22CC3016C395CD00731F7C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CC2F16C395CD00731F7C /* Reachability.m */; };
+		0B4D625B16C39CE100D5C532 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D625A16C39CE100D5C532 /* UIKit.framework */; };
+		0B4D625D16C39D2C00D5C532 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D625C16C39D2C00D5C532 /* Foundation.framework */; };
+		0B4D625F16C39D3C00D5C532 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D625E16C39D3C00D5C532 /* CoreGraphics.framework */; };
+		0B4D626116C39DDF00D5C532 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D626016C39DDF00D5C532 /* SystemConfiguration.framework */; };
 		F994864C15A4B080001969E8 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864915A4B080001969E8 /* SwarmDrawView.m */; };
 		F994864D15A4B080001969E8 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864B15A4B080001969E8 /* SwarmViewController.m */; };
-		F9FFFC1A159E36830011760F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC19159E36830011760F /* UIKit.framework */; };
-		F9FFFC1C159E36830011760F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC1B159E36830011760F /* Foundation.framework */; };
-		F9FFFC1E159E36830011760F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC1D159E36830011760F /* CoreGraphics.framework */; };
 		F9FFFC24159E36840011760F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9FFFC22159E36840011760F /* InfoPlist.strings */; };
 		F9FFFC26159E36840011760F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FFFC25159E36840011760F /* main.m */; };
 		F9FFFC32159E36BE0011760F /* BindleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FFFC31159E36BE0011760F /* BindleAppDelegate.m */; };
@@ -42,8 +45,15 @@
 		0B116B6116C3415B00878006 /* Pointer_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pointer_30x30.png; sourceTree = "<group>"; };
 		0B116B6216C3415B00878006 /* Discuss_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discuss_30x30.png; sourceTree = "<group>"; };
 		0B116B6316C3415B00878006 /* Cloud_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cloud_30x30.png; sourceTree = "<group>"; };
+		0B116B6B16C38A6200878006 /* infoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoView.xib; sourceTree = "<group>"; };
 		0B22629816C33A2C00BA1449 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0B22629E16C33F0900BA1449 /* Login_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Login_30x30.png; sourceTree = "<group>"; };
+		0B22CC2E16C395CD00731F7C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		0B22CC2F16C395CD00731F7C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		0B4D625A16C39CE100D5C532 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		0B4D625C16C39D2C00D5C532 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0B4D625E16C39D3C00D5C532 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0B4D626016C39DDF00D5C532 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
 		F9616FA915B9C439007BA941 /* NAppIDMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppIDMain.h; path = ../../ClassLib/NAppIDMain.h; sourceTree = "<group>"; };
 		F9616FAA15B9C439007BA941 /* NCommandMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommandMain.h; path = ../../ClassLib/NCommandMain.h; sourceTree = "<group>"; };
@@ -52,9 +62,6 @@
 		F994864A15A4B080001969E8 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
 		F994864B15A4B080001969E8 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
 		F9FFFC15159E36830011760F /* NOMADS_Bindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9FFFC19159E36830011760F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		F9FFFC1B159E36830011760F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		F9FFFC1D159E36830011760F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F9FFFC21159E36840011760F /* NOMADS_Bindle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NOMADS_Bindle-Info.plist"; sourceTree = "<group>"; };
 		F9FFFC23159E36840011760F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F9FFFC25159E36840011760F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -88,9 +95,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9FFFC1A159E36830011760F /* UIKit.framework in Frameworks */,
-				F9FFFC1C159E36830011760F /* Foundation.framework in Frameworks */,
-				F9FFFC1E159E36830011760F /* CoreGraphics.framework in Frameworks */,
+				0B4D626116C39DDF00D5C532 /* SystemConfiguration.framework in Frameworks */,
+				0B4D625F16C39D3C00D5C532 /* CoreGraphics.framework in Frameworks */,
+				0B4D625D16C39D2C00D5C532 /* Foundation.framework in Frameworks */,
+				0B4D625B16C39CE100D5C532 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,9 +126,10 @@
 		F9FFFC18159E36830011760F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F9FFFC19159E36830011760F /* UIKit.framework */,
-				F9FFFC1B159E36830011760F /* Foundation.framework */,
-				F9FFFC1D159E36830011760F /* CoreGraphics.framework */,
+				0B4D626016C39DDF00D5C532 /* SystemConfiguration.framework */,
+				0B4D625E16C39D3C00D5C532 /* CoreGraphics.framework */,
+				0B4D625C16C39D2C00D5C532 /* Foundation.framework */,
+				0B4D625A16C39CE100D5C532 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -128,11 +137,23 @@
 		F9FFFC1F159E36840011760F /* NOMADS_Bindle */ = {
 			isa = PBXGroup;
 			children = (
-				0B116B6116C3415B00878006 /* Pointer_30x30.png */,
-				0B116B6216C3415B00878006 /* Discuss_30x30.png */,
+				F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */,
+				F9FFFC31159E36BE0011760F /* BindleAppDelegate.m */,
 				0B116B6316C3415B00878006 /* Cloud_30x30.png */,
-				0B116B5F16C3411C00878006 /* Poll_30x30.png */,
+				F9FFFC41159E36E70011760F /* CloudViewController.h */,
+				F9FFFC42159E36E70011760F /* CloudViewController.m */,
+				F9FFFC43159E36E70011760F /* CloudViewController.xib */,
+				F9FFFC33159E36D10011760F /* Default.png */,
+				0B116B6216C3415B00878006 /* Discuss_30x30.png */,
+				F9FFFC34159E36D10011760F /* DiscussViewController.h */,
+				F9FFFC35159E36D10011760F /* DiscussViewController.m */,
+				F9FFFC44159E36E70011760F /* DiscussViewController.xib */,
+				0B116B6B16C38A6200878006 /* infoView.xib */,
+				F9FFFC36159E36D10011760F /* iPhone_AppIcon_57x57.png */,
 				0B22629E16C33F0900BA1449 /* Login_30x30.png */,
+				F9FFFC45159E36E70011760F /* LoginViewController.h */,
+				F9FFFC46159E36E70011760F /* LoginViewController.m */,
+				F9FFFC47159E36E70011760F /* LoginViewController.xib */,
 				F9616FA915B9C439007BA941 /* NAppIDMain.h */,
 				F9616FAA15B9C439007BA941 /* NCommandMain.h */,
 				F9FFFC4D159E37410011760F /* NGlobals.h */,
@@ -141,28 +162,19 @@
 				F9FFFC50159E37410011760F /* NGrain.m */,
 				F9FFFC51159E37410011760F /* NSand.h */,
 				F9FFFC52159E37410011760F /* NSand.m */,
+				0B116B6116C3415B00878006 /* Pointer_30x30.png */,
+				0B116B5F16C3411C00878006 /* Poll_30x30.png */,
+				F9FFFC37159E36D10011760F /* PollViewController.h */,
+				F9FFFC38159E36D10011760F /* PollViewController.m */,
+				F9FFFC39159E36D10011760F /* PollViewController.xib */,
+				0B22CC2E16C395CD00731F7C /* Reachability.h */,
+				0B22CC2F16C395CD00731F7C /* Reachability.m */,
+				F9FFFC3A159E36D10011760F /* SandDunes1_960x640.png */,
+				F9FFFC20159E36840011760F /* Supporting Files */,
 				F994864815A4B07F001969E8 /* SwarmDrawView.h */,
 				F994864915A4B080001969E8 /* SwarmDrawView.m */,
 				F994864A15A4B080001969E8 /* SwarmViewController.h */,
 				F994864B15A4B080001969E8 /* SwarmViewController.m */,
-				F9FFFC41159E36E70011760F /* CloudViewController.h */,
-				F9FFFC42159E36E70011760F /* CloudViewController.m */,
-				F9FFFC43159E36E70011760F /* CloudViewController.xib */,
-				F9FFFC44159E36E70011760F /* DiscussViewController.xib */,
-				F9FFFC45159E36E70011760F /* LoginViewController.h */,
-				F9FFFC46159E36E70011760F /* LoginViewController.m */,
-				F9FFFC47159E36E70011760F /* LoginViewController.xib */,
-				F9FFFC33159E36D10011760F /* Default.png */,
-				F9FFFC34159E36D10011760F /* DiscussViewController.h */,
-				F9FFFC35159E36D10011760F /* DiscussViewController.m */,
-				F9FFFC36159E36D10011760F /* iPhone_AppIcon_57x57.png */,
-				F9FFFC37159E36D10011760F /* PollViewController.h */,
-				F9FFFC38159E36D10011760F /* PollViewController.m */,
-				F9FFFC39159E36D10011760F /* PollViewController.xib */,
-				F9FFFC3A159E36D10011760F /* SandDunes1_960x640.png */,
-				F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */,
-				F9FFFC31159E36BE0011760F /* BindleAppDelegate.m */,
-				F9FFFC20159E36840011760F /* Supporting Files */,
 			);
 			path = NOMADS_Bindle;
 			sourceTree = "<group>";
@@ -205,7 +217,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = NOMADS_Bindle;
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = F9FFFC0F159E36830011760F /* Build configuration list for PBXProject "NOMADS_Bindle" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -243,6 +255,7 @@
 				0B116B6416C3415B00878006 /* Pointer_30x30.png in Resources */,
 				0B116B6516C3415B00878006 /* Discuss_30x30.png in Resources */,
 				0B116B6616C3415B00878006 /* Cloud_30x30.png in Resources */,
+				0B116B6C16C38A6200878006 /* infoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9FFFC26159E36840011760F /* main.m in Sources */,
+				0B22CC3016C395CD00731F7C /* Reachability.m in Sources */,
 				F9FFFC32159E36BE0011760F /* BindleAppDelegate.m in Sources */,
 				F9FFFC3C159E36D10011760F /* DiscussViewController.m in Sources */,
 				F9FFFC3E159E36D10011760F /* PollViewController.m in Sources */,
@@ -287,6 +301,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -303,6 +321,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7";
 			};
 			name = Debug;
 		};
@@ -312,6 +331,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -323,6 +346,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7";
 			};
 			name = Release;
 		};

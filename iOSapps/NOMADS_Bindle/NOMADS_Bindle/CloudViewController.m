@@ -55,7 +55,16 @@
     cloudLabel.text = @"Thought Cloud";
 
     messages = [[NSMutableArray alloc] init];
-    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+    UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
+    
+    // redraw the image to fit |yourView|'s size
+    UIGraphicsBeginImageContextWithOptions([self view].frame.size, NO, 0.f);
+    [targetImage drawInRect:CGRectMake(0.f, 0.f, [self view].frame.size.width, [self view] .frame.size.height)];
+    UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:resultImage]];
 	
 }
 
