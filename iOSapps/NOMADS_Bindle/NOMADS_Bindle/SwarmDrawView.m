@@ -174,7 +174,7 @@
         xy[1] = (int) loc.y;
         
         
-        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Integer:xy];
+        [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
     }
     //Redraw
     [self setNeedsDisplay];

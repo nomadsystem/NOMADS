@@ -24,9 +24,15 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Pointer" image:[UIImage imageNamed:@"Pointer_30x30.png"] tag:5];
         tbi = [self tabBarItem];
-        //     [tbi setEnabled:NO];
-        [tbi setTitle:@"Sound Swarm"];
+
+        [tbi setEnabled:NO];
+        // [tbi setTitle:@"Pointer"];
+        // UIImage *i3 = [UIImage imageNamed:@"tPoll.png"];
+        // [tbi setImage:i3];
+
+        
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available

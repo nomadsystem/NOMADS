@@ -20,6 +20,7 @@
 @synthesize inputDiscussField;
 @synthesize tableView;
 @synthesize discussPromptLabel;
+
 @synthesize sendDiscussButton;
 @synthesize messages;
 @synthesize appSand; //Our implementation of NSand
@@ -32,9 +33,15 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Discuss" image:[UIImage imageNamed:@"Discuss_30x30.png"] tag:1];
+
         tbi = [self tabBarItem];
    //     [tbi setEnabled:NO];
-        [tbi setTitle:@"Group Discuss"];
+//        [tbi setTitle:@"Discuss"];
+        
+        // UIImage *i1 = [UIImage imageNamed:@"tDiscuss.png"];
+        // [tbi setImage:i1];
+        
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
 
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -52,7 +59,8 @@
     //  [self initNetworkCommunication];
     
     inputDiscussField.text = @"";
-    discussPromptLabel.text = @"Discuss Prompt";
+    discussPromptLabel.text = @"Group Discussion";
+    
 	messages = [[NSMutableArray alloc] init];
     
     [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
@@ -62,8 +70,6 @@
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 }
-
-
 
 - (IBAction)sendDiscuss:(id)sender
 {
@@ -86,12 +92,18 @@
     
     //DATA ARRAY (String from inputDiscussField)
     //****STK Currently set directly in sendWithGrainElts
+
+    NSString *cText;
     
-    [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
+    cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
+
+    NSLog(@"cText = %@\n",cText);
+    
+    [appDelegate->appSand sendWithGrainElts_AppID:myAppID
                                           Command:myCommand 
                                          DataType:myDataType 
-                                          DataLen:[inputDiscussField.text length] 
-                                           String:inputDiscussField.text];
+                                          DataLen:[cText length]
+                                           String:cText];
         
     inputDiscussField.text = @"";
     [inputDiscussField setHidden:NO];
@@ -105,43 +117,49 @@
 {
     CLog(@"I GOT DATA FROM SAND!!!\n");
     
-    if (nil != inGrain) { 
+    if (nil != inGrain) {
         
-        if(inGrain->appID == DISCUSS_PROMPT)//Text from Discuss Prompt
+        if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
         {
-            //    NSLog(@"Filtering AppID 22");
-            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
-            discussPromptLabel.text = inGrain->str;
-        }
-        else if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
-        { 
             //    NSLog(@"Filtering AppID 20");
             //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
             [self messageReceived:inGrain->str];
-            NSLog(@"Got Discuss Data");
-        } 
-        else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel****STK This will need to be changed to Commands
+            CLog(@"Got Discuss Data");
+        }
+
+        else if(inGrain->appID == DISCUSS_PROMPT) //Text from Instructor Panel
         {
-            if ([inGrain->str isEqualToString:@"DISABLE_DISCUSS_BUTTON"])
+            if(inGrain->command == SEND_DISCUSS_PROMPT)//Text from Discuss Prompt
             {
+                CLog(@"GOT DISCUSS PROMPT %@\n", inGrain->str);
+                discussPromptLabel.text = inGrain->str;
+                
+            }
+        }
+        else if(inGrain->appID == INSTRUCTOR_PANEL) //Text from Instructor Panel
+        {
+            if ((inGrain->command == SET_DISCUSS_STATUS) &&
+                (inGrain->bArray[0] == 0)) {
                 [sendDiscussButton setEnabled:NO];
                 sendDiscussButton.titleLabel.textColor = [UIColor grayColor];
                 [inputDiscussField setEnabled:NO];
                 [inputDiscussField setBackgroundColor:[UIColor grayColor]];
             }
-            else if ([inGrain->str isEqualToString:@"ENABLE_DISCUSS_BUTTON"])
-            {
-                [sendDiscussButton setEnabled:YES];
-                //Sets color to current default value
-                sendDiscussButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0];                                    [inputDiscussField setEnabled:YES];
-                [inputDiscussField setBackgroundColor:[UIColor whiteColor]];
+            else if ((inGrain->command == SET_DISCUSS_STATUS) &&
+                     (inGrain->bArray[0] == 1)) {
+                {
+                    [sendDiscussButton setEnabled:YES];
+                    //Sets color to current default value
+                    sendDiscussButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0];                                    [inputDiscussField setEnabled:YES];
+                    [inputDiscussField setBackgroundColor:[UIColor whiteColor]];
+                }
             }
         }
         else {
-            NSLog(@"No Data for Discuss App");
+            CLog(@"No Data for Discuss App");
         }
     }
-
+    
 }
 
 - (void) messageReceived:(NSString *)message {
@@ -163,7 +181,7 @@
 	
     static NSString *CellIdentifier = @"ChatCellIdentifier";
     
-    UIFont *cellFont = [UIFont fontWithName:@"Helvetica-Bold" size:25.0];
+    UIFont *cellFont = [UIFont fontWithName:@"Optima" size:17.0];
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
     CGSize labelSize = [s sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
     
@@ -172,7 +190,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         cell.textLabel.numberOfLines = 0;
-        cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.0];
+        cell.textLabel.font = [UIFont fontWithName:@"Optima" size:17.0];
     }
 	
 	cell.textLabel.text = s;

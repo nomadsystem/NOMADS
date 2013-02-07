@@ -16,16 +16,22 @@
 
 {
     @public NSand   *appSand;
+    @public NSString   *userName;
+    @public int loginStatus;
+
     UITabBarController *tabBarController;
     UITabBarItem *discussTBI;
     UITabBarItem *cloudTBI;
     UITabBarItem *pollTBI;
     UITabBarItem *swarmTBI;
+    UITabBarItem *loginTBI;
     
 }
 
 @property (strong, retain) NSand *appSand;
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, retain) NSString *userName;
+
 //@property UITabBarController *tabBarController;
 
 - (void)dataReadyHandle:(NGrain *)inGrain; // INPUT:  the function we use when WE get data from Sand

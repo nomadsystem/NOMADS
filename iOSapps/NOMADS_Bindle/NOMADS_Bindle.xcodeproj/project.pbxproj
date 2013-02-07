@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B116B6016C3411C00878006 /* Poll_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B5F16C3411C00878006 /* Poll_30x30.png */; };
+		0B116B6416C3415B00878006 /* Pointer_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6116C3415B00878006 /* Pointer_30x30.png */; };
+		0B116B6516C3415B00878006 /* Discuss_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6216C3415B00878006 /* Discuss_30x30.png */; };
+		0B116B6616C3415B00878006 /* Cloud_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B116B6316C3415B00878006 /* Cloud_30x30.png */; };
+		0B22629916C33A2C00BA1449 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B22629816C33A2C00BA1449 /* Default-568h@2x.png */; };
+		0B22629F16C33F0A00BA1449 /* Login_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B22629E16C33F0900BA1449 /* Login_30x30.png */; };
 		F994864C15A4B080001969E8 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864915A4B080001969E8 /* SwarmDrawView.m */; };
 		F994864D15A4B080001969E8 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864B15A4B080001969E8 /* SwarmViewController.m */; };
 		F9FFFC1A159E36830011760F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FFFC19159E36830011760F /* UIKit.framework */; };
@@ -32,6 +38,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B116B5F16C3411C00878006 /* Poll_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Poll_30x30.png; sourceTree = "<group>"; };
+		0B116B6116C3415B00878006 /* Pointer_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pointer_30x30.png; sourceTree = "<group>"; };
+		0B116B6216C3415B00878006 /* Discuss_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discuss_30x30.png; sourceTree = "<group>"; };
+		0B116B6316C3415B00878006 /* Cloud_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cloud_30x30.png; sourceTree = "<group>"; };
+		0B22629816C33A2C00BA1449 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		0B22629E16C33F0900BA1449 /* Login_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Login_30x30.png; sourceTree = "<group>"; };
 		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
 		F9616FA915B9C439007BA941 /* NAppIDMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppIDMain.h; path = ../../ClassLib/NAppIDMain.h; sourceTree = "<group>"; };
 		F9616FAA15B9C439007BA941 /* NCommandMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommandMain.h; path = ../../ClassLib/NCommandMain.h; sourceTree = "<group>"; };
@@ -88,6 +100,7 @@
 		F9FFFC0A159E36830011760F = {
 			isa = PBXGroup;
 			children = (
+				0B22629816C33A2C00BA1449 /* Default-568h@2x.png */,
 				F9FFFC1F159E36840011760F /* NOMADS_Bindle */,
 				F9FFFC18159E36830011760F /* Frameworks */,
 				F9FFFC16159E36830011760F /* Products */,
@@ -115,6 +128,11 @@
 		F9FFFC1F159E36840011760F /* NOMADS_Bindle */ = {
 			isa = PBXGroup;
 			children = (
+				0B116B6116C3415B00878006 /* Pointer_30x30.png */,
+				0B116B6216C3415B00878006 /* Discuss_30x30.png */,
+				0B116B6316C3415B00878006 /* Cloud_30x30.png */,
+				0B116B5F16C3411C00878006 /* Poll_30x30.png */,
+				0B22629E16C33F0900BA1449 /* Login_30x30.png */,
 				F9616FA915B9C439007BA941 /* NAppIDMain.h */,
 				F9616FAA15B9C439007BA941 /* NCommandMain.h */,
 				F9FFFC4D159E37410011760F /* NGlobals.h */,
@@ -219,6 +237,12 @@
 				F9FFFC49159E36E70011760F /* CloudViewController.xib in Resources */,
 				F9FFFC4A159E36E70011760F /* DiscussViewController.xib in Resources */,
 				F9FFFC4C159E36E70011760F /* LoginViewController.xib in Resources */,
+				0B22629916C33A2C00BA1449 /* Default-568h@2x.png in Resources */,
+				0B22629F16C33F0A00BA1449 /* Login_30x30.png in Resources */,
+				0B116B6016C3411C00878006 /* Poll_30x30.png in Resources */,
+				0B116B6416C3415B00878006 /* Pointer_30x30.png in Resources */,
+				0B116B6516C3415B00878006 /* Discuss_30x30.png in Resources */,
+				0B116B6616C3415B00878006 /* Cloud_30x30.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +332,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle/NOMADS_Bindle-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle/NOMADS_Bindle-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -319,6 +344,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NOMADS_Bindle/NOMADS_Bindle-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle/NOMADS_Bindle-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

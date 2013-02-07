@@ -18,8 +18,13 @@
 {
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
-    
+    @public UITabBarItem __weak *tbi;
 }
+
+
+@property (weak, nonatomic) IBOutlet UILabel *welcomeMessage2;
+@property (weak, nonatomic) IBOutlet UILabel *welcomeMessage;
+@property (weak, nonatomic) IBOutlet UILabel *instructions;
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
