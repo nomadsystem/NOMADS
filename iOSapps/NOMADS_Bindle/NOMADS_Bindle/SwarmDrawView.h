@@ -26,6 +26,8 @@
     float decayColor;
     float decayColorChangeDelta;
     float touchColor;
+    int sWidth;
+    int sHeight;
     
 }
 @property (strong, retain) NSand *appSand;

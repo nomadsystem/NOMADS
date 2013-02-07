@@ -14,10 +14,13 @@
 #import "CloudViewController.h"
 #import "PollViewController.h"
 #import "BindleAppDelegate.h"
+#import "Reachability.h"
 
 @implementation LoginViewController
+
 @synthesize loginTextField;
 @synthesize connectStatusLabel;
+@synthesize userNameLabel;
 @synthesize welcomeMessage;
 @synthesize welcomeMessage2;
 
@@ -25,6 +28,7 @@
 @synthesize appDelegate;
 @synthesize loginButton;
 @synthesize disconnectButton;
+@synthesize moreInfoButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,6 +46,35 @@
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
+        
+        //Handles first check of internet communcation status
+        if (![self internetConnectionStatus]) {
+            CLog("No internet connection");
+        }
+        
+        
+        //Init handling of network communications errors
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reachabilityChanged:)
+                                                     name:kReachabilityChangedNotification
+                                                   object:nil];
+        
+        Reachability * reach = [Reachability reachabilityForInternetConnection];
+        reach.reachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CLog("Block Says Reachable");
+            });
+        };
+        reach.unreachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CLog("Block Says UN-Reachable");
+            });
+        };
+        [reach startNotifier];
+        //--END init handle network communcation errors
+
 
 
         
@@ -49,16 +82,112 @@
     return self;
 }
 
+// BEGIN Network Error Handling ==============================================
+
+//Method to determine internet reachability (general network connections)
+//Only called once on init
+-(BOOL)internetConnectionStatus {
+    @autoreleasepool {
+        Reachability *reachability = [Reachability reachabilityForInternetConnection];
+        NetworkStatus internetStatus = [reachability currentReachabilityStatus];
+        
+        //If network is NOT reachable
+        if(internetStatus == NotReachable) {
+            [appDelegate->tabBarController setSelectedIndex:0];
+            [appDelegate tabBarItemsEnabled:false];
+            
+
+            CLog("internet status == NotReachable");
+            
+            
+            UIAlertView *errorView;
+            
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            
+            //Calls alertView didDismissWithButtonIndex: on button press
+            return NO;
+        }
+        else {
+            return YES;
+        }
+    }
+}
+
+//Method to determine change in network reachability (general network connections)
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    @autoreleasepool {
+        
+        Reachability * reach = [note object];
+        
+        
+        if([reach isReachable]) //If network is reachable
+        {
+            CLog(@"Notification Says Reachable");
+        }
+        else //if Network is unreachable
+        {
+            [appDelegate->tabBarController setSelectedIndex:0];
+            [appDelegate tabBarItemsEnabled:false];
+
+            CLog(@"Notification Says UnReachable");
+            UIAlertView *errorView;
+            //Create error view (pop up window) for error message
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            //Calls alertView didDismissWithButtonIndex: on button press
+        }
+    }
+}
+
+
+//Method handles what to do when network errors are dismissed with the button
+-(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
+    if (buttonIndex == 0) {
+        CLog("Alert button %i pressed", buttonIndex);
+        
+        
+        // Do any additional setup after loading the view.
+        connectStatusLabel.text = @"Enter your user name";
+        userNameLabel.text = @"";
+        welcomeMessage.text = @"";
+        welcomeMessage2.text = @"";
+        
+        [disconnectButton setHidden:YES];
+        [loginTextField setHidden:NO];
+        [loginButton setHidden:NO];
+
+        
+    }
+}
+// END Network Error Handling ==============================================
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    connectStatusLabel.text = @"";
+    connectStatusLabel.text = @"Enter your user name";
+    userNameLabel.text = @"";
     welcomeMessage.text = @"";
     welcomeMessage2.text = @"";
     
     [disconnectButton setHidden:YES];
+
     UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
     
     // redraw the image to fit |yourView|'s size
@@ -76,7 +205,7 @@
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
     
-    
+    NSString *tString;
     if ([loginTextField.text length] > 0){
         [appDelegate->appSand connect];
 
@@ -90,6 +219,7 @@
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
 
+        tString = loginTextField.text;
         appDelegate->userName = [loginTextField.text stringByAppendingString:@": "];
         
         loginTextField.text = @"";
@@ -98,9 +228,10 @@
         [loginButton setHidden:YES];
         [disconnectButton setHidden:NO];
         
-        connectStatusLabel.text = @"Welcome to NOMADS!";
-        welcomeMessage.text = @"Begin by tapping one";
-        welcomeMessage2.text = @"of the icons below";
+        connectStatusLabel.text = @"Welcome to NOMADS";
+        userNameLabel.text = tString;
+        // welcomeMessage.text = @"Start NOMADS interaction by";
+        welcomeMessage2.text = @"Select from the icons below";
 
         [appDelegate->tabBarController setSelectedIndex:0];
         
@@ -109,6 +240,8 @@
     //We want to revise this to generate a warning message to the user
     else {
         connectStatusLabel.text = @"Error connecting: Please enter username.";
+        userNameLabel.text = @"";
+
         welcomeMessage.text = @"";
         welcomeMessage2.text = @"";
 
@@ -119,8 +252,14 @@
     
 }
 
+- (IBAction)moreInfoButton:(id)sender {
+    NSURL *url = [ [ NSURL alloc ] initWithString: @"http://nomads.music.virginia.edu" ];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
 - (IBAction)disconnectButton:(id)sender {
-    connectStatusLabel.text = @"Leaving NOMADS (but not really)";
+    connectStatusLabel.text = @"Leaving NOMADS";
+    userNameLabel.text = @"";
     welcomeMessage.text = @"";
     welcomeMessage2.text = @"";
     [disconnectButton setHidden:YES];
@@ -140,8 +279,6 @@
     }
     
 }
-
-
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *) textField
@@ -169,7 +306,6 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
 
 
 @end

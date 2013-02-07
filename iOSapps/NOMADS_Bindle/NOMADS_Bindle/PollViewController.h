@@ -20,6 +20,16 @@
 	UIView			*aeView;
     UIView          *blankView;
     UIView          *oneToTenView;
+
+    __weak IBOutlet UIButton *buttonAOut;
+    __weak IBOutlet UIButton *buttonBOut;
+    __weak IBOutlet UIButton *buttonCOut;
+    __weak IBOutlet UIButton *buttonDOut;
+    __weak IBOutlet UIButton *buttonEOut;
+    __weak IBOutlet UIButton *buttonNOut;
+    __weak IBOutlet UIButton *buttonYOut;
+    __weak IBOutlet UIButton *voteButton;
+    __weak IBOutlet UISlider *oneToTenSlider;
     
     NSand   *appSand;
     BindleAppDelegate *appDelegate;

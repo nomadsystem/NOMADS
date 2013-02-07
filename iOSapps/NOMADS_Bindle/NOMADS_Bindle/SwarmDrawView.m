@@ -23,6 +23,7 @@
     if (self) {
         
         //     [self setBackgroundColor:[UIColor whiteColor]];
+        
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -34,10 +35,13 @@
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
+        sWidth = (int)screenWidth;
+        sHeight = (int)screenHeight;
+        
         myFingerPoint.x = (screenWidth * 0.5);
         myFingerPoint.y = (screenHeight * 0.5);
         
-        maxTrails = 10;
+        maxTrails = 2;
         // earlier on in your code put this (below)
         
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
@@ -48,7 +52,9 @@
             yTrail[i]=(screenHeight * 0.5);
         }
         decayColor = 1.0;
-        decayColorChangeDelta = decayColor/(float)maxTrails;
+        decayColorChangeDelta = 0.2;
+
+        // decayColorChangeDelta = decayColor/(float)maxTrails;
     //    NSLog(@" brightness = %f ", brightness);
     //    NSLog(@" brightDelta = %f ", brightDelta);
         
@@ -103,8 +109,10 @@
     
     decayColor = 1.0;
     for (int i=0; i<maxTrails; i++) {   
-        CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
-        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 44.0, 44.0)));
+        CGContextSetRGBFillColor(context, (94.0/255.0), (41.0/255.0), (28.0/255.0), decayColor);
+        //  CGContextSetRGBFillColor(context, decayColor, touchColor, 1.0, decayColor);
+
+        CGContextAddEllipseInRect(context,(CGRectMake (xTrail[i], yTrail[i], 22.0, 22.0)));
         CGContextDrawPath(context, kCGPathFill);
         //     CGContextFillPath(context);
         CGContextStrokePath(context);
@@ -170,8 +178,8 @@
         
         int xy[2];
         
-        xy[0] = (int) loc.x;
-        xy[1] = (int) loc.y;
+        xy[0] = (int)((double)(loc.x/sWidth)*1000.0);
+        xy[1] = (int)((double)(loc.y/(sHeight-50))*1000.0);
         
         
         [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
@@ -185,7 +193,7 @@
     //Remove ending touches from dictionary
     for (UITouch *t in touches) {
         
-        touchColor = 0.6;
+        touchColor = 0.0;
         //If this is a double tap, point will be nil,
         //Do stuff here when touch ends
         

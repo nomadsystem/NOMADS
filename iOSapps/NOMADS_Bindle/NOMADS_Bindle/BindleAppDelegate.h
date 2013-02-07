@@ -5,6 +5,8 @@
 //  Created by Steven Kemper on 5/15/12.
 //
 
+
+
 #ifndef BINDLEAPPDELEGATE
 #define BINDLEAPPDELEGATE
 
@@ -26,11 +28,13 @@
     UITabBarItem *swarmTBI;
     UITabBarItem *loginTBI;
     
+    
 }
 
 @property (strong, retain) NSand *appSand;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, retain) NSString *userName;
+
 
 //@property UITabBarController *tabBarController;
 

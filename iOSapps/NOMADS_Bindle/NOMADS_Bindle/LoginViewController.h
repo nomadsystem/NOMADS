@@ -21,6 +21,7 @@
     @public UITabBarItem __weak *tbi;
 }
 
+@property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *welcomeMessage2;
 @property (weak, nonatomic) IBOutlet UILabel *welcomeMessage;
@@ -33,12 +34,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *connectStatusLabel;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
+@property (weak, nonatomic) IBOutlet UIButton *moreInfoButton;
 
 
 - (IBAction)loginButton:(id)sender;
 - (IBAction)disconnectButton:(id)sender;
-
-
+- (IBAction)moreInfoButton:(id)sender;
 
 
 @end

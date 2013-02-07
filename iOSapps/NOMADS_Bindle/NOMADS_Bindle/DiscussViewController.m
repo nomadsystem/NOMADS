@@ -63,7 +63,16 @@
     
 	messages = [[NSMutableArray alloc] init];
     
-    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+    UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
+    
+    // redraw the image to fit |yourView|'s size
+    UIGraphicsBeginImageContextWithOptions([self view].frame.size, NO, 0.f);
+    [targetImage drawInRect:CGRectMake(0.f, 0.f, [self view].frame.size.width, [self view] .frame.size.height)];
+    UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:resultImage]];
 	
     tableView.backgroundColor = [UIColor clearColor];
     
@@ -181,14 +190,14 @@
 	
     static NSString *CellIdentifier = @"ChatCellIdentifier";
     
-    UIFont *cellFont = [UIFont fontWithName:@"Optima" size:17.0];
-    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-    CGSize labelSize = [s sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    // UIFont *cellFont = [UIFont fontWithName:@"Optima" size:17.0];
+    // CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
+    // CGSize labelSize = [s sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
     
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+        // cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         cell.textLabel.numberOfLines = 0;
         cell.textLabel.font = [UIFont fontWithName:@"Optima" size:17.0];
     }
