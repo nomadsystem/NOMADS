@@ -24,6 +24,7 @@
     @public UITabBarItem __weak *tbi;
 }
 
+@property (weak, nonatomic) IBOutlet UILabel *userCloudEntryLabel;
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UILabel *cloudLabel;

@@ -60,7 +60,7 @@ int oneToTenVoteVal;
     UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
     
     // redraw the image to fit |yourView|'s size
-    UIGraphicsBeginImageContextWithOptions([self view].frame.size, NO, 0.f);
+    UIGraphicsBeginImageContextWithOptions([self view].frame.size, NO, 0.0f);
     [targetImage drawInRect:CGRectMake(0.f, 0.f, [self view].frame.size.width, [self view] .frame.size.height)];
     UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -88,7 +88,7 @@ int oneToTenVoteVal;
     [buttonNOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
 
 }
@@ -107,7 +107,7 @@ int oneToTenVoteVal;
     [buttonNOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
 
 }
@@ -126,7 +126,7 @@ int oneToTenVoteVal;
     [buttonEOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     
 }
@@ -147,7 +147,7 @@ int oneToTenVoteVal;
     [buttonEOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     
 }
@@ -169,7 +169,7 @@ int oneToTenVoteVal;
     [buttonEOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     
 }
@@ -191,7 +191,7 @@ int oneToTenVoteVal;
     [buttonEOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     
 }
@@ -212,7 +212,7 @@ int oneToTenVoteVal;
     [buttonEOut setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     
 }
@@ -241,7 +241,7 @@ int oneToTenVoteVal;
     [sender setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
-                                                blue:((float) 255.0f)
+                                                blue:((float) 0.0f)
                                                alpha:1.0f]];
     [oneToTenSlider setEnabled:false];
 }
@@ -273,27 +273,27 @@ int oneToTenVoteVal;
                 [buttonAOut setEnabled:true];
                 [buttonAOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                               green:((float) 0.0f)
-                                                               blue:((float) 1.0f)
+                                                               blue:((float) 0.0f)
                                                               alpha:0.0f]];
                 [buttonBOut setEnabled:true];
                 [buttonBOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
                 [buttonCOut setEnabled:true];
                 [buttonCOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
                 [buttonDOut setEnabled:true];
                 [buttonDOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
                 [buttonEOut setEnabled:true];
                 [buttonEOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
 
             }
@@ -307,7 +307,7 @@ int oneToTenVoteVal;
                 [voteButton setEnabled:true];
                 [voteButton setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
                 [oneToTenSlider setEnabled:true];
 
@@ -325,11 +325,11 @@ int oneToTenVoteVal;
                 [buttonNOut setEnabled:true];
                 [buttonYOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
                 [buttonNOut setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                                green:((float) 0.0f)
-                                                                blue:((float) 1.0f)
+                                                                blue:((float) 0.0f)
                                                                alpha:0.0f]];
 
                 

@@ -20,7 +20,9 @@
     BindleAppDelegate *appDelegate;
     @public UITabBarItem __weak *tbi;
 }
+@property (weak, nonatomic) IBOutlet UILabel *userNameIsLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *pleaseEnterYourNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *welcomeMessage2;

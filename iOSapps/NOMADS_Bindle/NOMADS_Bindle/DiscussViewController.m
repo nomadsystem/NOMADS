@@ -202,7 +202,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         // cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         cell.textLabel.numberOfLines = 0;
-        cell.textLabel.font = [UIFont fontWithName:@"Optima" size:17.0];
+        cell.textLabel.font = [UIFont fontWithName:@"Optima-Bold" size:17.0];
     }
 	
 	cell.textLabel.text = s;

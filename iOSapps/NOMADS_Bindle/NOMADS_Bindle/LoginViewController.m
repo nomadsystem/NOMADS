@@ -29,6 +29,8 @@
 @synthesize loginButton;
 @synthesize disconnectButton;
 @synthesize moreInfoButton;
+@synthesize pleaseEnterYourNameLabel;
+@synthesize userNameIsLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -160,7 +162,7 @@
         
         
         // Do any additional setup after loading the view.
-        connectStatusLabel.text = @"Enter your user name";
+        connectStatusLabel.text = @"Welcome to NOMADS";
         userNameLabel.text = @"";
         welcomeMessage.text = @"";
         welcomeMessage2.text = @"";
@@ -168,6 +170,7 @@
         [disconnectButton setHidden:YES];
         [loginTextField setHidden:NO];
         [loginButton setHidden:NO];
+        [userNameIsLabel setHidden:YES];
 
         
     }
@@ -181,13 +184,14 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    connectStatusLabel.text = @"Enter your user name";
+    connectStatusLabel.text = @"Welcome to NOMADS";
     userNameLabel.text = @"";
     welcomeMessage.text = @"";
     welcomeMessage2.text = @"";
     
     [disconnectButton setHidden:YES];
-
+    [userNameIsLabel setHidden:YES];
+    
     UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
     
     // redraw the image to fit |yourView|'s size
@@ -206,7 +210,6 @@
     [loginTextField resignFirstResponder];
     
     NSString *tString;
-    NSString *uString = @"Your user id is:  ";
     if ([loginTextField.text length] > 0){
         [appDelegate->appSand connect];
 
@@ -220,7 +223,7 @@
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
 
-        tString = [uString stringByAppendingString:loginTextField.text];
+        tString = loginTextField.text;
         
         appDelegate->userName = [loginTextField.text stringByAppendingString:@": "];
         
@@ -229,11 +232,13 @@
         [loginTextField setHidden:YES];
         [loginButton setHidden:YES];
         [disconnectButton setHidden:NO];
+        [pleaseEnterYourNameLabel setHidden:YES];
+        [userNameIsLabel setHidden:NO];
         
         connectStatusLabel.text = @"Welcome to NOMADS";
         userNameLabel.text = tString;
         // welcomeMessage.text = @"Start NOMADS interaction by";
-        welcomeMessage2.text = @"Select from the icons below";
+        welcomeMessage2.text = @"Select from the active icons below";
 
         [appDelegate->tabBarController setSelectedIndex:0];
         
@@ -260,13 +265,16 @@
 }
 
 - (IBAction)disconnectButton:(id)sender {
-    connectStatusLabel.text = @"Leaving NOMADS";
+    connectStatusLabel.text = @"Welcome to NOMADS";
     userNameLabel.text = @"";
     welcomeMessage.text = @"";
     welcomeMessage2.text = @"";
     [disconnectButton setHidden:YES];
     [loginTextField setHidden:NO];
     [loginButton setHidden:NO];
+    [pleaseEnterYourNameLabel setHidden:NO];
+    [userNameIsLabel setHidden:YES];
+    
     [appDelegate tabBarItemsEnabled:NO];
     
 }

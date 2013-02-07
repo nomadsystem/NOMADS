@@ -24,6 +24,7 @@
 @synthesize appSand;
 @synthesize appDelegate;
 @synthesize tbi;
+@synthesize userCloudEntryLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -52,6 +53,7 @@
 	// Do any additional setup after loading the view.
     inputCloudField.text = @"";
     cloudLabel.text = @"Thought Cloud";
+    userCloudEntryLabel.text = @"";
     
     messages = [[NSMutableArray alloc] init];
     UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
@@ -71,6 +73,8 @@
 - (IBAction)sendCloud {
     
     if ([inputCloudField.text length] > 1) {
+
+        userCloudEntryLabel.text = inputCloudField.text;
         
         [inputCloudField resignFirstResponder];
         NSLog(@"Entered sendCloud");
@@ -107,6 +111,9 @@
 - (BOOL)textFieldShouldReturn:(UITextField *) textField {
     
     if ([inputCloudField.text length] > 1) {
+        
+
+        userCloudEntryLabel.text = inputCloudField.text;
         
         [inputCloudField resignFirstResponder];
         NSLog(@"Entered sendCloud");

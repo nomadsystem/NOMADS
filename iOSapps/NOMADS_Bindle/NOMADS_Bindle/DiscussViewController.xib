@@ -41,7 +41,7 @@
 					<object class="IBUITableView" id="263820870">
 						<reference key="NSNextResponder" ref="136190491"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{11, 129}, {299, 331}}</string>
+						<string key="NSFrame">{{9, 138}, {292, 262}}</string>
 						<reference key="NSSuperview" ref="136190491"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -62,7 +62,7 @@
 					<object class="IBUITextField" id="998645033">
 						<reference key="NSNextResponder" ref="136190491"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 80}, {204, 31}}</string>
+						<string key="NSFrame">{{20, 85}, {204, 31}}</string>
 						<reference key="NSSuperview" ref="136190491"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="403935344"/>
@@ -99,7 +99,7 @@
 					<object class="IBUIButton" id="403935344">
 						<reference key="NSNextResponder" ref="136190491"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{232, 77}, {72, 35}}</string>
+						<string key="NSFrame">{{228, 85}, {72, 32}}</string>
 						<reference key="NSSuperview" ref="136190491"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="263820870"/>
@@ -119,14 +119,14 @@
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC41AA</bytes>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="484323213">
-							<string key="name">Optima-Regular</string>
+						<object class="IBUIFontDescription" key="IBUIFontDescription">
+							<string key="name">Optima-Bold</string>
 							<string key="family">Optima</string>
-							<int key="traits">0</int>
+							<int key="traits">2</int>
 							<double key="pointSize">20</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="1002712424">
-							<string key="NSName">Optima-Regular</string>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Optima-ExtraBlack</string>
 							<double key="NSSize">20</double>
 							<int key="NSfFlags">16</int>
 						</object>
@@ -134,7 +134,7 @@
 					<object class="IBUILabel" id="32230134">
 						<reference key="NSNextResponder" ref="136190491"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{11, 25}, {289, 32}}</string>
+						<string key="NSFrame">{{11, 30}, {289, 40}}</string>
 						<reference key="NSSuperview" ref="136190491"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="998645033"/>
@@ -154,8 +154,17 @@
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="484323213"/>
-						<reference key="IBUIFont" ref="1002712424"/>
+						<object class="IBUIFontDescription" key="IBUIFontDescription">
+							<string key="name">Optima-Bold</string>
+							<string key="family">Optima</string>
+							<int key="traits">2</int>
+							<double key="pointSize">25</double>
+						</object>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Optima-ExtraBlack</string>
+							<double key="NSSize">25</double>
+							<int key="NSfFlags">16</int>
+						</object>
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 460}</string>
@@ -183,14 +192,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">tableView</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="263820870"/>
-					</object>
-					<int key="connectionID">8</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">discussPromptLabel</string>
 						<reference key="source" ref="841351856"/>
 						<reference key="destination" ref="32230134"/>
@@ -204,6 +205,14 @@
 						<reference key="destination" ref="136190491"/>
 					</object>
 					<int key="connectionID">30</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">tableView</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="263820870"/>
+					</object>
+					<int key="connectionID">8</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -224,19 +233,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="263820870"/>
-						<reference key="destination" ref="841351856"/>
-					</object>
-					<int key="connectionID">11</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="263820870"/>
 						<reference key="destination" ref="841351856"/>
 					</object>
 					<int key="connectionID">10</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="263820870"/>
+						<reference key="destination" ref="841351856"/>
+					</object>
+					<int key="connectionID">11</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -262,10 +271,10 @@
 						<int key="objectID">28</int>
 						<reference key="object" ref="136190491"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="998645033"/>
-							<reference ref="263820870"/>
-							<reference ref="403935344"/>
 							<reference ref="32230134"/>
+							<reference ref="998645033"/>
+							<reference ref="403935344"/>
+							<reference ref="263820870"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -372,10 +381,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1552" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
