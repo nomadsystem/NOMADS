@@ -34,16 +34,16 @@
     if (self) {
         // Custom initialization
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Discuss" image:[UIImage imageNamed:@"Discuss_30x30.png"] tag:1];
-
+        
         tbi = [self tabBarItem];
-   //     [tbi setEnabled:NO];
-//        [tbi setTitle:@"Discuss"];
+        //     [tbi setEnabled:NO];
+        //        [tbi setTitle:@"Discuss"];
         
         // UIImage *i1 = [UIImage imageNamed:@"tDiscuss.png"];
         // [tbi setImage:i1];
         
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
-
+        
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
     }
@@ -84,40 +84,43 @@
 {
     NSLog(@"Entered sendDiscuss");
     
-    //AppID
-    Byte myAppID = WEB_CHAT;
-    NSLog(@"myAppID =  %i\n", myAppID);
     
-    //COMMAND
-    Byte myCommand = SEND_MESSAGE;
-    NSLog(@"myCommand =  %i\n", myCommand);
-    
-    //DATA TYPE
-    Byte myDataType = CHAR;
-    NSLog(@"myDataType =  %i\n", myDataType);
-    
-    //DATA LENGTH
-    //****STK Currently set directly in sendWithGrainElts
-    
-    //DATA ARRAY (String from inputDiscussField)
-    //****STK Currently set directly in sendWithGrainElts
-
-    NSString *cText;
-    
-    cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
-
-    NSLog(@"cText = %@\n",cText);
-    
-    [appDelegate->appSand sendWithGrainElts_AppID:myAppID
-                                          Command:myCommand 
-                                         DataType:myDataType 
-                                          DataLen:[cText length]
-                                           String:cText];
+    if([inputDiscussField.text length]>0) { //Prevents null strings from being sent
         
-    inputDiscussField.text = @"";
-    [inputDiscussField setHidden:NO];
-    [inputDiscussField resignFirstResponder];
-
+        //AppID
+        Byte myAppID = WEB_CHAT;
+        NSLog(@"myAppID =  %i\n", myAppID);
+        
+        //COMMAND
+        Byte myCommand = SEND_MESSAGE;
+        NSLog(@"myCommand =  %i\n", myCommand);
+        
+        //DATA TYPE
+        Byte myDataType = CHAR;
+        NSLog(@"myDataType =  %i\n", myDataType);
+        
+        //DATA LENGTH
+        //****STK Currently set directly in sendWithGrainElts
+        
+        //DATA ARRAY (String from inputDiscussField)
+        //****STK Currently set directly in sendWithGrainElts
+        
+        NSString *cText;
+        
+        cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
+        
+        NSLog(@"cText = %@\n",cText);
+        
+        [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                              Command:myCommand
+                                             DataType:myDataType
+                                              DataLen:[cText length]
+                                               String:cText];
+        
+        inputDiscussField.text = @"";
+        [inputDiscussField setHidden:NO];
+        [inputDiscussField resignFirstResponder];
+    }
 }
 
 // input data function ============================================
@@ -135,7 +138,7 @@
             [self messageReceived:inGrain->str];
             CLog(@"Got Discuss Data");
         }
-
+        
         else if(inGrain->appID == DISCUSS_PROMPT) //Text from Instructor Panel
         {
             if(inGrain->command == SEND_DISCUSS_PROMPT)//Text from Discuss Prompt
@@ -176,12 +179,12 @@
     if (message != nil) {
         [self.messages addObject:message];
         [self.tableView reloadData];
-        NSIndexPath *topIndexPath = [NSIndexPath indexPathForRow:messages.count-1 
+        NSIndexPath *topIndexPath = [NSIndexPath indexPathForRow:messages.count-1
                                                        inSection:0];
-        [self.tableView scrollToRowAtIndexPath:topIndexPath 
-                              atScrollPosition:UITableViewScrollPositionMiddle 
+        [self.tableView scrollToRowAtIndexPath:topIndexPath
+                              atScrollPosition:UITableViewScrollPositionMiddle
                                       animated:YES];
-    }    
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -216,15 +219,59 @@
 	return messages.count;
     
 }
-//****STK Enter key not implemented (it was causing problems. . .)
-//- (BOOL)textFieldShouldReturn:(UITextField *) textField
-//{   
-//    if (textField == inputDiscussField) 
+
+- (BOOL)textFieldShouldReturn:(UITextField *) textField {
+    
+    if (textField == inputDiscussField) {
+        if([inputDiscussField.text length]>0) { //Prevents null strings from being sent
+            
+            //AppID
+            Byte myAppID = WEB_CHAT;
+            NSLog(@"myAppID =  %i\n", myAppID);
+            
+            //COMMAND
+            Byte myCommand = SEND_MESSAGE;
+            NSLog(@"myCommand =  %i\n", myCommand);
+            
+            //DATA TYPE
+            Byte myDataType = CHAR;
+            NSLog(@"myDataType =  %i\n", myDataType);
+            
+            NSString *cText;
+            
+            cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
+            
+            NSLog(@"cText = %@\n",cText);
+            
+            [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                                  Command:myCommand
+                                                 DataType:myDataType
+                                                  DataLen:[cText length]
+                                                   String:cText];
+            
+            inputDiscussField.text = @"";
+            [inputDiscussField setHidden:NO];
+            [inputDiscussField resignFirstResponder];
+//            [[self view ] sendSubviewToBack:inputDiscussField];
+        }
+        else { //Dismisses keyboard if no text is entered but send button is pressed
+            inputDiscussField.text = @"";
+            [inputDiscussField setHidden:NO];
+            [inputDiscussField resignFirstResponder];
+//            [[self view ] sendSubviewToBack:inputDiscussField];
+        }
+    }
+    return YES;
+}
+
+
+//{
+//    if (textField == inputDiscussField)
 //        [self sendDiscuss:(id)self];
-//    
+//
 //    [textField resignFirstResponder];
-//    
-//    return YES;   
+//
+//    return YES;
 //}
 
 - (void)viewDidUnload

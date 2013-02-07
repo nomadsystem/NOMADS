@@ -26,11 +26,8 @@
 
 @property (strong, retain) NSand *appSand;
 @property (strong, retain) BindleAppDelegate *appDelegate;
-
 @property (weak, nonatomic) IBOutlet UILabel *cloudLabel;
-
 @property (weak, nonatomic) IBOutlet UITextField *inputCloudField;
-
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (weak, nonatomic) IBOutlet UIButton *sendCloudButton;
 @property (weak, nonatomic) UITabBarItem *tbi;

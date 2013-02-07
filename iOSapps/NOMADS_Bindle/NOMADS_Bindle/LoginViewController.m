@@ -206,6 +206,7 @@
     [loginTextField resignFirstResponder];
     
     NSString *tString;
+    NSString *uString = @"Your user id is:  ";
     if ([loginTextField.text length] > 0){
         [appDelegate->appSand connect];
 
@@ -219,7 +220,8 @@
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
 
-        tString = loginTextField.text;
+        tString = [uString stringByAppendingString:loginTextField.text];
+        
         appDelegate->userName = [loginTextField.text stringByAppendingString:@": "];
         
         loginTextField.text = @"";
