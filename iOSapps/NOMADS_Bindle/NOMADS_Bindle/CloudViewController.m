@@ -16,6 +16,7 @@
 //@end
 
 @implementation CloudViewController
+
 @synthesize cloudLabel;
 @synthesize sendCloudButton;
 @synthesize inputCloudField;
@@ -30,8 +31,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Cloud" image:[UIImage imageNamed:@"Cloud_30x30.png"] tag:2];
+
         tbi = [self tabBarItem];
-        [tbi setTitle:@"Thought Cloud"];
+        [tbi setTitle:@"Cloud"];
+        // UIImage *i2 = [UIImage imageNamed:@"tCloud.png"];
+        // [tbi setImage:i2];
+        
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; 
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
@@ -46,9 +52,11 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     inputCloudField.text = @"";
+    cloudLabel.text = @"Thought Cloud";
+
     messages = [[NSMutableArray alloc] init];
     [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
-
+	
 }
 
 
@@ -87,12 +95,13 @@
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
-    NSLog(@"CVC: I GOT DATA FROM SAND!!!\n");
+    CLog(@"CVC: I GOT DATA FROM SAND!!!\n");
     
     if (nil != inGrain) { 
         
         if(inGrain->appID == CLOUD_PROMPT)//Text from Discuss Prompt
         {
+            CLog(@"Got prompt:  %@\n",inGrain->str);
             cloudLabel.text = inGrain->str;
         }
         else if(inGrain->appID == INSTRUCTOR_PANEL)//Text from Instructor Panel
@@ -111,7 +120,7 @@
             }
         }
         else {
-            NSLog(@"No Data for Discuss App");
+            CLog(@"No Data for Cloud App");
         }
     }
 }

@@ -21,7 +21,7 @@
 
 @synthesize window = _window;
 @synthesize appSand;
-
+@synthesize userName;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -44,6 +44,7 @@
     [self makeTabBar];
     //   self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    loginStatus = 0;
     return YES;
 }
 
@@ -52,13 +53,37 @@
 - (void)dataReadyHandle:(NGrain *)inGrain;
 {
     CLog(@"I GOT DATA FROM SAND!!!\n");
+    
+    if (nil != inGrain) {
+        
+        if (loginStatus == 1)  {
+            if ((inGrain->appID == INSTRUCTOR_PANEL) || (inGrain->appID == SERVER)) {  // Control info from the IP
+                if(inGrain->command == SET_DISCUSS_STATUS) {
+                    [discussTBI setEnabled:inGrain->bArray[0]];
+                }
+                else if(inGrain->command == SET_CLOUD_STATUS) {
+                    [cloudTBI setEnabled:inGrain->bArray[0]];
+                }
+                else if(inGrain->command == SET_POLL_STATUS) {
+                    [pollTBI setEnabled:inGrain->bArray[0]];
+                }
+                else if(inGrain->command == SET_SWARM_STATUS) {
+                    [swarmTBI setEnabled:inGrain->bArray[0]];
+                }
+            }
+        }
+    }
 }
 
 
 - (void)makeTabBar {
+
+    LoginViewController *lvc = [[LoginViewController alloc] init];
+    loginTBI = lvc->tbi;
+    
     DiscussViewController *dvc = [[DiscussViewController alloc] init];
     discussTBI = dvc->tbi;
-    
+   
     CloudViewController *cvc = [[CloudViewController alloc] init];
     cloudTBI = cvc->tbi;
     
@@ -68,15 +93,15 @@
     SwarmViewController *svc = [[SwarmViewController alloc] init];
     swarmTBI = svc->tbi;
     
-    [self tabBarItemsEnabled:NO];
-    LoginViewController *lvc = [[LoginViewController alloc] init];
-    
     tabBarController = [[UITabBarController alloc] init];
     NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc, svc,  nil];
     [tabBarController setViewControllers:viewControllers];
     [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
     
     [[self window] setRootViewController:tabBarController];
+
+    
+    [self tabBarItemsEnabled:NO];
 }
 
 - (void)tabBarItemsEnabled:(BOOL)val {

@@ -45,7 +45,7 @@
 
 // Network data sending functions =================================================================
 
-- (void) sendWithGrainElts_AppID:(Byte)a 
+- (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c 
                         DataType:(Byte)dT 
                          DataLen:(int)dL
