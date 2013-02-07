@@ -19,6 +19,9 @@
 		0B4D625D16C39D2C00D5C532 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D625C16C39D2C00D5C532 /* Foundation.framework */; };
 		0B4D625F16C39D3C00D5C532 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D625E16C39D3C00D5C532 /* CoreGraphics.framework */; };
 		0B4D626116C39DDF00D5C532 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4D626016C39DDF00D5C532 /* SystemConfiguration.framework */; };
+		0B573DE616C44FC50004AA45 /* iPhone_AppIcon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B573DE516C44FC50004AA45 /* iPhone_AppIcon_57x57.png */; };
+		0B573DE816C44FCE0004AA45 /* iPhone_AppIcon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B573DE716C44FCE0004AA45 /* iPhone_AppIcon_114x114.png */; };
+		0B573DEA16C4501F0004AA45 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B573DE916C4501F0004AA45 /* Default@2x.png */; };
 		F994864C15A4B080001969E8 /* SwarmDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864915A4B080001969E8 /* SwarmDrawView.m */; };
 		F994864D15A4B080001969E8 /* SwarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F994864B15A4B080001969E8 /* SwarmViewController.m */; };
 		F9FFFC24159E36840011760F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9FFFC22159E36840011760F /* InfoPlist.strings */; };
@@ -54,6 +57,9 @@
 		0B4D625C16C39D2C00D5C532 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0B4D625E16C39D3C00D5C532 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		0B4D626016C39DDF00D5C532 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0B573DE516C44FC50004AA45 /* iPhone_AppIcon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_57x57.png; sourceTree = "<group>"; };
+		0B573DE716C44FCE0004AA45 /* iPhone_AppIcon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_AppIcon_114x114.png; sourceTree = "<group>"; };
+		0B573DE916C4501F0004AA45 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		F95B3BB015A2203E00C8450E /* BindleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindleAppDelegate.h; sourceTree = "<group>"; };
 		F9616FA915B9C439007BA941 /* NAppIDMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NAppIDMain.h; path = ../../ClassLib/NAppIDMain.h; sourceTree = "<group>"; };
 		F9616FAA15B9C439007BA941 /* NCommandMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NCommandMain.h; path = ../../ClassLib/NCommandMain.h; sourceTree = "<group>"; };
@@ -61,7 +67,7 @@
 		F994864915A4B080001969E8 /* SwarmDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmDrawView.m; sourceTree = "<group>"; };
 		F994864A15A4B080001969E8 /* SwarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwarmViewController.h; sourceTree = "<group>"; };
 		F994864B15A4B080001969E8 /* SwarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwarmViewController.m; sourceTree = "<group>"; };
-		F9FFFC15159E36830011760F /* NOMADS_Bindle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS_Bindle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9FFFC15159E36830011760F /* NOMADS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOMADS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9FFFC21159E36840011760F /* NOMADS_Bindle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NOMADS_Bindle-Info.plist"; sourceTree = "<group>"; };
 		F9FFFC23159E36840011760F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F9FFFC25159E36840011760F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -109,8 +115,11 @@
 			isa = PBXGroup;
 			children = (
 				0B22629816C33A2C00BA1449 /* Default-568h@2x.png */,
-				F9FFFC1F159E36840011760F /* NOMADS_Bindle */,
+				0B573DE916C4501F0004AA45 /* Default@2x.png */,
+				0B573DE716C44FCE0004AA45 /* iPhone_AppIcon_114x114.png */,
+				0B573DE516C44FC50004AA45 /* iPhone_AppIcon_57x57.png */,
 				F9FFFC18159E36830011760F /* Frameworks */,
+				F9FFFC1F159E36840011760F /* NOMADS_Bindle */,
 				F9FFFC16159E36830011760F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,7 +127,7 @@
 		F9FFFC16159E36830011760F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F9FFFC15159E36830011760F /* NOMADS_Bindle.app */,
+				F9FFFC15159E36830011760F /* NOMADS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -207,7 +216,7 @@
 			);
 			name = NOMADS_Bindle;
 			productName = NOMADS_Bindle;
-			productReference = F9FFFC15159E36830011760F /* NOMADS_Bindle.app */;
+			productReference = F9FFFC15159E36830011760F /* NOMADS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -256,6 +265,9 @@
 				0B116B6516C3415B00878006 /* Discuss_30x30.png in Resources */,
 				0B116B6616C3415B00878006 /* Cloud_30x30.png in Resources */,
 				0B116B6C16C38A6200878006 /* infoView.xib in Resources */,
+				0B573DE616C44FC50004AA45 /* iPhone_AppIcon_57x57.png in Resources */,
+				0B573DE816C44FCE0004AA45 /* iPhone_AppIcon_114x114.png in Resources */,
+				0B573DEA16C4501F0004AA45 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +331,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7";
 			};
@@ -342,7 +354,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -357,7 +369,7 @@
 				GCC_PREFIX_HEADER = "NOMADS_Bindle/NOMADS_Bindle-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle/NOMADS_Bindle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NOMADS;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -369,7 +381,7 @@
 				GCC_PREFIX_HEADER = "NOMADS_Bindle/NOMADS_Bindle-Prefix.pch";
 				INFOPLIST_FILE = "NOMADS_Bindle/NOMADS_Bindle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NOMADS;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
