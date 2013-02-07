@@ -110,6 +110,8 @@
     NSArray *viewControllers = [NSArray arrayWithObjects:lvc, dvc, cvc, pvc, svc,  nil];
     [tabBarController setViewControllers:viewControllers];
     [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
+
+    tabBarController.tabBar.selectedImageTintColor= [UIColor redColor];
     
     [[self window] setRootViewController:tabBarController];
 
