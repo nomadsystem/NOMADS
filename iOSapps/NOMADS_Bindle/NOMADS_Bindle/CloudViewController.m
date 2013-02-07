@@ -25,23 +25,22 @@
 @synthesize appDelegate;
 @synthesize tbi;
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Cloud" image:[UIImage imageNamed:@"Cloud_30x30.png"] tag:2];
-
+        
         tbi = [self tabBarItem];
         [tbi setTitle:@"Cloud"];
         // UIImage *i2 = [UIImage imageNamed:@"tCloud.png"];
         // [tbi setImage:i2];
         
-        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate]; 
+        appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         // SAND:  set a pointer inside appSand so we get notified when network data is available
         [appDelegate->appSand setDelegate:self];
-
+        
     }
     //[cloudSand setDelegate:self];
     return self;
@@ -53,7 +52,7 @@
 	// Do any additional setup after loading the view.
     inputCloudField.text = @"";
     cloudLabel.text = @"Thought Cloud";
-
+    
     messages = [[NSMutableArray alloc] init];
     UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
     
@@ -69,44 +68,93 @@
 }
 
 
-- (IBAction)sendCloud
-{
-    [inputCloudField resignFirstResponder];
-    NSLog(@"Entered sendCloud");
+- (IBAction)sendCloud {
     
-    //AppID
-    Byte myAppID = CLOUD_CHAT;
-    NSLog(@"myAppID =  %i\n", myAppID);
-    
-    //COMMAND
-    Byte myCommand = SEND_MESSAGE;
-    NSLog(@"myCommand =  %i\n", myCommand);
-    
-    //DATA TYPE
-    Byte myDataType = CHAR;
-    NSLog(@"myDataType =  %i\n", myDataType);
-    
-    //DATA LENGTH
-    //****STK Currently set directly in sendWithGrainElts
-    
-    //DATA ARRAY (String from inputDiscussField)
-    //****STK Currently set directly in sendWithGrainElts
-    
-    [appDelegate->appSand sendWithGrainElts_AppID:myAppID 
-                                          Command:myCommand 
-                                         DataType:myDataType 
-                                          DataLen:[inputCloudField.text length] 
-                                           String:inputCloudField.text];
-
-    inputCloudField.text = @"";
-    [inputCloudField setHidden:NO];
+    if ([inputCloudField.text length] > 1) {
+        
+        [inputCloudField resignFirstResponder];
+        NSLog(@"Entered sendCloud");
+        
+        //Ap    pID
+        Byte myAppID = CLOUD_CHAT;
+        NSLog(@"myAppID =  %i\n", myAppID);
+        
+        //COMMAND
+        Byte myCommand = SEND_MESSAGE;
+        NSLog(@"myCommand =  %i\n", myCommand);
+        
+        //DATA TYPE
+        Byte myDataType = CHAR;
+        NSLog(@"myDataType =  %i\n", myDataType);
+        
+        //DATA LENGTH
+        //****STK Currently set directly in sendWithGrainElts
+        
+        //DATA ARRAY (String from inputDiscussField)
+        //****STK Currently set directly in sendWithGrainElts
+        
+        [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                              Command:myCommand
+                                             DataType:myDataType
+                                              DataLen:[inputCloudField.text length]
+                                               String:inputCloudField.text];
+        
+        inputCloudField.text = @"";
+        [inputCloudField setHidden:NO];
+    }
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *) textField {
+    
+    if ([inputCloudField.text length] > 1) {
+        
+        [inputCloudField resignFirstResponder];
+        NSLog(@"Entered sendCloud");
+        
+        //Ap    pID
+        Byte myAppID = CLOUD_CHAT;
+        NSLog(@"myAppID =  %i\n", myAppID);
+        
+        //COMMAND
+        Byte myCommand = SEND_MESSAGE;
+        NSLog(@"myCommand =  %i\n", myCommand);
+        
+        //DATA TYPE
+        Byte myDataType = CHAR;
+        NSLog(@"myDataType =  %i\n", myDataType);
+        
+        //DATA LENGTH
+        //****STK Currently set directly in sendWithGrainElts
+        
+        //DATA ARRAY (String from inputDiscussField)
+        //****STK Currently set directly in sendWithGrainElts
+        
+        [appDelegate->appSand sendWithGrainElts_AppID:myAppID
+                                              Command:myCommand
+                                             DataType:myDataType
+                                              DataLen:[inputCloudField.text length]
+                                               String:inputCloudField.text];
+        
+        inputCloudField.text = @"";
+        [inputCloudField setHidden:NO];
+        [inputCloudField resignFirstResponder];
+        //            [[self view ] sendSubviewToBack:inputDiscussField];
+    }
+    else { //Dismisses keyboard if no text is entered but send button is pressed
+        inputCloudField.text = @"";
+        [inputCloudField setHidden:NO];
+        [inputCloudField resignFirstResponder];
+        //            [[self view ] sendSubviewToBack:inputDiscussField];
+    }
+    return YES;
+}
+
 
 - (void)dataReadyHandle:(NGrain *)inGrain
 {
     CLog(@"CVC: I GOT DATA FROM SAND!!!\n");
     
-    if (nil != inGrain) { 
+    if (nil != inGrain) {
         
         if(inGrain->appID == CLOUD_PROMPT)//Text from Discuss Prompt
         {
@@ -124,7 +172,7 @@
             else if ([inGrain->str isEqualToString:@"ENABLE_CLOUD_BUTTON"])
             {
                 [sendCloudButton setEnabled:YES];
-                sendCloudButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0]; 
+                sendCloudButton.titleLabel.textColor = [UIColor colorWithRed:0.196 green:0.3098 blue:0.5216 alpha:1.0];
                 [inputCloudField setBackgroundColor:[UIColor whiteColor]];
             }
         }
@@ -136,8 +184,8 @@
 
 
 - (void) messageReceived:(NSString *)message {
-	
-	[self.messages addObject:message];
+    
+    [self.messages addObject:message];
     
 }
 
@@ -151,13 +199,13 @@
 }
 
 //- (BOOL)textFieldShouldReturn:(UITextField *) textField
-//{   
-//    if (textField == inputCloudField) 
+//{
+//    if (textField == inputCloudField)
 //        [self sendCloud];
-//    
+//
 //    [textField resignFirstResponder];
-//    
-//    return YES;   
+//
+//    return YES;
 //}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

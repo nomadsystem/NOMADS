@@ -111,10 +111,12 @@
     [tabBarController setViewControllers:viewControllers];
     [tabBarController setSelectedIndex:0]; //Sets which tab to display initially, 3=lvc
 
-    tabBarController.tabBar.selectedImageTintColor= [UIColor redColor];
+    tabBarController.tabBar.selectedImageTintColor = [UIColor colorWithRed:(222/255.0)
+                                                                     green:(199/255.0)
+                                                                      blue:(132/255.0)
+                                                                     alpha:1.0];
     
     [[self window] setRootViewController:tabBarController];
-
     
     [self tabBarItemsEnabled:NO];
 }
