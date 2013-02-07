@@ -219,6 +219,7 @@ int oneToTenVoteVal;
 
 - (IBAction)pollOneToTenSliderChanged:(id)sender {
     UISlider *slider = (UISlider *)sender;
+
     oneToTenVoteVal = (int)slider.value;
     NSString *newText = [[NSString alloc] initWithFormat:@"%d", oneToTenVoteVal];
     pollOneToTenValLabel.text = newText;
@@ -300,6 +301,7 @@ int oneToTenVoteVal;
             if (inGrain->command == QUESTION_TYPE_ONE_TO_TEN)
             {
                 CLog(@"PVC: We got an 1-10 Question");
+                
                 pollPromptOneToTenLabel.text = toBePosed;
                 [self.view bringSubviewToFront:oneToTenView];
                 [voteButton setEnabled:true];
@@ -308,6 +310,10 @@ int oneToTenVoteVal;
                                                                 blue:((float) 1.0f)
                                                                alpha:0.0f]];
                 [oneToTenSlider setEnabled:true];
+
+                oneToTenSlider.minimumTrackTintColor = [UIColor whiteColor];
+                oneToTenSlider.maximumTrackTintColor = [UIColor whiteColor];
+                oneToTenSlider.thumbTintColor = [UIColor grayColor];
 
             }
             if (inGrain->command == QUESTION_TYPE_YES_NO)
