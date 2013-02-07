@@ -41,7 +41,7 @@
         myFingerPoint.x = (screenWidth * 0.5);
         myFingerPoint.y = (screenHeight * 0.5);
         
-        maxTrails = 2;
+        maxTrails = 1;
         // earlier on in your code put this (below)
         
         xTrail = (int *)malloc(sizeof(int)*maxTrails);
@@ -185,7 +185,9 @@
         [appDelegate->appSand sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_SPRITE_XY DataType:INT32 DataLen:2 Int32:xy];
     }
     //Redraw
-    [self setNeedsDisplay];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self setNeedsDisplay];
+    });
 }
 
 - (void)endTouches:(NSSet *)touches
