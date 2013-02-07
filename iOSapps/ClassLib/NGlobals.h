@@ -47,11 +47,11 @@ typedef enum {
 
 //Port Number
 typedef enum {
-    SERVER_PORT = 52910,
-    SERVER_PORT_DT = 52911,
-    SERVER_PORT_SK = 52912,
-    SERVER_PORT_PT = 52913,
-    SERVER_PORT_MB = 52914,
+    SERVER_PORT = 52920,
+    SERVER_PORT_DT = 52921,
+    SERVER_PORT_SK = 52922,
+    SERVER_PORT_PT = 52923,
+    SERVER_PORT_MB = 52924,
 } NGPort;
 
 // Convenience

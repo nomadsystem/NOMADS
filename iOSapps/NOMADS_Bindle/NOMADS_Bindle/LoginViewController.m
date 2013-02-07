@@ -13,10 +13,14 @@
 #import "DiscussViewController.h"
 #import "CloudViewController.h"
 #import "PollViewController.h"
+#import "BindleAppDelegate.h"
 
 @implementation LoginViewController
 @synthesize loginTextField;
 @synthesize connectStatusLabel;
+@synthesize welcomeMessage;
+@synthesize welcomeMessage2;
+
 @synthesize appSand; //Our implementation of NSand
 @synthesize appDelegate;
 @synthesize loginButton;
@@ -27,8 +31,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        UITabBarItem *tbi = [self tabBarItem];
-        [tbi setTitle:@"Join NOMADS"];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Login" image:[UIImage imageNamed:@"Login_30x30.png"] tag:0];
+        tbi = [self tabBarItem];
+        // [tbi setTitle:@"Login"];
+        
+        // UIImage *i0 = [UIImage imageNamed:@"tLogin.png"];
+        // [tbi setImage:i0];
+        
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
         // SAND:  set a pointer inside appSand so we get notified when network data is available
@@ -46,38 +55,63 @@
     
 	// Do any additional setup after loading the view.
     connectStatusLabel.text = @"";
-    [disconnectButton setHidden:YES];
-    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"SandDunes1_960x640.png"]]];
+    welcomeMessage.text = @"";
+    welcomeMessage2.text = @"";
     
+    [disconnectButton setHidden:YES];
+    UIImage * targetImage = [UIImage imageNamed:@"SandDunes1_960x640.png"];
+    
+    // redraw the image to fit |yourView|'s size
+    UIGraphicsBeginImageContextWithOptions([self view].frame.size, NO, 0.f);
+    [targetImage drawInRect:CGRectMake(0.f, 0.f, [self view].frame.size.width, [self view] .frame.size.height)];
+    UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:resultImage]];
+     
 }
 
 
 - (IBAction)loginButton:(id)sender {
     [loginTextField resignFirstResponder];
     
-
     
     if ([loginTextField.text length] > 0){
         [appDelegate->appSand connect];
 
-        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE 
+        appDelegate->loginStatus = 1;
+        // [appDelegate tabBarItemsEnabled:YES];
+        
+
+        [appDelegate->appSand sendWithGrainElts_AppID:BINDLE
                                               Command:LOGIN 
                                              DataType:CHAR 
                                               DataLen:[loginTextField.text length] 
                                                String:loginTextField.text];
+
+        appDelegate->userName = [loginTextField.text stringByAppendingString:@": "];
+        
         loginTextField.text = @"";
+
         [loginTextField setHidden:YES];
         [loginButton setHidden:YES];
         [disconnectButton setHidden:NO];
-        [appDelegate tabBarItemsEnabled:YES];
-        [appDelegate->tabBarController setSelectedIndex:1]; //Switch the tab viewer to Discuss
         
-        connectStatusLabel.text = @"Connected to NOMADS!";
+        connectStatusLabel.text = @"Welcome to NOMADS!";
+        welcomeMessage.text = @"Begin by tapping one";
+        welcomeMessage2.text = @"of the icons below";
+
+        [appDelegate->tabBarController setSelectedIndex:0];
+        
     }
     //If there's no text, connect with a "space" for now 
     //We want to revise this to generate a warning message to the user
     else {
-        connectStatusLabel.text = @"Error connecting: Please enter username!";
+        connectStatusLabel.text = @"Error connecting: Please enter username.";
+        welcomeMessage.text = @"";
+        welcomeMessage2.text = @"";
+
     }
     
     
@@ -87,6 +121,8 @@
 
 - (IBAction)disconnectButton:(id)sender {
     connectStatusLabel.text = @"Leaving NOMADS (but not really)";
+    welcomeMessage.text = @"";
+    welcomeMessage2.text = @"";
     [disconnectButton setHidden:YES];
     [loginTextField setHidden:NO];
     [loginButton setHidden:NO];

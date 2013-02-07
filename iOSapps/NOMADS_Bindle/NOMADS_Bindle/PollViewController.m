@@ -36,8 +36,12 @@ int oneToTenVoteVal;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Poll" image:[UIImage imageNamed:@"Poll_30x30.png"] tag:0];
+
         tbi = [self tabBarItem];
-        [tbi setTitle:@"Poll Aura"];
+        // [tbi setTitle:@"Poll"];
+        // UIImage *i3 = [UIImage imageNamed:@"tPoll.png"];
+        // [tbi setImage:i3];
         
         appDelegate = (BindleAppDelegate *)[[UIApplication sharedApplication] delegate];
         
