@@ -82,22 +82,22 @@
 
 - (IBAction)sendDiscuss:(id)sender
 {
-    NSLog(@"Entered sendDiscuss");
+    CLog(@"Entered sendDiscuss");
     
     
     if([inputDiscussField.text length]>0) { //Prevents null strings from being sent
         
         //AppID
         Byte myAppID = WEB_CHAT;
-        NSLog(@"myAppID =  %i\n", myAppID);
+        CLog(@"myAppID =  %i\n", myAppID);
         
         //COMMAND
         Byte myCommand = SEND_MESSAGE;
-        NSLog(@"myCommand =  %i\n", myCommand);
+        CLog(@"myCommand =  %i\n", myCommand);
         
         //DATA TYPE
         Byte myDataType = CHAR;
-        NSLog(@"myDataType =  %i\n", myDataType);
+        CLog(@"myDataType =  %i\n", myDataType);
         
         //DATA LENGTH
         //****STK Currently set directly in sendWithGrainElts
@@ -109,7 +109,7 @@
         
         cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
         
-        NSLog(@"cText = %@\n",cText);
+        CLog(@"cText = %@\n",cText);
         
         [appDelegate->appSand sendWithGrainElts_AppID:myAppID
                                               Command:myCommand
@@ -133,8 +133,8 @@
         
         if(inGrain->appID == WEB_CHAT || inGrain->appID == INSTRUCTOR_DISCUSS) //Text from Student Discuss
         {
-            //    NSLog(@"Filtering AppID 20");
-            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+            //    CLog(@"Filtering AppID 20");
+            //    CLog(@"textFromNOMADS %@",textFromNOMADS);
             [self messageReceived:inGrain->str];
             CLog(@"Got Discuss Data");
         }
@@ -175,7 +175,7 @@
 }
 
 - (void) messageReceived:(NSString *)message {
-	NSLog(@"Entering messageReceived");
+	CLog(@"Entering messageReceived");
     if (message != nil) {
         [self.messages addObject:message];
         [self.tableView reloadData];
@@ -188,7 +188,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"Entering Table View");
+	CLog(@"Entering Table View");
 	NSString *s = (NSString *) [messages objectAtIndex:indexPath.row];
 	
     static NSString *CellIdentifier = @"ChatCellIdentifier";
@@ -227,21 +227,21 @@
             
             //AppID
             Byte myAppID = WEB_CHAT;
-            NSLog(@"myAppID =  %i\n", myAppID);
+            CLog(@"myAppID =  %i\n", myAppID);
             
             //COMMAND
             Byte myCommand = SEND_MESSAGE;
-            NSLog(@"myCommand =  %i\n", myCommand);
+            CLog(@"myCommand =  %i\n", myCommand);
             
             //DATA TYPE
             Byte myDataType = CHAR;
-            NSLog(@"myDataType =  %i\n", myDataType);
+            CLog(@"myDataType =  %i\n", myDataType);
             
             NSString *cText;
             
             cText = [appDelegate->userName stringByAppendingString:inputDiscussField.text];
             
-            NSLog(@"cText = %@\n",cText);
+            CLog(@"cText = %@\n",cText);
             
             [appDelegate->appSand sendWithGrainElts_AppID:myAppID
                                                   Command:myCommand

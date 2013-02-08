@@ -1,6 +1,6 @@
 //
 //  LoginViewController.m
-//  DiscussCloudPoll
+//  DiscuCLogCloudPoll
 //
 //  Created by Steven Kemper on 5/21/12.
 //
@@ -112,7 +112,7 @@
             
             [errorView show];
             
-            //Calls alertView didDismissWithButtonIndex: on button press
+            //Calls alertView didDismiCLogWithButtonIndex: on button preCLog
             return NO;
         }
         else {
@@ -140,7 +140,7 @@
 
             CLog(@"Notification Says UnReachable");
             UIAlertView *errorView;
-            //Create error view (pop up window) for error message
+            //Create error view (pop up window) for error meCLogage
             errorView = [[UIAlertView alloc]
                          initWithTitle: NSLocalizedString(@"Network error", @"Network error")
                          message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
@@ -148,17 +148,17 @@
                          cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
             
             [errorView show];
-            //Calls alertView didDismissWithButtonIndex: on button press
+            //Calls alertView didDismiCLogWithButtonIndex: on button preCLog
         }
     }
 }
 
 
-//Method handles what to do when network errors are dismissed with the button
--(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
+//Method handles what to do when network errors are dismiCLoged with the button
+-(void) alertView:(UIAlertView *)alertView didDismiCLogWithButtonIndex:(NSInteger)buttonIndex {
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was preCLoged.
     if (buttonIndex == 0) {
-        CLog("Alert button %i pressed", buttonIndex);
+        CLog("Alert button %i preCLoged", buttonIndex);
         
         
         // Do any additional setup after loading the view.
@@ -237,14 +237,14 @@
         
         connectStatusLabel.text = @"Welcome to NOMADS";
         userNameLabel.text = tString;
-        // welcomeMessage.text = @"Start NOMADS interaction by";
+        // welcomeMeCLogage.text = @"Start NOMADS interaction by";
         welcomeMessage2.text = @"Select from the active icons below";
 
         [appDelegate->tabBarController setSelectedIndex:0];
         
     }
     //If there's no text, connect with a "space" for now 
-    //We want to revise this to generate a warning message to the user
+    //We want to revise this to generate a warning meCLogage to the user
     else {
         connectStatusLabel.text = @"Error connecting: Please enter username.";
         userNameLabel.text = @"";

@@ -69,9 +69,6 @@
 - (IBAction)pollOneToTenSliderChanged:(id)sender; 
 - (IBAction)pollOneToTenVoteButton:(id)sender;
 
-- (void) initNetworkCommunication;
-- (void) messageReceived:(NSString *)message;
-
 @end
 
 #endif

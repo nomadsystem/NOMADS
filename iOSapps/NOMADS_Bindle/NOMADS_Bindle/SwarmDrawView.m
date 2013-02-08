@@ -55,10 +55,10 @@
         decayColorChangeDelta = 0.2;
 
         // decayColorChangeDelta = decayColor/(float)maxTrails;
-    //    NSLog(@" brightness = %f ", brightness);
-    //    NSLog(@" brightDelta = %f ", brightDelta);
+    //    CLog(@" brightness = %f ", brightness);
+    //    CLog(@" brightDelta = %f ", brightDelta);
         
-        //     NSLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
+        //     CLog(@"center point = %f , %f ",myFingerPoint.x, myFingerPoint.y);
         
     }
     return self;
@@ -75,13 +75,13 @@
         
         //        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
         //        {
-        //            //    NSLog(@"Filtering AppID 22");
-        //            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+        //            //    CLog(@"Filtering AppID 22");
+        //            //    CLog(@"textFromNOMADS %@",textFromNOMADS);
         //            //do something
         //        }
         
         //        else {
-        //            NSLog(@"No Data for Swarm App");
+        //            CLog(@"No Data for Swarm App");
         //        }
     }
     
@@ -118,7 +118,7 @@
         CGContextStrokePath(context);
         
         decayColor = (decayColor - decayColorChangeDelta);
-        NSLog(@" Brightness = %f", decayColor);
+        CLog(@" Brightness = %f", decayColor);
         
     }
     
@@ -141,7 +141,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     for (UITouch *t in touches) {
-        NSLog(@" Touches Began");
+        CLog(@" Touches Began");
         //Is this a double tap?
         if ([t tapCount] > 1) {
             [self clearAll];
@@ -151,8 +151,8 @@
         //Create a point for the value
         touchColor = 0.0;
         CGPoint loc = [t locationInView:self];
-        NSLog(@"SWARM_X loc = %f", loc.x);
-        NSLog(@"SWARM_Y loc = %f", loc.y);
+        CLog(@"SWARM_X loc = %f", loc.x);
+        CLog(@"SWARM_Y loc = %f", loc.y);
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
         
@@ -173,8 +173,8 @@
         CGPoint loc = [t locationInView:self];
         myFingerPoint.x = loc.x;
         myFingerPoint.y = loc.y;
-        NSLog(@"SWARM_X loc = %f", loc.x);
-        NSLog(@"SWARM_Y loc = %f", loc.y);
+        CLog(@"SWARM_X loc = %f", loc.x);
+        CLog(@"SWARM_Y loc = %f", loc.y);
         
         int xy[2];
         

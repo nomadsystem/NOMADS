@@ -14,6 +14,7 @@
 int oneToTenVoteVal;
 
 @implementation PollViewController
+
 @synthesize oneToTenView;
 @synthesize aeView;
 @synthesize yesNoView;
@@ -227,7 +228,6 @@ int oneToTenVoteVal;
 }
 
 - (IBAction)pollOneToTenVoteButton:(id)sender {
-    NSString *voteValString = [NSString stringWithFormat:@"%d", oneToTenVoteVal];
     
     int x[1];
     x[0] = oneToTenVoteVal;
@@ -237,7 +237,7 @@ int oneToTenVoteVal;
                                           DataLen:1
                                            Int32:x];
     
-    NSLog(@"VOTE VAL STRING: %@",voteValString);
+    CLog(@"VOTE VAL STRING: %@",voteValString);
     [sender setEnabled:false];
     [sender setBackgroundColor:[UIColor colorWithRed:((float) 0.0f)
                                                green:((float) 0.0f)
