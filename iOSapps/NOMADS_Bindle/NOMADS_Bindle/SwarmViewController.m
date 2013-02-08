@@ -78,13 +78,13 @@
         
 //        if(inGrain->appID == SOUND_SWARM)//Text from Discuss Prompt
 //        {
-//            //    NSLog(@"Filtering AppID 22");
-//            //    NSLog(@"textFromNOMADS %@",textFromNOMADS);
+//            //    CLog(@"Filtering AppID 22");
+//            //    CLog(@"textFromNOMADS %@",textFromNOMADS);
 //            //do something
 //        }
        
 //        else {
-//            NSLog(@"No Data for Swarm App");
+//            CLog(@"No Data for Swarm App");
 //        }
     }
     

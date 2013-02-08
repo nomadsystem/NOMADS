@@ -10,9 +10,9 @@
 
 // DEBUG vars, used by MACRO functions below
 //      - comment out each to disable printout
-#define CLIENT_DEBUG
-#define LIBRARY_DEBUG
-#define SERVER_DEBUG
+// #define CLIENT_DEBUG
+// #define LIBRARY_DEBUG
+// #define SERVER_DEBUG
 //#define SOME_OTHER_DEBUG
 
 // Use these in place of NSLog from now on

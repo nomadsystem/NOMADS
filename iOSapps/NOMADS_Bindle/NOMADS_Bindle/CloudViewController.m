@@ -70,26 +70,26 @@
 }
 
 
-- (IBAction)sendCloud {
+- (IBAction)sendCloud:(id)sender {
     
     if ([inputCloudField.text length] > 1) {
 
         userCloudEntryLabel.text = inputCloudField.text;
         
         [inputCloudField resignFirstResponder];
-        NSLog(@"Entered sendCloud");
+        CLog(@"Entered sendCloud");
         
         //Ap    pID
         Byte myAppID = CLOUD_CHAT;
-        NSLog(@"myAppID =  %i\n", myAppID);
+        CLog(@"myAppID =  %i\n", myAppID);
         
         //COMMAND
         Byte myCommand = SEND_MESSAGE;
-        NSLog(@"myCommand =  %i\n", myCommand);
+        CLog(@"myCommand =  %i\n", myCommand);
         
         //DATA TYPE
         Byte myDataType = CHAR;
-        NSLog(@"myDataType =  %i\n", myDataType);
+        CLog(@"myDataType =  %i\n", myDataType);
         
         //DATA LENGTH
         //****STK Currently set directly in sendWithGrainElts
@@ -116,19 +116,19 @@
         userCloudEntryLabel.text = inputCloudField.text;
         
         [inputCloudField resignFirstResponder];
-        NSLog(@"Entered sendCloud");
+        CLog(@"Entered sendCloud");
         
         //Ap    pID
         Byte myAppID = CLOUD_CHAT;
-        NSLog(@"myAppID =  %i\n", myAppID);
+        CLog(@"myAppID =  %i\n", myAppID);
         
         //COMMAND
         Byte myCommand = SEND_MESSAGE;
-        NSLog(@"myCommand =  %i\n", myCommand);
+        CLog(@"myCommand =  %i\n", myCommand);
         
         //DATA TYPE
         Byte myDataType = CHAR;
-        NSLog(@"myDataType =  %i\n", myDataType);
+        CLog(@"myDataType =  %i\n", myDataType);
         
         //DATA LENGTH
         //****STK Currently set directly in sendWithGrainElts
