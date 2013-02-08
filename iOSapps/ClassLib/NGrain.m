@@ -1,6 +1,6 @@
 //
 //  NGrain.m
-//  DiscussCloudPoll
+//  DiscuCLogCloudPoll
 //
 //  Created by Steven Kemper on 6/22/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -13,8 +13,8 @@
 
 - (id)init //initialization function
 {
-    //Perhaps unnecessary. . .****STK 6/22/12
-    self = [super init]; //Here to get initialization from parent class first
+    //Perhaps unneceCLogary. . .****STK 6/22/12
+    self = [super init]; //Here to get initialization from parent claCLog first
     if (self) { //if we get that initialization, override it
     }
     return self;
@@ -77,30 +77,30 @@
 - (void)print
 {
     int i;
-    NSLog(@"NGrain -> print()");
-    NSLog(@"appID = %d",appID);
-    NSLog(@"command = %d",command);
-    NSLog(@"dataType = %d",dataType);
-    NSLog(@"dataLen = %d",dataLen);
+    LLog(@"NGrain -> print()");
+    LLog(@"appID = %d",appID);
+    LLog(@"command = %d",command);
+    LLog(@"dataType = %d",dataType);
+    LLog(@"dataLen = %d",dataLen);
     if (dataType == CHAR) {
-        NSLog(@"str = %@\n",str);
+        LLog(@"str = %@\n",str);
     }
     else if (dataType == UINT8) {
-        NSLog(@"uint8:");
+        LLog(@"uint8:");
         for(i=0;i<dataLen;i++) {
-            NSLog(@" %d ",bArray[i]);
+            LLog(@" %d ",bArray[i]);
         }
     }
     else if (dataType == INT32) {
-        NSLog(@"int32:");
+        LLog(@"int32:");
         for(i=0;i<dataLen;i++) {
-            NSLog(@" %d ",iArray[i]);
+            LLog(@" %d ",iArray[i]);
         }
     }
     else if (dataType == FLOAT32) {
-        NSLog(@"float32:");
+        LLog(@"float32:");
         for(i=0;i<dataLen;i++) {
-            NSLog(@" %f ",fArray[i]);
+            LLog(@" %f ",fArray[i]);
         }
     }
 }
