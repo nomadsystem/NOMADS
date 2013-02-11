@@ -53,7 +53,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
     ImageIcon discussIconOn, pollIconOn, cloudIconOn, mosaicIconOn, pointerIconOn, uGrooveIconOn;
     ImageIcon discussIconOff, pollIconOff, cloudIconOff, mosaicIconOff, pointerIconOff, uGrooveIconOff;
 
-    GridLayout buttonGridLayout = new GridLayout(6,3,0,0); //3rd value was set to 5
+    GridLayout buttonGridLayout = new GridLayout (4,3,0,0); //3rd value was set to 5
+    
 
     int discussOnOff, cloudOnOff, pollOnOff, mosaicOnOff, pointerOnOff, uGrooveOnOff; //*****STK variables store current state of button	
 
@@ -127,20 +128,32 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
     int pToggle=0;
     private int maxSkip;
 
-    public synchronized Boolean getSandRead() {
-	return sandRead;
+    private Object sandReadLock = new Object();
+
+    public Boolean getSandRead() {
+	synchronized (sandReadLock) {
+	    return sandRead;
+	}
     }
 
-    public synchronized void setSandRead(Boolean sr) {
-	sandRead = sr;
+    public void setSandRead(Boolean sr) {
+	synchronized (sandReadLock) {
+	    sandRead = sr;
+	}
     }
 
-    public synchronized Boolean getHandleActive() {
-	return handleActive;
+    private Object handleActiveLock = new Object();
+
+    public Boolean getHandleActive() {
+	synchronized(handleActiveLock) {
+	    return handleActive;
+	}
     }
 
-    public synchronized void setHandleActive(Boolean ha) {
-	handleActive = ha;
+    public void setHandleActive(Boolean ha) {
+	synchronized(handleActiveLock) {
+	    handleActive = ha;
+	}
     }
 
     Thread runner;
@@ -152,7 +165,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	runner.start();
     }
 
-    public void run () {
+    public synchronized void run () {
 	while (true) {
 	    try {
 		runner.sleep(1000);
@@ -177,28 +190,46 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	float mSecAvg=10;
 	float mSecAvgL=10;
 
-	public synchronized long getHandleStart() {
-	    return handleStart;
+	private Object handleStartLock = new Object();
+
+	public long getHandleStart() {
+	    synchronized(handleStartLock) {
+		return handleStart;
+	    }
 	}
 
-	public synchronized long getHandleEnd() {
-	    return handleEnd;
+	public void setHandleStart(long hs) {
+	    synchronized(handleStartLock) {
+		handleStart = hs;
+	    }
 	}
 
-	public synchronized void setHandleStart(long hs) {
-	    handleStart = hs;
+	private Object handleEndLock = new Object();
+
+	public long getHandleEnd() {
+	    synchronized(handleEndLock) {
+		return handleEnd;
+	    }
 	}
 
-	public synchronized void setHandleEnd(long he) {
-	    handleEnd = he;
+	public void setHandleEnd(long he) {
+	    synchronized(handleEndLock) {
+		handleEnd = he;
+	    }
 	}
 
-	public synchronized void setRunState(Boolean state) {
-	    runState = state;
+	private Object runStateLock = new Object();
+
+	public void setRunState(Boolean state) {
+	    synchronized(runStateLock) {
+		runState = state;
+	    }
 	}
 
-	public synchronized Boolean getRunState() {
-	    return runState;
+	public Boolean getRunState() {
+	    synchronized(runStateLock) {
+		return runState;
+	    }
 	}
 
 
@@ -207,8 +238,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	    // Connect
 	}
 
-	public void run()    {			
-	    NGlobals.dtPrint("NomadsAppThread -> run()");
+	public synchronized void run()    {			
+	    //NGlobals.dtPrint("NomadsAppThread -> run()");
 	    while (getRunState() == true)  {
 		now = Calendar.getInstance();
 		setHandleStart(now.getTimeInMillis());
@@ -227,7 +258,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	public NomadsErrCheckThread(InstructorControlPanel _client) {
 	    client = _client;
 	}
-	public void run()    {			
+	public synchronized void run()    {			
 	    NGlobals.dtPrint("InstructorControlPanel ERRCHECKTHREAD -> run");
 	    while (true)  {
 		client.errCheck();
@@ -311,7 +342,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 			instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
 			connected = true;
-			NomadsErrCheckThread.sleep(800);
 			System.out.println("   reconnected!");			
 			System.out.println("   attempting to restart thread.");			
 			NomadsErrCheckThread.sleep(800);
@@ -408,6 +438,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	    imgWebBase = new URL(imgPrefix); 
 	} 
 	catch (Exception e) {}
+
+	butPanel.setPreferredSize(new Dimension(550,225));
 
 
 
@@ -525,7 +557,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	pointerIcon = new ImageIcon(pointerImgOff);
 	pointerButton = new JButton( pointerIcon );
 	pointerButton.setMargin(new Insets(0,0,0,0));
-	pointerButton.setEnabled(false);
+	pointerButton.setEnabled(true);
 
 	uGrooveIcon = new ImageIcon(uGrooveImgOff);
 	uGrooveButton = new JButton( uGrooveIcon);
@@ -703,7 +735,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	pointerDisplayButton.setMargin(new Insets(0,0,0,0));
 	pointerDisplayButton.setBorderPainted(false);
 	pointerDisplayButton.addActionListener( this );
-	pointerDisplayButton.setEnabled(false);
+	pointerDisplayButton.setEnabled(true);
 		
 	// Sound Mosaic ------------------
 
@@ -764,15 +796,15 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	butPanel.add( pollButton, buttonGridLayout );
 	butPanel.add( pollPromptButton, buttonGridLayout );
 	butPanel.add( pollDisplayButton, buttonGridLayout );
-	butPanel.add( mosaicButton, buttonGridLayout );
-	butPanel.add( blankButton, buttonGridLayout );
-	butPanel.add( mosaicDisplayButton, buttonGridLayout);
+	// butPanel.add( mosaicButton, buttonGridLayout );
+	// butPanel.add( blankButton, buttonGridLayout );
+	// butPanel.add( mosaicDisplayButton, buttonGridLayout);
 	butPanel.add( pointerButton, buttonGridLayout );
 	butPanel.add( blankButton2, buttonGridLayout );
 	butPanel.add( pointerDisplayButton, buttonGridLayout );
-	butPanel.add( uGrooveButton, buttonGridLayout );
-	butPanel.add( uGroovePromptButton, buttonGridLayout );
-	butPanel.add( uGrooveDisplayButton, buttonGridLayout );
+	// butPanel.add( uGrooveButton, buttonGridLayout );
+	// butPanel.add( uGroovePromptButton, buttonGridLayout );
+	// butPanel.add( uGrooveDisplayButton, buttonGridLayout );
 
 	// add the "button panel" to the window ------------h
 
@@ -927,7 +959,9 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 		
 	// Send to SAND POINTER DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.SOUND_SWARM ) {
-	    // myPointerDisplayPanel.handle(grain);
+	    if (pointerOnOff == 1) {
+		myPointerDisplayPanel.handle(grain);
+	    }
 	}
 
 	// Send to UNITY GROOVE DISPLAY------------------------
