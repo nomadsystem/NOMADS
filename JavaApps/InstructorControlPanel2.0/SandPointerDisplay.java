@@ -16,7 +16,7 @@ import com.softsynth.jsyn.view11x.SynthScope;
 public class SandPointerDisplay extends JPanel implements MouseListener, MouseMotionListener
 {
 
-     int THREAD_ID;
+    int THREAD_ID;
 
     // will always need this
     int numOscs = 0;
@@ -64,13 +64,13 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 
     public void print(String str) {
 	if (1 < 0) {
-	System.out.println(str);
+	    System.out.println(str);
 	}
     }
 
     public void hPrint(String str) {
 	if (1 < 0) {
-	System.out.println(">" + str);
+	    System.out.println(">" + str);
 	}
     }
 
@@ -129,15 +129,15 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 		carOsc = new SineOscillator[MAX_THREADS];
 		freqAdder = new AddUnit[MAX_THREADS];
 		lineOut  = new LineOut();
-		
+		    
 		myBusReader = new BusReader();
 		
 		myBusWriter = new BusWriter[MAX_THREADS];
-
+		    
 		/* Synchronize Java display to make buttons appear. */
 		// getParent().validate();
 		// getToolkit().sync();
-
+		    
 		myBusReader.output.connect(0, lineOut.input, 0 );
 		myBusReader.output.connect(0, lineOut.input, 1 );
 
@@ -172,7 +172,7 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	int tNum;
 	float tAmp;
 	if (!isOsc[threadNum]) {
-	    NGlobals.cPrint("SOUND_SWARM_DISPLAY::  creating oscillator for thread: " + threadNum);
+	    NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  creating oscillator for thread: " + threadNum);
 	    sprites[threadNum] = new Sprite();
 	    sprites[threadNum].x = width / 2 - 20;
 	    sprites[threadNum].y = height / 2 - 20;
@@ -220,17 +220,18 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	    //  add( modRangeFader = new PortFader( modOsc[threadNum].amplitude,
 	    //  					"Modulation Depth", 1.0, 0.0, MAX_MOD_DEPTH) );
 
-	    NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting isOsc[" + threadNum + "] to true");
+	    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: setting isOsc[" + threadNum + "] to true");
 	    isOsc[threadNum] = true;
-
-	    /* Start units. */
-	    modOsc[threadNum].start();
-	    freqAdder[threadNum].start();
-	    carOsc[threadNum].start();
-	    myBusWriter[threadNum].start();
+	    if (false) {
+		/* Start units. */
+		modOsc[threadNum].start();
+		freqAdder[threadNum].start();
+		carOsc[threadNum].start();
+		myBusWriter[threadNum].start();
+	    }
 	}
 	else {
-	    NGlobals.cPrint("SOUND_SWARM_DISPLAY: synth already created for thread: " + threadNum);
+	    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: synth already created for thread: " + threadNum);
 
 	}
     }
@@ -250,57 +251,65 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	x=y=0;
 
 	grain = inGrain;
-	NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got GRAIN");
+	NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  got GRAIN");
+
+	NGlobals.dtPrint("appID = " + grain.appID);
+	NGlobals.dtPrint("command = " + grain.command);
 
 	
 	if (grain.appID == NAppID.SOUND_SWARM) {
 
-	    if(grain.command == NCommand.SEND_THREAD_ID) {
+
+	    if (grain.command == NCommand.SEND_SPRITE_XY) {
 		THREAD_ID = grain.iArray[0];
-		NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got THREAD_ID from SOUND_SWARM: " + THREAD_ID);
-		makeSynth(THREAD_ID);
-	    }
-	    else if (grain.command == NCommand.SEND_SPRITE_XY) {
-		x = grain.iArray[0];
-		y = grain.iArray[1];
-		NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		x = grain.iArray[1];
+		y = grain.iArray[2];
+
+		NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+		// x *= (1.3);
+		// y *= (1.3);
+		NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 	    
-		freq = (float)x;
-		amp = (float)(y/1000);
 	    
-		if (x > 500)
-		    x = 500;
-		xput = (float)(x/0.5);
+		if (x > 999)
+		    x = 1999;
+		xput = (float)(x/3);
+
 		if (xput < 50)
 		    xput = 50;
-		if (xput > 500)
-		    xput = 500;
+		if (xput > 2000)
+		    xput = 2000;
 		
-		if (y > 500)
-		    y = 500;
+		if (y > 999)
+		    y = 999;
 		
-		yput = (float)((y/0.5));
-		if (yput < 0)
-		    yput = 0;
-		if (yput > 500)
-		    yput = 500;
+		yput = (float)((y/3));
+		if (yput < 50)
+		    yput = 50;
+		if (yput > 2000)
+		    yput = 2000;
 		
+		freq = (float)x;
+		amp = (float)(y/1000);
+
+
 		if (isOsc[THREAD_ID]) {
-		    NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting osc values for thread: " + THREAD_ID);
+		    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: setting osc values for thread: " + THREAD_ID);
 		    
 		    //carOsc[THREAD_ID].frequency.set((float)xput);
 		    //carOsc[THREAD_ID].amplitude.set((float)yput);
 		    
-		    sprites[THREAD_ID].x = x;
-		    sprites[THREAD_ID].y = y;
+		    sprites[THREAD_ID].x = (int)((x/1000.0)*width);
+		    sprites[THREAD_ID].y = (int)((y/1000.0)*height);
 		    
 		    carOsc[THREAD_ID].frequency.set((float)xput);
-		    //		    freqAdder[THREAD_ID].inputB.set((float)xput);
+		    freqAdder[THREAD_ID].inputB.set((float)xput);
 		    modOsc[THREAD_ID].frequency.set((float)yput);
 		    repaint();
 		}
 		else {
-		    NGlobals.cPrint("SOUND_SWARM_DISPLAY: isOsc[" + THREAD_ID + "] = false");
+		    makeSynth(THREAD_ID);
+		    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: isOsc[" + THREAD_ID + "] = false");
 		}
 	    }
 	}

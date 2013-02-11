@@ -29,22 +29,27 @@ import nomads.v210_auk.*;
 
 public class OperaCntrl extends JApplet implements ActionListener, KeyListener, Runnable {   
 
-    private class NomadsAppThread extends Thread {
-	OperaCntrl client; //Replace with current class name
+    int errFlag = 0;
+    int lastThread = 0;
+    Boolean handleActive = false;
+    Boolean sandRead = false;
+    Boolean connected = false;
 
-	public NomadsAppThread(OperaCntrl _client) {
-	    client = _client;
-	}
-	public void run()    {			
-	    NGlobals.lPrint("ACP: NomadsAppThread -> run()");
-	    while (true)  {
-		client.handle();
-	    }
-	}
-    }
+    long mSecR=0;
+    int resetCtr=0;
+    int maxResets=1000;
+
+    float mSecAvg=10;
+    float mSecAvgL=10;
+    int pToggle=0;
+
+    int mSecLimit=3000;
+    int errTrip=20;
 
     NSand operaSand;
     private NomadsAppThread nThread;
+    private NomadsErrCheckThread nECThread;
+
 
     Random randNum;
 
@@ -77,15 +82,279 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
     JToggleButton promptButton;
     JTextField promptTextField;
 
-
     int clientCount = 0;
     JLabel clientCountLabel;
 
     JButton discussClear, cloudClear;  //, pointerClear;
 
+    // private class NomadsAppThread extends Thread {
+    // 	OperaCntrl client; //Replace with current class name
+
+    // 	public NomadsAppThread(OperaCntrl _client) {
+    // 	    client = _client;
+    // 	}
+    // 	public void run()    {			
+    // 	    NGlobals.lPrint("ACP: NomadsAppThread -> run()");
+    // 	    while (true)  {
+    // 		client.handle();
+    // 	    }
+    // 	}
+    // }
+
+    // START errCheck() !!===================================!!
+
+    private int maxSkip;
+
+    private Object sandReadLock = new Object();
+
+    public Boolean getSandRead() {
+	synchronized (sandReadLock) {
+	    return sandRead;
+	}
+    }
+
+    public void setSandRead(Boolean sr) {
+	synchronized (sandReadLock) {
+	    sandRead = sr;
+	}
+    }
+
+    private Object handleActiveLock = new Object();
+
+    public Boolean getHandleActive() {
+	synchronized(handleActiveLock) {
+	    return handleActive;
+	}
+    }
+
+    public void setHandleActive(Boolean ha) {
+	synchronized(handleActiveLock) {
+	    handleActive = ha;
+	}
+    }
+
+    Thread runner;
+
+    // DT 6/30/10:  not sure we need these anymore
+
+    public void start() {
+	runner = new Thread(this);
+	runner.start();
+    }
+
+    public synchronized void run () {
+	while (true) {
+	    try {
+		runner.sleep(1000);
+	    }
+	    catch (InterruptedException ie) {}
+	}
+    }
+
+    private class NomadsErrCheckThread extends Thread {
+	OperaCntrl client; //Replace with current class name
+
+	public NomadsErrCheckThread(OperaCntrl _client) {
+	    client = _client;
+	}
+	public synchronized void run()    {			
+	    NGlobals.dtPrint("OperaControl ERRCHECKTHREAD -> run");
+	    while (true)  {
+		client.errCheck();
+	    }
+	}
+    }
+
+
+
+    private class NomadsAppThread extends Thread {
+	OperaCntrl client; //Replace with current class name
+	Calendar now;
+
+	long handleStart=0;
+	long handleEnd=1;
+	long millis=0;
+	Boolean runState=false;
+
+	long mSecR=0;
+	int resetCtr=0;
+	int maxResets=10;
+	
+	float mSecAvg=10;
+	float mSecAvgL=10;
+
+	private Object handleStartLock = new Object();
+
+	public long getHandleStart() {
+	    synchronized(handleStartLock) {
+		return handleStart;
+	    }
+	}
+
+	public void setHandleStart(long hs) {
+	    synchronized(handleStartLock) {
+		handleStart = hs;
+	    }
+	}
+
+	private Object handleEndLock = new Object();
+
+	public long getHandleEnd() {
+	    synchronized(handleEndLock) {
+		return handleEnd;
+	    }
+	}
+
+	public void setHandleEnd(long he) {
+	    synchronized(handleEndLock) {
+		handleEnd = he;
+	    }
+	}
+
+	private Object runStateLock = new Object();
+
+	public void setRunState(Boolean state) {
+	    synchronized(runStateLock) {
+		runState = state;
+	    }
+	}
+
+	public Boolean getRunState() {
+	    synchronized(runStateLock) {
+		return runState;
+	    }
+	}
+
+
+	public NomadsAppThread(OperaCntrl _client) {
+	    client = _client;
+	    // Connect
+	}
+
+	public synchronized void run()    {			
+	    //NGlobals.dtPrint("NomadsAppThread -> run()");
+	    while (getRunState() == true)  {
+		now = Calendar.getInstance();
+		setHandleStart(now.getTimeInMillis());
+		client.handle();
+		client.setHandleActive(false);
+		handleEnd = now.getTimeInMillis();
+		millis = getHandleEnd()-getHandleStart();
+		NGlobals.dtPrint("handle() proc time:" + millis);
+	    }
+	}
+    }
+
+
+
+    public void errCheck() {
+	Calendar now;
+	long mSecN=0;
+	long mSecH=0;
+	long mSecDiff=0;
+
+	// NGlobals.csvPrint(" . ");
+
+	try {
+
+	    if ((getHandleActive() == true) && (getSandRead() == true)) {
+
+		now = Calendar.getInstance();
+		mSecN = now.getTimeInMillis();
+		mSecH = nThread.getHandleStart();
+
+		mSecDiff = mSecN-mSecH;
+		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
+		mSecAvgL = ((mSecAvgL*19)+mSecDiff)/20;
+
+		NGlobals.dtPrint("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
+
+		pToggle++;
+		if (pToggle > 10) {
+		    pToggle=0;
+		}
+		if (pToggle%2 == 0) {
+		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
+		}
+
+		if (mSecDiff > mSecLimit) {
+		    errFlag += 1;
+		    if (errFlag > 0) {
+			System.out.println("   INCR ERROR COUNT: " + errFlag);
+		    }
+		    if ((errFlag > errTrip) && (connected == true)) {
+			now = Calendar.getInstance();
+			mSecR = now.getTimeInMillis(); // time of this reset
+			System.out.println("-----> EREC #" + resetCtr);
+			resetCtr++;
+			if (resetCtr > maxResets) {
+			    System.out.println("######### CRITICAL ERROR");
+			    System.out.println(">>> #### MAX RESETS");
+			    System.out.println(">>> sleeping 10 sec");
+			    NomadsErrCheckThread.sleep(12000);
+			    resetCtr=0;
+			}
+			nThread.setHandleStart(mSecN);
+			System.out.println("######### NETWORK ERROR");
+			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+			// System.out.println(">>> halting thread.");
+			nThread.setRunState(false);
+			NomadsErrCheckThread.sleep(800);
+			// deleteSynth(lastThread);
+			nThread = null;
+			System.out.println("   disconnecting.");
+			operaSand.disconnect();
+			NomadsErrCheckThread.sleep(800);
+			operaSand = null;
+			connected = false;
+			System.out.println("   disconneced.");
+			// System.out.println(">>> deleting sprites/synths.");
+			// deleteAllSynths();
+			// System.out.println(">>> sprites/synths deleted.");
+			System.out.println("   Attempting reconnect.");
+			NomadsErrCheckThread.sleep(800);
+			operaSand = new NSand(); 
+			operaSand.connect();
+
+			int d[] = new int[1];
+			d[0] = 0;
+			operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
+			connected = true;
+			System.out.println("   reconnected!");			
+			System.out.println("   attempting to restart thread.");			
+			NomadsErrCheckThread.sleep(800);
+			nThread = new NomadsAppThread(this);
+			nThread.setRunState(true);
+			nThread.start();
+
+
+			System.out.println("Thread restarted.");			
+			errFlag = 0;
+
+			now = Calendar.getInstance();
+			mSecN = now.getTimeInMillis();
+			nThread.setHandleStart(mSecN);
+
+		    }
+		}
+		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
+		    errFlag--;
+		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
+		}
+	    }
+	    NomadsErrCheckThread.sleep(100);
+	}
+	catch (InterruptedException ie) {}
+
+    }
+
+    // END errcheck -------------------------------------------
+
+
+
+
     public void createGUI(Container pane) {
-
-
 
 	Color BG = new Color(0,0,100);      
 	pane.setBackground(BG);
@@ -339,12 +608,17 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 
 	operaSand = new NSand();
 	operaSand.connect();
+	connected = true;
 
 	byte d[] = new byte[1];
 	d[0] = 0;
 
 	nThread = new NomadsAppThread(this);
+	nThread.setRunState(true);
 	nThread.start();
+
+	nECThread = new NomadsErrCheckThread(this);
+	nECThread.start();
 
 	operaSand.sendGrain((byte)NAppID.CONDUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
@@ -361,18 +635,45 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 	int THREAD_ID;
 	float xput,yput;
 
-	int incCmd, incAppID, incDType, incDLen;
+	byte incCmd, incAppID, incDType, incDLen;
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 	NGrain grain;
 
 	NGlobals.cPrint("ACP: OperaCntrl -> handle()");
 
+	setSandRead(false);
 	grain = operaSand.getGrain();
-	grain.print(); //prints grain data to console
+	if (grain == null) {
+	    setSandRead(true);
+	    setHandleActive(true);
+	    while(true) {
+		try {
+		    runner.sleep(1000);
+		}
+		catch (InterruptedException ie) {}
+	    }
+	}
+
+	if (grain == null) 
+	    return;
+	else 
+	    grain.print(); //prints grain data to console
 
 	incAppID = grain.appID;
 	incCmd = grain.command;
+
+
+	byte incAppCmd = grain.command;
+	byte incAppDataType = grain.dataType;
+	int incAppDataLen = grain.dataLen;
+
+	NGlobals.cPrint("OCTL ===== READING ===== ");
+	NGlobals.cPrint("OCTL appID: " + NAppID.printID(incAppID));
+	NGlobals.cPrint("OCTL command: " + NCommand.printCmd(incAppCmd));
+	NGlobals.cPrint("OCTL dataType: " + NDataType.printDT(incAppDataType));
+	NGlobals.cPrint("OCTL dataLen: " + incAppDataLen);
+
 
 	//		if (incAppID == NAppID.MONITOR) {
 	//			if (text.equals("CHECK")) {
@@ -470,9 +771,6 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
 		promptTextField.setText(prompt);
 		promptTextField.setEnabled(false);
 	    }
-			
-
-
 	}
 
 	if (incAppID == NAppID.CONDUCTOR_PANEL) {
@@ -826,15 +1124,5 @@ public class OperaCntrl extends JApplet implements ActionListener, KeyListener, 
     }
 
 
-    // DT 6/30/10:  not sure we need these anymore
-
-    public void start() {
-
-    }
-
-    public void run () {
-	if (i == 1) {
-	} 
-    }
-
 }
+

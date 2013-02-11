@@ -49,6 +49,8 @@ public class OperaClient extends JApplet implements Runnable
     Boolean sandRead = false;
     Boolean connected = true;
     int errFlag = 0;
+    int errTrip = 10;
+
     int lastThread = 0;
     float mSecAvg=10;
     float mSecAvgL=10;
@@ -176,7 +178,7 @@ public class OperaClient extends JApplet implements Runnable
 		    if (errFlag > 0) {
 			NGlobals.dtPrint(">>> INCR ERROR COUNT: " + errFlag);
 		    }
-		    if ((errFlag > 3) && (connected == true)) {
+		    if ((errFlag > errTrip) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
 			NGlobals.dtPrint("-----> EREC #" + resetCtr);
@@ -400,7 +402,7 @@ public class OperaClient extends JApplet implements Runnable
 
 
     public void handle() { //byte bite String text
-	int incCmd, incAppID, incDType, incDLen;
+	byte incCmd, incAppID, incDType, incDLen;
 	int i,j;
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
@@ -415,36 +417,21 @@ public class OperaClient extends JApplet implements Runnable
 
 	NGlobals.cPrint("OperaClient -> got data === message num: " + msgCntr);
 
-
 	// grain.print(); //prints grain data to console
 
 	incAppID = grain.appID;
 	incCmd = grain.command;
 
+	byte incAppCmd = grain.command;
+	byte incAppDataType = grain.dataType;
+	int incAppDataLen = grain.dataLen;
 
+	NGlobals.cPrint("OCli ===== READING ===== ");
+	NGlobals.cPrint("OCli appID: " + NAppID.printID(incAppID));
+	NGlobals.cPrint("OCli command: " + NCommand.printCmd(incAppCmd));
+	NGlobals.cPrint("OCli dataType: " + NDataType.printDT(incAppDataType));
+	NGlobals.cPrint("OCli dataLen: " + incAppDataLen);
 
-	//	String input, tTest;
-
-
-	//		tTest = text; 
-	//
-	//		if (text.length() >= 4){
-	//			tTest = text.substring(0, 4);
-	//			NGlobals.cPrint("tTest =" + tTest);
-	//		}
-
-	//NOT IMPLEMENTED ****STK 6/20/12
-	//		if (bite == app_id.MONITOR) {
-	//			if (text.equals("CHECK")) {
-	//				try {
-	//					streamOut.writeByte((byte)app_id.OPERA_CLIENT);
-	//					streamOut.writeUTF("PING");
-	//				}
-	//				catch(IOException ioe) {
-	//					NGlobals.dtPrint("Error writing to output stream: ");
-	//				}
-	//			}	 
-	//		}   
 
 	if (incAppID == NAppID.CONDUCTOR_PANEL) {
 	    NGlobals.cPrint("OC: from Conductor Panel: ");

@@ -70,7 +70,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 
     long mSecR=0;
     int resetCtr=0;
-    int maxResets=10;
+    int maxResets=1000;
 
     float mSecAvg=10;
     float mSecAvgL=10;
@@ -87,7 +87,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 	runner.start();
     }
 
-    public void run () {
+    public synchronized void run () {
 	while (true) {
 	    try {
 		runner.sleep(1000);
@@ -96,20 +96,33 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 	}
     }
 
-    public synchronized Boolean getSandRead() {
-	return sandRead;
+
+    private Object sandReadLock = new Object();
+
+    public Boolean getSandRead() {
+	synchronized (sandReadLock) {
+	    return sandRead;
+	}
     }
 
-    public synchronized void setSandRead(Boolean sr) {
-	sandRead = sr;
+    public void setSandRead(Boolean sr) {
+	synchronized (sandReadLock) {
+	    sandRead = sr;
+	}
     }
 
-    public synchronized Boolean getHandleActive() {
-	return handleActive;
+    private Object handleActiveLock = new Object();
+
+    public Boolean getHandleActive() {
+	synchronized(handleActiveLock) {
+	    return handleActive;
+	}
     }
 
-    public synchronized void setHandleActive(Boolean ha) {
-	handleActive = ha;
+    public void setHandleActive(Boolean ha) {
+	synchronized(handleActiveLock) {
+	    handleActive = ha;
+	}
     }
 
     private class NomadsAppThread extends Thread {
@@ -128,37 +141,54 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 	float mSecAvg=10;
 	float mSecAvgL=10;
 
-	public synchronized long getHandleStart() {
-	    return handleStart;
+	private Object handleStartLock = new Object();
+
+	public long getHandleStart() {
+	    synchronized(handleStartLock) {
+		return handleStart;
+	    }
 	}
 
-	public synchronized long getHandleEnd() {
-	    return handleEnd;
+	public void setHandleStart(long hs) {
+	    synchronized(handleStartLock) {
+		handleStart = hs;
+	    }
 	}
 
-	public synchronized void setHandleStart(long hs) {
-	    handleStart = hs;
+	private Object handleEndLock = new Object();
+
+	public long getHandleEnd() {
+	    synchronized(handleEndLock) {
+		return handleEnd;
+	    }
 	}
 
-	public synchronized void setHandleEnd(long he) {
-	    handleEnd = he;
+	public void setHandleEnd(long he) {
+	    synchronized(handleEndLock) {
+		handleEnd = he;
+	    }
 	}
 
-	public synchronized void setRunState(Boolean state) {
-	    runState = state;
+	private Object runStateLock = new Object();
+
+	public void setRunState(Boolean state) {
+	    synchronized(runStateLock) {
+		runState = state;
+	    }
 	}
 
-	public synchronized Boolean getRunState() {
-	    return runState;
+	public Boolean getRunState() {
+	    synchronized(runStateLock) {
+		return runState;
+	    }
 	}
-
 
 	public NomadsAppThread(StudentControlPanel _client) {
 	    client = _client;
 	    // Connect
 	}
 
-	public void run()    {			
+	public synchronized void run()    {			
 	    NGlobals.dtPrint("NomadsAppThread -> run()");
 	    while (getRunState() == true)  {
 		now = Calendar.getInstance();
@@ -178,7 +208,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 	public NomadsErrCheckThread(StudentControlPanel _client) {
 	    client = _client;
 	}
-	public void run()    {			
+	public synchronized void run()    {			
 	    NGlobals.dtPrint("StudentControlPanel ERRCHECKTHREAD -> run");
 	    while (true)  {
 		client.errCheck();
@@ -240,12 +270,12 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 			// System.out.println(">>> halting thread.");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(2000);
+			NomadsErrCheckThread.sleep(800);
 			// deleteSynth(lastThread);
 			nThread = null;
 			System.out.println("   disconnecting.");
 			studentControlPanelSand.disconnect();
-			NomadsErrCheckThread.sleep(2000);
+			NomadsErrCheckThread.sleep(800);
 			studentControlPanelSand = null;
 			connected = false;
 			System.out.println("   disconneced.");
@@ -253,7 +283,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// deleteAllSynths();
 			// System.out.println(">>> sprites/synths deleted.");
 			System.out.println("   Attempting reconnect.");
-			NomadsErrCheckThread.sleep(2000);
+			NomadsErrCheckThread.sleep(800);
 			studentControlPanelSand = new NSand(); 
 			studentControlPanelSand.connect();
 
@@ -265,10 +295,9 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// xaxa
 
 			connected = true;
-			NomadsErrCheckThread.sleep(1000);
 			System.out.println("   reconnected!");			
 			System.out.println("   attempting to restart thread.");			
-			NomadsErrCheckThread.sleep(1000);
+			NomadsErrCheckThread.sleep(800);
 			nThread = new NomadsAppThread(this);
 			nThread.setRunState(true);
 			nThread.start();
@@ -289,8 +318,6 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			    byte[] tStringAsBytes = userName.getBytes();
 			    int tLen = userName.length();
 			    studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
-
-
 			}
 			discussFrame.setVisible(false);
 			cloudFrame.setVisible(false);
@@ -776,7 +803,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 
 	// Send to SWARM/POINTER ---------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL) {
-	    //	mySandPointerPanel.handle(grain);
+	    mySandPointerPanel.handle(grain);
 	}
 
 	// Send to UNITY GROOVE ----------------------

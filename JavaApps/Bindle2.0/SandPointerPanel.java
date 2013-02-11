@@ -88,14 +88,14 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 	    // event
 	    // Note that "x += ...;" is just shorthand for "x = x + ...;"
 
-	    if (new_mx < 5)
-		new_mx = 5;
-	    if (new_mx > 490)
-		new_mx = 490;
-	    if (new_my < 5)
-		new_my = 5;
-	    if (new_my > 490)
-		new_my = 490;
+	    if (new_mx < 1)
+		new_mx = 1;
+	    if (new_mx > 599)
+		new_mx = 599;
+	    if (new_my < 1)
+		new_my = 1;
+	    if (new_my > 599)
+		new_my = 599;
 
 	    x += new_mx - mx;
 	    y += new_my - my;
@@ -105,18 +105,12 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 	    my = new_my;
 			
 	    if (isMouseDraggingBox) {
-		double myx = (mx - (width / 2)) / ((double) width * 3);
-		double myy = (my - (height / 2)) / ((double) height * 3);
-		NumberFormat formatter = new DecimalFormat("#0.0000");
-		String towrite = new String("C:" + new_mx + ":" + new_my);
-		//System.out.println("Byte is " + app_id.STUDENT_SAND_POINTER + " and write is "
-		//			+ towrite);
 
 		int[] xy = new int[2];
-		xy[0] = new_mx;
-		xy[1] = new_my;
+		xy[0] = (int)(new_mx/599)*1000;
+		xy[1] = (int)(new_my/599)*1000;
 
-		mySand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT, 2, xy);
+		mySand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy);
 
 		// xxx	streamOut.writeByte(NSand.appID.STUDENT_SAND_POINTER);
 		// xxx streamOut.writeUTF(towrite);

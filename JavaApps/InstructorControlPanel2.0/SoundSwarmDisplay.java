@@ -139,30 +139,31 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	
 	try
 	    {
-		Synth.startEngine(0);
-		/* DO: Your setup code goes here. ******************/
-		/* Create unit generators. */
-		modOsc = new SineOscillator[MAX_THREADS];
-		carOsc = new SineOscillator[MAX_THREADS];
-		freqAdder = new AddUnit[MAX_THREADS];
-		lineOut  = new LineOut();
-		
-		myBusReader = new BusReader();
-		
-		myBusWriter = new BusWriter[MAX_THREADS];
-
-		/* Synchronize Java display to make buttons appear. */
-		getParent().validate();
-		getToolkit().sync();
-
-		myBusReader.output.connect(0, lineOut.input, 0 );
-		myBusReader.output.connect(0, lineOut.input, 1 );
-
-		myBusReader.start();
-		lineOut.start();
-
+		if (false) {
+		    Synth.startEngine(0);
+		    /* DO: Your setup code goes here. ******************/
+		    /* Create unit generators. */
+		    modOsc = new SineOscillator[MAX_THREADS];
+		    carOsc = new SineOscillator[MAX_THREADS];
+		    freqAdder = new AddUnit[MAX_THREADS];
+		    lineOut  = new LineOut();
+		    
+		    myBusReader = new BusReader();
+		    
+		    myBusWriter = new BusWriter[MAX_THREADS];
+		    
+		    /* Synchronize Java display to make buttons appear. */
+		    getParent().validate();
+		    getToolkit().sync();
+		    
+		    myBusReader.output.connect(0, lineOut.input, 0 );
+		    myBusReader.output.connect(0, lineOut.input, 1 );
+		    
+		    myBusReader.start();
+		    lineOut.start();
+		    
 		//	myBusReader.output.connect(lineOut.input, 0 );
-
+		}
 		
 	    } catch(SynthException e) {
 	    SynthAlert.showError(this,e);
@@ -195,38 +196,39 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	    sprites[threadNum].y = height / 2 - 20;
 	    sprites[threadNum].color = new Color(randNum.nextInt(255),randNum.nextInt(255),randNum.nextInt(255));
 
-	    oscNum[numOscs++] = threadNum;
-	    modOsc[threadNum] = new SineOscillator();
-	    carOsc [threadNum]= new SineOscillator();
-	    freqAdder[threadNum]    = new AddUnit();
-
-	    modOsc[threadNum].amplitude.set(0.5);
-	    for (int i=0;i<numOscs;i++) {
-		tNum = oscNum[i];
-		tAmp = (float)1/(numOscs+1);
-		//hPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		carOsc[tNum].amplitude.set(tAmp);
-	    }
-	    // freqAdder[threadNum].amplitude.set(0.5);
-
-	    /* Feed first oscillators through adder to offset center frequency. */
-	    modOsc[threadNum].output.connect( freqAdder[threadNum].inputA );
-	    freqAdder[threadNum].output.connect( carOsc[threadNum].frequency );
-			
-	    /* Connect oscillator to LineOut so we can hear it. */
-
-	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
-
-	    carOsc[threadNum].output.connect(myBusWriter[threadNum].input);
-
-	    myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
-
-	    modOsc[threadNum].frequency.set(200.0);  // MF
-	    carOsc[threadNum].frequency.set(400.0);  // CF
-
-	    modOsc[threadNum].amplitude.set(100.0);
-	    freqAdder[threadNum].inputB.set(200.0);  // CF
-	    
+	    if (false) {
+		oscNum[numOscs++] = threadNum;
+		modOsc[threadNum] = new SineOscillator();
+		carOsc [threadNum]= new SineOscillator();
+		freqAdder[threadNum]    = new AddUnit();
+		
+		modOsc[threadNum].amplitude.set(0.5);
+		for (int i=0;i<numOscs;i++) {
+		    tNum = oscNum[i];
+		    tAmp = (float)1/(numOscs+1);
+		    //hPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		    carOsc[tNum].amplitude.set(tAmp);
+		}
+		// freqAdder[threadNum].amplitude.set(0.5);
+		
+		/* Feed first oscillators through adder to offset center frequency. */
+		modOsc[threadNum].output.connect( freqAdder[threadNum].inputA );
+		freqAdder[threadNum].output.connect( carOsc[threadNum].frequency );
+		
+		/* Connect oscillator to LineOut so we can hear it. */
+		
+		myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
+		
+		carOsc[threadNum].output.connect(myBusWriter[threadNum].input);
+		
+		myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
+		
+		modOsc[threadNum].frequency.set(200.0);  // MF
+		carOsc[threadNum].frequency.set(400.0);  // CF
+		
+		modOsc[threadNum].amplitude.set(100.0);
+		freqAdder[threadNum].inputB.set(200.0);  // CF
+		
 	    // // /* Create a fader to control Frequency. */
 	    // add( centerFader = new PortFader( freqAdder[threadNum].inputB,
 	    //  				      "Center Frequency", 200.0, 0.0, 500.0) );
@@ -237,14 +239,17 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	    //  add( modRangeFader = new PortFader( modOsc[threadNum].amplitude,
 	    //  					"Modulation Depth", 1.0, 0.0, MAX_MOD_DEPTH) );
 
-	    NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting isOsc[" + threadNum + "] to true");
+		NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting isOsc[" + threadNum + "] to true");
+	    }
 	    isOsc[threadNum] = true;
 
-	    /* Start units. */
-	    modOsc[threadNum].start();
-	    freqAdder[threadNum].start();
-	    carOsc[threadNum].start();
-	    myBusWriter[threadNum].start();
+	    if (false) {
+		/* Start units. */
+		modOsc[threadNum].start();
+		freqAdder[threadNum].start();
+		carOsc[threadNum].start();
+		myBusWriter[threadNum].start();
+	    }
 	}
 	else {
 	    NGlobals.cPrint("SOUND_SWARM_DISPLAY: synth already created for thread: " + threadNum);
@@ -269,7 +274,8 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	grain = swarmDisplaySand.getGrain();
 	NGlobals.cPrint("SOUND_SWARM_DISPLAY::  got GRAIN");
 	grain.print(); //prints grain data to console
-	
+
+
 	if (grain.appID == NAppID.SOUND_SWARM) {
 
 	    if(grain.command == NCommand.SEND_THREAD_ID) {
@@ -302,20 +308,23 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 		if (yput > 500)
 		    yput = 500;
 		
-		if (isOsc[THREAD_ID]) {
-		    NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting osc values for thread: " + THREAD_ID);
-		    
-		    //carOsc[THREAD_ID].frequency.set((float)xput);
-		    //carOsc[THREAD_ID].amplitude.set((float)yput);
-		    
-		    sprites[THREAD_ID].x = x;
-		    sprites[THREAD_ID].y = y;
-		    
-		    carOsc[THREAD_ID].frequency.set((float)xput);
-		    //		    freqAdder[THREAD_ID].inputB.set((float)xput);
-		    modOsc[THREAD_ID].frequency.set((float)yput);
-		    repaint();
-		}
+		    if (isOsc[THREAD_ID]) {
+			NGlobals.cPrint("SOUND_SWARM_DISPLAY: setting osc values for thread: " + THREAD_ID);
+			
+			//carOsc[THREAD_ID].frequency.set((float)xput);
+			//carOsc[THREAD_ID].amplitude.set((float)yput);
+			
+			sprites[THREAD_ID].x = (x/1000)*width;
+			sprites[THREAD_ID].y = (y/1000)*height;
+			
+			if (false) {
+			    carOsc[THREAD_ID].frequency.set((float)xput);
+			    //		    freqAdder[THREAD_ID].inputB.set((float)xput);
+			    modOsc[THREAD_ID].frequency.set((float)yput);
+			}
+			repaint();
+
+		    }
 		else {
 		    NGlobals.cPrint("SOUND_SWARM_DISPLAY: isOsc[" + THREAD_ID + "] = false");
 		}

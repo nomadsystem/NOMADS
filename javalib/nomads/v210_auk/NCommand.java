@@ -31,13 +31,61 @@ public class NCommand {
     public static byte SET_POINTER_TONE_VOLUME = 26;
     public static byte SEND_CACHED_DISCUSS_STRING = 27;
 
-    public static byte DELETE_SPRITE = 99;
-
-    
     public static byte SEND_PROMPT_ON = 30;
     public static byte SEND_PROMPT_OFF = 31;
     public static byte SET_CLIENT_COUNT = 33;
 
-    
+    public static byte DELETE_SPRITE = 99;
 
+    public static String printCmd (byte id) {
+	String[] idList = new String[255];
+	int i;
+	for(i=0;i<255;i++) {
+	    idList[i] = null;
+	}
+
+	idList[NOOP] = new String("NOOP");
+	idList[SEND_MESSAGE] = new String("SEND_MESSAGE");
+	idList[REGISTER] = new String("REGISTER");
+	
+	idList[SYNTH_ENABLE] = new String("SYNTH_ENABLE");
+	idList[SYNTH_DISABLE] = new String("SYNTH_DISABLE");
+	idList[SYNTH_START] = new String("SYNTH_START");
+	idList[SYNTH_STOP] = new String("SYNTH_STOP");
+
+	idList[SET_DISCUSS_STATUS] = new String("SET_DISCUSS_STATUS");
+	idList[SET_CLOUD_STATUS] = new String("SET_CLOUD_STATUS");
+	idList[SET_POINTER_STATUS] = new String("SET_POINTER_STATUS");
+	idList[SET_DROPLET_VOLUME] = new String("SET_DROPLET_VOLUME");
+	idList[SET_DISCUSS_DISPLAY_STATUS] = new String("SET_DISCUSS_DISPLAY_STATUS");
+	idList[SET_CLOUD_DISPLAY_STATUS] = new String("SET_CLOUD_DISPLAY_STATUS");
+	idList[SET_DISCUSS_ALPHA] = new String("SET_DISCUSS_ALPHA");
+	idList[SET_CLOUD_ALPHA] = new String("SET_CLOUD_ALPHA");
+	idList[SET_POINTER_ALPHA] = new String("SET_POINTER_ALPHA");
+	idList[SEND_SPRITE_THREAD_XY] = new String("SEND_SPRITE_THREAD_XY");
+	idList[SEND_SPRITE_XY] = new String("SEND_SPRITE_XY");
+	idList[SET_SYNTH_VOLUME] = new String("SET_SYNTH_VOLUME");
+
+	idList[SET_CLOUD_SOUND_STATUS] = new String("SET_CLOUD_SOUND_STATUS");
+	idList[SET_CLOUD_SOUND_VOLUME] = new String("SET_CLOUD_SOUND_VOLUME");
+	idList[SET_POINTER_TONE_STATUS] = new String("SET_POINTER_TONE_STATUS");
+	idList[SET_POINTER_TONE_VOLUME] = new String("SET_POINTER_TONE_VOLUME");
+	idList[SEND_CACHED_DISCUSS_STRING] = new String("SEND_CACHED_DISCUSS_STRING");
+
+	idList[SEND_PROMPT_ON] = new String("SEND_PROMPT_ON");
+	idList[SEND_PROMPT_OFF] = new String("SEND_PROMPT_OFF");
+	idList[SET_CLIENT_COUNT] = new String("SET_CLIENT_COUNT");
+
+	idList[DELETE_SPRITE] = new String("DELETE_SPRITE");
+
+	// Print out the id as a string
+	if (idList[id] != null) {
+	    String rString = new String(idList[id] + "[" + id + "]");
+	    return rString;	
+	}
+	else {
+	    String rString = new String("UNKNOWN[" + id + "]");
+	    return rString;	
+	}
+    }
 }

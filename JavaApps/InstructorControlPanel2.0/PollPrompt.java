@@ -164,11 +164,13 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	byte incAppID = grain.appID;
 	byte incCmd = grain.command;
+	int response;
 		
 	if (incAppID == NAppID.STUDENT_POLL) {
-	    int response = grain.iArray[0];
 	    if (incCmd == NCommand.QUESTION_TYPE_YES_NO)	// Replace with QUESTION_TYPE_YES_NO)
 		{
+		    response = grain.iArray[0];
+
 		    if (response == 1) //eventually may want to convert these to commands
 			{
 			    NGlobals.cPrint("PP:yes came in");
@@ -219,6 +221,7 @@ public class PollPrompt extends JApplet implements ActionListener
 	    //parse 1 to 10 results
 	    else if (incCmd == NCommand.QUESTION_TYPE_ONE_TO_TEN)	// Replace with QUESTION_TYPE_ONE_TO_TEN)
 		{
+		    response = grain.iArray[0];
 		    resp = response; //May need to deal with gettng results as an int or string ****STK 6/15/12
 		    runningTotal += resp;
 		    count++;
@@ -236,6 +239,25 @@ public class PollPrompt extends JApplet implements ActionListener
 
 		    results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></center></html>");	
 		}
+	    else if (incCmd == NCommand.QUESTION_TYPE_A_TO_E) {
+		    response = grain.iArray[0];
+		    resp = response; //May need to deal with gettng results as an int or string ****STK 6/15/12
+		    runningTotal += resp;
+		    count++;
+				
+		    NGlobals.cPrint("PP:runningTotal / count " + (runningTotal / count));
+		    average = runningTotal / count;
+
+		    //show results with color in bottom of applet
+		    bottom.setBackground(theColors[(int)Math.round(average)]);
+		    dispResults.setBackground(theColors[(int)Math.round(average)]);
+		    DecimalFormat roundAverage = new DecimalFormat("#.##");//use to round to 2 decimal places
+		    //	roundAverage = (float)average;
+
+		    //show results average in applet too
+
+		    results.setText("<html><center><h3>" + qText + "</h3><h2 style='color:black'>Average: " + roundAverage.format(average) + "</h2></center></html>");	
+	    }
 	    else	
 		{
 		    NGlobals.cPrint("PP:Teacher poll says Extraneous information");
