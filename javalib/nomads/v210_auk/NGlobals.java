@@ -2,10 +2,10 @@ package nomads.v210_auk;
 
 
 public class NGlobals {
-    public static int clientDebugLevel = 0;  // Use this for printout info
-    public static int serverDebugLevel = 0;  // Use this for printout info
+    public static int clientDebugLevel = 1;  // Use this for printout info
+    public static int serverDebugLevel = 1;  // Use this for printout info
     public static int libraryDebugLevel = 0;  // Use this for printout info
-    public static int dtDebugLevel = 0;  // Use this for printout info
+    public static int dtDebugLevel = 1;  // Use this for printout info
     public static int xDebugLevel = 1;  // Use this for printout info
     public static String    serverName = "nomads.music.virginia.edu";
     public static int serverPort = 52910;
@@ -13,6 +13,10 @@ public class NGlobals {
     public static int serverPortSK = 52912;
     public static int serverPortPT = 52913;
     public static int serverPortMB = 52914;
+
+    public static void noPrint(String str) {
+    }
+
 
     public static void printit(String str) {
 	if (clientDebugLevel > 0) {

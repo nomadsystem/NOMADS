@@ -18,15 +18,46 @@ public class NSand
     private String    serverName = NGlobals.serverName;
     private int       serverPort = NGlobals.serverPortDT;
 
+    private Boolean canRun;
+    private Object outSandLock;
+    private Object inSandLock;
+    private Object runLock;
+
+
     // Maybe yes to these
     URL imgWebBase, webBase;
 
     public NSand () {
+	outSandLock = new Object();
+	inSandLock = new Object();
+	runLock = new Object();
+	canRun = true;
     }
 
     public NSand (Socket serverSock) {
+	outSandLock = new Object();
+	inSandLock = new Object();
+	runLock = new Object();
 	socket = serverSock;
+	canRun = true;
     }
+
+    public void setRun(Boolean b) {
+	synchronized(runLock) {
+	NGlobals.dtPrint(">> setRun( " + b +" ) passed runLock");
+	    canRun = b;
+	}
+    }
+
+    public Boolean getRun() {
+	NGlobals.noPrint(">> getRun()");
+	synchronized(runLock) {
+	    NGlobals.noPrint("     passed runLick");
+	    NGlobals.noPrint("     returning " + canRun);
+	    return canRun;
+	}
+    }
+
 
     public DataInputStream getInStream() {
 	return streamIn;
@@ -40,7 +71,36 @@ public class NSand
 	socket = serverSock;
     }
 
-    // SendGrain with Byte Array
+    // 0.  Get single byte (used by server) ===============================
+    public byte getByte () {
+	byte b = -1;
+	try {
+	    b = streamIn.readByte();
+	}
+	catch(IOException ioe) {  
+	    System.out.println("6: SAND write error");
+	    setRun(false);
+	}
+	return b;
+    }
+
+    // 0.  Get single byte (used by server) ===============================
+    public byte getByteL () {
+	byte b = -1;
+	synchronized (inSandLock) {
+	    try {
+		b =streamIn.readByte();
+	    }
+	    catch(IOException ioe) {  
+		System.out.println("6: SAND write error");
+		setRun(false);
+	    }
+	    return b;
+	}
+    }
+
+    // SendGrain with GRAIN ===============================================
+
     public int sendGrain (NGrain myGrain) {
 	int retCode = 0;
 	NGlobals.lPrint("sendGrain: (NGrain) ");
@@ -112,8 +172,72 @@ public class NSand
 	return retCode;
     }
 
+    // 1.  SendGrain with Grain (with LOCK, for servers) =================================
 
-    // SendGrain with Byte Array
+    public void sendGrainL (NGrain myGrain) {
+	NGlobals.noPrint("preOSL");
+	synchronized (outSandLock) {
+	NGlobals.noPrint("postOSL");
+	NGlobals.lPrint("sendGrain: (NGrain) ");
+	try {  
+	    // send app id
+	    streamOut.writeByte(myGrain.appID);
+	    // send command
+	    streamOut.writeByte(myGrain.command);
+	    // send data Type
+	    streamOut.writeByte(myGrain.dataType);
+	    // send data Length
+	    streamOut.writeInt(myGrain.dataLen);
+	    NGlobals.lPrint("appID =" + myGrain.appID);
+	    NGlobals.lPrint("commd =" + myGrain.command);
+	    NGlobals.lPrint("dataType =" + myGrain.dataType);
+	    NGlobals.lPrint("dLen  =" + myGrain.dataLen);
+
+	    // send data
+	    if (myGrain.dataType == NDataType.CHAR) {
+		NGlobals.lPrint("data[] = CHAR");
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeByte(myGrain.bArray[i]);
+		}
+	    }
+
+	    else if (myGrain.dataType == NDataType.UINT8) {
+		NGlobals.lPrint("data[] = UINT8");
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeByte(myGrain.bArray[i]);
+		}
+	    }
+
+	    else if (myGrain.dataType == NDataType.INT32) {
+		NGlobals.lPrint("data[] = INT32");
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeInt(myGrain.iArray[i]);
+		}
+	    }
+
+	    else if (myGrain.dataType == NDataType.FLOAT32) {
+		NGlobals.lPrint("data[] = FLOAT32");
+		for (int i=0; i<myGrain.dataLen; i++) {
+		    streamOut.writeFloat(myGrain.fArray[i]);
+		}
+	    }
+
+	    else {
+		NGlobals.lPrint("NSAND: sendGrain(nGrain): WARNING:  Unknown NDataType: " + myGrain.dataType);
+	    }
+
+
+	}
+	catch(IOException ioe) {  
+	    System.out.println("1: SAND write error");
+	    setRun(false);
+	}
+    }
+    }
+
+
+    // 2. SendGrain with Byte Array no lock ====================================================
+
     public void sendGrain (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
 	NGlobals.lPrint("sendGrain: ... args ... bArray[]");
 	try {  
@@ -142,7 +266,42 @@ public class NSand
 	}
     }
 
-    // SendGrain with Int Array
+    // 2. SendGrain with Byte Array (with LOCK, for servers) ===============================
+    public void sendGrainL (byte aID, byte cmd, byte dType, int dLen, byte[] bArray) {
+	NGlobals.noPrint("preOSL");
+	synchronized (outSandLock) {
+	NGlobals.noPrint("postOSL");
+	NGlobals.lPrint("sendGrain: ... args ... bArray[]");
+	try {  
+	    // send app id
+	    streamOut.writeByte(aID);
+	    // send command
+	    streamOut.writeByte(cmd);
+	    // send data Type
+	    streamOut.writeByte(dType);
+	    // send data Length
+	    streamOut.writeInt(dLen);
+
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
+
+	    for (int i=0; i<dLen; i++) {
+		streamOut.writeByte(bArray[i]);
+		NGlobals.lPrint("BYTE:  " + bArray[i]);
+	    }
+	}
+	catch(IOException ioe) {  
+	    System.out.println("2: SAND write error");
+	    setRun(false);
+	}
+    }
+    }
+
+
+    // 3. SendGrain with Int Array (no locks, for apps) ========================================
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
 	NGlobals.lPrint("sendGrain: ... args ... iArray[]");
 	try {  
@@ -169,7 +328,39 @@ public class NSand
 	}
     }
 
-    // SendGrain with Float Array
+    // 3. SendGrain with Int Array (with LOCKS, for servers) ====================================
+    public  void sendGrainL (byte aID, byte cmd, byte dType, int dLen, int[] iArray) {
+	NGlobals.noPrint("preOSL");
+	synchronized (outSandLock) {
+	NGlobals.noPrint("postOSL");
+	NGlobals.lPrint("sendGrain: ... args ... iArray[]");
+	try {  
+	    // send app id
+	    streamOut.writeByte(aID);
+	    // send command
+	    streamOut.writeByte(cmd);
+	    // send data Type
+	    streamOut.writeByte(dType);
+	    // send data Length
+	    streamOut.writeInt(dLen);
+
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
+	    for (int i=0; i<dLen; i++) {
+		streamOut.writeInt(iArray[i]);
+	    }
+	}
+	catch(IOException ioe) {  
+	    System.out.println("4: SAND write error");
+	    setRun(false);
+	}
+    }
+    }
+
+    // 4. SendGrain with Float Array (no locks, for apps) ===============================
     public  void sendGrain (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
 	NGlobals.lPrint("sendGrain: ... args ... fArray[]");
 	try {  
@@ -196,6 +387,138 @@ public class NSand
 	    System.out.println("SAND write error 4");
 	}
     }
+
+    // 4. SendGrain with Float Array (with LOCKS, for servers) ===============================
+    public  void sendGrainL (byte aID, byte cmd, byte dType, int dLen, float[] fArray) {
+	NGlobals.noPrint("preOSL");
+	synchronized (outSandLock) {
+	NGlobals.noPrint("postOSL");
+	NGlobals.lPrint("sendGrain: ... args ... fArray[]");
+	try {  
+	    // send app id
+	    streamOut.writeByte(aID);
+	    // send command
+	    streamOut.writeByte(cmd);
+	    // send data Type
+	    streamOut.writeByte(dType);
+	    // send data Length
+	    streamOut.writeInt(dLen);
+
+	    NGlobals.lPrint("appID =" + aID);
+	    NGlobals.lPrint("commd =" + cmd);
+	    NGlobals.lPrint("dataType =" + dType);
+	    NGlobals.lPrint("dLen  =" + dLen);
+
+	    for (int i=0; i<dLen; i++) {
+		streamOut.writeFloat(fArray[i]);
+	    }
+	}
+	catch(IOException ioe) {  
+	    System.out.println("5: SAND write error");
+	    setRun(false);
+	}
+    }
+    }
+
+    // getGrain 1 (arg) LOCKS ===========================================================================================
+
+    //Returns Grain appID, cmd, dT, dL, bA
+    public  NGrain getGrainL (byte appID) {
+	synchronized (inSandLock) {
+	NGlobals.lPrint("getGrain");
+	byte cmd, dT;
+	int dL;
+	NGrain grain = null;
+	try {  
+	    // get command
+	    cmd = streamIn.readByte();
+	    // get data Type
+	    dT = streamIn.readByte();
+	    // get data Length
+	    dL = streamIn.readInt();
+
+	    //Detect array type in Grain
+	    //Byte array
+	    if (dT == NDataType.BYTE) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+	    }
+
+	    //Byte array
+	    else if (dT == NDataType.UINT8) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("UINT8:  " + bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
+	    }
+			
+	    //Int Array
+	    else if (dT == NDataType.INT) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+	    }
+
+	    //Int Array 32
+	    else if (dT == NDataType.INT32) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
+	    }
+			
+	    //Float Array
+	    else if (dT == NDataType.FLOAT) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+	    }
+			
+	    else if (dT == NDataType.FLOAT32) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+
+	    }
+
+	}
+	catch(IOException ioe) {  
+	    System.out.println("6: SAND write error");
+	    setRun(false);
+	}
+	// System.out.println("NSand:getGrain: returning grain");
+	// grain.print();
+	return grain;
+    }
+    }
+
+    // getGrain 1 (arg) no locks ===========================================================================================
 
     //Returns Grain appID, cmd, dT, dL, bA
     public  NGrain getGrain (byte aID) {
@@ -305,6 +628,111 @@ public class NSand
 
 	return grain;
     }
+
+    // getGrain() 2 no args LOCKS ===========================================================================================
+
+    //Returns Grain appID, cmd, dT, dL, bA
+    public  NGrain getGrainL () {
+	synchronized (inSandLock) {
+
+	NGlobals.lPrint("getGrain");
+	byte appID, cmd, dT;
+	int dL;
+	NGrain grain = null;
+	try {  
+	    // get app id
+	    appID = streamIn.readByte();
+	    // get command
+	    cmd = streamIn.readByte();
+	    // get data Type
+	    dT = streamIn.readByte();
+	    // get data Length
+	    dL = streamIn.readInt();
+
+	    //Detect array type in Grain
+	    //Byte array
+	    if (dT == NDataType.BYTE) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("BYTE:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+	    }
+			
+	    //Byte array
+	    else if (dT == NDataType.UINT8) {
+		byte[] bA = new byte[dL];
+
+		for (int i=0; i< dL; i++) {
+		    bA[i] = streamIn.readByte();
+		    NGlobals.lPrint("UINT8:  " + (char) bA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, bA);
+		// System.out.println("NSand:getGrain: creating grain with UINT8s");
+	    }
+
+	    //Int Array
+	    else if (dT == NDataType.INT) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+	    }
+
+	    //Int Array 32
+	    else if (dT == NDataType.INT32) {
+		int[] iA = new int[dL];
+
+		for (int i=0; i< dL; i++) {
+		    iA[i] = streamIn.readInt();
+		    NGlobals.lPrint("INT32:  " + iA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, iA);
+		// System.out.println("NSand:getGrain: creating grain with INT32s");
+	    }
+			
+	    //Float Array
+	    else if (dT == NDataType.FLOAT) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+	    }
+
+	    //Float Array 32
+	    else if (dT == NDataType.FLOAT32) {
+		float[] fA = new float[dL];
+
+		for (int i=0; i< dL; i++) {
+		    fA[i] = streamIn.readFloat();
+		    NGlobals.lPrint("FLOAT:  " + fA[i]);
+		}
+		grain = new NGrain(appID, cmd, dT, dL, fA);
+		// System.out.println("NSand:getGrain: creating grain with FLOAT32s");
+
+	    }
+	    else {
+		NGlobals.lPrint("WARNING:  unknown SAND data type\n");
+	    }
+			
+	}
+	catch(IOException ioe) {  
+	    // System.out.println("7: SAND write error");
+	    setRun(false);
+	}
+	return grain;
+    }
+    }
+
+    // getGrain() 2 no args no locks ===========================================================================================
 
     //Returns Grain appID, cmd, dT, dL, bA
     public  NGrain getGrain () {

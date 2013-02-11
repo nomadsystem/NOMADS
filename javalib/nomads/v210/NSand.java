@@ -39,13 +39,18 @@ public class NSand
     }
 
     public void setRun(Boolean b) {
+	NGlobals.dtPrint(">> setRun( " + b);
 	synchronized(runLock) {
+	NGlobals.dtPrint("     passed runLick");
 	    canRun = b;
 	}
     }
 
     public Boolean getRun() {
+	NGlobals.dtPrint(">> getRun()");
 	synchronized(runLock) {
+	    NGlobals.dtPrint("     passed runLick");
+	    NGlobals.dtPrint("     returning " + canRun);
 	    return canRun;
 	}
     }
@@ -1051,17 +1056,18 @@ public class NSand
 	disConnectSocket();
     }
 
-    public void closeSocketStreams()
+    public void connectSocket()
     {  
-	try {
-	    if (streamOut != null)  streamOut.close();
-	    if (streamIn != null)  streamIn.close();
-	    // if (socket    != null)  socket.close();
+	// System.out.println("Establishing connection. Please wait ...");
+	try {  
+	    socket = new Socket(serverName, serverPort);
+	    // System.out.println("Connected");
 	}
-	catch(IOException ioe) {
-	    System.out.println("Error closing...");
+	catch(IOException ioe) {  
+	    // System.out.println("socket connect exception: ");
 	}
     }
+
 
     public void disConnectSocket()
     {  
@@ -1072,19 +1078,6 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("socket discconnect exception: ");
-	}
-    }
-
-
-    public void connectSocket()
-    {  
-	// System.out.println("Establishing connection. Please wait ...");
-	try {  
-	    socket = new Socket(serverName, serverPort);
-	    // System.out.println("Connected");
-	}
-	catch(IOException ioe) {  
-	    // System.out.println("socket connect exception: ");
 	}
     }
 
@@ -1099,6 +1092,17 @@ public class NSand
 	}
     }
 
+    public void closeSocketStreams()
+    {  
+	try {
+	    if (streamOut != null)  streamOut.close();
+	    if (streamIn != null)  streamIn.close();
+	    // if (socket    != null)  socket.close();
+	}
+	catch(IOException ioe) {
+	    System.out.println("Error closing...");
+	}
+    }
 
     public void close()
     {  
