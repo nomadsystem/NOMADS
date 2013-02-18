@@ -233,7 +233,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	for (i=0; i<screenCellX; i++) {
 	    xRand = 25-randNum.nextInt(xVar);
 	    cellSlotsX[i] = ((generatedX.get(i) * (int)((width * 0.7)/screenCellX)) + xRand); //Scale width to get greatest X value (try 0.7)
-	    NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
+	    // NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
 	    // System.out.println("CellSlotsX[i] = " + cellSlotsX[i]);
 	}
 		
@@ -256,7 +256,7 @@ public class CloudDisplay extends JPanel implements MouseListener, MouseMotionLi
 	for (i=0; i<screenCellY; i++) {
 	    yRand = 10-randNum.nextInt(yVar);
 	    cellSlotsY[i] = ((generatedY.get(i) * (int)((height * 0.9)/screenCellY)) + yRand); //Scale height to get greatest Y value (total screen size seems okay)
-	    NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
+	    // NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
 	    // System.out.println("CellSlotsY[i] = " + cellSlotsY[i]);
 	}
 	//STK**** End Cloud Randomization code========================================

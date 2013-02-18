@@ -104,7 +104,7 @@ public class CloudTest implements Runnable {
 
 	cloudTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 	
-	String tString = new String("testUsers");
+	String tString = new String("testCloud");
 	int tLen = tString.length();
 
 	byte[] tStringAsBytes = tString.getBytes();

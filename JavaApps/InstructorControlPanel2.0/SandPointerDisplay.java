@@ -6,6 +6,8 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import nomads.v210.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.*;
 
 import com.softsynth.jsyn.*;
 import com.softsynth.jsyn.view11x.ExponentialPortFader;
@@ -20,6 +22,12 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 
     // will always need this
     int numOscs = 0;
+    private int BackgroundNum = 0;
+
+    String imgPrefix;
+    Image backgroundImg;
+    URL imgWebBase;
+    public Boolean soundStatus = false;
 
     Random randNum;
 
@@ -34,6 +42,9 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
     SineOscillator carOsc[];
     AddUnit            freqAdder[];
     Boolean            isOsc[];
+    Boolean            oscCheck[];
+    int tOscNum[];
+    
     LineOut            lineOut;
     int                lineOutType;
     BusReader          myBusReader;
@@ -74,6 +85,20 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	}
     }
 
+
+    public synchronized void deleteOsc(int i) {
+	isOsc[i] = false;
+    }
+
+    public synchronized void deleteSprite(int i) {
+	sprites[i] = null;
+    }
+
+    public synchronized Sprite getSprite(int i) {
+	return sprites[i];
+    }
+
+
     // public static void main(String args[])
     // {
     // 	DO: Change TUT_SineFreq to match the name of your class. Must match file name!
@@ -84,7 +109,45 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
     // 	frame.test();
     // }
     
+
+    public void setAllSynthVol(int vol) {
+	int threadNum, tNum,i;
+	float tAmp;
+	if (vol > 0) {
+	    for (i=0;i<numOscs;i++) {
+		threadNum = i;
+		tNum = oscNum[i];
+		tAmp = (float)(1.0/(numOscs+1));
+		//hPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+
+		// modOsc[tNum].frequency.set(200.0);  // MF
+		// carOsc[tNum].frequency.set(400.0);  // CF
+		
+		modOsc[tNum].amplitude.set(100.0);
+		freqAdder[tNum].inputB.set(200.0);  // CF
+
+		// modOsc[tNum].amplitude.set(0.5);
+		carOsc[tNum].amplitude.set(tAmp);
+	    }
+	    // freqAdder[threadNum].amplitude.set(0.5);
+	}
+	else {
+	    for (i=0; i<numOscs; i++) {
+		tNum = oscNum[i];
+		tAmp = (float)(1.0/(numOscs+1));
+		//hPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		modOsc[tNum].amplitude.set(0);
+		carOsc[tNum].amplitude.set(0);
+	    }
+	}
+    }
  
+    public void setBackground(int i) {
+	NGlobals.dtPrint("  ---> setBackground(" + i + ")");
+	BackgroundNum = i;
+	repaint();
+    }
+
     public void init(NSand inSand)
     {
 
@@ -104,8 +167,16 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 
 	width = 800;
 	height = 800;
-	setBackground(Color.black);
+	// setBackground(Color.black);
 	
+	// imgPrefix = "http://nomads.music.virginia.edu/images/";
+	// try { 
+	//     imgWebBase = new URL(imgPrefix); 
+	// } 
+	// catch (Exception e) {}
+
+	// backgroundImg = getImage(imgWebBase,"NOMADS_world_map.jpg");
+
 	x = width / 2 - 20;
 	y = height / 2 - 20;
 	
@@ -113,9 +184,13 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	addMouseMotionListener(this);
 
 	sprites = new Sprite[MAX_THREADS];
-	isOsc = new Boolean[MAX_THREADS];
 	oscNum = new int[MAX_THREADS];
-	
+
+	isOsc = new Boolean[MAX_THREADS];
+	oscCheck = new Boolean[MAX_THREADS];
+	tOscNum = new int[MAX_THREADS];
+
+
 	for (i=0;i<MAX_THREADS;i++) {
 	    isOsc[i] = false;
 	}
@@ -222,7 +297,7 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 
 	    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: setting isOsc[" + threadNum + "] to true");
 	    isOsc[threadNum] = true;
-	    if (false) {
+	    if (true) {
 		/* Start units. */
 		modOsc[threadNum].start();
 		freqAdder[threadNum].start();
@@ -234,8 +309,61 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: synth already created for thread: " + threadNum);
 
 	}
+	if (soundStatus == false) {
+	    setAllSynthVol(0);
+	}
     }
-    
+
+    public void deleteAllSynths() {
+	NGlobals.dtPrint("deleteAllSynths()");
+	for (int i=0;i<MAX_THREADS;i++) {
+	    //	    int tNum = 	oscNum[i];
+	    deleteSynth(i);
+	}
+	numOscs = 0;
+	repaint();
+    }
+ 
+
+    public synchronized void deleteSynth(int threadNum) {
+	int tNum = threadNum;
+	if (isOsc[threadNum]) {
+
+	    freqAdder[tNum].inputA.set(0.0);  // CF
+	    freqAdder[tNum].inputB.set(0.0);  // CF
+	    modOsc[tNum].amplitude.set(0.0);
+	    carOsc[tNum].amplitude.set(0.0);
+
+	    deleteSprite(threadNum);
+	    deleteOsc(threadNum);
+
+	    freqAdder[tNum].stop();
+	    modOsc[tNum].stop();
+	    carOsc[tNum].stop();
+	    freqAdder[tNum].delete();
+	    modOsc[tNum].delete();
+	    
+
+	    carOsc[tNum].delete();
+
+	    int j=0;
+
+	    for (int i=0;i<numOscs;i++) {
+		tNum = 	oscNum[i];
+		if (sprites[tNum] != null) {
+		    tOscNum[j] = oscNum[i];
+		    j++;
+		}
+	    }
+	    numOscs--;
+	    for (int i=0;i<numOscs;i++) {
+		oscNum[i] = tOscNum[i];
+	    }
+	    
+	}
+    }
+
+
     // ================================ HANDLE ==================================
 
     public void handle(NGrain inGrain)
@@ -256,9 +384,7 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	NGlobals.dtPrint("appID = " + grain.appID);
 	NGlobals.dtPrint("command = " + grain.command);
 
-	
 	if (grain.appID == NAppID.SOUND_SWARM) {
-
 
 	    if (grain.command == NCommand.SEND_SPRITE_XY) {
 		THREAD_ID = grain.iArray[0];
@@ -268,8 +394,7 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 		NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
 		// x *= (1.3);
 		// y *= (1.3);
-		NGlobals.dtPrint("SOUND_SWARM_DISPLAY::  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
-	    
+    
 	    
 		if (x > 999)
 		    x = 1999;
@@ -296,15 +421,17 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 		if (isOsc[THREAD_ID]) {
 		    NGlobals.dtPrint("SOUND_SWARM_DISPLAY: setting osc values for thread: " + THREAD_ID);
 		    
-		    //carOsc[THREAD_ID].frequency.set((float)xput);
-		    //carOsc[THREAD_ID].amplitude.set((float)yput);
+		    // carOsc[THREAD_ID].frequency.set((float)xput);
+		    // carOsc[THREAD_ID].amplitude.set((float)yput);
 		    
 		    sprites[THREAD_ID].x = (int)((x/1000.0)*width);
 		    sprites[THREAD_ID].y = (int)((y/1000.0)*height);
 		    
-		    carOsc[THREAD_ID].frequency.set((float)xput);
-		    freqAdder[THREAD_ID].inputB.set((float)xput);
-		    modOsc[THREAD_ID].frequency.set((float)yput);
+		    if (soundStatus == true) {
+			carOsc[THREAD_ID].frequency.set((float)xput);
+			freqAdder[THREAD_ID].inputB.set((float)xput);
+			modOsc[THREAD_ID].frequency.set((float)yput);
+		    }
 		    repaint();
 		}
 		else {
@@ -393,6 +520,15 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	int ksize = 7;
 	int ssize = 5;
 
+	if (BackgroundNum == 0) {
+	    g.setColor(Color.BLACK);
+	    g.fillRect(0,0,width,height);
+	    ssize = 5;
+	}
+	else if (BackgroundNum == 1) {
+	    g.drawImage(backgroundImg, 0, 0, width, height, this);
+	    ssize = 7;
+	}
 
 	//	int xpoints[] = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
 	//	int ypoints[] = {y+(int)(ksize/1), y-(int)(ksize/1), y+(int)(ksize/1), y+(int)(ksize*3)};
@@ -406,8 +542,13 @@ public class SandPointerDisplay extends JPanel implements MouseListener, MouseMo
 	// g.setColor(Color.RED);
 	// g.fillPolygon(xpoints, ypoints, xpoints.length);
 
-	g.setColor(Color.BLACK);
-	g.fillRect(0,0,width,height);
+	if (BackgroundNum == 0) {
+	    g.setColor(Color.BLACK);
+	    g.fillRect(0,0,width,height);
+	}
+	else if (BackgroundNum == 1) {
+	    g.drawImage(backgroundImg, 0, 0, width, height, this);
+	}
 
 	//	setBackground(Color.black);
 

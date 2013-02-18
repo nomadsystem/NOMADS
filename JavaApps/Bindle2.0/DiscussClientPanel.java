@@ -139,6 +139,7 @@ public class DiscussClientPanel extends JPanel implements ActionListener, KeyLis
 	wholeThing.add(rTab, BorderLayout.EAST);	   
 
 	add(wholeThing, BorderLayout.CENTER);
+	// input.requestFocus();
 
     }
 

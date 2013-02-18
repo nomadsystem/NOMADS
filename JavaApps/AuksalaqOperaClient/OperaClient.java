@@ -507,13 +507,13 @@ public class OperaClient extends JApplet implements Runnable
 	    }
 	}
 
-	else if (incAppID == NAppID.OC_CLOUD) {
-	    if (incCmd == NCommand.SEND_MESSAGE) {
-		String text = new String(grain.bArray);
-		myOC_Cloud.handle(text);
-		NGlobals.cPrint("OC: Entering Cloud Discuss");
-	    }
-	}
+	// else if (incAppID == NAppID.OC_CLOUD) {
+	//     if (incCmd == NCommand.SEND_MESSAGE) {
+	// 	String text = new String(grain.bArray);
+	// 	myOC_Cloud.handle(text);
+	// 	NGlobals.cPrint("OC: Entering Cloud Discuss");
+	//     }
+	// }
 
 	else if (incAppID == NAppID.DISCUSS_TOPIC)
 	    if (incCmd == NCommand.SEND_MESSAGE) {

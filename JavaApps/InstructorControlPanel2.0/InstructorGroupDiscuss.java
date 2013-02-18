@@ -134,6 +134,8 @@ public class InstructorGroupDiscuss extends JPanel implements ActionListener, Ke
 
 	add(wholeThing, BorderLayout.CENTER);
 
+	// input.requestFocus();
+
     }
 
     public synchronized void handle(NGrain inGrain)
@@ -183,7 +185,6 @@ public class InstructorGroupDiscuss extends JPanel implements ActionListener, Ke
 
 	    if (incCmd == NCommand.SEND_MESSAGE) {
 		chatWindow.append(msg + "\n");
-		// input.requestFocus();
 	    }
 	}
 	else {

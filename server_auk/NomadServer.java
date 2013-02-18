@@ -65,7 +65,7 @@ public class NomadServer implements Runnable {
 
     private synchronized void checkClients() {
 	// CHECK double check the client count
-	NGlobals.sPrint("checkClients() - - - - -");
+	NGlobals.dtPrint("checkClients() - - - - -");
 	NomadServerThread tT;
 	int tC = 0;
 	for (int c=0; c<getClientCount(); c++) {
@@ -73,7 +73,8 @@ public class NomadServer implements Runnable {
 	    tT = getClient(c);
 	    if (tT != null) {
 		if (tT.getRun()) {
-		    clientsChecked[tC++] = tT; 
+		    clientsChecked[tC] = tT; 
+		    tC++;
 		}
 	    }
 	}
@@ -82,17 +83,18 @@ public class NomadServer implements Runnable {
 	// Put only clean clients back on the list
 
 	for (int c=0; c<getClientCount(); c++) {
+	    tT = null;
 	    tT = clientsChecked[c];
 	    setClient(c,tT);
 	}
 
-	NGlobals.sPrint("- - - - -clientCount = " + getClientCount());
+	NGlobals.dtPrint("- - - - -clientCount = " + getClientCount());
 	// - CHECK
     }
 
     private synchronized void checkDispClients() {
 	// CHECK double check the client count
-	NGlobals.sPrint("checkDispClients() - - - - -");
+	NGlobals.dtPrint("checkDispClients() - - - - -");
 	NomadServerThread tT;
 	int tC = 0;
 	for (int c=0; c<getDispClientCount(); c++) {
@@ -113,7 +115,7 @@ public class NomadServer implements Runnable {
 	}
 
 	setDispClientCount(tC);
-	NGlobals.sPrint("- - - - -clientCount = " + getClientCount());
+	NGlobals.dtPrint("- - - - -clientCount = " + getClientCount());
 	// - CHECK
     }
 
@@ -419,6 +421,8 @@ public class NomadServer implements Runnable {
 	int[] x3 = new int[3];
 
 	NomadServerThread currentClient;
+	NomadServerThread inClient;
+	int inClientNum;
 
 	// Do the following for EACH client
 
@@ -432,7 +436,7 @@ public class NomadServer implements Runnable {
 
 	// 1: READ =================================================================================================================
 
-	NGlobals.sPrint("--------------------------------------------------------------------[" + debugLine++ + "]");
+	
 	
 
 	// Read in relevant SAND header info
@@ -442,6 +446,8 @@ public class NomadServer implements Runnable {
 	incAppDataLen = myGrain.dataLen;
 
 	if (incAppCmd != NCommand.SEND_SPRITE_XY) {
+	    NGlobals.sPrint("--------------------------------------------------------------------[" + debugLine++ + "]");
+
 	    NGlobals.sPrint("======= READING =======");
 	    NGlobals.sPrint("\tcientCount = " + getClientCount());
 	    NGlobals.sPrint("\tmainDisplayClientCount = " + getDispClientCount());
@@ -455,7 +461,7 @@ public class NomadServer implements Runnable {
 	    }
 	}
 	else {
-	    NGlobals.sPrint("  -> SEND_SPRITE_XY/tcientCount = " + getClientCount() + "/tmainDisplayClientCount = " + getDispClientCount());
+	    NGlobals.dtPrint("  -> SEND_SPRITE_XY/tcientCount = " + getClientCount() + "/tmainDisplayClientCount = " + getDispClientCount());
 
 	}
 
@@ -1131,18 +1137,19 @@ public class NomadServer implements Runnable {
 			    c--;
 			}
 
-			// send data to ===> OPERA CLIENT - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// send data to ===> OPERA CLIENT - - - - - - - - -  - - - - - - - - - - - - - - - - - - - -
 			else if (currentClient.getAppID() == NAppID.OPERA_CLIENT) {
 			    NGlobals.sPrint("   sending to ===> client[" + c + "] w/ appID = " + NAppID.printID((byte)currentClient.getAppID()));
 			    //myGrain.print();
 			    // Write the data out
 			    if (currentClient.threadSand.getRun()) {
+				// inClientNum = getClientThreadNum(THREAD_ID);
+				// inClient = getClient(inClientNum);
 				currentClient.threadSand.sendGrainL(myGrain);
 			    }
 			    else {
 				removeByThreadID(currentClient.getThreadID());
 			    }
-
 			}
 
 			// // send data to ===> OPERA MAIN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1229,7 +1236,8 @@ public class NomadServer implements Runnable {
 			}
 			else {
 
-			    NGlobals.sPrint("   sending to ===> display client[" + c + "] w/ appID = " + NAppID.printID((byte)currentClient.getAppID()));
+			    // NGlobals.sPrint("   sending to ===> display client[" + c + "] w/ appID = " + NAppID.printID((byte)currentClient.getAppID()));
+			    // 
 			    // CUSTOM DATA PACKING into 3 ints: THREAD_ID, x, y
 			    x3[0] = THREAD_ID;
 			    x3[1] = myGrain.iArray[0];
@@ -1286,14 +1294,20 @@ public class NomadServer implements Runnable {
 	    if (incAppCmd != NCommand.SEND_SPRITE_XY) {
 		NGlobals.sPrint("handle(DONE) " + THREAD_ID + ":" + myGrain.appID);
 	    }
-	    // Free up memory
-	    if (myGrain != null) {
-		myGrain = null;
-	    }
 	}
 
-	NGlobals.sPrint("---------------------------------------------------------------- handle() done");
-    }	
+	// DT 2-16-13:  moved this from outside the above "if (false)" loop
+	//              saw it was in the classroom server code
+	// Free up memory
+	if (myGrain != null) {
+	    myGrain = null;
+	}
+
+
+	if (incAppCmd != NCommand.SEND_SPRITE_XY) {
+	    NGlobals.sPrint("---------------------------------------------------------------- handle() done");
+	}	
+    }
 
     // =====================================================================================================
     // END main data routing code --- handle() fn
@@ -1316,9 +1330,9 @@ public class NomadServer implements Runnable {
 
 	pos = getClientThreadNum(THREAD_ID);
 
-	NGlobals.sPrint("(rbtid) removing THREAD_ID " + THREAD_ID + " at pos " + pos);
-	NGlobals.sPrint("(rbtid)     clientCount = " + getClientCount());
-	NGlobals.sPrint("(rbtid)     clients.length = " + getClientsLength());
+	NGlobals.dtPrint("(rbtid) removing THREAD_ID " + THREAD_ID + " at pos " + pos);
+	NGlobals.dtPrint("(rbtid)     clientCount = " + getClientCount());
+	NGlobals.dtPrint("(rbtid)     clients.length = " + getClientsLength());
 
 	// remove from lists ---------------------------------------------------------------------------------
 
@@ -1400,7 +1414,7 @@ public class NomadServer implements Runnable {
 
 	    // rem from client list
 	    if (pos < getClientCount()-1) {
-		NGlobals.sPrint("   (rbtid) removing client thread " + THREAD_ID + " at " + pos);
+		NGlobals.dtPrint("   (rbtid) removing client thread " + THREAD_ID + " at " + pos);
 		for (int i = pos+1; i < getClientCount(); i++) {
 		    tT = getClient(i);
 		    if (tT != null) {
@@ -1435,7 +1449,7 @@ public class NomadServer implements Runnable {
 		}
 	    }
 	    catch(IOException ioe) {  
-		NGlobals.sPrint("  (rbtid) error closing thread: " + ioe); 
+		NGlobals.dtPrint("  (rbtid) error closing thread: " + ioe); 
 	    }
 	}
 	

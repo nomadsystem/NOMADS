@@ -39,18 +39,18 @@ public class NSand
     }
 
     public void setRun(Boolean b) {
-	NGlobals.dtPrint(">> setRun( " + b);
+	// NGlobals.dtPrint(">> setRun( " + b);
 	synchronized(runLock) {
-	NGlobals.dtPrint("     passed runLick");
+	    // NGlobals.dtPrint("     passed runLick");
 	    canRun = b;
 	}
     }
 
     public Boolean getRun() {
-	NGlobals.dtPrint(">> getRun()");
+	// NGlobals.dtPrint(">> getRun()");
 	synchronized(runLock) {
-	    NGlobals.dtPrint("     passed runLick");
-	    NGlobals.dtPrint("     returning " + canRun);
+	    // NGlobals.dtPrint("     passed runLick");
+	    // NGlobals.dtPrint("     returning " + canRun);
 	    return canRun;
 	}
     }
@@ -150,7 +150,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("1: SAND write error");
-	    setRun(false);
+	    setRun(false);  // sendGrain (myGrain)
 	}
     }
 
@@ -212,7 +212,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("1: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrainL (myGrain)
 	}
     }
     }
@@ -244,7 +244,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("2: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrain(a,c,d,l,bA)
 	}
     }
 
@@ -277,7 +277,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("2: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrainL(a,c,d,l,bA)
 	}
     }
     }
@@ -314,7 +314,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("3: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrainC(a,c,d,l,bA)
 	}
     }
 
@@ -342,7 +342,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("4: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrain (a,c,d,l,iA)
 	}
     }
 
@@ -373,7 +373,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("4: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrainL(a,c,d,l,iA)
 	}
     }
     }
@@ -403,7 +403,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("5: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrain(a,c,d,l,fA)
 	}
     }
 
@@ -434,7 +434,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("5: SAND write error");
-	    setRun(false);
+	    setRun(false); // sendGrainL(a,c,d,l,fA)
 	}
     }
     }
@@ -529,7 +529,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("6: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrainL(appID)
 	}
 	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
@@ -626,7 +626,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("6: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrain(appID)
 	}
 	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
@@ -730,7 +730,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    // System.out.println("7: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrainL()
 	}
 	return grain;
     }
@@ -831,7 +831,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    // System.out.println("7: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrain()
 	}
 	return grain;
     }
@@ -931,7 +931,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("8: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrainC(appID)
 	}
 	// System.out.println("NSand:getGrain: returning grain");
 	// grain.print();
@@ -1039,7 +1039,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    // System.out.println("9: SAND write error");
-	    setRun(false);
+	    setRun(false); // getGrainC()
 	}
 	return grain;
     }
@@ -1071,10 +1071,10 @@ public class NSand
 
     public void disConnectSocket()
     {  
-	System.out.println("Disconnecting Please wait ...");
+	System.out.println("LOG, Disconnecting Please wait ...");
 	try {  
 	    if (socket    != null)  socket.close();
-	    System.out.println("Disconnected");
+	    System.out.println("LOG, Disconnected");
 	}
 	catch(IOException ioe) {  
 	    System.out.println("socket discconnect exception: ");

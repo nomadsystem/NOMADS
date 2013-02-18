@@ -8,8 +8,9 @@ import javax.swing.*;
 
 import nomads.v210.*;
 
-public class SandPointerPanel extends JApplet implements MouseListener,
-						   MouseMotionListener {
+public class SandPointerPanel extends JPanel implements MouseListener, MouseMotionListener {   
+
+// public class SandPointerPanel extends JApplet implements MouseListener, MouseMotionListener {
 
     int width, height;
     int x, y; // coords of the box
@@ -38,6 +39,11 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 	addMouseMotionListener(this);
     }
 
+    public void resetSand(NSand inSand)
+    { 
+	mySand = inSand;
+    }
+
     public void mouseEntered(MouseEvent e) {
     }
 
@@ -50,9 +56,9 @@ public class SandPointerPanel extends JApplet implements MouseListener,
     public void mousePressed(MouseEvent e) {
 	mx = e.getX();
 	my = e.getY();
-	if (x < mx && mx < x + 40 && y < my && my < y + 40) {
+	 if (x < mx && mx < x + 40 && y < my && my < y + 40) {
 	    isMouseDraggingBox = true;
-	}
+	     }
 	e.consume();
     }
 
@@ -104,18 +110,27 @@ public class SandPointerPanel extends JApplet implements MouseListener,
 	    mx = new_mx;
 	    my = new_my;
 			
-	    if (isMouseDraggingBox) {
+	    
+	    int[] xy = new int[2];
+	    double a,b,c,d;
+	    a = x/599.0;
+	    b = y/599.0;
+	    c = a*1000;
+	    d = b*1000;
+	    xy[0] = (int)c;
+	    xy[1] = (int)d;
+	    
+	    NGlobals.cPrint("a = " + a);
+	    NGlobals.cPrint("b = " + b);
+	    NGlobals.cPrint("c = " + c);
+	    NGlobals.cPrint("d = " + d);
 
-		int[] xy = new int[2];
-		xy[0] = (int)(new_mx/599)*1000;
-		xy[1] = (int)(new_my/599)*1000;
 
-		mySand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy);
-
-		// xxx	streamOut.writeByte(NSand.appID.STUDENT_SAND_POINTER);
-		// xxx streamOut.writeUTF(towrite);
-	    }
-			
+	    mySand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy);
+	    
+	    NGlobals.cPrint(" -- sending x/y " + xy[0] + "," + xy[1]);
+	    // xxx	streamOut.writeByte(NSand.appID.STUDENT_SAND_POINTER);
+	    // xxx streamOut.writeUTF(towrite);
 			
 	    repaint();
 	    e.consume();
@@ -125,7 +140,7 @@ public class SandPointerPanel extends JApplet implements MouseListener,
     public void paint(Graphics g) {
 
 	NGlobals.cPrint("SAND POINTER:  paint()");
-	int ksize = 5;
+	int ksize = 7;
 	int xpoints[] = {x-(int)(ksize/2), x+(int)(ksize/2), x+(int)(ksize*1.5), x+(int)(ksize/2)};
 	int ypoints[] = {y+(int)(ksize/2), y-(int)(ksize/2), y+(int)(ksize/2), y+(int)(ksize*1.5)};
 
