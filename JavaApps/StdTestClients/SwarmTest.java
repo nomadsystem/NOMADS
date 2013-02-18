@@ -12,12 +12,12 @@ import java.net.*;
 import java.io.*;
 import nomads.v210.*;
 
-public class PollTest5 implements Runnable {   
+public class SwarmTest implements Runnable {   
 
     private class NomadsAppThread extends Thread {
-	PollTest5 client; //Replace with current class name
+	SwarmTest client; //Replace with current class name
 
-	public NomadsAppThread(PollTest5 _client) {
+	public NomadsAppThread(SwarmTest _client) {
 	    client = _client;
 	}
 	public void run()    {			
@@ -30,7 +30,7 @@ public class PollTest5 implements Runnable {
 
     private Thread       thread = null;
 
-    NSand pollTestSand;
+    NSand swarmTestSand;
     private NomadsAppThread nThread;
 
     Random randNum;
@@ -42,8 +42,8 @@ public class PollTest5 implements Runnable {
     public static void main(String args[])
     {
 
-	PollTest5  applet = null;
-	applet = new PollTest5();
+	SwarmTest  applet = null;
+	applet = new SwarmTest();
 
     }
 
@@ -52,10 +52,10 @@ public class PollTest5 implements Runnable {
 
 	int i;
 
-	NGlobals.cPrint("PollTest5 -> init()");
+	NGlobals.cPrint("SwarmTest -> init()");
 
-	pollTestSand = new NSand(); 
-	pollTestSand.connect();
+	swarmTestSand = new NSand(); 
+	swarmTestSand.connect();
 
 	int d[] = new int[1];
 	d[0] = 0;
@@ -63,22 +63,21 @@ public class PollTest5 implements Runnable {
 	nThread = new NomadsAppThread(this);
 	nThread.start();
 
-	pollTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+	swarmTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	String tString = new String("testPoll5");
+	String tString = new String("testSwarm");
 	int tLen = tString.length();
 
 	byte[] tStringAsBytes = tString.getBytes();
 
-	pollTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.UINT8, tLen, tStringAsBytes );
-	
+	swarmTestSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );	
 
 
 
     }	
 
 
-    public PollTest5() {  	    
+    public SwarmTest() {  	    
 	randNum = new Random();
 	init();
 	start();
@@ -88,7 +87,7 @@ public class PollTest5 implements Runnable {
 
 
     public void start()  {  
-	NGlobals.cPrint("PollTest5 -> start()");
+	NGlobals.cPrint("SwarmTest -> start()");
 
 	runner = new Thread(this);
 	runner.start();
@@ -103,20 +102,25 @@ public class PollTest5 implements Runnable {
     }
 
     public void run () {
+	NGlobals.cPrint("SwarmTest -> run()");
 	int i = 0;
-	int pollRes;
+	int startX = 200+randNum.nextInt(600);
+	int startY = 200+randNum.nextInt(600);
+	int xOff, yOff;
 
 	while (true) {
 
-	    int[] pollD = new int[1];
-
-	    pollRes = randNum.nextInt(5)+1;
-
-	    pollD[0] = pollRes;
+	    int[] xy = new int[2];
+	    xOff = randNum.nextInt(400)-200;
+	    yOff = randNum.nextInt(400)-200;
+	    xy[0] = startX+xOff;
+	    xy[1] = startY+yOff;
+	    
 
 	    try {
-		pollTestSand.sendGrain((byte)NAppID.STUDENT_POLL, (byte)NCommand.QUESTION_TYPE_A_TO_E, (byte)NDataType.INT32, 1, pollD );
-		runner.sleep(1000);
+		NGlobals.cPrint("SwarmTest -> NSand.send()");
+		swarmTestSand.sendGrain((byte)NAppID.SOUND_SWARM, (byte)NCommand.SEND_SPRITE_XY, (byte)NDataType.INT32, 2, xy );
+		runner.sleep(100);
 	    }
 	    catch (InterruptedException ie) {}
 
@@ -128,11 +132,11 @@ public class PollTest5 implements Runnable {
 
 	NGrain grain;
 
-	NGlobals.cPrint("PollTest5 -> handle()");
+	NGlobals.cPrint("SwarmTest -> handle()");
 
-	grain = pollTestSand.getGrain();
+	grain = swarmTestSand.getGrain();
 	grain.print();
-	System.out.println("PollTest5 handle()");
+	System.out.println("SwarmTest handle()");
 
 	    
     }

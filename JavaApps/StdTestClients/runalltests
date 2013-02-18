@@ -1,6 +1,8 @@
 #for proc in $(ps -ax | grep "/usr/bin/java" | grep -v "NomadServer"); do kill $proc; done &>/dev/null
-./killswarms
-./killclouds
-./killdiscs
-./killpolls
-./killcrashers
+./runswarm &
+./runcloud &
+./rundisc &
+./runpoll10 &
+./runpoll5 &
+./runpollYN &
+./runcrasher &

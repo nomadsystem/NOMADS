@@ -18,7 +18,7 @@ public class JoinPanel extends JApplet implements ActionListener {
     String userID, tUserID, tLogin;
     JButton submit;
     JLabel usernameLabel, empty;
-    JTextField login;
+    public JTextField login;
     Color bgColor;
     NSand mySand;
     StudentControlPanel parent;

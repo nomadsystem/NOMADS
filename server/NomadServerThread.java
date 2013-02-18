@@ -132,7 +132,7 @@ public class NomadServerThread extends Thread
 		}
 	    }
 	    catch(IOException ioe) {  
-		System.out.println("THREAD " + THREAD_ID + " ERROR reading: " + ioe.getMessage());
+		System.out.println("LOG, THREAD " + THREAD_ID + " ERROR reading: " + ioe.getMessage());
 		myRun = false;
 		threadSand.setRun(false);
 		server.removeByThreadID(THREAD_ID);

@@ -88,7 +88,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Thread runner;
 
     long mSecR=0;
-    int mSecLimit=3000;
+    int mSecLimit=5000;
     int errTrip=10;
 
     int resetCtr=0;
@@ -136,7 +136,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	}
 
 	public void run()    {			
-	    NGlobals.lPrint("NomadsAppThread -> run()");
+	    NGlobals.cPrint("NomadsAppThread -> run()");
 	    while (getRunState() == true)  {
 		now = Calendar.getInstance();
 		setHandleStart(now.getTimeInMillis());
@@ -156,7 +156,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    client = _client;
 	}
 	public void run()    {			
-	    NGlobals.lPrint("NomadsErrCheckThread -> run()");
+	    NGlobals.dtPrint("NomadsErrCheckThread -> run()");
 	    while (true)  {
 		client.errCheck();
 	    }
@@ -173,7 +173,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Random randNum;
     int numOscs = 0;
 
-    int currentBackgroundImageName = 1; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
+    int currentBackgroundImageName = 1; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080, 4=7680x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
 
@@ -424,7 +424,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
 	backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
 	backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
-	backgroundImageName[4] = "BackgroundDisplay1_11520x1200.jpg";
+	backgroundImageName[4] = "BackgroundDisplay1_7680x1080.jpg";
 
 	//Resizing text/pointer based on which image we're using
 	if (currentBackgroundImageName == 0)
@@ -462,7 +462,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	for (int i=0; i<screenCellX; i++) {
 	    cellSlotsX[i] = (generatedX.get(i) * (int)((width * 0.7)/screenCellX)); //Scale width to get greatest X value (try 0.7)
 	    NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
-	    System.out.println("CellSlotsX[i] = " + cellSlotsX[i]);
 	}
 		
 	cellSlotsY = new int[screenCellY];
@@ -484,7 +483,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	for (int i=0; i<screenCellY; i++) {
 	    cellSlotsY[i] = (generatedY.get(i) * (int)((height * 0.9)/screenCellY)); //Scale height to get greatest Y value (total screen size seems okay)
 	    NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
-	    System.out.println("CellSlotsY[i] = " + cellSlotsY[i]);
 	}
 	//STK**** End Cloud Randomization code========================================
 
@@ -1142,12 +1140,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		
 		if (isOsc(THREAD_ID)) {
 		    if (oscTick > oscMaxTick) {
-			NGlobals.sPrint("OK TO SWARM");
+			NGlobals.dtPrint("OK TO SWARM");
 			oscTick = 0;
 		    }
 		    else {
 			oscTick++;
-			NGlobals.sPrint("SKIPPING SWARM");
+			NGlobals.dtPrint("SKIPPING SWARM");
 			return;
 		    }
 		}
@@ -1762,7 +1760,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatLines[i] = chatLines[i-1];
 		}
 		chatLines[0] = text;
-		redraw();
+		// redraw();
 	    }
 	}
 	    
@@ -1956,7 +1954,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	tH = (int)(height*1.1);
 	chatSpace = tH/numChatLines;
 	chatYLoc = height-chatSpace;
-	chatXLoc = 20;
+	chatXLoc = 40;
 
 
 

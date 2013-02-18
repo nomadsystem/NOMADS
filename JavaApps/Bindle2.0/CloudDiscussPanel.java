@@ -152,7 +152,7 @@ public class CloudDiscussPanel extends JPanel implements ActionListener, KeyList
 		}
 		if (grain != null)
 			grain = null;
-		input.requestFocus();
+		// input.requestFocus();
 	}
 
 
