@@ -6,12 +6,18 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import nomads.v210.*;
+import netscape.javascript.*;
+
 
 import com.softsynth.jsyn.*;
 import com.softsynth.jsyn.view11x.ExponentialPortFader;
 import com.softsynth.jsyn.view11x.LabelledFader;
 import com.softsynth.jsyn.view11x.PortFader;
 import com.softsynth.jsyn.view11x.SynthScope;
+
+String imgPrefix;
+Image backgroundImg;
+URL imgWebBase;
  
 public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMotionListener
 {
@@ -103,10 +109,18 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
     public void init()
     {
 	int i;
-
+xxx
 	swarmDisplaySand = new NSand(); 
 	swarmDisplaySand.connect();
 	THREAD_ID=0;
+
+	imgPrefix = "http://nomads.music.virginia.edu/images/";
+	try { 
+	    imgWebBase = new URL(imgPrefix); 
+	} 
+	catch (Exception e) {}
+	backgroundImg = getImage(imgWebBase,"NOMADS_world_map.jpg");
+
 
 	String tString = new String("REGISTER");
 	int tLen = tString.length();
@@ -422,6 +436,10 @@ public class SoundSwarmDisplay extends Applet implements MouseListener, MouseMot
 	//g.fillRect(x, y, 10, 10);
 	// g.setColor(Color.RED);
 	// g.fillPolygon(xpoints, ypoints, xpoints.length);
+
+
+	g.drawImage(backgroundImg, 0, 0, width, height, this);
+
 
 	//	setBackground(Color.black);
 

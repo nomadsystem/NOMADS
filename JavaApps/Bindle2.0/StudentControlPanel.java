@@ -251,24 +251,24 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 		if (mSecDiff > mSecLimit) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
-			System.out.println("   INCR ERROR COUNT: " + errFlag);
+			NGlobals.dtPrint("   INCR ERROR COUNT: " + errFlag);
 		    }
 		    if ((errFlag > errTrip) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
-			System.out.println("-----> EREC #" + resetCtr);
+			NGlobals.dtPrint("-----> EREC #" + resetCtr);
 			resetCtr++;
 			if (resetCtr > maxResets) {
-			    System.out.println("######### CRITICAL ERROR");
-			    System.out.println(">>> #### MAX RESETS");
-			    System.out.println(">>> sleeping 10 sec");
+			    NGlobals.dtPrint("######### CRITICAL ERROR");
+			    NGlobals.dtPrint(">>> #### MAX RESETS");
+			    NGlobals.dtPrint(">>> sleeping 10 sec");
 			    NomadsErrCheckThread.sleep(12000);
 			    resetCtr=0;
 			}
 			nThread.setHandleStart(mSecN);
-			System.out.println("######### NETWORK ERROR");
-			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
-			// System.out.println(">>> halting thread.");
+			NGlobals.dtPrint("######### NETWORK ERROR");
+			// NGlobals.dtPrint(">>> handleErrCheck time diff: " + mSecDiff);
+			// NGlobals.dtPrint(">>> halting thread.");
 			nThread.setRunState(false);
 			NomadsErrCheckThread.sleep(800);
 			// deleteSynth(lastThread);
@@ -282,7 +282,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			// System.out.println(">>> deleting sprites/synths.");
 			// deleteAllSynths();
 			// System.out.println(">>> sprites/synths deleted.");
-			System.out.println("   Attempting reconnect.");
+			NGlobals.dtPrint("   Attempting reconnect.");
 			NomadsErrCheckThread.sleep(800);
 			studentControlPanelSand = new NSand(); 
 			studentControlPanelSand.connect();
@@ -306,6 +306,7 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			myDiscussClientPanel.resetSand(studentControlPanelSand);
 			myCloudDiscussPanel.resetSand(studentControlPanelSand);
 			myPollStudentPanel.resetSand(studentControlPanelSand);
+			mySandPointerPanel.resetSand(studentControlPanelSand);
 
 			System.out.println("Thread restarted.");			
 			errFlag = 0;
@@ -314,21 +315,21 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 			mSecN = now.getTimeInMillis();
 			nThread.setHandleStart(mSecN);
 
+			discussFrame.setVisible(false);
+			cloudFrame.setVisible(false);
+			pollFrame.setVisible(false);
+			sandPointerFrame.setVisible(false);
+
 			if (userName != null) {
 			    byte[] tStringAsBytes = userName.getBytes();
 			    int tLen = userName.length();
 			    studentControlPanelSand.sendGrain((byte)NAppID.BINDLE, (byte)NCommand.LOGIN, (byte)NDataType.CHAR, tLen, tStringAsBytes );
 			}
-			discussFrame.setVisible(false);
-			cloudFrame.setVisible(false);
-			pollFrame.setVisible(false);
-			
-
 		    }
 		}
 		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
 		    errFlag--;
-		    System.out.println("   DECR ERROR COUNT: " + errFlag);
+		    NGlobals.dtPrint("   DECR ERROR COUNT: " + errFlag);
 		}
 	    }
 	    NomadsErrCheckThread.sleep(10);
@@ -819,11 +820,12 @@ public class StudentControlPanel extends JApplet  implements  ActionListener, Ru
 	if( source == joinButton )
 	    {
 		joinFrame.setVisible(true);
+		// myJoinPanel.login.requestFocus();
 		//			getAppletContext().showDocument(discussURL,"Discuss"); 
 		setupImage( joinImg );
 
 		//	discussFrame.setVisible(true);
-		//			CustomDialog myDialog = new CustomDialog(discussFrame, true, "Do you like Java?");
+		//			CustomDisalog myDialog = new CustomDialog(discussFrame, true, "Do you like Java?");
 		//            System.err.println("After opening dialog.");
 		//            if(myDialog.getAnswer()) {
 		//                System.err.println("The answer stored in CustomDialog is 'true' (i.e. user clicked yes button.)");

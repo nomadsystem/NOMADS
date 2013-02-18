@@ -120,7 +120,7 @@ public class PollPrompt extends JApplet implements ActionListener
 
 	//JTextField to recieve question entered by user
 	question = new JTextField("",40);
-
+	question.setFocusable(true);
 	//button to send question
 	ask = new JButton("Ask");
 	clear = new JButton("Clear");
@@ -285,11 +285,13 @@ public class PollPrompt extends JApplet implements ActionListener
 		else 
 		    NGlobals.cPrint("Invalid question type specified");
 
+		String tString = new String("");
+		qText = tString;
 		int tLen = qText.length();
+
 		//    char[] tStringAsChars = tString.toCharArray();
 		byte[] tStringAsBytes = qText.getBytes();
 		mySand.sendGrain((byte)NAppID.TEACHER_POLL, (byte)tCommand, (byte)NDataType.CHAR, tLen, tStringAsBytes );
-
 
 		// The data 
 		NGlobals.cPrint("sending:  (" + tLen + ") of this data type");

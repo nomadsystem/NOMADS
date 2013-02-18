@@ -21,9 +21,16 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
     int mSecLimit=1000;
     int errTrip=20;
 
+    JCheckBoxMenuItem audioMenu_SoundOn;
+    JCheckBoxMenuItem audioMenu_SoundOff;
+
+    JCheckBoxMenuItem pointerMenu_MapBackground;
+    JCheckBoxMenuItem pointerMenu_BlackBackground;
+
     JMenuItem pollMenu_VoteAgain ;
     JMenuItem pollMenu_ResetScreen;
     JMenuItem pollMenu_PollMode;
+
     JCheckBoxMenuItem  pollMenu_ShowAnswer;
     JCheckBoxMenuItem  pollMenu_ShowStats;
     JCheckBoxMenuItem  pollMenu_ShowQuestion;
@@ -117,6 +124,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
     Boolean handleActive = false;
     Boolean sandRead = false;
     Boolean connected = false;
+    Boolean soundStatus = false;
 
     long mSecR=0;
     int resetCtr=0;
@@ -301,24 +309,24 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 		if (mSecDiff > mSecLimit) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
-			System.out.println("   INCR ERROR COUNT: " + errFlag);
+			NGlobals.dtPrint("   INCR ERROR COUNT: " + errFlag);
 		    }
 		    if ((errFlag > errTrip) && (connected == true)) {
 			now = Calendar.getInstance();
 			mSecR = now.getTimeInMillis(); // time of this reset
-			System.out.println("-----> EREC #" + resetCtr);
+			NGlobals.dtPrint("-----> EREC #" + resetCtr);
 			resetCtr++;
 			if (resetCtr > maxResets) {
-			    System.out.println("######### CRITICAL ERROR");
-			    System.out.println(">>> #### MAX RESETS");
-			    System.out.println(">>> sleeping 10 sec");
+			    NGlobals.dtPrint("######### CRITICAL ERROR");
+			    NGlobals.dtPrint(">>> #### MAX RESETS");
+			    NGlobals.dtPrint(">>> sleeping 10 sec");
 			    NomadsErrCheckThread.sleep(12000);
 			    resetCtr=0;
 			}
 			nThread.setHandleStart(mSecN);
-			System.out.println("######### NETWORK ERROR");
-			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
-			// System.out.println(">>> halting thread.");
+			NGlobals.dtPrint("######### NETWORK ERROR");
+			// NGlobals.dtPrint(">>> handleErrCheck time diff: " + mSecDiff);
+			// NGlobals.dtPrint(">>> halting thread.");
 			nThread.setRunState(false);
 			NomadsErrCheckThread.sleep(800);
 			// deleteSynth(lastThread);
@@ -379,7 +387,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 		}
 		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
 		    errFlag--;
-		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
+		    NGlobals.dtPrint(">>> DECR ERROR COUNT: " + errFlag);
 		}
 	    }
 	    NomadsErrCheckThread.sleep(10);
@@ -401,16 +409,54 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 
 	//============================= MENU BAR BEGIN ==============================
 	JMenuBar menuBar = new JMenuBar ();
-	JMenu pollMenu = new JMenu ("poll");
+	JMenu pollMenu = new JMenu ("Poll");
 
 	pollMenu_VoteAgain = new JMenuItem ("Vote Again");
 	pollMenu.add (pollMenu_VoteAgain);
 	pollMenu_VoteAgain.addActionListener (this);
 
+	JMenu audioMenu = new JMenu ("Audio");
+
+	audioMenu_SoundOn = new JCheckBoxMenuItem ("Pointer Sound ON");
+	audioMenu.add (audioMenu_SoundOn);
+	audioMenu_SoundOn.addActionListener (this);
+
+	audioMenu_SoundOff = new JCheckBoxMenuItem ("Pointer Sound OFF");
+	audioMenu.add (audioMenu_SoundOff);
+	audioMenu_SoundOff.addActionListener (this);
+
+	JMenu pointerMenu = new JMenu ("Pointer");
+
+	pointerMenu_BlackBackground = new JCheckBoxMenuItem ("BLACK Background");
+	pointerMenu_MapBackground = new JCheckBoxMenuItem ("GLOBE Background");
+
+	pointerMenu_MapBackground.addActionListener (this);
+	pointerMenu_BlackBackground.addActionListener (this);
+
+	pointerMenu.add (pointerMenu_BlackBackground);
+	pointerMenu.add (pointerMenu_MapBackground);
+
 	menuBar.add (pollMenu);
+	menuBar.add (audioMenu);
+	menuBar.add (pointerMenu);
+
+
 	setJMenuBar (menuBar);
 
-	pollMenu_VoteAgain.setEnabled (false);
+	pointerMenu_BlackBackground.setEnabled(true);
+	pointerMenu_BlackBackground.setSelected(true);
+
+	pointerMenu_MapBackground.setEnabled(true);
+	pointerMenu_MapBackground.setSelected(false);
+
+	pollMenu_VoteAgain.setEnabled (true);
+
+	audioMenu_SoundOn.setEnabled (true);
+	audioMenu_SoundOn.setSelected(false);
+
+	audioMenu_SoundOff.setEnabled (true);
+	audioMenu_SoundOff.setSelected(true);
+
 	//============================= MENU BAR END ==============================
 
 	butPanel.setLayout(buttonGridLayout);
@@ -462,6 +508,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 
 	NGlobals.dtPrint("registering...");
 	instructorControlPanelSand.sendGrain((byte)NAppID.INSTRUCTOR_PANEL, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
+
+	
     }
 
     // button setup function -----------------------------------------------------------------------
@@ -578,7 +626,6 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	groupDiscussPromptFrame.setPreferredSize(new Dimension(750,200));
 	groupDiscussPromptFrame.getContentPane().add(myGroupDiscussPromptPanel);
 	groupDiscussPromptFrame.pack();
-
 	discussPromptButton = new JButton ( discussPromptIcon ); //STK 1_29_10
 	discussPromptButton.setMargin(new Insets(0, 0, 0, 0));
 	discussPromptButton.setBorderPainted(false);
@@ -671,7 +718,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	    int fileNum = i+20;
 	    String tString = new String("SandDunePoll_" + fileNum + "_web.jpg");
 	    myPollDisplayPanel.bgImages[i] = getImage(imgWebBase,tString);
-	    NGlobals.dtPrint("tString = " + tString);
+	    // NGlobals.dtPrint("tString = " + tString);
 	}
 
 	pollDisplayFrame = new JFrame("NOMADS Poll");
@@ -720,9 +767,19 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	uGrooveDisplayButton.setEnabled(false);
 		
 	// Sand Pointer ------------------
+	imgPrefix = "http://nomads.music.virginia.edu/images/";
+
+	try { 
+	    imgWebBase = new URL(imgPrefix); 
+	} 
+	catch (Exception e) {}
 
 	myPointerDisplayPanel = new SandPointerDisplay();
 	myPointerDisplayPanel.init(instructorControlPanelSand);
+	myPointerDisplayPanel.setAllSynthVol(0);
+
+	myPointerDisplayPanel.backgroundImg = getImage(imgWebBase,"NOMADS_world_map.png");
+
 
 	pointerDisplayFrame = new JFrame("Sand Pointer");
 	pointerDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -730,6 +787,8 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	pointerDisplayFrame.setPreferredSize(new Dimension(800,800));
 	pointerDisplayFrame.getContentPane().add(myPointerDisplayPanel);
 	pointerDisplayFrame.pack();
+
+
 
 	pointerDisplayButton = new JButton ( pointerDisplayIcon );
 	pointerDisplayButton.setMargin(new Insets(0,0,0,0));
@@ -925,32 +984,32 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 
 	// Send to DISCUSS ------------------------
 	//	if (discussOnOff == 1) {
-	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
-		myInstructorGroupDiscussPanel.handle(grain);
-	    }
-	    //	}
-
+	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.DISCUSS || incAppID == NAppID.INSTRUCTOR_DISCUSS || incAppID == NAppID.DISCUSS_PROMPT) {
+	    myInstructorGroupDiscussPanel.handle(grain);
+	}
+	//	}
+	
 	// Send to CLOUD DISPLAY------------------------q
-	    //	if (cloudOnOff == 1) {
-	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
-		myCloudDisplayPanel.handle(grain);
-	    }
-	    //	}
-		
+	//	if (cloudOnOff == 1) {
+	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.CLOUD_CHAT) {
+	    myCloudDisplayPanel.handle(grain);
+	}
+	//	}
+	
 	// Send to POLL PROMPT------------------------
-	    //	if (pollOnOff == 1) {
-	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
-		myPollPromptPanel.handle(grain);
-	    }
-	    //	}
+	//	if (pollOnOff == 1) {
+	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL) {
+	    myPollPromptPanel.handle(grain);
+	}
+	//	}
 		
 	// Send to POLL DISPLAY------------------------
-	    //	if (pollOnOff == 1) {
-	    if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
-		NGlobals.dtPrint("ICP:  sending to pollDisplay");
-		myPollDisplayPanel.handle(grain);
-	    }
-	    //	}
+	//	if (pollOnOff == 1) {
+	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_POLL ||incAppID == NAppID.TEACHER_POLL ) {
+	    NGlobals.dtPrint("ICP:  sending to pollDisplay");
+	    myPollDisplayPanel.handle(grain);
+	}
+	//	}
 		
 	// Send to SOUND MOSAIC DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.STUDENT_SEQUENCER ) {
@@ -959,7 +1018,9 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 		
 	// Send to SAND POINTER DISPLAY------------------------
 	if (incAppID == NAppID.INSTRUCTOR_PANEL || incAppID == NAppID.SOUND_SWARM ) {
+	    NGlobals.dtPrint("ICP:  got SOUND SWARM DATA");
 	    if (pointerOnOff == 1) {
+		NGlobals.dtPrint("ICP:  sending to pointerDisplayPanel()");
 		myPointerDisplayPanel.handle(grain);
 	    }
 	}
@@ -1063,6 +1124,7 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	    else if ( pointerOnOff == 1) {
 		pointerButton.setIcon(pointerIcon);
 		pointerOnOff = 0;
+		myPointerDisplayPanel.deleteAllSynths();
 	    }
 	    tByte[0] = (byte)pointerOnOff;
 	    NGlobals.cPrint(NAppID.INSTRUCTOR_PANEL + "SET_POINTER_STATUS: " + pointerOnOff);
@@ -1091,6 +1153,53 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 						 tByte);
 
 	}
+
+	else if( source == audioMenu_SoundOff ) {	
+	    audioMenu_SoundOn.setSelected(false);
+	    audioMenu_SoundOff.setSelected(true);
+	    myPointerDisplayPanel.soundStatus = false;
+	    myPointerDisplayPanel.setAllSynthVol(0);
+	}
+
+	else if( source == audioMenu_SoundOn ) {	
+	    audioMenu_SoundOff.setSelected(false);
+	    audioMenu_SoundOn.setSelected(true);
+	    myPointerDisplayPanel.soundStatus = true;
+	    myPointerDisplayPanel.setAllSynthVol(1);
+	}
+
+	else if( source == pointerMenu_BlackBackground ) {	
+	    pointerMenu_BlackBackground.setSelected(true);
+	    pointerMenu_MapBackground.setSelected(false);
+	    NGlobals.dtPrint("calling setBackground(0)");
+	    myPointerDisplayPanel.height=800;
+	    myPointerDisplayPanel.width=800;
+	    pointerDisplayFrame.setVisible(false);
+	    pointerDisplayFrame.setPreferredSize(new Dimension(800,800));
+	    pointerDisplayFrame.setSize(800,800);
+	    myPointerDisplayPanel.setBackground(0);
+	    pointerDisplayFrame.setVisible(true);
+
+	    // xxxx put code to change background here
+	}
+
+	else if( source == pointerMenu_MapBackground ) {	
+	    pointerMenu_MapBackground.setSelected(true);
+	    pointerMenu_BlackBackground.setSelected(false);
+	    NGlobals.dtPrint("calling setBackground(1)");
+	    pointerDisplayFrame.setVisible(false);
+	    myPointerDisplayPanel.width=1800;
+	    myPointerDisplayPanel.height=900;
+	    pointerDisplayFrame.setPreferredSize(new Dimension(1800,900));
+	    pointerDisplayFrame.setSize(1800,900);
+	    myPointerDisplayPanel.setBackground(1);
+	    pointerDisplayFrame.setVisible(true);
+
+	    // xxxx put code to change background here
+	}
+
+
+
 
 	// END ------ ON/OFF buttons ------------------------------------
 
@@ -1151,8 +1260,13 @@ public class InstructorControlPanel extends JApplet  implements  ActionListener,
 	}
 
 	else if ( source == pollMenu_VoteAgain ) {
-	    sendMessage("VOTE");
-
+	    tByte[0]=0;
+	    instructorControlPanelSand.sendGrain(
+						 NAppID.TEACHER_POLL,
+						 NCommand.VOTE_AGAIN,
+						 NDataType.UINT8,
+						 1,
+						 tByte);
 	    NGlobals.cPrint("Vote Again selected");
 	}
     }

@@ -10,7 +10,8 @@ CLASSES = \
 	DiscussTest.java\
 	PollTest10.java\
 	PollTest5.java\
-	PollTestYN.java
+	PollTestYN.java\
+	SwarmTest.java
 
 
 default: myliblink comlink classes
