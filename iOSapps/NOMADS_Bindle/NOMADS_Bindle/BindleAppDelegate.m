@@ -185,7 +185,7 @@ bool prepareToDie;
     //Create error view (pop up window) for error meCLogage
     errorView = [[UIAlertView alloc]
                  initWithTitle: NSLocalizedString(@"Network error", @"Network error")
-                 message: NSLocalizedString(@"Lost connection with NOMADS server.", @"Network error")
+                 message: NSLocalizedString(@"Cannot connect to NOMADS server.", @"Network error")
                  delegate: self
                  cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
     
