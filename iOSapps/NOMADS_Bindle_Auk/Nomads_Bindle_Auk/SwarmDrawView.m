@@ -107,7 +107,6 @@
             CLog("Error initializing Audio Session Category");
         }
         
-        
         //Init for Audio
         toneVolScaler = 0.3;
         tonePlayer = 0;

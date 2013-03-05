@@ -27,12 +27,11 @@
     id <SandDelegate> delegate[10];  // OUTPUT:  where we send our signal
     NGrain *grain;  
     int numDelegates;
-    Boolean sandErrorFlag;
+    @public Boolean sandErrorFlag;
 }
 
 @property (nonatomic, retain) NSInputStream *streamIn;
 @property (nonatomic, retain) NSOutputStream *streamOut;
-
 @property (retain) NGrain *grain;
 
 // Modified accessor functions so we can be specific about delegate numbers =======================
@@ -42,6 +41,8 @@
 - (id<SandDelegate>) delegate:(int) delNum;
 
 // - (void) sendWithGrain:(NGrain *) myGrain;
+
+- (void) setPort:(int)port;
 
 // Network data sending functions =================================================================
 
