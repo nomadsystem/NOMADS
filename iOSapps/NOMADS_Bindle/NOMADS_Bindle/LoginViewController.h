@@ -19,7 +19,11 @@
     NSand   *appSand;
     BindleAppDelegate *appDelegate;
     @public UITabBarItem __weak *tbi;
+    NSTimer* connectionTimeoutTimer;
+    
 }
+@property (weak, nonatomic) IBOutlet UITextField *portField;
+@property (weak, nonatomic) IBOutlet UILabel *groupIDLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userNameIsLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *pleaseEnterYourNameLabel;
@@ -38,6 +42,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
 @property (weak, nonatomic) IBOutlet UIButton *moreInfoButton;
 
+@property (nonatomic, retain) NSTimer* connectionTimeoutTimer;
+
+
+- (void) reinit;
 
 - (IBAction)loginButton:(id)sender;
 - (IBAction)disconnectButton:(id)sender;
