@@ -102,11 +102,11 @@
 							<int key="IBUIReturnKeyType">9</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="296560691">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="634441833">
 							<int key="type">1</int>
 							<double key="pointSize">16</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="666703340">
+						<object class="NSFont" key="IBUIFont" id="291247307">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">16</double>
 							<int key="NSfFlags">16</int>
@@ -137,8 +137,8 @@
 							<int key="IBUIReturnKeyType">9</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<reference key="IBUIFontDescription" ref="296560691"/>
-						<reference key="IBUIFont" ref="666703340"/>
+						<reference key="IBUIFontDescription" ref="634441833"/>
+						<reference key="IBUIFont" ref="291247307"/>
 					</object>
 					<object class="IBUILabel" id="757126428">
 						<reference key="NSNextResponder" ref="581875779"/>
@@ -163,13 +163,13 @@
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="196774287">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="125680104">
 							<string key="name">Optima-Bold</string>
 							<string key="family">Optima</string>
 							<int key="traits">2</int>
 							<double key="pointSize">18</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="96171888">
+						<object class="NSFont" key="IBUIFont" id="350042458">
 							<string key="NSName">Optima-ExtraBlack</string>
 							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
@@ -194,8 +194,8 @@
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="196774287"/>
-						<reference key="IBUIFont" ref="96171888"/>
+						<reference key="IBUIFontDescription" ref="125680104"/>
+						<reference key="IBUIFont" ref="350042458"/>
 					</object>
 					<object class="IBUILabel" id="201601818">
 						<reference key="NSNextResponder" ref="581875779"/>
@@ -231,7 +231,7 @@
 					<object class="IBUILabel" id="752195616">
 						<reference key="NSNextResponder" ref="581875779"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{16, 374}, {287, 45}}</string>
+						<string key="NSFrame">{{16, 389}, {287, 45}}</string>
 						<reference key="NSSuperview" ref="581875779"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="309120943"/>
@@ -262,7 +262,7 @@
 					<object class="IBUILabel" id="201922211">
 						<reference key="NSNextResponder" ref="581875779"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{123, 213}, {75, 45}}</string>
+						<string key="NSFrame">{{123, 239}, {75, 45}}</string>
 						<reference key="NSSuperview" ref="581875779"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="18173120"/>
@@ -293,7 +293,7 @@
 					<object class="IBUILabel" id="566334635">
 						<reference key="NSNextResponder" ref="581875779"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{67, 166}, {186, 45}}</string>
+						<string key="NSFrame">{{58, 183}, {218, 45}}</string>
 						<reference key="NSSuperview" ref="581875779"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="277222923"/>
@@ -303,11 +303,12 @@
 						<int key="IBUIContentMode">4</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Your user name is:</string>
+						<string key="IBUIText">Connected to NOMADS Your user name is</string>
 						<reference key="IBUITextColor" ref="638432670"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<int key="IBUINumberOfLines">2</int>
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
 							<string key="name">Optima-Regular</string>
@@ -320,6 +321,7 @@
 							<double key="NSSize">20</double>
 							<int key="NSfFlags">16</int>
 						</object>
+						<double key="preferredMaxLayoutWidth">218</double>
 					</object>
 					<object class="IBUILabel" id="819916374">
 						<reference key="NSNextResponder" ref="581875779"/>
@@ -355,7 +357,7 @@
 					<object class="IBUIButton" id="943822047">
 						<reference key="NSNextResponder" ref="581875779"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{237, 20}, {63, 24}}</string>
+						<string key="NSFrame">{{243, 14}, {63, 24}}</string>
 						<reference key="NSSuperview" ref="581875779"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="201601818"/>
@@ -373,13 +375,13 @@
 							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="315861251"/>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="606942243">
 							<string key="name">Optima-Bold</string>
 							<string key="family">Optima</string>
 							<int key="traits">2</int>
 							<double key="pointSize">12</double>
 						</object>
-						<object class="NSFont" key="IBUIFont">
+						<object class="NSFont" key="IBUIFont" id="597824753">
 							<string key="NSName">Optima-ExtraBlack</string>
 							<double key="NSSize">12</double>
 							<int key="NSfFlags">16</int>
@@ -446,6 +448,36 @@
 						<reference key="IBUINormalTitleShadowColor" ref="315861251"/>
 						<reference key="IBUIFontDescription" ref="373176237"/>
 						<reference key="IBUIFont" ref="226025400"/>
+					</object>
+					<object class="IBUIButton" id="504365402">
+						<reference key="NSNextResponder" ref="581875779"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{53, 365}, {213, 40}}</string>
+						<reference key="NSSuperview" ref="581875779"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<int key="IBUILineBreakMode">0</int>
+						<string key="IBUINormalTitle">(this will end your NOMADS session)</string>
+						<object class="NSColor" key="IBUIHighlightedTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4yNjc5ODQzOTMxIDAuNDMwNzE2MTE0MSAwLjc0NDc5ODc0MzIAA</bytes>
+						</object>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
+						</object>
+						<object class="NSColor" key="IBUIHighlightedTitleShadowColor">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MQA</bytes>
+							<reference key="NSCustomColorSpace" ref="26956858"/>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="315861251"/>
+						<reference key="IBUIFontDescription" ref="606942243"/>
+						<reference key="IBUIFont" ref="597824753"/>
 					</object>
 					<object class="IBUILabel" id="980908788">
 						<reference key="NSNextResponder" ref="581875779"/>
@@ -680,6 +712,15 @@
 					</object>
 					<int key="connectionID">47</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">moreInfoButton:</string>
+						<reference key="source" ref="504365402"/>
+						<reference key="destination" ref="841351856"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">55</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -718,6 +759,7 @@
 							<reference ref="201601818"/>
 							<reference ref="277222923"/>
 							<reference ref="757126428"/>
+							<reference ref="504365402"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -794,6 +836,11 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">53</int>
 						<reference key="object" ref="201601818"/>
+						<reference key="parent" ref="581875779"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">54</int>
+						<reference key="object" ref="504365402"/>
 						<reference key="parent" ref="581875779"/>
 					</object>
 				</array>
@@ -892,6 +939,13 @@
 						<characters key="NS.bytes"/>
 					</object>
 				</object>
+				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<real value="1" key="54.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
+				<object class="NSMutableAttributedString" key="54.notes">
+					<object class="NSMutableString" key="NSString">
+						<characters key="NS.bytes"/>
+					</object>
+				</object>
 				<string key="9.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<object class="NSMutableAttributedString" key="9.notes">
 					<object class="NSMutableString" key="NSString">
@@ -903,7 +957,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">53</int>
+			<int key="maxID">55</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
