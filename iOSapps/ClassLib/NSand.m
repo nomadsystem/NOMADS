@@ -14,6 +14,8 @@
 @synthesize streamIn, streamOut;
 @synthesize grain;
 
+
+
 // Modified accessor functions so we can be specific about delegate numbers ================
 
 - (id<SandDelegate>) delegate:(int) delNum
@@ -37,6 +39,14 @@
 
 //initialization function ===================================================================
 
+- (void)setPort: (int) port;
+{
+        serverPort = port;
+}
+
+
+//initialization function ===================================================================
+
 - (id)init
 {
     self = [super init]; //Here to get initialization from parent class first
@@ -54,24 +64,62 @@
 
 - (void)connect
 {
-    CFReadStreamRef readStream;
-	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)serverName, serverPort, &readStream, &writeStream);
-	streamIn = (__bridge NSInputStream *)readStream;
-	streamOut = (__bridge NSOutputStream *)writeStream;
-	[streamIn setDelegate:self];
-	[streamOut setDelegate:self];
-	[streamIn scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[streamOut scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	[streamIn open];
-	[streamOut open];
+        streamIn = nil;
+        streamOut = nil;
+        CFReadStreamRef readStream=nil;
+        CFWriteStreamRef writeStream=nil;
+        CFStreamCreatePairWithSocketToHost(NULL, CFBridgingRetain(serverName), serverPort, &readStream, &writeStream);
+        streamIn = (__bridge NSInputStream *)readStream;
+        streamOut = (__bridge NSOutputStream *)writeStream;
+        
+        if (streamIn == nil)
+            LLog(@"streamin nil");
+        if (streamOut == nil)
+            LLog(@"streamOut nil");
+
+    [streamIn scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [streamOut scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+        [streamIn setDelegate:self];
+        [streamOut setDelegate:self];
+    if (CFWriteStreamOpen((__bridge CFWriteStreamRef)(streamIn)) == false) {
+        LLog(@"streamin open failed");
+    }
+    else {
+        LLog(@"STREAMIN %@ status=%d", streamIn, [streamIn streamStatus]);
+        LLog(@"ERR: %@", [streamIn streamError]);
+    }
+    if (CFWriteStreamOpen((__bridge CFWriteStreamRef)(streamOut)) == false) {
+        LLog(@"streamout open failed");
+    }
+    else {
+        LLog(@"STREAMOUT %@ status=%d", streamOut, [streamOut streamStatus]);
+        LLog(@"ERR: %@", [streamOut streamError]);
+    }
+
+    
+    
     LLog(@"NSand: Connecting, Streams Open ");
-    sandErrorFlag = NO;
-    // [self sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_MESSAGE DataType:CHAR DataLen:1 String:@"a"];
-}
+        sandErrorFlag = NO;
+   
+        //        connected = false;
+        //        [self checkConnection];
+    
+
+//    cNum = [streamOut write:(const uint8_t *) &b maxLength: 1];
+//    if (-1 == cNum) {
+//        LLog(@"NSand: Error connecting to stream %@: %@", streamOut, [streamOut streamError]);
+//    }
+//    else {
+//        LLog(@"NSand: Wrote %i bytes to stream %@.", cNum, streamOut);
+//    }
+
+
+// [self sendWithGrainElts_AppID:SOUND_SWARM Command:SEND_MESSAGE DataType:CHAR DataLen:1 String:@"a"];
+
 
 // sendWithGrain_AppID (for strings) =========================================================
-
+}
 
 - (void) sendWithGrainElts_AppID:(Byte)a
                          Command:(Byte)c
@@ -983,7 +1031,6 @@
                     }
                 }
             }
-            
             break;
             
         case NSStreamEventEndEncountered:
@@ -994,7 +1041,9 @@
             //    [theStream release];
             theStream = nil;
             break;
-            
+        case NSStreamEventNone:
+            LLog(@"NSAND:  ERROR could not connect to server");
+            break;
         case NSStreamEventHasSpaceAvailable:
             LLog(@"NSAND : NSStreamEventHasSpaceAvailable\n");
             break;

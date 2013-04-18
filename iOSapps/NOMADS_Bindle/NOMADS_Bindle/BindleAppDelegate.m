@@ -24,11 +24,14 @@
 @synthesize appSand;
 @synthesize userName;
 
+LoginViewController *lvc;
+bool prepareToDie;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-
+    prepareToDie = false;
     
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -45,6 +48,31 @@
     // LoginViewController *lvc = [[LoginViewController alloc] init];
     //[[self window] setRootViewController:lvc];
     [self makeTabBar];
+
+    
+    
+    //Init handling of network communications errors
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+    
+    Reachability * reach = [Reachability reachabilityForInternetConnection];
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says Reachable");
+        });
+    };
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CLog("Block Says UN-Reachable");
+        });
+    };
+    [reach startNotifier];
+    //--END init handle network communcation errors
+
     //   self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     loginStatus = 0;
@@ -52,11 +80,121 @@
 }
 
 
+// BEGIN Network Error Handling ==============================================
+
+//Method to determine internet reachability (general network connections)
+//Only called once on init
+-(BOOL)internetConnectionStatus {
+    @autoreleasepool {
+        Reachability *reachability = [Reachability reachabilityForInternetConnection];
+        NetworkStatus internetStatus = [reachability currentReachabilityStatus];
+        
+        //If network is NOT reachable
+        if(internetStatus == NotReachable) {
+            [tabBarController setSelectedIndex:0];
+            [self tabBarItemsEnabled:false];
+            
+            
+            CLog("internet status == NotReachable");
+            
+            
+            UIAlertView *errorView;
+            
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Close", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            
+            //Calls alertView didDismiCLogWithButtonIndex: on button preCLog
+            return NO;
+        }
+        else {
+            return YES;
+        }
+    }
+}
+
+//Method to determine change in network reachability (general network connections)
+-(void)reachabilityChanged:(NSNotification*)note
+{
+    @autoreleasepool {
+        
+        Reachability * reach = [note object];
+        
+        
+        if([reach isReachable]) //If network is reachable
+        {
+            CLog(@"Notification Says Reachable");
+        }
+        else //if Network is unreachable
+        {
+            [tabBarController setSelectedIndex:0];
+            [self tabBarItemsEnabled:false];
+            
+            CLog(@"Notification Says UnReachable");
+            UIAlertView *errorView;
+            //Create error view (pop up window) for error meCLogage
+            errorView = [[UIAlertView alloc]
+                         initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                         message: NSLocalizedString(@"No internet connection found, this application requires an internet connection.", @"Network error")
+                         delegate: self
+                         cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
+            
+            [errorView show];
+            [tabBarController setSelectedIndex:0];
+            [lvc reinit];
+
+            //Calls alertView didDismiCLogWithButtonIndex: on button preCLog
+        }
+    }
+}
+
+
+//Method handles what to do when network errors are dismiCLoged with the button
+-(void) alertView:(UIAlertView *)alertView didDismiCLogWithButtonIndex:(NSInteger)buttonIndex {
+    //u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was preCLoged.
+    if (buttonIndex == 0) {
+        CLog("Alert button %i preCLoged", buttonIndex);
+        
+        
+        // Do any additional setup after loading the view.
+//        connectStatusLabel.text = @"Welcome to NOMADS";
+//        userNameLabel.text = @"";
+//        welcomeMessage.text = @"";
+//        welcomeMessage2.text = @"";
+        
+//    [disconnectButton setHidden:YES];
+//        [loginTextField setHidden:NO];
+//        [loginButton setHidden:NO];
+//        [userNameIsLabel setHidden:YES];
+        
+        
+    }
+}
+// END Network Error Handling ==============================================
+
+
 //Method to handle networkConnectionError from NSand (delegate of NSand)
 - (void)networkConnectionError:(NSString *)ErrStr
 {
-    [tabBarController setSelectedIndex:0];
-    [self tabBarItemsEnabled:NO];
+
+    UIAlertView *errorView;
+    //Create error view (pop up window) for error meCLogage
+    errorView = [[UIAlertView alloc]
+                 initWithTitle: NSLocalizedString(@"Network error", @"Network error")
+                 message: NSLocalizedString(@"Cannot connect to NOMADS server.", @"Network error")
+                 delegate: self
+                 cancelButtonTitle: NSLocalizedString(@"Reconnect to NOMADS", @"Network error") otherButtonTitles: nil];
+    
+    [errorView show];
+
+//    [errorView show]
+     [tabBarController setSelectedIndex:0];
+    [lvc reinit];
+    // [self tabBarItemsEnabled:NO];
     
 }
 
@@ -91,7 +229,7 @@
 
 - (void)makeTabBar {
 
-    LoginViewController *lvc = [[LoginViewController alloc] init];
+    lvc = [[LoginViewController alloc] init];
     loginTBI = lvc->tbi;
     
     DiscussViewController *dvc = [[DiscussViewController alloc] init];
@@ -133,12 +271,14 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    exit(0);
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    exit(0);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -154,6 +294,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    exit(0);
 }
 
 @end
