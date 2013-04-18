@@ -167,7 +167,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    NGlobals.dtPrint("SAND write error 1");
-	    setRun(false);
+	    //	    setRun(false);
 	    return -1;
 	}
 	return retCode;
@@ -264,7 +264,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("SAND write error 2");
-	    setRun(false);
+	    //	    setRun(false);
 	}
     }
 
@@ -327,7 +327,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("SAND write error 3");
-	    setRun(false);
+	    //	    setRun(false);
 	}
     }
 
@@ -358,7 +358,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("4: SAND write error");
-	    setRun(false);
+	    //	    setRun(false);
 	}
     }
     }
@@ -386,7 +386,7 @@ public class NSand
 	    }
 	}
 	catch(IOException ioe) {  
-	    setRun(false);
+	    //	    setRun(false);
 	    System.out.println("SAND write error 4");
 	}
     }
@@ -730,7 +730,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    // System.out.println("7: SAND write error");
-	    setRun(false);
+	    	    setRun(false);
 	}
 	return grain;
     }
@@ -841,7 +841,7 @@ public class NSand
 	}
 	catch(IOException ioe) {  
 	    System.out.println("SAND write error 6");
-	    setRun(false);
+	    //	    setRun(false);
 	}
 	return grain;
     }

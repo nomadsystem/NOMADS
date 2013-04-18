@@ -173,7 +173,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     Random randNum;
     int numOscs = 0;
 
-    int currentBackgroundImageName = 1; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080, 4=7680x1080
+    int currentBackgroundImageName = 0; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080, 4=7680x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
 
@@ -391,16 +391,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	chatColors[7] = new Color(145, 86, 65, alpha);
     }
 
-    public void setCloudColors(int alpha) {
-	cloudColors[0] = new Color(130, 240, 255, alpha);
-	cloudColors[1] = new Color(130, 240, 255, alpha);
-	cloudColors[2] = new Color(130, 240, 255, alpha);
-	cloudColors[3] = new Color(130, 240, 255, alpha);
-	cloudColors[4] = new Color(130, 240, 255, alpha);
-	cloudColors[5] = new Color(130, 240, 255, alpha);
-	cloudColors[6] = new Color(130, 240, 255, alpha);
-	cloudColors[7] = new Color(130, 240, 255, alpha);
-    }
+     public void setCloudColors(int alpha) {
+     	cloudColors[0] = new Color(255, 255, 255, alpha);
+     	cloudColors[1] = new Color(255, 255, 255, alpha);
+     	cloudColors[2] = new Color(255, 255, 255, alpha);
+     	cloudColors[3] = new Color(255, 255, 255, alpha);
+     	cloudColors[4] = new Color(255, 255, 255, alpha);
+     	cloudColors[5] = new Color(255, 255, 255, alpha);
+     	cloudColors[6] = new Color(255, 255, 255, alpha);
+     	cloudColors[7] = new Color(255, 255, 255, alpha);
+     }
 
     public void setPointerColors(int alpha) {
 	pointerColors[0] = new Color(255, 255, 255, alpha);
@@ -419,8 +419,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	width = getSize().width;
 	height = getSize().height;
 
+	// backgroundImageName = new String[5];
+	// backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
+	// backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
+	// backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
+	// backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
+	// backgroundImageName[4] = "BackgroundDisplay1_7680x1080.jpg";
+
 	backgroundImageName = new String[5];
-	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
+	backgroundImageName[0] = "FrostNoise_bgnd_1280x1024.jpg";
 	backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
 	backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
 	backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
@@ -511,6 +518,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	//	backgroundIce = getImage(imgWebBase,"NOMADSMainDisplay_11520x1200Background.jpg");
 
 	offScreenGrp.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	offScreenGrp.setStroke(new BasicStroke(2));
 	randNum = new Random();
 
 	// Cloud placement init code
@@ -744,9 +752,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    // sprites[threadNum].r = randNum.nextInt(255);
 	    // 	    sprites[threadNum].g = randNum.nextInt(255);
 	    // 	    sprites[threadNum].b = randNum.nextInt(255);
-	    sprites[threadNum].r = 255;
-	    sprites[threadNum].g = 255;
-	    sprites[threadNum].b = 255;
+	    sprites[threadNum].r = 0; //255;
+	    sprites[threadNum].g = 0; //255;
+	    sprites[threadNum].b = 0; // 255;
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
@@ -761,7 +769,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	    for (int i=0;i<numOscs;i++) {
 		tNum = oscNum[i];
-		tAmp = (float)2/numOscs; //default amp = 2.0
+		tAmp = (float)4/numOscs; //default amp = 2.0
 		NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
 		myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
 		float tVolume = tAmp * mainVolumeFromSlider;
@@ -1206,7 +1214,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
 		for (i=0;i<numOscs;i++) {
 		    tNum = oscNum[i];
-		    tAmp = (float)2/numOscs; //default amp = 2.0
+		    tAmp = (float)4/numOscs; //default amp = 2.0
 		    NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
 		    myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
 		    tVolume = tAmp * mainVolumeFromSlider;
