@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-import netscape.javascript.*;
+// import netscape.javascript.*;
 import nomads.v210_auk.*;
 import java.awt.image.BufferedImage;
 
