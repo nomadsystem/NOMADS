@@ -3,14 +3,14 @@
 //
 
 import java.awt.*;
-import java.lang.Math.*;
+import java.lang.Math;
 import java.applet.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-// import netscape.javascript.*;
+import netscape.javascript.*;
 import nomads.v210_auk.*;
 import java.awt.image.BufferedImage;
 
@@ -22,80 +22,6 @@ import com.softsynth.jsyn.view11x.SynthScope;
 
 public class OperaMain extends Applet implements MouseListener, MouseMotionListener, ActionListener, Runnable {   
 
-    // Number of times we've checked our global word list array
-    int numPasses;
-
-    int MAX_OSCS = 50;
-    int oscTick = 0;
-    int oscMaxTick = 5;
-
-    // List of all our elements
-    ArrayList<HistoElt> histoGram;
-    //  Temporary placeholder
-    HistoElt tHist;
-
-    int guesser,rGuess,cGuess;
-
-    BufferedImage offScreen;
-    Graphics2D offScreenGrp;
-    Image player;
-
-    Font chatFont;
-
-
-    Color chatColor;
-
-    // mist vars made global to try and improve performance
-
-    double tVolumeVal;
-    int tNum;
-    float tAmp;
-    float tVolume;
-    int scaledX;
-    int scaledY;
-    double myX, myY, myH_Sqr;
-    double myH;
-    double tFreq;
-    String text;
-    int xMin;
-    int xVar;
-    int yMin;
-    int yVar;
-    int xRand;
-    int yRand;
-    int xpoints[] = new int[4];
-    int ypoints[] = new int[4];
-    int txpoints[] = new int[4];
-    int typoints[] = new int[4];
-    int threadNum;
-    int quad;
-    int numScreenCellsX;
-    int numScreenCellsY;
-    int curCellX;
-    int curCellY;
-    int cellCtrX;
-    int cellCtrY;
-    int cellSlotsX[];
-    int cellSlotsY[];
-    int screenCellX = 4; //Number of columns for cloud text
-    int screenCellY = 15; //Number of rows for cloud text
-
-    Random rng = new Random(); // Ideally just create one instance globally
-	
-    ArrayList<Integer> generatedX;
-    ArrayList<Integer> generatedY;
-	
-    Thread runner;
-
-    long mSecR=0;
-    int mSecLimit=5000;
-    int errTrip=10;
-
-    int resetCtr=0;
-    int maxResets=10;
-
-    float mSecAvg=10;
-    float mSecAvgL=10;
 
     private class NomadsAppThread extends Thread {
 	OperaMain client; //Replace with current class name
@@ -105,7 +31,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	long millis=0;
 	Boolean runState=false;
 
-	int numSynths=0;
+
 	public synchronized long getHandleStart() {
 	    return handleStart;
 	}
@@ -134,9 +60,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	public NomadsAppThread(OperaMain _client) {
 	    client = _client;
 	}
-
 	public void run()    {			
-	    NGlobals.cPrint("NomadsAppThread -> run()");
+	    NGlobals.lPrint("NomadsAppThread -> run()");
 	    while (getRunState() == true)  {
 		now = Calendar.getInstance();
 		setHandleStart(now.getTimeInMillis());
@@ -156,24 +81,24 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    client = _client;
 	}
 	public void run()    {			
-	    NGlobals.dtPrint("NomadsErrCheckThread -> run()");
+	    NGlobals.lPrint("NomadsErrCheckThread -> run()");
 	    while (true)  {
 		client.errCheck();
 	    }
 	}
     }
 
-    private int maxSkip;
 
-    int pToggle=0;
     NSand operaSand;
     private NomadsAppThread nThread;
     private NomadsErrCheckThread nECThread;
 
+    int skipper = 0;
+    int maxSkip = 1;
     Random randNum;
     int numOscs = 0;
-
-    int currentBackgroundImageName = 0; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080, 4=7680x1080
+	
+    int currentBackgroundImageName = 3; //SELECT WHICH IMAGE TO USE: 0=800x600, 1=1024x768, 2=1280x1024, 3=1920x1080
     String backgroundImageName[]; //Stores background images
     float textImageSizeScaler = 1.0F; //Change depending on image size
 
@@ -239,7 +164,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     JButton	clearButton;
     String chatLines[];
-    int numChatLines = 30;
+    int numChatLines = 60;
     int activeChatLines = 0;
 
     int mx, my; // recent mouse coords
@@ -247,36 +172,26 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     Boolean handleActive = false;
     Boolean sandRead = false;
-    Boolean connected = false;
+    Boolean connected;
 
-    private Object sandReadLock = new Object();
+    int MAX_OSCS = 50;
 
-
-    public Boolean getSandRead() {
-	synchronized (sandReadLock) {
-	    return sandRead;
-	}
+    public synchronized Boolean getSandRead() {
+	return sandRead;
     }
 
-    public void setSandRead(Boolean sr) {
-	synchronized (sandReadLock) {
-	    sandRead = sr;
-	}
+    public synchronized void setSandRead(Boolean sr) {
+	sandRead = sr;
     }
 
-    private Object handleActiveLock = new Object();
-
-    public Boolean getHandleActive() {
-	synchronized(handleActiveLock) {
-	    return handleActive;
-	}
+    public synchronized Boolean getHandleActive() {
+	return handleActive;
     }
 
-    public void setHandleActive(Boolean ha) {
-	synchronized(handleActiveLock) {
-	    handleActive = ha;
-	}
+    public synchronized void setHandleActive(Boolean ha) {
+	handleActive = ha;
     }
+
 
 
     int errFlag = 0;
@@ -322,6 +237,57 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	Color color;
     }    
 
+    // Number of times we've checked our global word list array
+    int numPasses;
+
+    // List of all our elements
+    ArrayList<HistoElt> histoGram;
+    //  Temporary placeholder
+    HistoElt tHist;
+
+    int guesser,rGuess,cGuess;
+
+    BufferedImage offScreen;
+    Graphics2D offScreenGrp;
+    Image player;
+
+    Font chatFont;
+
+
+    Color chatColor;
+
+    // mist vars made global to try and improve performance
+
+    double tVolumeVal;
+    int tNum;
+    float tAmp;
+    float tVolume;
+    int scaledX;
+    int scaledY;
+    double myX, myY, myH_Sqr;
+    double myH;
+    double tFreq;
+    String text;
+    int xMin;
+    int xVar;
+    int yMin;
+    int yVar;
+    int xRand;
+    int yRand;
+    int xpoints[] = new int[4];
+    int ypoints[] = new int[4];
+    int txpoints[] = new int[4];
+    int typoints[] = new int[4];
+    int threadNum;
+    int quad;
+    int lastQuad;
+
+    int numRChatLines;
+    int curLine;
+    int rLineCntr;
+    int rLineSlots[];
+
+    Thread runner;
 
     public static void main(String args[])
     {
@@ -380,7 +346,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     //     }
 
     public void setChatColors(int alpha) {
-	//chatColors[0] = new Color(255, 215, 10, alpha);
 	chatColors[0] = new Color(204, 255, 255, alpha);
 	chatColors[1] = new Color(145, 86, 65, alpha);
 	chatColors[2] = new Color(145, 86, 65, alpha);
@@ -391,16 +356,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	chatColors[7] = new Color(145, 86, 65, alpha);
     }
 
-     public void setCloudColors(int alpha) {
-     	cloudColors[0] = new Color(255, 255, 255, alpha);
-     	cloudColors[1] = new Color(255, 255, 255, alpha);
-     	cloudColors[2] = new Color(255, 255, 255, alpha);
-     	cloudColors[3] = new Color(255, 255, 255, alpha);
-     	cloudColors[4] = new Color(255, 255, 255, alpha);
-     	cloudColors[5] = new Color(255, 255, 255, alpha);
-     	cloudColors[6] = new Color(255, 255, 255, alpha);
-     	cloudColors[7] = new Color(255, 255, 255, alpha);
-     }
+    public void setCloudColors(int alpha) {
+	cloudColors[0] = new Color(130, 240, 255, alpha);
+	cloudColors[1] = new Color(130, 240, 255, alpha);
+	cloudColors[2] = new Color(130, 240, 255, alpha);
+	cloudColors[3] = new Color(130, 240, 255, alpha);
+	cloudColors[4] = new Color(130, 240, 255, alpha);
+	cloudColors[5] = new Color(130, 240, 255, alpha);
+	cloudColors[6] = new Color(130, 240, 255, alpha);
+	cloudColors[7] = new Color(130, 240, 255, alpha);
+    }
 
     public void setPointerColors(int alpha) {
 	pointerColors[0] = new Color(255, 255, 255, alpha);
@@ -412,27 +377,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	pointerColors[6] = new Color(255, 255, 255, alpha);
 	pointerColors[7] = new Color(255, 255, 255, alpha);
     }
-
+	
     public void init()
     {  	
-		
-	width = getSize().width;
-	height = getSize().height;
 
-	// backgroundImageName = new String[5];
-	// backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
-	// backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
-	// backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
-	// backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
-	// backgroundImageName[4] = "BackgroundDisplay1_7680x1080.jpg";
-
-	backgroundImageName = new String[5];
-	backgroundImageName[0] = "FrostNoise_bgnd_1280x1024.jpg";
+	backgroundImageName = new String[4];
+	backgroundImageName[0] = "BackgroundDisplay1_800x600.jpg";
 	backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
 	backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
 	backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
-	backgroundImageName[4] = "BackgroundDisplay1_7680x1080.jpg";
-
+		
 	//Resizing text/pointer based on which image we're using
 	if (currentBackgroundImageName == 0)
 	    textImageSizeScaler = 1.0F;
@@ -442,70 +396,24 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    textImageSizeScaler = 1.7F;
 	else if (currentBackgroundImageName == 3)
 	    textImageSizeScaler = 1.8F;
-	else if (currentBackgroundImageName == 4)
-	    textImageSizeScaler = 1.8F;
-
-
-	chatFont = new Font("Helvetica", Font.PLAIN, (int)(14 * textImageSizeScaler));
-
 		
-	//STK**** Begin Cloud Randomization code========================================
-	cellSlotsX = new int[screenCellX];		
-	generatedX = new ArrayList<Integer>();
-	for (int i = 0; i < screenCellX; i++)
-	    {
-		while(true)
-		    {
-		        Integer next = rng.nextInt(screenCellX) + 1;
-		        if (!generatedX.contains(next))
-			    {
-				// Done for this iteration
-				generatedX.add(next);
-				break;
-			    }
-		    }
-	    }
-		
-	for (int i=0; i<screenCellX; i++) {
-	    cellSlotsX[i] = (generatedX.get(i) * (int)((width * 0.7)/screenCellX)); //Scale width to get greatest X value (try 0.7)
-	    NGlobals.cPrint("CellSlotsX[i] = " + cellSlotsX[i]);
-	}
-		
-	cellSlotsY = new int[screenCellY];
-	generatedY = new ArrayList<Integer>();
-	for (int i = 0; i < screenCellY; i++)
-	    {
-		while(true)
-		    {
-		        Integer next = rng.nextInt(screenCellY) + 1;
-		        if (!generatedY.contains(next))
-			    {
-				// Done for this iteration
-				generatedY.add(next);
-				break;
-			    }
-		    }
-	    }
-	cellSlotsY = new int[screenCellY];
-	for (int i=0; i<screenCellY; i++) {
-	    cellSlotsY[i] = (generatedY.get(i) * (int)((height * 0.9)/screenCellY)); //Scale height to get greatest Y value (total screen size seems okay)
-	    NGlobals.cPrint("CellSlotsY[i] = " + cellSlotsY[i]);
-	}
-	//STK**** End Cloud Randomization code========================================
 
-	startX = new int[100];
-	startY = new int[100];
+	chatFont = new Font("TimesRoman", Font.PLAIN, (int)(14 * textImageSizeScaler));
+				
+
 
 	imgPrefix = "http://nomads.music.virginia.edu/images/";
 
 	quad = 0;
+	lastQuad = 0;
 
 	try { 
 	    imgWebBase = new URL(imgPrefix); 
 	} 
 	catch (Exception e) {}
 
-
+	width = getSize().width;
+	height = getSize().height;
 
 	offScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -518,41 +426,71 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	//	backgroundIce = getImage(imgWebBase,"NOMADSMainDisplay_11520x1200Background.jpg");
 
 	offScreenGrp.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	offScreenGrp.setStroke(new BasicStroke(2));
+
 	randNum = new Random();
 
-	// Cloud placement init code
-	int wEnd = (int)(width * 0.85);
-	int hEnd = (int)(height * 0.8);
+	int i;
+
+	numRChatLines = 24;
+
+	rLineSlots = new int[numRChatLines+1];
+
+	int tNum;
+	for(j=0;j<numRChatLines;j++) {
+	    
+	    tNum = randNum.nextInt(numRChatLines);
+	    for (i=0;i<numRChatLines;i++) {
+		if (rLineSlots[i] == tNum) {
+		    i=0;
+		    tNum = randNum.nextInt(numRChatLines);
+		}
+	    }
+	    rLineSlots[j] = tNum;
+	}
+
+	startX = new int[100];
+	startY = new int[100];
+
+
 	int wStart = (int)(width * 0.1);
+	int wEnd = (int)(width * 0.9);
+
 	int hStart = (int)(height * 0.1);
+	int hEnd = (int)(height * 0.9);
+
 	int wDiff = wEnd-wStart;
 	int hDiff = hEnd-hStart;
 
-	int wIncr = (int)(wDiff/screenCellX);
-	int hIncr = (int)(hDiff/screenCellY);
-
-	//	cellCtrX = randNum.nextInt(screenCellX);
-	//	cellCtrY = randNum.nextInt(screenCellY);
-	cellCtrX = 0;
-	cellCtrY = 0;
+	float hIncr = (int)(hDiff/numRChatLines);  // divide by numRChatLines vertically
 
 	int tX;
 	int tY;
-	int cell = 0;
-
-	for (tX = wStart; tX < wEnd; tX += wIncr) {
-	    for (tY = hStart; tY < hEnd; tY += hIncr) {
-		startX[cell] = tX;
-		startY[cell] = tY;
-		cell++;
-	    }
-	}
+	int tLine = 0;
+	int tSlot = 0;
+	tX = wStart;
 
 	centerX = (width/2);
 	centerY = (height/2); 
 
-	NGlobals.cPrint("width = " + width + "height = " + height);
+	for (int l=0; l<numRChatLines; l++) {
+	    tSlot = rLineSlots[l];
+	    if (tSlot%3 == 2) {
+		startX[tSlot] = wStart;
+	    }
+	    else if (tSlot%3 == 1) {
+		startX[tSlot] = wStart+(int)(wDiff/3);
+	    }
+	    else {
+		startX[tSlot] = wStart+(int)((2*wDiff)/3);
+	    }
+	    tY = (int)(tSlot*hIncr);
+	    startY[tSlot] = tY;
+	    tLine++;
+	}
+
+
+	NGlobals.dtPrint("width = " + width);
+	NGlobals.dtPrint("height = " + height);
 	setBackground(Color.black);	
 
 	chatLines = new String[numChatLines];
@@ -615,7 +553,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	startFreq[7] = 171.89;
 	startFreq[8] = 129.17;
 
-	freqMultiply = 2.5F;
+	freqMultiply = 2.0F;
 	mainVolumeFromSlider = 1.0F;
 
 
@@ -644,28 +582,28 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	try
 	    {
-		Synth.startEngine(0);
+		// Synth.startEngine(0);
 
-		myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
-		envPlayer = new EnvelopePlayer[MAX_THREADS];
-		envData = new SynthEnvelope[MAX_THREADS];
-		lineOut  = new LineOut();
+		// myNoiseSwarm = new NoiseSwarm[MAX_THREADS];
+		// envPlayer = new EnvelopePlayer[MAX_THREADS];
+		// envData = new SynthEnvelope[MAX_THREADS];
+		// lineOut  = new LineOut();
 
-		myBusReader = new BusReader();
+		// myBusReader = new BusReader();
 
-		myBusWriter = new BusWriter[MAX_THREADS];
+		// myBusWriter = new BusWriter[MAX_THREADS];
 
-		/* Synchronize Java display to make buttons appear. */
-		getParent().validate();
-		getToolkit().sync();
+		// /* Synchronize Java display to make buttons appear. */
+		// getParent().validate();
+		// getToolkit().sync();
 
-		myBusReader.output.connect(0, lineOut.input, 0 );
-		myBusReader.output.connect(0, lineOut.input, 1 );
+		// myBusReader.output.connect(0, lineOut.input, 0 );
+		// myBusReader.output.connect(0, lineOut.input, 1 );
 
-		myBusReader.start();
-		lineOut.start();
+		// myBusReader.start();
+		// lineOut.start();
 
-		myBusReader.output.connect(lineOut.input, 0 );
+		//	myBusReader.output.connect(lineOut.input, 0 );
 
 
 	    } catch(SynthException e) {
@@ -686,7 +624,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	d[0] = 0;
 	operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
 
-	//redraw();
+	redraw();
     }	
 
     public void deleteAllSynths() {
@@ -694,21 +632,20 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    int tNum = 	oscNum[i];
 	    deleteSynth(tNum);
 	}
-	numOscs = 0;
+	// numOscs = 0;
     }
 
 
-    public synchronized void deleteSynth(int threadNum) {
+    public void deleteSynth(int threadNum) {
 
 	if (isOsc(threadNum)) {
-	    myNoiseSwarm[threadNum].amplitude.set(0);
 	    deleteSprite(threadNum);
 	    sprites[threadNum] = null;
-	    deleteOsc(threadNum);
-	    oscCheck[threadNum] = false;
-	    envPlayer[threadNum].stop();
-	    envPlayer[threadNum].delete();
-	    myNoiseSwarm[threadNum].delete();
+	    // deleteOsc(threadNum);
+	    // oscCheck[threadNum] = false;
+	    // envPlayer[threadNum].stop();
+	    // envPlayer[threadNum].delete();
+	    // myNoiseSwarm[threadNum].delete();
 
 
 	    int j=0;
@@ -722,8 +659,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    }
 
 	    numOscs--;
-	    oscMaxTick = (int)(numOscs/5.0);
-
 	    for (int i=0;i<numOscs;i++) {
 		oscNum[i] = tOscNum[i];
 	    }
@@ -742,7 +677,6 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 	if (!isOsc(threadNum)) {
 
-
 	    NGlobals.dtPrint("CREATING OSC" + numOscs);
 
 	    sprites[threadNum] = new Sprite();
@@ -752,54 +686,65 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    // sprites[threadNum].r = randNum.nextInt(255);
 	    // 	    sprites[threadNum].g = randNum.nextInt(255);
 	    // 	    sprites[threadNum].b = randNum.nextInt(255);
-	    sprites[threadNum].r = 0; //255;
-	    sprites[threadNum].g = 0; //255;
-	    sprites[threadNum].b = 0; // 255;
+	    sprites[threadNum].r = 255;
+	    sprites[threadNum].g = 255;
+	    sprites[threadNum].b = 255;
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
-	    oscMaxTick = (int)(numOscs/5.0);
-
-	    if (myNoiseSwarm[threadNum] == null) {
-	    	myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    if (numOscs < 20) {
+		maxSkip = 1+(int)(numOscs/10);
 	    }
-	    if (envPlayer[threadNum] == null) {
-	    	envPlayer[threadNum] = new EnvelopePlayer();
+	    else if (numOscs < 40) {
+		maxSkip = 1+(int)(numOscs/5);
 	    }
-
-	    for (int i=0;i<numOscs;i++) {
-		tNum = oscNum[i];
-		tAmp = (float)4/numOscs; //default amp = 2.0
-		NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-		float tVolume = tAmp * mainVolumeFromSlider;
-		NGlobals.cPrint("Amplitude = " + tVolume);
+	    else if (numOscs < 60) {
+		maxSkip = 1+(int)(numOscs/4);
+	    }
+	    else if (numOscs < 100) {
+		maxSkip = 1+(int)(numOscs/3);
 	    }
 
-	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
-		    
+	    // if (myNoiseSwarm[threadNum] == null) {
+	    // 	myNoiseSwarm[threadNum] = new NoiseSwarm();
+	    // }
+	    // if (envPlayer[threadNum] == null) {
+	    // 	envPlayer[threadNum] = new EnvelopePlayer();
+	    // }
+
+	    // for (int i=0;i<numOscs;i++) {
+	    // tNum = oscNum[i];
+	    // tAmp = (float)2/numOscs; //default amp = 2.0
+	    // NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+	    // myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+	    // float tVolume = tAmp * mainVolumeFromSlider;
+	    // NGlobals.cPrint("Amplitude = " + tVolume);
+	    // }
+
+	    //	    envPlayer[threadNum].output.connect( myNoiseSwarm[threadNum].frequency );
+
 	    // define shape of envelope as an array of doubles
-	    data[threadNum] = new double[2];
-	    data[threadNum][0] = 0.1; //time point value
-	    data[threadNum][1] = (startFreq[tStartFreq]); //frequency
-	    NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
+	    // data[threadNum] = new double[2];
+	    // data[threadNum][0] = 0.1; //time point value
+	    // data[threadNum][1] = (startFreq[tStartFreq]); //frequency
+	    // NGlobals.cPrint( "starting freq= " + data[threadNum][1]);
 
-	    if (envData[threadNum] == null) {
-	    	envData[threadNum] = new SynthEnvelope( 1 );
-	    }
-	    envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
+	    // if (envData[threadNum] == null) {
+	    // 	envData[threadNum] = new SynthEnvelope( 1 );
+	    // }
+	    // envData[threadNum].write(0, data[threadNum], 0, 1); // 1 = number of frames
 
-	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
+	    //	    myBusWriter[threadNum]   = new BusWriter(); /* Create bus writers. */
 
-	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
-	    myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
-	    myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
+	    //	    myNoiseSwarm[threadNum].output.connect(myBusWriter[threadNum].input);
+	    // myBusWriter[threadNum].busOutput.connect( myBusReader.busInput );	    
+	    // myNoiseSwarm[threadNum].frequency.set((float)(startFreq[tStartFreq]));
 
-	    envPlayer[threadNum].start();
-	    myNoiseSwarm[threadNum].start();
-	    myBusWriter[threadNum].start();
+	    // envPlayer[threadNum].start();
+	    // myNoiseSwarm[threadNum].start();
+	    // myBusWriter[threadNum].start();
 	    oscCheck[threadNum] = true;
-	    envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
+	    // envPlayer[threadNum].envelopePort.queue( envData[threadNum] );
 
 	}
 	else {
@@ -877,7 +822,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    my = new_my;
 
 
-	    //redraw();
+	    redraw();
 	    e.consume();
 	}
     }
@@ -887,112 +832,11 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     }
 
 
-    // public void errCheck() {
-    // 	Calendar now;
-    // 	long mSecN=0;
-    // 	long mSecH=0;
-    // 	long mSecDiff=0;
-
-    // 	try {
-
-    // 	    if ((getHandleActive() == true) && (getSandRead() == true)) {
-
-    // 		now = Calendar.getInstance();
-    // 		mSecN = now.getTimeInMillis();
-    // 		mSecH = nThread.getHandleStart();
-
-    // 		mSecDiff = mSecN-mSecH;
-
-    // 		// System.out.println("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
-
-
-    // 		pToggle++;
-    // 		if (pToggle > 100) {
-    // 		    pToggle=0;
-    // 		}
-    // 		if (pToggle%2 == 0) {
-    // 		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
-    // 		}
-
-    // 		if (mSecDiff > 2000) {
-    // 		    errFlag += 1;
-    // 		    if (errFlag > 0) {
-    // 			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
-    // 			System.out.println(">>> connected = " + connected);
-
-    // 		    }
-    // 		    if ((errFlag > 3) && (connected == true)) {
-    // 			now = Calendar.getInstance();
-    // 			mSecR = now.getTimeInMillis(); // time of this reset
-    // 			System.out.println("-----> EREC #" + resetCtr);
-    // 			resetCtr++;
-    // 			if (resetCtr > maxResets) {
-    // 			    System.out.println("######### CRITICAL ERROR");
-    // 			    System.out.println(">>> #### MAX RESETS");
-    // 			    System.out.println(">>> sleeping 10 sec");
-    // 			    NomadsErrCheckThread.sleep(12000);
-    // 			    resetCtr=0;
-    // 			}
-    // 			nThread.setHandleStart(mSecN);
-    // 			System.out.println("######### CRITICAL ERROR");
-    // 			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
-    // 			System.out.println(">>> halting thread ...");
-    // 			nThread.setRunState(false);
-    // 			NomadsErrCheckThread.sleep(2000);
-    // 			// deleteSynth(lastThread);
-    // 			nThread = null;
-    // 			System.out.println(">>> disconnecting ...");
-    // 			operaSand.disconnect();
-    // 			NomadsErrCheckThread.sleep(1000);
-    // 			operaSand = null;
-    // 			connected = false;
-    // 			System.out.println(">>> disconneced ...");
-    // 			// System.out.println(">>> deleting sprites/synths ...");
-    // 			// deleteAllSynths();
-    // 			// System.out.println(">>> sprites/synths deleted ...");
-    // 			System.out.println("+++++ Attempting reconnect ...");
-    // 			NomadsErrCheckThread.sleep(1000);
-    // 			operaSand = new NSand(); 
-    // 			operaSand.connect();
-    // 			int d[] = new int[1];
-    // 			d[0] = 0;
-    // 			operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
-    // 			connected = true;
-    // 			NomadsErrCheckThread.sleep(1000);
-    // 			System.out.println("+++ reconnected!");			
-    // 			System.out.println("+++ attempting to restart thread ...");			
-    // 			NomadsErrCheckThread.sleep(1000);
-    // 			nThread = new NomadsAppThread(this);
-    // 			nThread.setRunState(true);
-    // 			nThread.start();
-    // 			System.out.println("+++ thread restarted!");			
-    // 			errFlag = 0;
-
-    // 			now = Calendar.getInstance();
-    // 			mSecN = now.getTimeInMillis();
-    // 			nThread.setHandleStart(mSecN);
-
-    // 		    }
-    // 		}
-    // 		else if (errFlag > 0) {
-    // 		    errFlag--;
-    // 		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
-    // 		}
-    // 	    }
-    // 	    NomadsErrCheckThread.sleep(10);
-    // 	}
-    // 	catch (InterruptedException ie) {}
-
-    // }
-
-
     public void errCheck() {
 	Calendar now;
 	long mSecN=0;
 	long mSecH=0;
 	long mSecDiff=0;
-
-	// NGlobals.csvPrint(" . ");
 
 	try {
 
@@ -1003,72 +847,47 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		mSecH = nThread.getHandleStart();
 
 		mSecDiff = mSecN-mSecH;
-		mSecAvg = ((mSecAvg*4)+mSecDiff)/5;
-		mSecAvgL = ((mSecAvgL*19)+mSecDiff)/20;
 
-		NGlobals.dtPrint("errCheck --> mSecDiff: " + mSecDiff + " avg: " + mSecAvg + " avgL: " + mSecAvgL);
+		System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
 
-		pToggle++;
-		if (pToggle > 10) {
-		    pToggle=0;
-		}
-		if (pToggle%2 == 0) {
-		    NGlobals.dtPrint(">>> maxSkip:" + maxSkip);
-		}
-
-		if (mSecDiff > mSecLimit) {
+		if (mSecDiff > 1000) {
 		    errFlag += 1;
 		    if (errFlag > 0) {
-			System.out.println("   INCR ERROR COUNT: " + errFlag);
+			System.out.println(">>> INCR ERROR COUNT: " + errFlag);
 		    }
-		    if ((errFlag > errTrip) && (connected == true)) {
-			now = Calendar.getInstance();
-			mSecR = now.getTimeInMillis(); // time of this reset
-			System.out.println("-----> EREC #" + resetCtr);
-			resetCtr++;
-			if (resetCtr > maxResets) {
-			    System.out.println("######### CRITICAL ERROR");
-			    System.out.println(">>> #### MAX RESETS");
-			    System.out.println(">>> sleeping 10 sec");
-			    NomadsErrCheckThread.sleep(12000);
-			    resetCtr=0;
-			}
-			nThread.setHandleStart(mSecN);
-			System.out.println("######### NETWORK ERROR");
-			// System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
-			// System.out.println(">>> halting thread.");
+		    if ((errFlag > 3) && (connected == true)) {
+			System.out.println("######### CRITICAL ERROR");
+			System.out.println(">>> handleErrCheck time diff: " + mSecDiff);
+			System.out.println(">>> halting thread ...");
 			nThread.setRunState(false);
-			NomadsErrCheckThread.sleep(800);
+			NomadsErrCheckThread.sleep(1000);
 			// deleteSynth(lastThread);
 			nThread = null;
-			System.out.println("   disconnecting.");
+			System.out.println(">>> disconnecting ...");
 			operaSand.disconnect();
-			NomadsErrCheckThread.sleep(800);
+			NomadsErrCheckThread.sleep(1000);
 			operaSand = null;
 			connected = false;
-			System.out.println("   disconneced.");
-			System.out.println(">>> deleting sprites/synths.");
-			deleteAllSynths();
-			System.out.println(">>> sprites/synths deleted.");
-			System.out.println("   Attempting reconnect.");
-			NomadsErrCheckThread.sleep(800);
+			System.out.println(">>> disconneced ...");
+			// System.out.println(">>> deleting sprites/synths ...");
+			// deleteAllSynths();
+			// System.out.println(">>> sprites/synths deleted ...");
+			System.out.println("+++++ Attempting reconnect ...");
+			NomadsErrCheckThread.sleep(1000);
 			operaSand = new NSand(); 
 			operaSand.connect();
-
 			int d[] = new int[1];
 			d[0] = 0;
 			operaSand.sendGrain((byte)NAppID.OPERA_MAIN, (byte)NCommand.REGISTER, (byte)NDataType.UINT8, 1, d );
-
 			connected = true;
-			System.out.println("   reconnected!");			
-			System.out.println("   attempting to restart thread.");			
-			NomadsErrCheckThread.sleep(800);
+			NomadsErrCheckThread.sleep(1000);
+			System.out.println("+++ reconnected!");			
+			System.out.println("+++ attempting to restart thread ...");			
+			NomadsErrCheckThread.sleep(1000);
 			nThread = new NomadsAppThread(this);
 			nThread.setRunState(true);
 			nThread.start();
-
-
-			System.out.println("Thread restarted.");			
+			System.out.println("+++ thread restarted!");			
 			errFlag = 0;
 
 			now = Calendar.getInstance();
@@ -1077,18 +896,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		    }
 		}
-		else if ((errFlag > 0) && (mSecDiff < mSecLimit)) {
+		else if (errFlag > 0) {
 		    errFlag--;
 		    System.out.println(">>> DECR ERROR COUNT: " + errFlag);
 		}
 	    }
-	    NomadsErrCheckThread.sleep(100);
+	    NomadsErrCheckThread.sleep(10);
 	}
 	catch (InterruptedException ie) {}
 
     }
-
-    // END errcheck -------------------------------------------
 
 
     // ------------------------------------------------------------------------------------------------
@@ -1102,7 +919,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	int THREAD_ID;
 	float xput,yput;
 
-	byte incCmd, incAppID, incDType, incDLen;
+	int incCmd, incAppID, incDType, incDLen;
 	int incIntData[] = new int[1000];
 	byte incByteData[] = new byte[1000];  // Cast as chars here because we're using chars -> strings
 	NGrain grain;
@@ -1111,10 +928,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	// System.out.println("handle()");
 
 	setSandRead(false);
-
-	// READ THE GRAIN
 	grain = operaSand.getGrain();
-
 	setSandRead(true);
 	setHandleActive(true);
 	//grain.print(); //prints grain data to console
@@ -1122,15 +936,9 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	incAppID = grain.appID;
 	incCmd = grain.command;
 
-	byte incAppCmd = grain.command;
-	byte incAppDataType = grain.dataType;
-	int incAppDataLen = grain.dataLen;
-
-	NGlobals.cPrint("OM ===== READING ===== ");
-	NGlobals.cPrint("OM appID: " + NAppID.printID(incAppID));
-	NGlobals.cPrint("OM command: " + NCommand.printCmd(incAppCmd));
-	NGlobals.cPrint("OM dataType: " + NDataType.printDT(incAppDataType));
-	NGlobals.cPrint("OM dataLen: " + incAppDataLen);
+	NGlobals.cPrint("...");
+	NGlobals.cPrint("OM: incAppID= " + incAppID + " incCmd= " + incCmd);
+	NGlobals.cPrint("...");
 
 	if (incAppID == NAppID.SERVER) {
 	    if (grain.command == NCommand.DELETE_SPRITE) {
@@ -1138,27 +946,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
 		NGlobals.cPrint("DELETING SPRITE: " + THREAD_ID);
 		deleteSynth(THREAD_ID);
-		return;
 	    }
+
 	}
 
-	if ((incAppID == NAppID.OC_POINTER) || (incAppID == NAppID.JOC_POINTER)) {
-	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-		THREAD_ID = grain.iArray[0];
-		
-		if (isOsc(THREAD_ID)) {
-		    if (oscTick > oscMaxTick) {
-			NGlobals.dtPrint("OK TO SWARM");
-			oscTick = 0;
-		    }
-		    else {
-			oscTick++;
-			NGlobals.dtPrint("SKIPPING SWARM");
-			return;
-		    }
-		}
-	    }
-	}
 
 	// CONDUCTOR PANEL ================================================================================
 
@@ -1169,20 +960,20 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		chatA = grain.iArray[0];
 		setChatColors(chatA);
 		NGlobals.cPrint("Setting ChA to " + chatA);
-		//redraw();
+		redraw();
 	    }
 
 	    else if (incCmd == NCommand.SET_CLOUD_ALPHA) {
 		cloudA = grain.iArray[0];;
 		setCloudColors(cloudA);
 		NGlobals.cPrint("Setting ClA to " + cloudA);
-		//redraw();
+		redraw();
 	    }
 	    else if (incCmd == NCommand.SET_POINTER_ALPHA) {
 		pointerA = grain.iArray[0];;
 		setPointerColors(pointerA);
 		NGlobals.cPrint("Setting PtA to " + pointerA);
-		//redraw();
+		redraw();
 	    }
 	    else if (incCmd == NCommand.SET_CLOUD_DISPLAY_STATUS) {  // Cloud reset
 		if(grain.bArray[0] == 0) {
@@ -1193,7 +984,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    //     histoGram.remove(i);
 		    // }
 		    NGlobals.cPrint("Resetting cloud...\n");
-		    //redraw();
+		    redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_DISCUSS_DISPLAY_STATUS) {  // Discuss reset
@@ -1206,20 +997,20 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatYLoc = height-chatSpace;
 		    chatXLoc = 20;
 		    NGlobals.cPrint("Resetting discuss...\n");
-		    //redraw();
+		    redraw();
 		}
 	    }
 	    else if (incCmd == NCommand.SET_SYNTH_VOLUME) {	
-		tVolumeVal = (double)grain.iArray[0];
-		mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
-		for (i=0;i<numOscs;i++) {
-		    tNum = oscNum[i];
-		    tAmp = (float)4/numOscs; //default amp = 2.0
-		    NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
-		    myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
-		    tVolume = tAmp * mainVolumeFromSlider;
-		    NGlobals.cPrint("Amplitude = " + tVolume);
-		}
+		// tVolumeVal = (double)grain.iArray[0];
+		// mainVolumeFromSlider = (float)(Math.pow(tVolumeVal, 2)/10000.0);
+		// for (i=0;i<numOscs;i++) {
+		//     tNum = oscNum[i];
+		//     tAmp = (float)2/numOscs; //default amp = 2.0
+		//     NGlobals.cPrint(i + ":resetting amp for osc " + tNum + " to " + tAmp);
+		//     myNoiseSwarm[tNum].amplitude.set(tAmp * mainVolumeFromSlider);
+		//     tVolume = tAmp * mainVolumeFromSlider;
+		//     NGlobals.cPrint("Amplitude = " + tVolume);
+		// }
 		//TO DO: Make this a log function. . .
 	    }
 
@@ -1229,39 +1020,39 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	}
 
 	// ========= Pointer (regular) ============================================
-	    
-	if (incAppID == NAppID.OC_POINTER) {
+
+	else if (incAppID == NAppID.OC_POINTER) {
 	    NGlobals.cPrint("OMP: OC_POINTER\n");
 	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-			
 		THREAD_ID = grain.iArray[0];
+		lastThread = THREAD_ID;
 		x = grain.iArray[1];
 		y = grain.iArray[2];
 		NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
-			
+
 		if (numOscs < MAX_OSCS) {
 		    makeSynth(THREAD_ID);
 		}
 		else if (numOscs >= MAX_OSCS) {
 		    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
 		}
-			
+
 		NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
-			
+
 		freq = (float)x;
 		amp = (float)(y/1000);
-			
+
 		//				float fx = (float)(x+1000)/(float)2000;
 		//				float fy = (float)(y+1000)/(float)2000;
 		//
 		//				x = (int)(fx*width);
 		//				y = (int)(fy*height);
-			
+
 		scaledX = (int)(x * origXScaler);
 		scaledY = (int)(y * origYScaler);
 		x = scaledX;
 		y = scaledY;
-			
+
 		NGlobals.cPrint("OMP: x = " + x);
 		//		amp = 1;
 		NGlobals.cPrint("OMP: y = " + y);
@@ -1314,141 +1105,155 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			myY = (double)(origY - y);
 
 		    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+
+
 		    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
 		    myH = Math.sqrt(myH_Sqr); //distance from center
 		    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
 
 		    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-		    tFreq = (float)myH * freqMultiply;
+		    tFreq = (float)myH * 4.0;
 
 		    if (tFreq > 22050.0)
 			tFreq = 22050.0;
 
-		    if (tFreq < 150.0)
-			tFreq = 150.0;
+		    if (tFreq < 20.0)
+			tFreq = 20.0;
 
 		    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-		    data[THREAD_ID][1] = tFreq;
-		    // System.out.println("data[1] = " + data[THREAD_ID][1]);
-		    envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-		    envPlayer[THREAD_ID].envelopePort.clear();
-		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+		    // data[THREAD_ID][1] = tFreq;
+		    //	System.out.println("data[1] = " + data[THREAD_ID][1]);
+		    // envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+		    // envPlayer[THREAD_ID].envelopePort.clear();
+		    // envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
 
-		    // myNoiseSwarm[THREAD_ID].frequency.set((float)((startFreq + myH) * freqMultiply));
-		    // redraw();
+		    redraw();
 		}
 	    }
+
 	}
-	    
+
 	// ========= Pointer (Java based) ============================================
-	    
+
 	else if (incAppID == NAppID.JOC_POINTER) {
 	    NGlobals.cPrint("OMP: JOC_POINTER\n");
 	    if (grain.command == NCommand.SEND_SPRITE_THREAD_XY) {
-			
-		THREAD_ID = grain.iArray[0];
-		x = grain.iArray[1];
-		y = grain.iArray[2];
-		NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
-			
-		if (numOscs < MAX_OSCS) {
-		    makeSynth(THREAD_ID);
+		if (skipper == 0) {
+
+		    THREAD_ID = grain.iArray[0];
+		    x = grain.iArray[1];
+		    y = grain.iArray[2];
+		    NGlobals.cPrint("OPERA_MAIN:  got SEND_SPRITE_XY from SOUND_SWARM: " + x + "," + y);
+
+		    if (numOscs < MAX_OSCS) {
+			makeSynth(THREAD_ID);
+		    }
+		    else if (numOscs >= MAX_OSCS) {
+			NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		    }
+
+		    NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
+
+		    freq = (float)x;
+		    amp = (float)(y/1000);
+
+		    //				float fx = (float)(x+1000)/(float)2000;
+		    //				float fy = (float)(y+1000)/(float)2000;
+		    //
+		    //				x = (int)(fx*width);
+		    //				y = (int)(fy*height);
+
+		    scaledX = (int)(x * origXScaler);
+		    scaledY = (int)(y * origYScaler);
+		    x = scaledX;
+		    y = scaledY;
+
+		    NGlobals.cPrint("OMP: x = " + x);
+		    //		amp = 1;
+		    NGlobals.cPrint("OMP: y = " + y);
+		    NGlobals.cPrint("OMP: scaledX = " + scaledX);
+		    //		amp = 1;
+		    NGlobals.cPrint("OMP: scaledY = " + scaledY);
+
+		    //if (x > 900)
+		    //	x = 900;
+		    //				xput = (float)(x/0.5);
+		    xput = x;
+		    if (xput < 50)
+			xput = 50;
+		    if (xput > 900)
+			xput = 900;
+
+		    //if (y > 900)
+		    //	y = 900;
+
+		    //			yput = (float)((y/0.5));
+		    yput = y;
+		    if (yput < 0)
+			yput = 0;
+		    if (yput > 900)
+			yput = 900;
+
+
+		    //=============== STK code to get H value for frequency =======================
+
+		    double myX, myY, myH_Sqr;
+		    double myH;		
+
+
+		    if (isOsc(THREAD_ID)) {
+			NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
+
+			tSprite = getSprite(THREAD_ID);
+
+			tSprite.x = x;
+			tSprite.y = y;
+
+			if (x >= origX)
+			    myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
+			else 
+			    myX = (double)(origX - x);
+
+			if (posY >= y)
+			    myY = (double)(y - origY);
+			else
+			    myY = (double)(origY - y);
+
+			NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
+
+
+			myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
+
+			myH = Math.sqrt(myH_Sqr); //distance from center
+			NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
+
+			// double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
+			tFreq = (float)myH * 4.0;
+
+			if (tFreq > 22050.0)
+			    tFreq = 22050.0;
+
+			if (tFreq < 20.0)
+			    tFreq = 20.0;
+
+			NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
+			// data[THREAD_ID][1] = tFreq;
+			//	System.out.println("data[1] = " + data[THREAD_ID][1]);
+			// envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
+			// envPlayer[THREAD_ID].envelopePort.clear();
+			// envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
+
+			//	myNoiseSwarm[THREAD_ID].frequency.set(((startFreq + myH) * freqMultiply));
+			redraw();
+		    }
 		}
-		else if (numOscs >= MAX_OSCS) {
-		    NGlobals.dtPrint("OPERA_MAIN:  MAX_OSCS");
+		else {
+		    // System.out.println("skipping: " + skipper);
 		}
-			
-		NGlobals.cPrint("OMP: THREAD_ID = " + THREAD_ID);
-			
-		freq = (float)x;
-		amp = (float)(y/1000);
-			
-		//				float fx = (float)(x+1000)/(float)2000;
-		//				float fy = (float)(y+1000)/(float)2000;
-		//
-		//				x = (int)(fx*width);
-		//				y = (int)(fy*height);
-			
-		scaledX = (int)(x * origXScaler);
-		scaledY = (int)(y * origYScaler);
-		x = scaledX;
-		y = scaledY;
-			
-		NGlobals.cPrint("OMP: x = " + x);
-		//		amp = 1;
-		NGlobals.cPrint("OMP: y = " + y);
-		NGlobals.cPrint("OMP: scaledX = " + scaledX);
-		//		amp = 1;
-		NGlobals.cPrint("OMP: scaledY = " + scaledY);
-
-		//if (x > 900)
-		//	x = 900;
-		//				xput = (float)(x/0.5);
-		xput = x;
-		if (xput < 50)
-		    xput = 50;
-		if (xput > 900)
-		    xput = 900;
-
-		//if (y > 900)
-		//	y = 900;
-
-		//			yput = (float)((y/0.5));
-		yput = y;
-		if (yput < 0)
-		    yput = 0;
-		if (yput > 900)
-		    yput = 900;
-
-
-		//=============== STK code to get H value for frequency =======================
-
-		double myX, myY, myH_Sqr;
-		double myH;		
-
-		if (isOsc(THREAD_ID)) {
-
-		    NGlobals.cPrint("setting osc values for thread: " + THREAD_ID);
-
-		    tSprite = getSprite(THREAD_ID);
-
-		    tSprite.x = x;
-		    tSprite.y = y;
-
-		    if (x >= origX)
-			myX = (double)(x - origX); //if X value is bigger than origin value, distance = X-origin (x - 230)
-		    else 
-			myX = (double)(origX - x);
-
-		    if (posY >= y)
-			myY = (double)(y - origY);
-		    else
-			myY = (double)(origY - y);
-
-		    NGlobals.cPrint( "x = " + x + "y = " + y + "myX = " + myX + "myY" + myY);
-		    myH_Sqr = Math.pow(myX, 2) + Math.pow(myY, 2); //Pythagoras' Theorem 
-		    myH = Math.sqrt(myH_Sqr); //distance from center
-		    NGlobals.cPrint( "H = " + myH + "Diagonal = " + diagonal);
-
-		    // double tFreq = (float)( 10.00 * Math.pow(1.005, myH));
-		    tFreq = (float)myH * freqMultiply;
-
-		    if (tFreq > 22050.0)
-			tFreq = 22050.0;
-
-		    if (tFreq < 150.0)
-			tFreq = 150.0;
-
-		    NGlobals.cPrint("tFreq " + THREAD_ID + " set to " + tFreq);
-		    data[THREAD_ID][1] = tFreq;
-		    // System.out.println("data[1] = " + data[THREAD_ID][1]);
-		    envData[THREAD_ID].write(0, data[THREAD_ID], 0, 1); // 1 = number of frames
-		    envPlayer[THREAD_ID].envelopePort.clear();
-		    envPlayer[THREAD_ID].envelopePort.queue( envData[THREAD_ID] );
-
-		    // myNoiseSwarm[THREAD_ID].frequency.set((float)((startFreq + myH) * freqMultiply));
-		    // redraw();
-		}
+		skipper++;
+		if (skipper > maxSkip)
+		    skipper = 0;
 	    }
 	}
 
@@ -1532,7 +1337,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			else {
 			    fontSize = tHist.size;
 			}
-			tHist.font = new Font("Helvetica", Font.PLAIN, fontSize);
+			tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
 
 			//i = histoGram.size();  // exit the loop
 
@@ -1550,38 +1355,38 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			NGlobals.cPrint("  DECreasing word size for " + tHist.text);
 			NGlobals.cPrint("...");
 			NGlobals.cPrint("  numPasses = " + numPasses);
-			//	if (numPasses%1 == 0) {
-			tHist.size-=2;
-			quad = tHist.quad;
-			if (quad > 2) {
-			    tHist.x+=2;
-			    tHist.y+=2;
+			if (numPasses%2 == 0) {
+			    tHist.size -= 4;
+			    quad = tHist.quad;
+			    if (quad > 2) {
+				tHist.x+=2;
+				tHist.y+=2;
+			    }
+			    else if (quad > 1) {
+				tHist.x+=2;
+				tHist.y-=2;
+			    }
+			    else if (quad > 0) {
+				tHist.x-=2;
+				tHist.y-=2;
+			    }
+			    else {
+				tHist.x-=2;
+				tHist.y+=2;
+			    }
+			    if (tHist.x < 10) 
+				tHist.x = 10;
+			    if (tHist.x > (width-10))
+				tHist.x = width-10;
+			    if (tHist.y < 10) 
+				tHist.y = 10;
+			    if (tHist.y > (height-10))
+				tHist.y = height-10;
 			}
-			else if (quad > 1) {
-			    tHist.x+=2;
-			    tHist.y-=2;
-			}
-			else if (quad > 0) {
-			    tHist.x-=2;
-			    tHist.y-=2;
-			}
-			else {
-			    tHist.x-=2;
-			    tHist.y+=2;
-			}
-			if (tHist.x < 10) 
-			    tHist.x = 10;
-			if (tHist.x > (width-10))
-			    tHist.x = width-10;
-			if (tHist.y < 10) 
-			    tHist.y = 10;
-			if (tHist.y > (height-10))
-			    tHist.y = height-10;
-			//	}
 			if (tHist.size > maxFontSize)
 			    tHist.size = maxFontSize;
 			fontSize = tHist.size;
-			tHist.font = new Font("Helvetica", Font.PLAIN, fontSize);
+			tHist.font = new Font("TimesRoman", Font.PLAIN, fontSize);
 
 			NGlobals.cPrint("...");
 
@@ -1627,27 +1432,18 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    tHist.text = new String(text);
 
 		    xMin = (int)(width * 0.0);
-		    xVar = (int)(width * 0.6);
+		    xVar = (int)(width * 0.4);
 
 		    yMin = (int)(height * 0.0);
 		    yVar = (int)(height * 0.4);
 
-		    NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
-		    NGlobals.cPrint("setting quad = " + quad);
-
 		    xRand = xMin + randNum.nextInt(xVar);
 		    yRand = yMin + randNum.nextInt(yVar);
-					
-					
 
-		    // curCell = cellSlots[cellCtr];
-		    curCellX = cellSlotsX[cellCtrX]; //pick x value from random array
-		    curCellY = cellSlotsY[cellCtrY]; //pick y value from random array
+		    curLine = rLineSlots[rLineCntr];
 
-		    x = curCellX; //Set x coordinate
-		    y = curCellY; //Set y coordinate
-
-		    // Check that text is shifted properly
+		    /// xxx
+		    x = startX[curLine]+randNum.nextInt(100);
 
 		    int tLen = text.length();
 		    int tEnd = x+((int)(startFontSize*0.6)*tLen);
@@ -1659,39 +1455,12 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 			x = (int)(width*0.1);
 		    }
 
+		    y = startY[curLine]+randNum.nextInt(10);
 
-		    cellCtrX++; //Move counter for next slot in random arrays
-		    cellCtrY++;
-					
-		    //Reset counters 
-		    if (cellCtrY >= screenCellY) {
-			cellCtrY = 0;
-		    }
+		    rLineCntr++;
+		    if (rLineCntr >= numRChatLines)
+			rLineCntr = 0;
 
-		    if (cellCtrX >= screenCellX) {
-			cellCtrX = 0;
-		    }
-
-		    NGlobals.cPrint("cellCntrX = " + cellCtrX);
-		    NGlobals.cPrint("cellCntrY = " + cellCtrY);
-
-
-		    // if (quad > 2) {
-		    // 	x = centerX + xRand;
-		    // 	y = centerY + yRand;
-		    // }
-		    // else if (quad > 1) {
-		    // 	x = centerX + xRand;
-		    // 	y = centerY - yRand;
-		    // }
-		    // else if (quad > 0) {
-		    // 	x = centerX - xRand;
-		    // 	y = centerY - yRand;
-		    // }
-		    // else  {
-		    // 	x = centerX - xRand;
-		    // 	y = centerY + yRand;
-		    // }
 
 		    if ((x > centerX) && (y > centerY)) {
 			quad = 3;
@@ -1707,6 +1476,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    }
 		    tHist.quad = quad;
 
+
+		    NGlobals.cPrint(">>>NEW WORD " + tHist.text + " at [" + x + "]" + "[" + y + "]");
+		    NGlobals.cPrint("setting quad = " + quad);
+
 		    NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
 
 		    tHist.color = cloudColors[tCloudColorNum]; 	
@@ -1720,7 +1493,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    tHist.x = x;
 		    tHist.y = y;
 
-		    tHist.font = new Font("Helvetica", Font.PLAIN, tHist.size);
+		    tHist.font = new Font("TimesRoman", Font.PLAIN, tHist.size);
 		    histoGram.add(tHist);
 
 		    // This will change to be a combination of rank v time (ie., numPasses);
@@ -1753,7 +1526,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		numPasses++;
 		NGlobals.cPrint("...");
 		NGlobals.cPrint("END handle(" + text + ") numPasses = " + numPasses + " -----");
-		// redraw();
+		redraw();
 	    }
 	}
 	// END OC_CLOUD ------------------------------------------------------------------------------------
@@ -1768,21 +1541,32 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    chatLines[i] = chatLines[i-1];
 		}
 		chatLines[0] = text;
-		// redraw();
+		redraw();
 	    }
 	}
-	    
-	
+
+	//		if (bite == app_id.MONITOR) {
+	//			if (text.equals("CHECK")) {
+	//				try {
+	//					streamOut.writeByte((byte)app_id.MONITOR);
+	//					streamOut.writeUTF("PING");
+	//				}
+	//				catch(IOException ioe) {
+	//					System.out.println("Error writing to output stream: ");
+	//				}
+	//			}	 
+	//		}   
+
 	NGlobals.cPrint ("-------------------------------------------------[OM]\n");
-	
+
 	setHandleActive(false);
-	
+
     }
-    
+
     // ------------------------------------------------------------------------------------------------
     // END handle()
     // ------------------------------------------------------------------------------------------------
-    
+
     public void actionPerformed( ActionEvent ae )
     {
 	Object obj = ae.getSource();
@@ -1791,16 +1575,16 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    NGlobals.cPrint("...");
 	    NGlobals.cPrint("actionPerformed():  clearing histogram");
 	    for (i=0;i<histoGram.size();i++) {
-		
+
 		NGlobals.cPrint("...");
 		String tempString = Integer.toString(histoGram.size());
-		
+
 		NGlobals.cPrint(tempString);
 		tHist = histoGram.get(i);
 		tHist.pass = 0;
 		x=tHist.x;
 		y=tHist.y;
-		tHist.font = new Font("Helvetica", Font.PLAIN, startFontSize);
+		tHist.font = new Font("TimesRoman", Font.PLAIN, startFontSize);
 	    }
 	    NGlobals.cPrint("CLEAR!");
 	    histoGram.clear();
@@ -1812,15 +1596,15 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    NGlobals.cPrint("...");
 	    NGlobals.cPrint("actionPerformed():  clearing rows/cols");
 	}
-	
+
     }
     // DT 6/30/10:  not sure we need these anymore
-    
+
     public void start() {
 	runner = new Thread(this);
 	runner.start();
     }
-    
+
     public void run () {
 	NGlobals.cPrint("I'm running!");
 	while (true) {
@@ -1957,12 +1741,17 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    offScreenGrp.setColor(tc);
 	    offScreenGrp.setFont(tHist.font);
 	    offScreenGrp.drawString(tHist.text, tHist.x, tHist.y);
+	    // int tLen = tHist.text.length();
+	    // int tH = 10; // TODO set to font height
+	    // int tW = ((int)(startFontSize*0.6)*tLen);
+	    // offScreenGrp.drawRect(tHist.x, tHist.y, tW, tH);
+	    
 	}
 
 	tH = (int)(height*1.1);
 	chatSpace = tH/numChatLines;
 	chatYLoc = height-chatSpace;
-	chatXLoc = 40;
+	chatXLoc = 20;
 
 
 
