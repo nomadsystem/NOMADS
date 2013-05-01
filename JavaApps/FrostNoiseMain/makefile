@@ -5,7 +5,7 @@ include ../makefile.conf
 		$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-		OperaMain.java
+		LaunchPanel.java MainDisplay.java
 
 default: classes myliblink comlink jar
 
@@ -23,7 +23,7 @@ comlink:
 
 jar:
 	rm -rf *.jar
-	jar cf OperaMain.jar *.class
+	jar cf LaunchPanel.jar *.class
 
 classes: $(CLASSES:.java=.class)
 

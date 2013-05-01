@@ -381,7 +381,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 
     public void setChatColors(int alpha) {
 	//chatColors[0] = new Color(255, 215, 10, alpha);
-	chatColors[0] = new Color(204, 255, 255, alpha);
+	chatColors[0] = new Color(0,0,60, alpha);
+	//chatColors[0] = new Color(204, 255, 255, alpha);
 	chatColors[1] = new Color(145, 86, 65, alpha);
 	chatColors[2] = new Color(145, 86, 65, alpha);
 	chatColors[3] = new Color(145, 86, 65, alpha);
@@ -392,7 +393,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
     }
 
      public void setCloudColors(int alpha) {
-     	cloudColors[0] = new Color(255, 255, 255, alpha);
+	cloudColors[0] = new Color(0,0,60, alpha);
+	//     	cloudColors[0] = new Color(255, 255, 255, alpha);
      	cloudColors[1] = new Color(255, 255, 255, alpha);
      	cloudColors[2] = new Color(255, 255, 255, alpha);
      	cloudColors[3] = new Color(255, 255, 255, alpha);
@@ -403,7 +405,8 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
      }
 
     public void setPointerColors(int alpha) {
-	pointerColors[0] = new Color(255, 255, 255, alpha);
+	pointerColors[0] = new Color(0,0,60, alpha);
+	//	pointerColors[0] = new Color(255, 255, 255, alpha);
 	pointerColors[1] = new Color(255, 255, 255, alpha);
 	pointerColors[2] = new Color(255, 255, 255, alpha);
 	pointerColors[3] = new Color(255, 255, 255, alpha);
@@ -427,7 +430,10 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	// backgroundImageName[4] = "BackgroundDisplay1_7680x1080.jpg";
 
 	backgroundImageName = new String[5];
-	backgroundImageName[0] = "FrostNoise_bgnd_1280x1024.jpg";
+		backgroundImageName[0] = "FrostNoise_bgnd_1024x768.jpg";
+	//	backgroundImageName[0] = "FrostNoise_bgnd_1280x1024.jpg";
+	//	backgroundImageName[0] = "FrostNoise_bgnd_1920x1080.jpg";
+
 	backgroundImageName[1] = "BackgroundDisplay1_1024x768.jpg";
 	backgroundImageName[2] = "BackgroundDisplay1_1280x1024.jpg";
 	backgroundImageName[3] = "BackgroundDisplay1_1920x1080.jpg";
@@ -754,7 +760,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 	    // 	    sprites[threadNum].b = randNum.nextInt(255);
 	    sprites[threadNum].r = 0; //255;
 	    sprites[threadNum].g = 0; //255;
-	    sprites[threadNum].b = 0; // 255;
+	    sprites[threadNum].b = 80; // 255;
 	    sprites[threadNum].a = pointerA;
 
 	    oscNum[numOscs++] = threadNum;
@@ -1710,7 +1716,7 @@ public class OperaMain extends Applet implements MouseListener, MouseMotionListe
 		    NGlobals.cPrint("<<<< ADDING new word: " + text + " at " + "[" + x + "]" + "[" + y + "]");
 
 		    tHist.color = cloudColors[tCloudColorNum]; 	
-		    tCloudColorNum++;
+		    //		    tCloudColorNum++;
 		    if (tCloudColorNum > maxCloudColors)
 			tCloudColorNum = 0;	
 
