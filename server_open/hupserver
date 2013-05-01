@@ -1,0 +1,11 @@
+# Change the port to match your own, or the one you're trying to kill
+PORT=52921
+DATE=$(date +%y%m%d%H%M)
+echo "./killmine $PORT"
+./killmine $PORT
+sleep 1
+echo "nohup java NomadServer $PORT >/var/www/nomads_logs/server_class_log_dt_$DATE.txt"
+nohup java NomadServer $PORT >/var/www/nomads_logs/server_class_log_dt_$DATE.txt &
+sleep 1
+echo "tail -f /var/www/nomads_logs/server_class_log_dt_$DATE.txt"
+tail -f /var/www/nomads_logs/server_class_log_dt_$DATE.txt
