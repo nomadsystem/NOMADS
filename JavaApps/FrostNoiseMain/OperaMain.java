@@ -1,5 +1,5 @@
 //
-//  Nomads Opera Main v.210
+//  Nomads Opera Main v.210 (modified for FrostNoise installation)
 //
 
 import java.awt.*;
