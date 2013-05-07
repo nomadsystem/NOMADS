@@ -465,9 +465,16 @@ public class NomadServer implements Runnable {
 		    removeByThreadID(currentClient.getThreadID());
 		}
 
-		// INIT STATES FOR BINDLE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		// INIT STATES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-		// Send button states (to the BINDLE -> implied by this coming from LOGIN)
+		// OASYS:  THIS EXAMPLE IS FOR THE BINDLE, SIMILAR METHOD CAN BE ADAPTED TO THE GENERAL CASE
+		//
+		//   PLUS THIS LOOP IS HELPFUL
+		//    it sends cached button "mod" states (code for picking that up is later)
+		//    might want to move that code up here
+		//    better logical flow (reading wise)
+		//
+		//   EG.,  send button states (to the BINDLE -> implied by this coming from LOGIN)
 		for (int i=0; i<numModStates; i++) {
 		    tCommand = (byte)(NCommand.MOD_STATE_START+i);
 		    dx[0] = modStates[i];
@@ -480,6 +487,12 @@ public class NomadServer implements Runnable {
 		    }
 
 		}
+
+		//
+		// QUESTIONS
+		//
+		//   How to send things like prompts and potentially even cached data?
+		//
 
 		if (LPPGrain != null) {
 		    NGlobals.dtPrint("Sending POLL PROMPT");
@@ -528,6 +541,7 @@ public class NomadServer implements Runnable {
 	    return;
 	}
 
+	// OASYS:  THIS IS A WAY TO STASH DATA FROM "THE CONTROLLER"
 	if (incAppID == NAppID.DISCUSS_PROMPT) {
 	    LDPGrain = myGrain;
 	}
@@ -555,6 +569,12 @@ public class NomadServer implements Runnable {
 	
 	// XMERGE(1):  this unrolled in Auksalaq
 	
+	// OASYS:  more storing of button "mod" states sent via INSTRUCTOR PANEL
+	//
+	//     this corresponds to the loop we use to send "mod" data used above
+	//
+	//     this is also the code to consider moving above
+	//
 	if (incAppID == NAppID.INSTRUCTOR_PANEL) {
 	    if ( (incAppCmd >= NCommand.MOD_STATE_START) && (incAppCmd <= NCommand.MOD_STATE_END) ) {
 		// synchronized(serverLock) {
@@ -579,8 +599,9 @@ public class NomadServer implements Runnable {
 
 	NGlobals.sPrint("===== WRITING =====");
 	
-
 	// Rejects ====================================
+
+	// OASYS:  this really only helps decrease server load, processing
 
 	// 1.  DISCUSS data when DISCUSS is off
 
@@ -631,6 +652,9 @@ public class NomadServer implements Runnable {
 
 
 	// Get client number of inc client
+	//
+	//   OASYS:  then get user name, if it exists
+	//
 	String myUser;
 	//	synchronized (threadLock) {
 	tCNum = getClientThreadNum(THREAD_ID);
@@ -659,6 +683,7 @@ public class NomadServer implements Runnable {
 	// }
 
 
+	// OASYS:  is this just for printout / logging?
 
 	if ((incAppDataType == NDataType.CHAR || incAppDataType == NDataType.BYTE) && (incAppDataLen > 1)) {
 	    String msg = new String(myGrain.bArray);
@@ -687,6 +712,10 @@ public class NomadServer implements Runnable {
 	//
 	// send out any messages from it
 
+
+	//
+	// OASYS:  send everything from INSTRUCTOR_PANEL
+	//
 	if (incAppID == NAppID.INSTRUCTOR_PANEL) {
 	    for (int c = 0; c < getClientCount(); c++) {
 		NGlobals.dtPrint("    IN");
@@ -711,6 +740,10 @@ public class NomadServer implements Runnable {
 		}
 	    }
 	}
+
+	//
+	// OASYS:  from here out, gonna need an outline on paper, possible redesign queue
+	//
 
 	// ==> Incoming app is TEACHER_POLL
 	//
@@ -774,6 +807,21 @@ public class NomadServer implements Runnable {
 		}
 	    }
 	}
+
+	//  OASYS:  thoughts
+	
+	//  STORED data (cache it in something)
+	//  THROUGH data (just pipe it through)
+	//
+	// appSched[SENDER_APPID].stored[dataName][num].data
+	// appSched[SENDER_APPID].through[dataName][num].data
+	//
+	//
+	//  OASYS:  that just might do it
+	//  
+	//    also may want the notion of "tagged" output (eg., with THREADID
+	//    so that endpoint can have unique identifier
+	//    that's what happens below with the SWARM
 
 	// NGlobals.dtPrint("CHECKPOINT 3 - BINDLE (non discuss) to ICP");
 	
